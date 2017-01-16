@@ -496,66 +496,88 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         getItem: function (rowIndex) {
             return new ExpressCraft.DataRow(this, rowIndex);
         },
-        addColumn: function (fieldName, type) {
+        clearRows: function () {
+            this._RowCount = 0;
+            for (var i = 0; i < this.columns.getCount(); i = (i + 1) | 0) {
+                this.clearCells(this.columns.getItem(i));
+            }
+        },
+        clearCells$1: function (T, _column) {
+            var _col = _column;
+            _col.cells = new (System.Collections.Generic.List$1(T))();
+        },
+        clearCells: function (_column) {
+            switch (_column.dataType) {
+                default: 
+                case ExpressCraft.DataType.Object: 
+                    this.clearCells$1(Object, _column);
+                    break;
+                case ExpressCraft.DataType.DateTime: 
+                    this.clearCells$1(System.Nullable$1(Date), _column);
+                    break;
+                case ExpressCraft.DataType.String: 
+                    this.clearCells$1(String, _column);
+                    break;
+                case ExpressCraft.DataType.Integer: 
+                    this.clearCells$1(System.Nullable$1(System.Int32), _column);
+                    break;
+                case ExpressCraft.DataType.Long: 
+                    this.clearCells$1(System.Nullable$1(System.Int64), _column);
+                    break;
+                case ExpressCraft.DataType.Float: 
+                    this.clearCells$1(System.Nullable$1(System.Single), _column);
+                    break;
+                case ExpressCraft.DataType.Double: 
+                    this.clearCells$1(System.Nullable$1(System.Double), _column);
+                    break;
+                case ExpressCraft.DataType.Decimal: 
+                    this.clearCells$1(System.Nullable$1(System.Decimal), _column);
+                    break;
+                case ExpressCraft.DataType.Bool: 
+                    this.clearCells$1(System.Nullable$1(Boolean), _column);
+                    break;
+                case ExpressCraft.DataType.Byte: 
+                    this.clearCells$1(System.Nullable$1(System.Byte), _column);
+                    break;
+                case ExpressCraft.DataType.Short: 
+                    this.clearCells$1(System.Nullable$1(System.Int16), _column);
+                    break;
+            }
+        },
+        getColumnByDataType: function (type) {
             if (type === void 0) { type = 0; }
             switch (type) {
                 default: 
                 case ExpressCraft.DataType.Object: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnObject(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnObject();
                 case ExpressCraft.DataType.DateTime: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnDateTime(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnDateTime();
                 case ExpressCraft.DataType.String: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnString(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnString();
                 case ExpressCraft.DataType.Integer: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnInteger(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnInteger();
                 case ExpressCraft.DataType.Long: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnLong(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnLong();
                 case ExpressCraft.DataType.Float: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnFloat(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnFloat();
                 case ExpressCraft.DataType.Double: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnDouble(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnDouble();
                 case ExpressCraft.DataType.Decimal: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnDecimal(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnDecimal();
                 case ExpressCraft.DataType.Bool: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnBool(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnBool();
                 case ExpressCraft.DataType.Byte: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnByte(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnByte();
                 case ExpressCraft.DataType.Short: 
-                    this.columns.add(Bridge.merge(new ExpressCraft.DataColumnShort(), {
-                        fieldName: fieldName
-                    } ));
-                    break;
+                    return new ExpressCraft.DataColumnShort();
             }
+        },
+        addColumn: function (fieldName, type) {
+            if (type === void 0) { type = 0; }
+            var col = this.getColumnByDataType(type);
+            col.fieldName = fieldName;
+
+            this.columns.add(col);
             this._ColCount = this.columns.getCount();
         },
         beginNewRow: function (EstimatedNewRows) {

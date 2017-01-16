@@ -18,7 +18,8 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         inherits: [ExpressCraft.Form],
         gridView: null,
         addNewRowButton: null,
-        add1000RowsButton: null,
+        add100000RowsButton: null,
+        clearRowsButton: null,
         x: 0,
         ctor: function () {
             this.$initialize();
@@ -41,14 +42,26 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             } );
             ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
-            this.add1000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "Add 1000 Row's"
+            this.add100000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Add 100000 Row's"
             } );
-            ExpressCraft.Helper.setBounds$5(this.add1000RowsButton, "98px", "3px", "auto", "24px");
-            this.add1000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
-                dataTable.beginNewRow(1000);
+            ExpressCraft.Helper.setBounds$5(this.add100000RowsButton, "98px", "3px", "auto", "24px");
 
-                for (var i = 0; i < 1000; i = (i + 1) | 0) {
+            this.clearRowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Clear Rows"
+            } );
+            ExpressCraft.Helper.setBounds$5(this.clearRowsButton, "205px", "3px", "auto", "24px");
+
+            this.clearRowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
+                dataTable.clearRows();
+
+                this.gridView.renderGrid();
+            });
+
+            this.add100000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
+                dataTable.beginNewRow(100000);
+
+                for (var i = 0; i < 100000; i = (i + 1) | 0) {
                     this.x = (this.x + 1) | 0;
                     var dr = dataTable.newRow();
                     dr.setItem(0, this.x);
@@ -75,7 +88,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 })]);
             });
 
-            ExpressCraft.Helper.appendChildren$1(this.getHeading(), [this.addNewRowButton, this.add1000RowsButton]);
+            ExpressCraft.Helper.appendChildren$1(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton]);
             this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
 
             this.linkchildToForm(this.gridView);

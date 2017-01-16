@@ -18,7 +18,7 @@ namespace ExpressCraftGridView
         {
             public GridView GridView;
             public SimpleButton AddNewRowButton;
-            public SimpleButton Add1000RowsButton;
+            public SimpleButton Add100000RowsButton;
             public SimpleButton ClearRowsButton;
 
             protected override void OnShowing()
@@ -44,11 +44,11 @@ namespace ExpressCraftGridView
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
                 AddNewRowButton.SetBounds("3px", "3px", "auto", "24px");
 
-                Add1000RowsButton = new SimpleButton() { Text = "Add 1000 Row's" };
-                Add1000RowsButton.SetBounds("98px", "3px", "auto", "24px");
+                Add100000RowsButton = new SimpleButton() { Text = "Add 100000 Row's" };
+                Add100000RowsButton.SetBounds("98px", "3px", "auto", "24px");
 
                 ClearRowsButton = new SimpleButton() { Text = "Clear Rows" };
-                ClearRowsButton.SetBounds("180px", "3px", "auto", "24px");
+                ClearRowsButton.SetBounds("205px", "3px", "auto", "24px");
 
                 ClearRowsButton.ItemClick = (ev) =>
                 {
@@ -57,11 +57,11 @@ namespace ExpressCraftGridView
                     GridView.RenderGrid();
                 };
 
-                Add1000RowsButton.ItemClick = (ev) =>
+                Add100000RowsButton.ItemClick = (ev) =>
                 {
-                    dataTable.BeginNewRow(1000);
+                    dataTable.BeginNewRow(100000);
 
-                    for (int i = 0; i < 1000; i++)
+                    for (int i = 0; i < 100000; i++)
                     {
                         x++;
                         var dr = dataTable.NewRow();
@@ -90,7 +90,7 @@ namespace ExpressCraftGridView
                     }));
                 };
 
-                this.Heading.AppendChildren(AddNewRowButton, Add1000RowsButton);                
+                this.Heading.AppendChildren(AddNewRowButton, Add100000RowsButton, ClearRowsButton);                
                 this.Body.AppendChild(GridView);
 
                 this.LinkchildToForm(GridView);
