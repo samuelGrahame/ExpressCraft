@@ -1,6 +1,7 @@
 ﻿using System;
 using Bridge;
 using Bridge.Html5;
+using ExpressCraft;
 
 namespace ExpressCraftGridView
 {
@@ -8,27 +9,49 @@ namespace ExpressCraftGridView
     {
         public static void Main()
         {
-            // Create a new Button
-            var button = new HTMLButtonElement
+            Form.Setup();
+            
+            Application.Run(new GridForm());
+        }
+        
+        public class GridForm : Form
+        {
+            public GridView GridView;
+            public SimpleButton AddNewRowButton;
+            public GridForm()
             {
-                InnerHTML = "Click Me",
-                OnClick = (ev) =>
-                {
-                    // When Button is clicked, 
-                    // the Bridge Console should open.
-                    Console.WriteLine("Success!");
-                }
-            };
+                GridView = new GridView(true, true);
 
-            // Add the Button to the page
-            Document.Body.AppendChild(button);
+                var dataTable = new DataTable();
 
-            // To confirm Bridge.NET is working: 
-            // 1. Build this project (Ctrl + Shift + B)
-            // 2. Browse to file /Bridge/www/demo.html
-            // 3. Right-click on file and select "View in Browser" (Ctrl + Shift + W)
-            // 4. File should open in a browser, click the "Submit" button
-            // 5. Success!
+                dataTable.AddColumn("Account Number", DataType.Integer);
+                dataTable.AddColumn("Last Name", DataType.String);
+                dataTable.AddColumn("First Name", DataType.String);
+                dataTable.AddColumn("Date Contacted", DataType.DateTime);
+
+                GridView.DataSource = dataTable;
+
+                GridView.SetBoundsFull();
+
+
+                AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
+                AddNewRowButton.SetBounds("5px", "5px", "auto", "24px");
+
+                AddNewRowButton.ItemClick = (ev) =>
+                {                    
+                    var dr = dataTable.NewRow();
+                    var fdre = new FormDataRowEdit(dr, GridView, true);
+                    fdre.DialogResult = DialogResultEnum.OK;
+
+                    fdre.ShowDialog(new ExpressCraft.DialogResult(DialogResultEnum.OK, () => {
+                        dataTable.AcceptNewRows();
+                        GridView.RenderGrid();
+                    }));
+                };
+
+                this.Heading.AppendChild(AddNewRowButton);                
+                this.Body.AppendChild(GridView);                
+            }
         }
     }
 }

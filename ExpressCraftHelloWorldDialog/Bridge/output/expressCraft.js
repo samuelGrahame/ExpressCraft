@@ -590,6 +590,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         newRow: function () {
+
             var dr = new ExpressCraft.DataRow(this);
 
             this.newRows.add(dr);

@@ -8,31 +8,51 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
     Bridge.define("ExpressCraftGridView.App", {
         $main: function () {
-            // Create a new Button
-            var button = Bridge.merge(document.createElement('button'), {
-                innerHTML: "Click Me",
-                onclick: $asm.$.ExpressCraftGridView.App.f1
-            } );
+            ExpressCraft.Form.setup();
 
-            // Add the Button to the page
-            document.body.appendChild(button);
-
-            // To confirm Bridge.NET is working: 
-            // 1. Build this project (Ctrl + Shift + B)
-            // 2. Browse to file /Bridge/www/demo.html
-            // 3. Right-click on file and select "View in Browser" (Ctrl + Shift + W)
-            // 4. File should open in a browser, click the "Submit" button
-            // 5. Success!
+            ExpressCraft.Application.run(new ExpressCraftGridView.App.GridForm());
         }
     });
 
-    Bridge.ns("ExpressCraftGridView.App", $asm.$);
+    Bridge.define("ExpressCraftGridView.App.GridForm", {
+        inherits: [ExpressCraft.Form],
+        gridView: null,
+        addNewRowButton: null,
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.gridView = new ExpressCraft.GridView(true, true);
 
-    Bridge.apply($asm.$.ExpressCraftGridView.App, {
-        f1: function (ev) {
-            // When Button is clicked, 
-            // the Bridge Console should open.
-            Bridge.Console.log("Success!");
+            var dataTable = new ExpressCraft.DataTable();
+
+            dataTable.addColumn("Account Number", ExpressCraft.DataType.Integer);
+            dataTable.addColumn("Last Name", ExpressCraft.DataType.String);
+            dataTable.addColumn("First Name", ExpressCraft.DataType.String);
+            dataTable.addColumn("Date Contacted", ExpressCraft.DataType.DateTime);
+
+            this.gridView.setDataSource(dataTable);
+
+            ExpressCraft.Helper.setBoundsFull(this.gridView);
+
+
+            this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Add New a Row"
+            } );
+            ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "5px", "5px", "auto", "24px");
+
+            this.addNewRowButton.itemClick = Bridge.fn.bind(this, function (ev) {
+                var dr = dataTable.newRow();
+                var fdre = new ExpressCraft.FormDataRowEdit(dr, this.gridView, true);
+                fdre.dialogResult = ExpressCraft.DialogResultEnum.OK;
+
+                fdre.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
+                    dataTable.acceptNewRows();
+                    this.gridView.renderGrid();
+                }))]);
+            });
+
+            this.getHeading().appendChild(ExpressCraft.Control.op_Implicit(this.addNewRowButton));
+            this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
         }
     });
 });

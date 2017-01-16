@@ -137,6 +137,7 @@ namespace ExpressCraft
 
 		public DataRow NewRow()
 		{
+
 			var dr = new DataRow(this);
 
 			NewRows.Add(dr);
