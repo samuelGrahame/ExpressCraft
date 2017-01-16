@@ -12,12 +12,21 @@ namespace ExpressCraft
 		public bool LiveData;
 		public GridView GridView;
 		public DataRow DataRow;
-
+        
         private HTMLDivElement Panel;
 
-		public FormDataRowEdit(DataRow _dataRow, GridView _gridView, bool _liveData) : base()
+        object[] prevData;    
+
+		public FormDataRowEdit(DataRow _dataRow, GridView _gridView, bool _liveData = true) : base()
 		{
-			DataRow = _dataRow;
+            prevData = new object[_dataRow.ParentTable.ColumnCount];
+
+            for (int i = 0; i < _dataRow.ParentTable.ColumnCount; i++)
+            {
+                prevData[i] = _dataRow[i];
+            }
+                    
+            DataRow = _dataRow;
 			GridView = _gridView;
 			LiveData = _liveData;
 
@@ -37,8 +46,15 @@ namespace ExpressCraft
             buttonSection.Style.BackgroundColor = "#F0F0F0";
 
             var lsdb = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK"},
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel"}
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", ItemClick = (ev) => {
+                            for (int i = 0; i < DataRow.ParentTable.ColumnCount; i++)
+                            {
+                                _dataRow[i] = prevData[i];
+                            }
+
+                            GridView.RenderGrid();
+                        }},
+                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK"  }
                     };
             lsdb[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
             lsdb[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
@@ -66,7 +82,7 @@ namespace ExpressCraft
 
 		private void GenerateForm()
 		{
-			this.Body.Empty();
+			this.Panel.Empty();
 			var length = GridView.ColumnCount();
 
 			int col = 0;

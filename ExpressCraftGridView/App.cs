@@ -18,6 +18,12 @@ namespace ExpressCraftGridView
         {
             public GridView GridView;
             public SimpleButton AddNewRowButton;
+
+            protected override void OnShowing()
+            {
+                base.OnShowing();
+            }
+
             public GridForm()
             {
                 GridView = new GridView(true, true);
@@ -32,10 +38,9 @@ namespace ExpressCraftGridView
                 GridView.DataSource = dataTable;
 
                 GridView.SetBoundsFull();
-
-
+                
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
-                AddNewRowButton.SetBounds("5px", "5px", "auto", "24px");
+                AddNewRowButton.SetBounds("3px", "3px", "auto", "24px");
 
                 AddNewRowButton.ItemClick = (ev) =>
                 {                    
@@ -51,7 +56,11 @@ namespace ExpressCraftGridView
                 };
 
                 this.Heading.AppendChild(AddNewRowButton);                
-                this.Body.AppendChild(GridView);                
+                this.Body.AppendChild(GridView);
+
+                this.LinkchildToForm(GridView);
+
+                GridView.RenderGrid();
             }
         }
     }

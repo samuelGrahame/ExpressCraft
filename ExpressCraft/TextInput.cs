@@ -85,18 +85,18 @@ namespace ExpressCraft
 			if(date != null)
 			{
 				DateTime dt;
-				if(DateTime.TryParse(date, out dt))
+				if(DateTime.TryParse(date, out dt) && dt != DateTime.MinValue)
 				{
 					obj.value = dt.ToString("yyyy-MM-dd");
 				}
 				else
 				{
-					obj.value = "0001-01-01";
+					obj.value = null;
 				}				
 			}
 			else
 			{
-				obj.value = "0001-01-01";
+				obj.value = null;
 			}
 			//obj.value = DateTime.Parse(Convert.ToString(date)).ToString("yyyy-MM-dd");
 		}

@@ -4172,7 +4172,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 var idr = this.getDataSource().getItem(drh);
 
                 var fdre = new ExpressCraft.FormDataRowEdit(idr, this, true);
-                fdre.show();
+                fdre.showDialog();
             }
         },
         f8: function (ev) {
@@ -5228,13 +5228,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             if (date != null) {
                 var dt = { };
-                if (Bridge.Date.tryParse(date, null, dt)) {
+                if (Bridge.Date.tryParse(date, null, dt) && !Bridge.equals(dt.v, new Date(-864e13))) {
                     obj.value = Bridge.Date.format(dt.v, "yyyy-MM-dd");
                 } else {
-                    obj.value = "0001-01-01";
+                    obj.value = null;
                 }
             } else {
-                obj.value = "0001-01-01";
+                obj.value = null;
             }
             //obj.value = DateTime.Parse(Convert.ToString(date)).ToString("yyyy-MM-dd");
         },
@@ -5289,9 +5289,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         gridView: null,
         dataRow: null,
         panel: null,
+        prevData: null,
         ctor: function (_dataRow, _gridView, _liveData) {
+            if (_liveData === void 0) { _liveData = true; }
+
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
+            this.prevData = System.Array.init(_dataRow.parentTable.getColumnCount(), null);
+
+            for (var i = 0; i < _dataRow.parentTable.getColumnCount(); i = (i + 1) | 0) {
+                this.prevData[i] = _dataRow.getItem(i);
+            }
+
             this.dataRow = _dataRow;
             this.gridView = _gridView;
             this.liveData = _liveData;
@@ -5311,7 +5320,22 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.setBounds$3(buttonSection, "0", "calc(100% - 48px)", "100%", "48px");
             buttonSection.style.backgroundColor = "#F0F0F0";
 
-            var lsdb = Bridge.fn.bind(this, $asm.$.ExpressCraft.FormDataRowEdit.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
+            var lsdb = Bridge.fn.bind(this, function (_o1) {
+                    _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                        setText: "Cancel",
+                        itemClick: Bridge.fn.bind(this, function (ev) {
+                            for (var i1 = 0; i1 < this.dataRow.parentTable.getColumnCount(); i1 = (i1 + 1) | 0) {
+                                _dataRow.setItem(i1, this.prevData[i1]);
+                            }
+
+                            this.gridView.renderGrid();
+                        })
+                    } ));
+                    _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+                        setText: "OK"
+                    } ));
+                    return _o1;
+                })(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
             ExpressCraft.Helper.setLocation$5(lsdb.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
             ExpressCraft.Helper.setLocation$5(lsdb.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
 
@@ -5333,7 +5357,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         generateForm: function () {
             var $t;
-            ExpressCraft.Helper.empty(this.getBody());
+            ExpressCraft.Helper.empty(this.panel);
             var length = this.gridView.columnCount();
 
             var col = 0;
@@ -5441,20 +5465,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if($t.jump == 1) continue;
             }
             // Add Accept Changes
-        }
-    });
-
-    Bridge.ns("ExpressCraft.FormDataRowEdit", $asm.$);
-
-    Bridge.apply($asm.$.ExpressCraft.FormDataRowEdit, {
-        f1: function (_o1) {
-            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
-                setText: "OK"
-            } ));
-            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
-                setText: "Cancel"
-            } ));
-            return _o1;
         }
     });
 

@@ -34,11 +34,10 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             ExpressCraft.Helper.setBoundsFull(this.gridView);
 
-
             this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add New a Row"
             } );
-            ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "5px", "5px", "auto", "24px");
+            ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
             this.addNewRowButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 var dr = dataTable.newRow();
@@ -54,6 +53,13 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             this.getHeading().appendChild(ExpressCraft.Control.op_Implicit(this.addNewRowButton));
             this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
+
+            this.linkchildToForm(this.gridView);
+
+            this.gridView.renderGrid();
+        },
+        onShowing: function () {
+            ExpressCraft.Form.prototype.onShowing.call(this);
         }
     });
 });
