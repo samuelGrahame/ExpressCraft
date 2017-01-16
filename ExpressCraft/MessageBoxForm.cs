@@ -89,41 +89,8 @@ namespace ExpressCraft
                     throw new ArgumentOutOfRangeException(nameof(ui), ui, null);
             }
 
-			pic.SetBounds(25, 32, 32, 32);
-			pic.Style.BackgroundSize = "100% 100%";            
-			
-			var tb = new TextBlock(prompt, 480 - 65 - 37);			
-			tb.ComputeString();
-
-			int width = 480;
-			if(!tb.ElelemtsOverMax)
-			{
-				width = (int)tb.MaxCalculatedWidth + 65 + 37;
-				if(width < Settings.MessageFormMinimumWidthInPx)
-					width = Settings.MessageFormMinimumWidthInPx;
-			}
-
-			textContent.InnerHTML = tb.ComputedSource;            
-            textContent.Style.Left = "65px";
-			textContent.Style.Height = "auto";
-
-			section.Style.OverflowY = Overflow.Auto;		
-            section.Style.Height = "100%";
-			section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
-            section.AppendChild(textContent);
-			section.Style.Top = "32px";
-			section.Style.Width = "90%";
-
-			base.Body.Style.BackgroundColor = "white";
-			base.Body.AppendChildren(pic, section, buttonSection);		
-			
-			if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
-				tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-			if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
-				tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
-
-
-			switch (_buttons) {
+            switch (_buttons)
+            {
                 case MessageBoxButtons.Ok:
                     _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok"}
@@ -162,6 +129,46 @@ namespace ExpressCraft
                     throw new ArgumentOutOfRangeException();
             }
 
+            pic.SetBounds(25, 32, 32, 32);
+			pic.Style.BackgroundSize = "100% 100%";            
+			
+			var tb = new TextBlock(prompt, 480 - 25);			
+			tb.ComputeString();
+
+			int width = 480;
+			if(!tb.ElelemtsOverMax)
+			{
+				width = (int)tb.MaxCalculatedWidth + 65 + 37;
+				if(width < Settings.MessageFormMinimumWidthInPx)
+					width = Settings.MessageFormMinimumWidthInPx;
+			}
+
+            if (_buttonCollection.Count > 2)
+            {
+                if(width < 320)
+                    width = 320;
+            }
+
+            textContent.InnerHTML = tb.ComputedSource;            
+            textContent.Style.Left = "65px";
+			textContent.Style.Height = "auto";
+
+			section.Style.OverflowY = Overflow.Auto;		
+            section.Style.Height = "100%";
+			section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
+            section.AppendChild(textContent);
+			section.Style.Top = "32px";
+			section.Style.Width = "90%";
+
+			base.Body.Style.BackgroundColor = "white";
+			base.Body.AppendChildren(pic, section, buttonSection);		
+			
+			if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
+				tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
+			if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
+				tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
+
+            
 			buttonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
 
 			base.Height = tb.ComputedHeight + 77 + 29 + 32 + "px";

@@ -9,11 +9,7 @@ namespace ExpressCraftRibbonBar
     {
         public static void Main()
         {
-            // Setup the form events and containers*
-            Form.Setup();
-
-            var mbf = new MessageBoxForm("Hello World!", MessageBoxLayout.Exclamation);
-            mbf.ShowDialog();
+            
         }
     }
 }

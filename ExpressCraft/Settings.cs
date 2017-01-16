@@ -80,41 +80,52 @@ namespace ExpressCraft
 			}
 			if(DefaultStyleSheet == null)
 				return;
-			DefaultFont = GetStyleRuleValue("font", ".control");
-		}
+            var df = GetStyleRuleValue("font", ".control");
+            if (df != null)
+                DefaultFont = df;
+
+        }
 
 		public static dynamic GetStyleRuleValue(string style, string className)
 		{
-			if(PluginStyleSheet != null)
-			{
-				dynamic pStyles = PluginStyleSheet;
-				if(pStyles.cssRules)
-				{
-					for(int i = 0; i < pStyles.cssRules.length; i++)
-					{
-						dynamic rule = pStyles.cssRules[i];
-						if(rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
-						{
-							return rule.style[style];
-						}
-					}
-				}
-			}
-			
-			if(DefaultStyleSheet == null)
-				return null;
-			dynamic Styles = DefaultStyleSheet;
-			if(!Styles.cssRules)
-				return null;
+            try
+            {
+                if (PluginStyleSheet != null)
+                {
+                    dynamic pStyles = PluginStyleSheet;
+                    if (pStyles.cssRules)
+                    {
+                        for (int i = 0; i < pStyles.cssRules.length; i++)
+                        {
+                            dynamic rule = pStyles.cssRules[i];
+                            if (rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
+                            {
+                                return rule.style[style];
+                            }
+                        }
+                    }
+                }
 
-			for(int i = 0; i < Styles.cssRules.length; i++)
-			{
-				dynamic rule = Styles.cssRules[i];
-				if(rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
-				{
-					return rule.style[style];
-				}
-			}
+                if (DefaultStyleSheet == null)
+                    return null;
+                dynamic Styles = DefaultStyleSheet;
+                if (!Styles.cssRules)
+                    return null;
+
+                for (int i = 0; i < Styles.cssRules.length; i++)
+                {
+                    dynamic rule = Styles.cssRules[i];
+                    if (rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
+                    {
+                        return rule.style[style];
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
+			
 			return null;
 		}		
 

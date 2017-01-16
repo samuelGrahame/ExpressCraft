@@ -330,8 +330,9 @@ namespace ExpressCraft
 		public static void Setup(HTMLElement parent = null)
 		{
 			StyleController.Setup();
-			
-			if(parent == null)
+            //Settings.Setup();
+
+            if (parent == null)
 				Parent = Document.Body;
 			else
 				Parent = parent;            
@@ -1378,10 +1379,11 @@ namespace ExpressCraft
 			FormCollections.Remove(null);
 
             int zIndex = 1;
-			
-            if(FormCollections.Count == 1)            
+			if (FormCollections.Count == 0)
+                FormOverLay.Style.ZIndex = "";
+            else if(FormCollections.Count == 1)            
                 FormOverLay.Style.Opacity = "0";            
-            else            
+            else
                 FormOverLay.Style.Opacity = "0.4";                                
 
             for (int x = 0; x < FormCollections.Count; x++)
@@ -1461,7 +1463,11 @@ namespace ExpressCraft
                         if (ownerFormCollection.VisibleForms[i] == this)
                             continue;
                         ownerFormCollection.VisibleForms[i].Close();
-                    }                    
+                    }
+                    if (FormCollections.Count == 1)
+                    {
+                        FormCollections = new List<FormCollection>();
+                    }
                 }
                 else
                 {
@@ -1497,7 +1503,7 @@ namespace ExpressCraft
 					for(int i = 0; i < DialogResults.Count; i++)
 						DialogResults[i].InvokeIfResult(DialogResult);
 				}
-			}						
+			}
 
             OnClosed();			
 		}
