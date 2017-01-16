@@ -5,18 +5,17 @@
     <NoStdLib>true</NoStdLib>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C7CEE0C5-14B9-4E9F-8890-FD9D15983058}</ProjectGuid>
+    <ProjectGuid>{8EC693BD-1FFA-41A5-8DDC-954FB79F54E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExpressCraft</RootNamespace>
     <AssemblyName>ExpressCraft</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -27,7 +26,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,10 +34,58 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="ComboBoxEdit.cs" />
+    <Compile Include="ContextMenu.cs" />
+    <Compile Include="Control.cs" />
+    <Compile Include="DataTable.cs" />
+    <Compile Include="DialogResult.cs" />
+    <Compile Include="Form.cs" />
+    <Compile Include="FormCollection.cs" />
+    <Compile Include="FormDataRowEdit.cs" />
+    <Compile Include="GridControl.cs" />
+    <Compile Include="GridView.cs" />
+    <Compile Include="HardSoftList.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="MessageBoxForm.cs" />
+    <Compile Include="Network.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="ProgressControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rectangle.cs" />
+    <Compile Include="RibbonButton.cs" />
+    <Compile Include="RibbonControl.cs" />
+    <Compile Include="RibbonGroup.cs" />
+    <Compile Include="RibbonPage.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="SimpleButton.cs" />
+    <Compile Include="SimpleDialogButton.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="SplitControlContainer.cs" />
+    <Compile Include="StatusListForm.cs" />
+    <Compile Include="StyleController.cs" />
+    <Compile Include="TabControl.cs" />
+    <Compile Include="TabControlPage.cs" />
+    <Compile Include="TextBlock.cs" />
+    <Compile Include="TextInput.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Bridge\output\ExpressCraft.css" />
+    <Content Include="Bridge\output\ExpressCraftPlugin.css" />
+    <Content Include="Bridge\output\readme.txt" />
+    <Content Include="Bridge\www\demo.html" />
+    <Content Include="external\ExpressCraft.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="external\ExpressCraftPlugin.css" />
+    <Content Include="external\jquery-1.12.0.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Bridge\bridge.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Bridge, Version=15.6.0.0, Culture=neutral, processorArchitecture=MSIL">
