@@ -18,12 +18,13 @@ namespace ExpressCraftGridView
         {
             public GridView GridView;
             public SimpleButton AddNewRowButton;
+            public SimpleButton Add1000RowsButton;
 
             protected override void OnShowing()
             {
                 base.OnShowing();
             }
-
+            private int x = 0;
             public GridForm()
             {
                 GridView = new GridView(true, true);
@@ -42,6 +43,28 @@ namespace ExpressCraftGridView
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
                 AddNewRowButton.SetBounds("3px", "3px", "auto", "24px");
 
+                Add1000RowsButton = new SimpleButton() { Text = "Add 1000 Row's" };
+                Add1000RowsButton.SetBounds("98px", "3px", "auto", "24px");
+                Add1000RowsButton.ItemClick = (ev) =>
+                {
+                    dataTable.BeginNewRow(1000);
+
+                    for (int i = 0; i < 1000; i++)
+                    {
+                        x++;
+                        var dr = dataTable.NewRow();
+                        dr[0] = x;
+                        dr[1] = "Some Last Name";
+                        dr[2] = "Some First Name";
+                        dr[3] = DateTime.Today;
+                    }
+
+                    dataTable.AcceptNewRows();
+
+                    GridView.RenderGrid();
+                    GridView.ScrollToBottom();                    
+                };
+
                 AddNewRowButton.ItemClick = (ev) =>
                 {                    
                     var dr = dataTable.NewRow();
@@ -55,7 +78,7 @@ namespace ExpressCraftGridView
                     }));
                 };
 
-                this.Heading.AppendChild(AddNewRowButton);                
+                this.Heading.AppendChildren(AddNewRowButton, Add1000RowsButton);                
                 this.Body.AppendChild(GridView);
 
                 this.LinkchildToForm(GridView);

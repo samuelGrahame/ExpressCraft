@@ -45,8 +45,25 @@ namespace ExpressCraft
                 }
 					
 				ev.StopPropagation();
+                ev.StopImmediatePropagation();
 			};
-		}
+            Content.OnDblClick = (ev) =>
+            {
+                ev.StopPropagation();
+                ev.StopImmediatePropagation();
+            };
+            Content.OnMouseDown = (ev) =>
+            {
+                ev.StopPropagation();
+                ev.StopImmediatePropagation();
+            };
+            Content.OnMouseUp = (ev) =>
+            {
+                ev.StopPropagation();
+                ev.StopImmediatePropagation();
+            };
+
+        }
 
 		public string Text
 		{

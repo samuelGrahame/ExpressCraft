@@ -4954,6 +4954,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.setSize$3(this, "69px", "20px");
 
             this.content.onclick = Bridge.fn.bind(this, $asm.$.ExpressCraft.SimpleButton.f2);
+            this.content.ondblclick = $asm.$.ExpressCraft.SimpleButton.f3;
+            this.content.onmousedown = $asm.$.ExpressCraft.SimpleButton.f3;
+            this.content.onmouseup = $asm.$.ExpressCraft.SimpleButton.f3;
+
         },
         getText: function () {
             return this.content.innerHTML;
@@ -4999,6 +5003,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             ev.stopPropagation();
+            ev.stopImmediatePropagation();
+        },
+        f3: function (ev) {
+            ev.stopPropagation();
+            ev.stopImmediatePropagation();
         }
     });
 

@@ -18,6 +18,8 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         inherits: [ExpressCraft.Form],
         gridView: null,
         addNewRowButton: null,
+        add1000RowsButton: null,
+        x: 0,
         ctor: function () {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
@@ -39,6 +41,28 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             } );
             ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
+            this.add1000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Add 1000 Row's"
+            } );
+            ExpressCraft.Helper.setBounds$5(this.add1000RowsButton, "98px", "3px", "auto", "24px");
+            this.add1000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
+                dataTable.beginNewRow(1000);
+
+                for (var i = 0; i < 1000; i = (i + 1) | 0) {
+                    this.x = (this.x + 1) | 0;
+                    var dr = dataTable.newRow();
+                    dr.setItem(0, this.x);
+                    dr.setItem(1, "Some Last Name");
+                    dr.setItem(2, "Some First Name");
+                    dr.setItem(3, Bridge.Date.today());
+                }
+
+                dataTable.acceptNewRows();
+
+                this.gridView.renderGrid();
+                this.gridView.scrollToBottom();
+            });
+
             this.addNewRowButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 var dr = dataTable.newRow();
                 var fdre = new ExpressCraft.FormDataRowEdit(dr, this.gridView, true);
@@ -51,7 +75,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 })]);
             });
 
-            this.getHeading().appendChild(ExpressCraft.Control.op_Implicit(this.addNewRowButton));
+            ExpressCraft.Helper.appendChildren$1(this.getHeading(), [this.addNewRowButton, this.add1000RowsButton]);
             this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
 
             this.linkchildToForm(this.gridView);
