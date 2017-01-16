@@ -45,6 +45,8 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 var fdre = new ExpressCraft.FormDataRowEdit(dr, this.gridView, true);
                 fdre.dialogResult = ExpressCraft.DialogResultEnum.OK;
 
+
+
                 fdre.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
                     dataTable.acceptNewRows();
                     this.gridView.renderGrid();

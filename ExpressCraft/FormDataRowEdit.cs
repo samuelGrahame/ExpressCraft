@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace ExpressCraft
 		public GridView GridView;
 		public DataRow DataRow;
 
+        private HTMLDivElement Panel;
+
 		public FormDataRowEdit(DataRow _dataRow, GridView _gridView, bool _liveData) : base()
 		{
 			DataRow = _dataRow;
@@ -23,7 +26,28 @@ namespace ExpressCraft
 			this.Height = "600px";
 			this.Body.Style.OverflowY = Bridge.Html5.Overflow.Auto;
 
-			this.AllowSizeChange = false;
+            Panel = Div();
+            Panel.Style.OverflowY = Overflow.Auto;
+            Panel.SetBounds("0", "0", "100%", "calc(100% - 60px)");
+            Body.Style.BackgroundColor = "white";
+
+            var buttonSection = Div();
+
+            buttonSection.SetBounds("0", "calc(100% - 48px)", "100%", "48px");
+            buttonSection.Style.BackgroundColor = "#F0F0F0";
+
+            var lsdb = new List<SimpleDialogButton>() {
+                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK"},
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel"}
+                    };
+            lsdb[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
+            lsdb[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
+
+            buttonSection.AppendChildrenTabIndex(lsdb.ToArray());
+
+            this.Body.AppendChildren(Panel, buttonSection);
+
+            this.AllowSizeChange = false;
 		}
 		
 		protected override void OnShowed()
@@ -88,8 +112,8 @@ namespace ExpressCraft
 									GridView.RenderGrid();
 							};
 						}
-						
-						Body.AppendChildren(lbldate, inputDate);
+
+                        Panel.AppendChildren(lbldate, inputDate);
 						
 						break;																
 					case DataType.Integer:						
@@ -116,7 +140,7 @@ namespace ExpressCraft
 							};
 						}
 
-						Body.AppendChildren(lblnmb, inputNum);
+                        Panel.AppendChildren(lblnmb, inputNum);
 						break;
 					default:
 					case DataType.Object:
@@ -138,7 +162,7 @@ namespace ExpressCraft
 							};
 						}
 
-						Body.AppendChildren(lblstr, inputstr);
+                        Panel.AppendChildren(lblstr, inputstr);
 
 						//if(obj.Length > 100)
 						//{

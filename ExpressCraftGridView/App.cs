@@ -43,6 +43,8 @@ namespace ExpressCraftGridView
                     var fdre = new FormDataRowEdit(dr, GridView, true);
                     fdre.DialogResult = DialogResultEnum.OK;
 
+                    
+
                     fdre.ShowDialog(new ExpressCraft.DialogResult(DialogResultEnum.OK, () => {
                         dataTable.AcceptNewRows();
                         GridView.RenderGrid();

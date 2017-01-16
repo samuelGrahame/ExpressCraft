@@ -5288,6 +5288,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         liveData: false,
         gridView: null,
         dataRow: null,
+        panel: null,
         ctor: function (_dataRow, _gridView, _liveData) {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
@@ -5299,6 +5300,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.setWidth("400px"); // 25px - 25px 350px width;
             this.setHeight("600px");
             this.getBody().style.overflowY = "auto";
+
+            this.panel = ExpressCraft.Control.div();
+            this.panel.style.overflowY = "auto";
+            ExpressCraft.Helper.setBounds$3(this.panel, "0", "0", "100%", "calc(100% - 60px)");
+            this.getBody().style.backgroundColor = "white";
+
+            var buttonSection = ExpressCraft.Control.div();
+
+            ExpressCraft.Helper.setBounds$3(buttonSection, "0", "calc(100% - 48px)", "100%", "48px");
+            buttonSection.style.backgroundColor = "#F0F0F0";
+
+            var lsdb = Bridge.fn.bind(this, $asm.$.ExpressCraft.FormDataRowEdit.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
+            ExpressCraft.Helper.setLocation$5(lsdb.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$5(lsdb.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+
+            ExpressCraft.Helper.appendChildrenTabIndex(buttonSection, lsdb.toArray());
+
+            ExpressCraft.Helper.appendChildren(this.getBody(), [this.panel, buttonSection]);
 
             this.allowSizeChange = false;
         },
@@ -5358,7 +5377,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                     }
                                 });
                             }
-                            ExpressCraft.Helper.appendChildren(this.getBody(), [lbldate, ExpressCraft.Control.op_Implicit(inputDate)]);
+                            ExpressCraft.Helper.appendChildren(this.panel, [lbldate, ExpressCraft.Control.op_Implicit(inputDate)]);
                             break;
                         case ExpressCraft.DataType.Integer: 
                         case ExpressCraft.DataType.Long: 
@@ -5381,7 +5400,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                     }
                                 });
                             }
-                            ExpressCraft.Helper.appendChildren(this.getBody(), [lblnmb, ExpressCraft.Control.op_Implicit(inputNum)]);
+                            ExpressCraft.Helper.appendChildren(this.panel, [lblnmb, ExpressCraft.Control.op_Implicit(inputNum)]);
                             break;
                         default: 
                         case ExpressCraft.DataType.Object: 
@@ -5400,7 +5419,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                     }
                                 });
                             }
-                            ExpressCraft.Helper.appendChildren(this.getBody(), [lblstr, ExpressCraft.Control.op_Implicit(inputstr)]);
+                            ExpressCraft.Helper.appendChildren(this.panel, [lblstr, ExpressCraft.Control.op_Implicit(inputstr)]);
                             //if(obj.Length > 100)
                             //{
                             //	incrementHeight = defaultHeight2X;
@@ -5422,6 +5441,20 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if($t.jump == 1) continue;
             }
             // Add Accept Changes
+        }
+    });
+
+    Bridge.ns("ExpressCraft.FormDataRowEdit", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.FormDataRowEdit, {
+        f1: function (_o1) {
+            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+                setText: "OK"
+            } ));
+            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                setText: "Cancel"
+            } ));
+            return _o1;
         }
     });
 
@@ -5619,25 +5652,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.ns("ExpressCraft.MessageBoxForm", $asm.$);
 
     Bridge.apply($asm.$.ExpressCraft.MessageBoxForm, {
-        f1: function (_o1) {
-            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+        f1: function (_o2) {
+            _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
                 setText: "Ok"
-            } ));
-            return _o1;
-        },
-        f2: function (_o2) {
-            _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
-                setText: "No"
-            } ));
-            _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Yes), {
-                setText: "Yes"
             } ));
             return _o2;
         },
-        f3: function (_o3) {
-            _o3.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
-                setText: "Cancel"
-            } ));
+        f2: function (_o3) {
             _o3.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
                 setText: "No"
             } ));
@@ -5646,17 +5667,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } ));
             return _o3;
         },
-        f4: function (_o4) {
-            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Abort), {
-                setText: "Abort"
+        f3: function (_o4) {
+            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                setText: "Cancel"
             } ));
-            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Retry), {
-                setText: "Retry"
+            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
+                setText: "No"
             } ));
-            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Ignore), {
-                setText: "Ignore"
+            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Yes), {
+                setText: "Yes"
             } ));
             return _o4;
+        },
+        f4: function (_o5) {
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Abort), {
+                setText: "Abort"
+            } ));
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Retry), {
+                setText: "Retry"
+            } ));
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Ignore), {
+                setText: "Ignore"
+            } ));
+            return _o5;
         }
     });
 
