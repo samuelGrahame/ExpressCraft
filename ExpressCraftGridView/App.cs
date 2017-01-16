@@ -41,13 +41,12 @@ namespace ExpressCraftGridView
                 {                    
                     var dr = dataTable.NewRow();
                     var fdre = new FormDataRowEdit(dr, GridView, true);
-                    fdre.DialogResult = DialogResultEnum.OK;
-
                     
-
                     fdre.ShowDialog(new ExpressCraft.DialogResult(DialogResultEnum.OK, () => {
                         dataTable.AcceptNewRows();
                         GridView.RenderGrid();
+                    }), new DialogResult(DialogResultEnum.Cancel, () => {
+                        dataTable.RejectNewRows();
                     }));
                 };
 
