@@ -13,59 +13,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     "use strict";
 
     Bridge.define("ExpressCraft.App", {
-        statics: {
-            untiTestLiveAdd: function () {
-                var dt = new ExpressCraft.DataTable();
-
-                dt.addColumn("Index", ExpressCraft.DataType.Integer);
-                dt.addColumn("A", ExpressCraft.DataType.Integer);
-                dt.addColumn("B", ExpressCraft.DataType.Integer);
-                dt.addColumn("C", ExpressCraft.DataType.Integer);
-
-                var sw = System.Diagnostics.Stopwatch.startNew();
-                var r = new System.Random.ctor();
-
-                for (var i = 0; i < 100000; i = (i + 1) | 0) {
-                    dt.addRow$1([i, r.next(), r.next(), r.next()]);
-                }
-
-                sw.stop();
-
-                //Global.Alert("took: " + sw.ElapsedMilliseconds + "ms to set data/add for 1000000 row(s)");			
-                return dt;
-            },
-            unitTestBatchAdd: function () {
-                var dt = new ExpressCraft.DataTable();
-
-                dt.addColumn("CNTR", ExpressCraft.DataType.Long);
-                dt.addColumn("Name", ExpressCraft.DataType.String);
-                dt.addColumn("Date", ExpressCraft.DataType.DateTime);
-
-                dt.beginNewRow(1000000);
-
-                var sw = System.Diagnostics.Stopwatch.startNew();
-
-                for (var i = System.Int64(0); i.lt(System.Int64(1000000)); i = i.inc()) {
-                    var dr = dt.newRow();
-
-                    dr.setItem(0, i);
-                    dr.setItem(1, "this is a new test");
-                    dr.setItem(2, new Date());
-                }
-
-                sw.stop();
-
-                Bridge.global.alert("took: " + sw.milliseconds() + "ms to set data for 1000000 row(s)");
-
-                sw = System.Diagnostics.Stopwatch.startNew();
-
-                dt.acceptNewRows();
-
-                sw.stop();
-
-                Bridge.global.alert("took: " + sw.milliseconds() + "ms to add 1000000 row(s)");
-            }
-        },
         $main: function () {
             ExpressCraft.Settings.setup();
 
@@ -1652,35 +1599,46 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (ExpressCraft.Settings.defaultStyleSheet == null) {
                     return;
                 }
-                ExpressCraft.Settings.defaultFont = ExpressCraft.Settings.getStyleRuleValue("font", ".control");
+                var df = ExpressCraft.Settings.getStyleRuleValue("font", ".control");
+                if (df != null) {
+                    ExpressCraft.Settings.defaultFont = df;
+                }
+
             },
             getStyleRuleValue: function (style, className) {
-                if (ExpressCraft.Settings.pluginStyleSheet != null) {
-                    var pStyles = ExpressCraft.Settings.pluginStyleSheet;
-                    if (pStyles.cssRules) {
-                        for (var i = 0; i < pStyles.cssRules.length; i = (i + 1) | 0) {
-                            var rule = pStyles.cssRules[i];
-                            if (rule.selectorText && !Bridge.referenceEquals(rule.selectorText.split(44).indexOf(className), -1)) {
-                                return rule.style[style];
+                try {
+                    if (ExpressCraft.Settings.pluginStyleSheet != null) {
+                        var pStyles = ExpressCraft.Settings.pluginStyleSheet;
+                        if (pStyles.cssRules) {
+                            for (var i = 0; i < pStyles.cssRules.length; i = (i + 1) | 0) {
+                                var rule = pStyles.cssRules[i];
+                                if (rule.selectorText && !Bridge.referenceEquals(rule.selectorText.split(44).indexOf(className), -1)) {
+                                    return rule.style[style];
+                                }
                             }
                         }
                     }
-                }
 
-                if (ExpressCraft.Settings.defaultStyleSheet == null) {
-                    return null;
-                }
-                var Styles = ExpressCraft.Settings.defaultStyleSheet;
-                if (!Styles.cssRules) {
-                    return null;
-                }
+                    if (ExpressCraft.Settings.defaultStyleSheet == null) {
+                        return null;
+                    }
+                    var Styles = ExpressCraft.Settings.defaultStyleSheet;
+                    if (!Styles.cssRules) {
+                        return null;
+                    }
 
-                for (var i1 = 0; i1 < Styles.cssRules.length; i1 = (i1 + 1) | 0) {
-                    var rule1 = Styles.cssRules[i1];
-                    if (rule1.selectorText && !Bridge.referenceEquals(rule1.selectorText.split(44).indexOf(className), -1)) {
-                        return rule1.style[style];
+                    for (var i1 = 0; i1 < Styles.cssRules.length; i1 = (i1 + 1) | 0) {
+                        var rule1 = Styles.cssRules[i1];
+                        if (rule1.selectorText && !Bridge.referenceEquals(rule1.selectorText.split(44).indexOf(className), -1)) {
+                            return rule1.style[style];
+                        }
                     }
                 }
+                catch ($e1) {
+                    $e1 = System.Exception.create($e1);
+
+                }
+
                 return null;
             }
         }
@@ -2350,6 +2308,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             setup: function (parent) {
                 if (parent === void 0) { parent = null; }
                 ExpressCraft.StyleController.setup();
+                //Settings.Setup();
 
                 if (parent == null) {
                     ExpressCraft.Form.parent = document.body;
@@ -2398,11 +2357,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Form.formCollections.remove(null);
 
                 var zIndex = { v : 1 };
-
-                if (ExpressCraft.Form.formCollections.getCount() === 1) {
-                    ExpressCraft.Form.formOverLay.style.opacity = "0";
+                if (ExpressCraft.Form.formCollections.getCount() === 0) {
+                    ExpressCraft.Form.formOverLay.style.zIndex = "";
                 } else {
-                    ExpressCraft.Form.formOverLay.style.opacity = "0.4";
+                    if (ExpressCraft.Form.formCollections.getCount() === 1) {
+                        ExpressCraft.Form.formOverLay.style.opacity = "0";
+                    } else {
+                        ExpressCraft.Form.formOverLay.style.opacity = "0.4";
+                    }
                 }
 
                 for (var x = 0; x < ExpressCraft.Form.formCollections.getCount(); x = (x + 1) | 0) {
@@ -2927,6 +2889,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             continue;
                         }
                         ownerFormCollection.visibleForms.getItem(i).close();
+                    }
+                    if (ExpressCraft.Form.formCollections.getCount() === 1) {
+                        ExpressCraft.Form.formCollections = new (System.Collections.Generic.List$1(ExpressCraft.FormCollection))();
                     }
                 } else {
                     ownerFormCollection.visibleForms.remove(this);
@@ -4404,13 +4369,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         enabled: true,
         captionDiv: null,
         imageDiv: null,
-        ctor: function (_caption, _isSmallCaption) {
-            if (_caption === void 0) { _caption = ""; }
+        ctor: function (caption, _isSmallCaption) {
+            if (caption === void 0) { caption = ""; }
             if (_isSmallCaption === void 0) { _isSmallCaption = false; }
 
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
-            this.setCaption(_caption);
+            this._caption = caption;
             this.isSmallCaption = _isSmallCaption;
         },
         getIcon: function () {
@@ -5570,42 +5535,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     throw new System.ArgumentOutOfRangeException("ui", null, null, ui);
             }
 
-            ExpressCraft.Helper.setBounds$1(pic, 25, 32, 32, 32);
-            pic.style.backgroundSize = "100% 100%";
-
-            var tb = new ExpressCraft.TextBlock(prompt, 378);
-            tb.computeString();
-
-            var width = 480;
-            if (!tb.elelemtsOverMax) {
-                width = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
-                if (width < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
-                    width = ExpressCraft.Settings.messageFormMinimumWidthInPx;
-                }
-            }
-
-            textContent.innerHTML = tb.computedSource;
-            textContent.style.left = "65px";
-            textContent.style.height = "auto";
-
-            section.style.overflowY = "auto";
-            section.style.height = "100%";
-            section.style.maxHeight = ExpressCraft.Helper.toPx$1(ExpressCraft.Settings.messageFormTextMaximumHeightInPx);
-            section.appendChild(textContent);
-            section.style.top = "32px";
-            section.style.width = "90%";
-
-            this.getBody().style.backgroundColor = "white";
-            ExpressCraft.Helper.appendChildren(this.getBody(), [pic, section, buttonSection]);
-
-            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
-            }
-            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
-            }
-
-
             switch (this._buttons) {
                 case ExpressCraft.MessageBoxButtons.Ok: 
                     this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.MessageBoxForm.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
@@ -5631,6 +5560,48 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 default: 
                     throw new System.ArgumentOutOfRangeException();
             }
+
+            ExpressCraft.Helper.setBounds$1(pic, 25, 32, 32, 32);
+            pic.style.backgroundSize = "100% 100%";
+
+            var tb = new ExpressCraft.TextBlock(prompt, 455);
+            tb.computeString();
+
+            var width = 480;
+            if (!tb.elelemtsOverMax) {
+                width = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
+                if (width < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
+                    width = ExpressCraft.Settings.messageFormMinimumWidthInPx;
+                }
+            }
+
+            if (this._buttonCollection.getCount() > 2) {
+                if (width < 320) {
+                    width = 320;
+                }
+            }
+
+            textContent.innerHTML = tb.computedSource;
+            textContent.style.left = "65px";
+            textContent.style.height = "auto";
+
+            section.style.overflowY = "auto";
+            section.style.height = "100%";
+            section.style.maxHeight = ExpressCraft.Helper.toPx$1(ExpressCraft.Settings.messageFormTextMaximumHeightInPx);
+            section.appendChild(textContent);
+            section.style.top = "32px";
+            section.style.width = "90%";
+
+            this.getBody().style.backgroundColor = "white";
+            ExpressCraft.Helper.appendChildren(this.getBody(), [pic, section, buttonSection]);
+
+            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+            }
+            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+            }
+
 
             ExpressCraft.Helper.appendChildrenTabIndex(buttonSection, this._buttonCollection.toArray());
 

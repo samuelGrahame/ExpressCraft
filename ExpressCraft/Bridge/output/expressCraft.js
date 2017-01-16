@@ -4369,13 +4369,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         enabled: true,
         captionDiv: null,
         imageDiv: null,
-        ctor: function (_caption, _isSmallCaption) {
-            if (_caption === void 0) { _caption = ""; }
+        ctor: function (caption, _isSmallCaption) {
+            if (caption === void 0) { caption = ""; }
             if (_isSmallCaption === void 0) { _isSmallCaption = false; }
 
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
-            this.setCaption(_caption);
+            this._caption = caption;
             this.isSmallCaption = _isSmallCaption;
         },
         getIcon: function () {

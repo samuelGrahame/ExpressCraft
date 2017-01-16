@@ -100,9 +100,9 @@ namespace ExpressCraft
 			}
 		}
 		
-		public RibbonButton(string _caption = "", bool _isSmallCaption = false) : base(_isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton")
+		public RibbonButton(string caption = "", bool _isSmallCaption = false) : base(_isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton")
 		{
-			Caption = _caption;
+			_caption = caption;
 			IsSmallCaption = _isSmallCaption;
 		}
 
