@@ -19,6 +19,7 @@ namespace ExpressCraftGridView
             public GridView GridView;
             public SimpleButton AddNewRowButton;
             public SimpleButton Add1000RowsButton;
+            public SimpleButton ClearRowsButton;
 
             protected override void OnShowing()
             {
@@ -45,6 +46,17 @@ namespace ExpressCraftGridView
 
                 Add1000RowsButton = new SimpleButton() { Text = "Add 1000 Row's" };
                 Add1000RowsButton.SetBounds("98px", "3px", "auto", "24px");
+
+                ClearRowsButton = new SimpleButton() { Text = "Clear Rows" };
+                ClearRowsButton.SetBounds("180px", "3px", "auto", "24px");
+
+                ClearRowsButton.ItemClick = (ev) =>
+                {
+                    dataTable.ClearRows();
+
+                    GridView.RenderGrid();
+                };
+
                 Add1000RowsButton.ItemClick = (ev) =>
                 {
                     dataTable.BeginNewRow(1000);

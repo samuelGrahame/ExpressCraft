@@ -28,6 +28,15 @@ namespace ExpressCraft
 
 		public Action<int> RowSizeChanged = null;
 
+        public void ClearRows()
+        {
+            _RowCount = 0;
+            for (int i = 0; i < Columns.Count; i++)
+            {
+                ClearCells(Columns[i]);
+            }
+        }
+
 		private int _ColCount;
 		public int ColumnCount
 		{
@@ -48,45 +57,89 @@ namespace ExpressCraft
 
 		private List<DataRow> NewRows = new List<DataRow>();		
 
+        public void ClearCells<T>(DataColumn _column)
+        {
+            dynamic _col = _column;
+            _col.cells = new List<T>();
+        }
+
+        public void ClearCells(DataColumn _column)
+        {
+            switch (_column.DataType)
+            {
+                default:
+                case DataType.Object:
+                    ClearCells<object>(_column);
+                    break;
+                case DataType.DateTime:
+                    ClearCells<DateTime?>(_column);
+                    break;
+                case DataType.String:
+                    ClearCells<string>(_column);
+                    break;
+                case DataType.Integer:
+                    ClearCells<int?>(_column);
+                    break;
+                case DataType.Long:
+                    ClearCells<long?>(_column);
+                    break;
+                case DataType.Float:
+                    ClearCells<float?>(_column);
+                    break;
+                case DataType.Double:
+                    ClearCells<double?>(_column);
+                    break;
+                case DataType.Decimal:
+                    ClearCells<decimal?>(_column);
+                    break;
+                case DataType.Bool:
+                    ClearCells<bool?>(_column);
+                    break;
+                case DataType.Byte:
+                    ClearCells<byte?>(_column);
+                    break;
+                case DataType.Short:
+                    ClearCells<short?>(_column);
+                    break;
+            }
+        }
+
+        public DataColumn GetColumnByDataType(DataType type = DataType.Object)
+        {
+            switch (type)
+            {
+                default:
+                case DataType.Object:
+                    return new DataColumnObject();                    
+                case DataType.DateTime:
+                    return new DataColumnDateTime();                    
+                case DataType.String:
+                    return new DataColumnString();                    
+                case DataType.Integer:
+                    return new DataColumnInteger();                    
+                case DataType.Long:
+                    return new DataColumnLong();                    
+                case DataType.Float:
+                    return new DataColumnFloat();                    
+                case DataType.Double:
+                    return new DataColumnDouble();                    
+                case DataType.Decimal:
+                    return new DataColumnDecimal();                    
+                case DataType.Bool:
+                    return new DataColumnBool();                    
+                case DataType.Byte:
+                    return new DataColumnByte();                    
+                case DataType.Short:
+                    return new DataColumnShort();                    
+            }
+        }
+
 		public void AddColumn(string fieldName, DataType type = DataType.Object)
 		{
-			switch(type)
-			{
-				default:
-				case DataType.Object:
-					Columns.Add(new DataColumnObject() { FieldName = fieldName });
-					break;
-				case DataType.DateTime:
-					Columns.Add(new DataColumnDateTime() { FieldName = fieldName });
-					break;
-				case DataType.String:
-					Columns.Add(new DataColumnString() { FieldName = fieldName });
-					break;
-				case DataType.Integer:
-					Columns.Add(new DataColumnInteger() { FieldName = fieldName });
-					break;
-				case DataType.Long:
-					Columns.Add(new DataColumnLong() { FieldName = fieldName });
-					break;
-				case DataType.Float:
-					Columns.Add(new DataColumnFloat() { FieldName = fieldName });
-					break;
-				case DataType.Double:
-					Columns.Add(new DataColumnDouble() { FieldName = fieldName });
-					break;
-				case DataType.Decimal:
-					Columns.Add(new DataColumnDecimal() { FieldName = fieldName });
-					break;
-				case DataType.Bool:
-					Columns.Add(new DataColumnBool() { FieldName = fieldName });
-					break;
-				case DataType.Byte:
-					Columns.Add(new DataColumnByte() { FieldName = fieldName });
-					break;
-				case DataType.Short:
-					Columns.Add(new DataColumnShort() { FieldName = fieldName });
-					break;
-			}			
+            var col = GetColumnByDataType(type);
+            col.FieldName = fieldName;
+
+            Columns.Add(col);
 			_ColCount = Columns.Count;
 		}
 
