@@ -36,19 +36,20 @@ namespace ExpressCraft
 		private const string SortUpBase64 = "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";
 		public const float UnitHeight = 28.0f;
 		private bool _columnAutoWidth = false;
-		
+
 		private int _focusedDataHandle = -1;
 		public int FocusedDataHandle
 		{
 			get { return _focusedDataHandle; }
-			set {
+			set
+			{
 				if(value != _focusedDataHandle)
 				{
 					var prev = _focusedDataHandle;
 					_focusedDataHandle = value;
 					RenderGrid();
-					if(OnFocusedRowChanged != null)					
-						OnFocusedRowChanged(_focusedDataHandle, prev);					
+					if(OnFocusedRowChanged != null)
+						OnFocusedRowChanged(_focusedDataHandle, prev);
 				}
 			}
 		}
@@ -56,17 +57,18 @@ namespace ExpressCraft
 		public bool ColumnAutoWidth
 		{
 			get { return _columnAutoWidth; }
-			set {
-				if(value)				
-					GridBodyContainer.Style.OverflowX = Overflow.Hidden;				
-				else				
-					GridBodyContainer.Style.OverflowX = Overflow.Auto;				
+			set
+			{
+				if(value)
+					GridBodyContainer.Style.OverflowX = Overflow.Hidden;
+				else
+					GridBodyContainer.Style.OverflowX = Overflow.Auto;
 
 				if(_columnAutoWidth != value)
 				{
-					_columnAutoWidth = value;					
+					_columnAutoWidth = value;
 					RenderGrid();
-				}				
+				}
 			}
 		}
 
@@ -75,7 +77,8 @@ namespace ExpressCraft
 		public bool UseEditForm
 		{
 			get { return _useEditForm; }
-			set {
+			set
+			{
 				if(value != _useEditForm)
 				{
 					_useEditForm = value;
@@ -88,7 +91,7 @@ namespace ExpressCraft
 		public Action<MouseEvent<HTMLDivElement>> OnRowClick;
 		public Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
 
-		public List<int> VisibleRowHandles = null;		
+		public List<int> VisibleRowHandles = null;
 
 		public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
 		{
@@ -119,7 +122,8 @@ namespace ExpressCraft
 			if(sort == SortMode.None)
 			{
 				VisibleRowHandles = null;
-			}else
+			}
+			else
 			{
 				bool sort1 = sort == SortMode.Asc;
 
@@ -151,7 +155,7 @@ namespace ExpressCraft
 						SetVisibleRowHandles((column.Column as DataColumnDecimal).Cells, sort1);
 						break;
 				}
-			}					
+			}
 
 			RenderGrid();
 		}
@@ -178,12 +182,17 @@ namespace ExpressCraft
 			GridBodyContainer.ScrollTop = 0;
 		}
 
-		public DataTable DataSource { get { return _dataSource; }
-			set {
+		public DataTable DataSource
+		{
+			get { return _dataSource; }
+			set
+			{
 				FocusedDataHandle = -1;
 				SelectedRows = new HardSoftList<bool>(false);
+				VisibleRowHandles = new List<int>();
+
 				_dataSource = value;
-				
+
 				if(_dataSource != null)
 				{
 					if(Columns.Count == 0 && AutoGenerateColumnsFromSource)
@@ -194,30 +203,30 @@ namespace ExpressCraft
 						{
 							var sw1 = Stopwatch.StartNew();
 
-							var gvc = new GridViewColumn(this);							
+							var gvc = new GridViewColumn(this);
 							gvc.Caption = _dataSource.Columns[i].FieldName;
 							gvc.Column = _dataSource.Columns[i];
-							gvc.Visible = true;							
+							gvc.Visible = true;
 
-							switch (_dataSource.Columns[i].DataType)
-                            {                                                                
-                                case DataType.Integer:
-                                case DataType.Long:
-                                case DataType.Float:
-                                case DataType.Double:
-                                case DataType.Decimal:
-                                    gvc.BodyApparence.Alignment = TextAlign.Right;
-                                    break;
-                                case DataType.DateTime:
+							switch(_dataSource.Columns[i].DataType)
+							{
+								case DataType.Integer:
+								case DataType.Long:
+								case DataType.Float:
+								case DataType.Double:
+								case DataType.Decimal:
+									gvc.BodyApparence.Alignment = TextAlign.Right;
+									break;
+								case DataType.DateTime:
 									if(Settings.GridViewAutoColumnGenerateFormatAsDate)
 										gvc.FormatString = "{0:d}";
 									else
 										gvc.FormatString = "{0:yyyy-MM-dd}";
 
 									break;
-                            }
+							}
 
-                            Columns.Add(gvc);
+							Columns.Add(gvc);
 
 							sw.Stop();
 							Console.WriteLine("DataSource AddColumn Auto: " + sw1.ElapsedMilliseconds);
@@ -226,7 +235,7 @@ namespace ExpressCraft
 						sw.Stop();
 						Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
 					}
-					
+
 					RenderGrid();
 				}
 			}
@@ -255,15 +264,15 @@ namespace ExpressCraft
 			}
 			return null;
 		}
-		
+
 		public object GetFocusedRowCellValue(string FieldName)
 		{
 			return GetFocusedRowCellValue(GetColumnByFieldName(FieldName));
-		}		
+		}
 
 		public object GetFocusedRowCellValue(GridViewColumn column)
 		{
-			return GetRowCellValue(FocusedDataHandle, column);			
+			return GetRowCellValue(FocusedDataHandle, column);
 		}
 
 		public object GetFocusedRowCellValue(DataColumn column)
@@ -272,10 +281,10 @@ namespace ExpressCraft
 		}
 
 		public object GetRowCellValue(int Datahandle, GridViewColumn column)
-		{			
+		{
 			return GetRowCellValue(Datahandle, column.Column);
 		}
-		
+
 		public object GetRowCellValue(int Datahandle, DataColumn column)
 		{
 			if(Datahandle == -1)
@@ -306,7 +315,7 @@ namespace ExpressCraft
 			}
 
 			return null;
-		}		
+		}
 
 		public void AddColumn(string caption, string fieldname, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false)
 		{
@@ -337,7 +346,7 @@ namespace ExpressCraft
 				return;
 
 			Columns.AddRange(columns);
-			
+
 			RenderGrid();
 		}
 
@@ -386,7 +395,7 @@ namespace ExpressCraft
 				{
 					index[i] = GetDataSourceRow(i);
 				}
-				SelectedRows.ClearAllSetHardRange(true, index);				
+				SelectedRows.ClearAllSetHardRange(true, index);
 			}
 			RenderGrid();
 		}
@@ -404,53 +413,54 @@ namespace ExpressCraft
 				PrevRenderGridScrollId = Global.SetTimeout(() => {
 					RenderGrid();
 				}, Math.Max(1, Settings.GridViewScrollDelayMS));
-			}else
+			}
+			else
 			{
 				RenderGrid();
-			}			
+			}
 		}
 		private Stopwatch clickTimeDiff = null;
 		public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
-		{			
+		{
 			GridHeaderContainer = Div("heading-container");
 			GridHeaderContainer.SetBounds("0", "0", "100%", "29px");
 
-			GridHeader = Div();						
+			GridHeader = Div();
 			GridHeader.SetBounds("0", "0", "0", "29px");
 			GridBodyContainer = Div();
 			GridBodyContainer.SetBounds("1px", "31px", "calc(100% - 2px)", "calc(100% - 31px)");
-			
+
 			GridBodyContainer.Style.OverflowX = Overflow.Auto;
 			GridBodyContainer.Style.OverflowY = Overflow.Auto;
 
 			GridHeaderContainer.Style.Overflow = Overflow.Hidden;
 
-			GridBody = Div();			
+			GridBody = Div();
 			GridBody.SetBounds("0", "0", "0", "0");
 
 			GridBodyContainer.AppendChild(GridBody);
 			GridHeaderContainer.AppendChild(GridHeader);
 
-            Content.OnMouseUp = (ev) =>
-            {
-                if (ResizeIndex == -1)
-                    return;
-                int x = Script.Write<int>("ev.pageX");
-                x = Columns[ResizeIndex].Width + (x - ResizePageX);
-                if (x < 24)
-                    x = 24;
-                Columns[ResizeIndex].Width = x;
-                
-                ResizeSpan.Style.Cursor = Cursor.Default;
+			Content.OnMouseUp = (ev) =>
+			{
+				if(ResizeIndex == -1)
+					return;
+				int x = Script.Write<int>("ev.pageX");
+				x = Columns[ResizeIndex].Width + (x - ResizePageX);
+				if(x < 24)
+					x = 24;
+				Columns[ResizeIndex].Width = x;
 
-                ev.PreventDefault();
-                ev.StopImmediatePropagation();
-                ev.StopPropagation();
+				ResizeSpan.Style.Cursor = Cursor.Default;
 
-                ResizeIndex = -1;
-                ResizeSpan = null;
-            };            
-            OnRowSizeChanged = (i) =>
+				ev.PreventDefault();
+				ev.StopImmediatePropagation();
+				ev.StopPropagation();
+
+				ResizeIndex = -1;
+				ResizeSpan = null;
+			};
+			OnRowSizeChanged = (i) =>
 			{
 				ValidateGridHeight();
 			};
@@ -488,11 +498,11 @@ namespace ExpressCraft
 							OnDoubleClick(ev);
 						}
 					}
-				}				
+				}
 
 				var DataRowHandle = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
 
-				var mev = ev.As<MouseEvent>();	
+				var mev = ev.As<MouseEvent>();
 				if(AllowMultiSelection)
 				{
 					if(mev.CtrlKey)
@@ -506,18 +516,19 @@ namespace ExpressCraft
 						return;
 					}
 				}
-				SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);			
+				SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
 				if(DataRowHandle != _focusedDataHandle)
 				{
 					FocusedDataHandle = DataRowHandle;
-				}else
+				}
+				else
 				{
 					RenderGrid();
 				}
 			};
 			Content.TabIndex = 0;
 			OnDoubleClick = (ev) =>
-			{				
+			{
 				int drh = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
 				if(OnRowDoubleClick != null)
 					OnRowDoubleClick(drh);
@@ -528,7 +539,7 @@ namespace ExpressCraft
 
 					var fdre = new FormDataRowEdit(idr, this, true);
 					fdre.ShowDialog();
-				}				
+				}
 			};
 
 			Content.OnKeyDown = (ev) =>
@@ -592,15 +603,15 @@ namespace ExpressCraft
 		public float GetRawVisibleRowCount()
 		{
 			return GridBodyContainer.ClientHeight == 0 ? 0.0f : GridBodyContainer.ClientHeight / UnitHeight;
-		}		
+		}
 
 		public float GetRawTopRowIndex()
 		{
-			return GridBodyContainer.ScrollTop == 0 ? 0.0f : GridBodyContainer.ScrollTop / UnitHeight;
+			return GridBodyContainer.ScrollTop == 0 ? 0.0f : GridBodyContainer.ScrollTop / PixelsPerRow(RowCount());
 		}
 
 		public void ValidateGridWidth()
-		{			
+		{
 			var width = GetColumnWidths();
 			GridBody.Style.Width = (width).ToPx();
 			GridHeader.Style.Width = ((width) + 24).ToPx(); // (width).ToPx();
@@ -618,17 +629,31 @@ namespace ExpressCraft
 			RightOfTableHeader.SetBounds(width - 1, 0, 1, 1);
 		}
 
+		public float PixelsPerRow(int rowCount)
+		{
+			if(rowCount > Settings.MaximumPixelScrollingRows)
+			{
+				return 1.0f;
+			}
+			else
+			{
+				return UnitHeight;
+			}
+		}
+
 		public void ValidateGridHeight()
 		{
 			var i = RowCount();
+			var ppr = PixelsPerRow(i);
 
-			GridBody.Style.Height = (i * UnitHeight).ToPx();
+
+			GridBody.Style.Height = (i * ppr).ToPx();
 			if(BottonOfTable == null)
 			{
 				BottonOfTable = Div();
 				GridBody.AppendChild(BottonOfTable);
 			}
-			BottonOfTable.SetBounds(0, (i * UnitHeight) - 1, 1, 1);
+			BottonOfTable.SetBounds(0, (i * ppr) - 1, 1, 1);
 		}
 
 		public void ValidateGridSize()
@@ -649,17 +674,19 @@ namespace ExpressCraft
 			//		//GridHeader.Children[i].Delete();
 			//	}
 			//}
-					//GridHeader.Children[i].Delete();
+			//GridHeader.Children[i].Delete();
 		}
 
 		public void ClearColumns()
 		{
-			Columns = new List<GridViewColumn>();			
+			Columns = new List<GridViewColumn>();
 		}
 
 		public void ClearView()
 		{
 			Columns = new List<GridViewColumn>();
+			VisibleRowHandles = new List<int>();
+			SelectedRows = new HardSoftList<bool>(false);
 			_dataSource = null;
 		}
 
@@ -682,175 +709,176 @@ namespace ExpressCraft
 			ClearHeader();
 			ClearBody();
 		}
-        private int DragIndex = -1;
-        private int ResizeIndex = -1;
-        private int ResizePageX = 0;
-        private HTMLSpanElement ResizeSpan = null;
+		private int DragIndex = -1;
+		private int ResizeIndex = -1;
+		private int ResizePageX = 0;
+		private HTMLSpanElement ResizeSpan = null;
 
-        private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
-        {
-            se.SetAttribute("i", Convert.ToString(index));
-            se.SetAttribute("draggable", "true");
-            se.OnClick = (ev) => {
-                if (ResizeIndex >= 0)
-                    return;
+		private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
+		{
+			se.SetAttribute("i", Convert.ToString(index));
+			se.SetAttribute("draggable", "true");
+			se.OnClick = (ev) => {
+				if(ResizeIndex >= 0)
+					return;
 
-                for (int i = 0; i < ColumnCount(); i++)
-                {
-                    if (Columns[i] != gcol)
-                    {
-                        Columns[i].SortedMode = SortMode.None;
-                    }
-                }
-                switch (gcol.SortedMode)
-                {
-                    default:
-                    case SortMode.None:
-                        SortColumn(gcol, SortMode.Asc);
-                        break;
-                    case SortMode.Asc:
-                        SortColumn(gcol, SortMode.Desc);
-                        break;
-                    case SortMode.Desc:
-                        SortColumn(gcol, SortMode.None);
-                        break;
-                }
-            };
-            se.OnDragStart = (ev) =>
-            {
-                //ev.dataTransfer.setData("text", ev.target.id);
-                Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", index.ToString());
-            };
-            se.OnDragOver = (ev) =>
-            {
-                ev.PreventDefault();                
-            };
-            se.OnDrop = (ev) =>
-            {
-                if (ev.Target == null || !(ev.Target is HTMLSpanElement))
-                    return;
-
-                var target = ev.Target.As<HTMLSpanElement>();
-                
-                if (target.ParentElement != GridHeader)
-                    return;
-                
-                var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
-                var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
-                if (SelectedIndex == HoverIndex)
-                    return;
-                
-                if (HoverIndex < 0)
-                    return;
-
-                int x = Script.Write<int>("ev.layerX");
-                x -= target.ClientLeft;
-                int w = target.ClientWidth / 2;
-                
-                if (HoverIndex == SelectedIndex - 1 && x > w)
-                    return;
-                if (HoverIndex == SelectedIndex + 1 && x < w)
-                    return;
-                
-                if (x < w)
-                {
-                    DragIndex = HoverIndex;
-                }
-                else
-                {
-                    DragIndex = HoverIndex + 1;
-                }
-
-                if (DragIndex < 0 || SelectedIndex < 0)
-                    return;
-                var col = Columns[SelectedIndex];
-                if (DragIndex == Columns.Count)
-                {
-                    Columns.Remove(col);
-                    Columns.Add(col);
-                }
-                else
-                {                    
-                    var col1 = Columns[DragIndex];
-                    Columns.Remove(col);
-                    Columns.Insert(Columns.IndexOf(col1), col);
-                }
-                
-                RenderGrid();
-            };
-
-            se.OnMouseDown = (ev) =>
-            {
-                int x = Script.Write<int>("ev.layerX");
-                var target = ev.Target.As<HTMLSpanElement>();
-                x -= target.ClientLeft;
-                ResizePageX = Script.Write<int>("ev.pageX");                               
-
-                if (x >= target.ClientWidth - 2)
-                {
-                    ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
-                    ResizeSpan = target;
-                    ResizeSpan.Style.Cursor = Cursor.EastWestResize;
-                    
-                    ev.PreventDefault();
-                }else
-                {
-                    ResizeSpan = null;
-                    ResizeIndex = -1;
-                }
-            };
-
-            se.OnMouseMove = (ev) =>
-            {
-                if (ResizeIndex == -1)
-                {
-                    int x = Script.Write<int>("ev.layerX");
-                    var target = ev.Target.As<HTMLSpanElement>();
-                    x -= target.ClientLeft;
-                    
-                    if (x >= target.ClientWidth - 2)
-                    {
-                        target.Style.Cursor = Cursor.EastWestResize;
-                        return;
-                    }
-                    target.Style.Cursor = Cursor.Default;
-                }
-            };
-        }
-        int lastId = -1;
-
-        int PrevScroll = -1;
-
-        private void ProcessBlur()
-        {
-            if (PrevScroll != GridBodyContainer.ScrollTop)
-            {
-                GridBody.ClassList.Add("blur");
-                if (lastId != -1)
-                {
-                    Global.ClearTimeout(lastId);
-                    lastId = -1;
-                }
-
-                lastId = Global.SetTimeout(() =>
-                {
-                    GridBody.ClassList.Remove("blur");
-                }, 100);
-            }
-            PrevScroll = GridBodyContainer.ScrollTop;
-        }
-		
-        public void RenderGrid()
-		{									
-			GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
-            if(Settings.GridViewBlurOnScroll)            
-                ProcessBlur();
-                        
-            ValidateGridSize();
-			
-			if (ColumnCount() == 0)
+				for(int i = 0; i < ColumnCount(); i++)
+				{
+					if(Columns[i] != gcol)
+					{
+						Columns[i].SortedMode = SortMode.None;
+					}
+				}
+				switch(gcol.SortedMode)
+				{
+					default:
+					case SortMode.None:
+						SortColumn(gcol, SortMode.Asc);
+						break;
+					case SortMode.Asc:
+						SortColumn(gcol, SortMode.Desc);
+						break;
+					case SortMode.Desc:
+						SortColumn(gcol, SortMode.None);
+						break;
+				}
+			};
+			se.OnDragStart = (ev) =>
 			{
-				ClearGrid();				
+				//ev.dataTransfer.setData("text", ev.target.id);
+				Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", index.ToString());
+			};
+			se.OnDragOver = (ev) =>
+			{
+				ev.PreventDefault();
+			};
+			se.OnDrop = (ev) =>
+			{
+				if(ev.Target == null || !(ev.Target is HTMLSpanElement))
+					return;
+
+				var target = ev.Target.As<HTMLSpanElement>();
+
+				if(target.ParentElement != GridHeader)
+					return;
+
+				var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
+				var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
+				if(SelectedIndex == HoverIndex)
+					return;
+
+				if(HoverIndex < 0)
+					return;
+
+				int x = Script.Write<int>("ev.layerX");
+				x -= target.ClientLeft;
+				int w = target.ClientWidth / 2;
+
+				if(HoverIndex == SelectedIndex - 1 && x > w)
+					return;
+				if(HoverIndex == SelectedIndex + 1 && x < w)
+					return;
+
+				if(x < w)
+				{
+					DragIndex = HoverIndex;
+				}
+				else
+				{
+					DragIndex = HoverIndex + 1;
+				}
+
+				if(DragIndex < 0 || SelectedIndex < 0)
+					return;
+				var col = Columns[SelectedIndex];
+				if(DragIndex == Columns.Count)
+				{
+					Columns.Remove(col);
+					Columns.Add(col);
+				}
+				else
+				{
+					var col1 = Columns[DragIndex];
+					Columns.Remove(col);
+					Columns.Insert(Columns.IndexOf(col1), col);
+				}
+
+				RenderGrid();
+			};
+
+			se.OnMouseDown = (ev) =>
+			{
+				int x = Script.Write<int>("ev.layerX");
+				var target = ev.Target.As<HTMLSpanElement>();
+				x -= target.ClientLeft;
+				ResizePageX = Script.Write<int>("ev.pageX");
+
+				if(x >= target.ClientWidth - 2)
+				{
+					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
+					ResizeSpan = target;
+					ResizeSpan.Style.Cursor = Cursor.EastWestResize;
+
+					ev.PreventDefault();
+				}
+				else
+				{
+					ResizeSpan = null;
+					ResizeIndex = -1;
+				}
+			};
+
+			se.OnMouseMove = (ev) =>
+			{
+				if(ResizeIndex == -1)
+				{
+					int x = Script.Write<int>("ev.layerX");
+					var target = ev.Target.As<HTMLSpanElement>();
+					x -= target.ClientLeft;
+
+					if(x >= target.ClientWidth - 2)
+					{
+						target.Style.Cursor = Cursor.EastWestResize;
+						return;
+					}
+					target.Style.Cursor = Cursor.Default;
+				}
+			};
+		}
+		int lastId = -1;
+
+		int PrevScroll = -1;
+
+		private void ProcessBlur()
+		{
+			if(PrevScroll != GridBodyContainer.ScrollTop)
+			{
+				GridBody.ClassList.Add("blur");
+				if(lastId != -1)
+				{
+					Global.ClearTimeout(lastId);
+					lastId = -1;
+				}
+
+				lastId = Global.SetTimeout(() =>
+				{
+					GridBody.ClassList.Remove("blur");
+				}, 100);
+			}
+			PrevScroll = GridBodyContainer.ScrollTop;
+		}
+
+		public void RenderGrid()
+		{
+			GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
+			if(Settings.GridViewBlurOnScroll)
+				ProcessBlur();
+
+			ValidateGridSize();
+
+			if(ColumnCount() == 0)
+			{
+				ClearGrid();
 				return;
 			}
 
@@ -870,7 +898,7 @@ namespace ExpressCraft
 			if(_columnAutoWidth)
 			{
 				_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / Columns.Count;
-			}			
+			}
 
 			for(int x = 0; x < Columns.Count; x++)
 			{
@@ -896,30 +924,30 @@ namespace ExpressCraft
 			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 			{
 				var gcol = Columns[x];
-				var apparence = gcol.HeadingApparence;				
+				var apparence = gcol.HeadingApparence;
 
-				var col = Label(gcol.Caption, 
-					(_columnAutoWidth ? gcol.CachedX  : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1), 
+				var col = Label(gcol.Caption,
+					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
 					apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
 
 				if(gcol.SortedMode != SortMode.None)
 				{
-					var sortImage = Div();					
+					var sortImage = Div();
 					sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
 					sortImage.Style.Background = GetImageString(gcol.SortedMode == SortMode.Asc ? SortUpBase64 : SortDownBase64);
 					col.AppendChild(sortImage);
 				}
 
-                SetupColumn(col, x, gcol);
+				SetupColumn(col, x, gcol);
 
-				Cols.Add(col);				
+				Cols.Add(col);
 			}
 
 			if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
-			{				
+			{
 				ClearGrid();
 				GridHeader.AppendChildren(Cols.ToArray());
-								
+
 				return;
 			}
 
@@ -952,11 +980,11 @@ namespace ExpressCraft
 			}
 
 			var Rows = new List<HTMLDivElement>();
-            if(Settings.GridViewRowScrollPadding > 0)
-            {
-                start -= Settings.GridViewRowScrollPadding;
-                Length += Settings.GridViewRowScrollPadding;
-            }			
+			if(Settings.GridViewRowScrollPadding > 0)
+			{
+				start -= Settings.GridViewRowScrollPadding;
+				Length += Settings.GridViewRowScrollPadding;
+			}
 			for(int i = start; i < Length; i++)
 			{
 				if(i < DataSource.RowCount && i >= 0)
@@ -965,12 +993,12 @@ namespace ExpressCraft
 
 					var Y = (i * (UnitHeight)) - RawTopRowScrollPadding;
 					string classname = (i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : "");
-					
+
 					var dr = Div(classname);
 					var Last = Columns[RawLeftCellCount - 1];
 					dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : (Last.CachedX + Last.Width), UnitHeight);
 					dr.SetAttribute("i", Convert.ToString(DataRowhandle));
-									
+
 					dr.OnClick = OnRowClick;
 					if(Settings.IsChrome)
 					{
@@ -980,8 +1008,8 @@ namespace ExpressCraft
 					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 					{
 						var apparence = Columns[x].BodyApparence;
-						var cell = Label(Columns[x].GetDisplayValueByDataRowHandle(DataRowhandle), Columns[x].CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);                       
-                        dr.AppendChild(cell);						
+						var cell = Label(Columns[x].GetDisplayValueByDataRowHandle(DataRowhandle), Columns[x].CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
+						dr.AppendChild(cell);
 					}
 					Rows.Add(dr);
 				}
@@ -993,13 +1021,13 @@ namespace ExpressCraft
 			GridHeader.AppendChildren(Cols.ToArray());
 			GridHeaderContainer.AppendChild(GridHeader);
 
-			if (Rows.Count > 0)
+			if(Rows.Count > 0)
 			{
 				GridBodyContainer.RemoveChild(GridBody);
 				GridBody.AppendChildren(Rows.ToArray());
 				GridBodyContainer.AppendChild(GridBody);
 				//jQuery.Select(GridBodyRows).Append(Rows.ToArray());
-			}			
+			}
 		}
 	}
 
@@ -1043,7 +1071,7 @@ namespace ExpressCraft
 	{
 		public DataColumn Column;
 		public GridView View;
-		public string Caption;		
+		public string Caption;
 		public bool Visible;
 		public float CachedX;
 		public string FormatString = string.Empty;
@@ -1066,7 +1094,7 @@ namespace ExpressCraft
 		}
 
 		public string GetDisplayValueByDataRowHandle(int RowHandle)
-		{			
+		{
 			if(string.IsNullOrWhiteSpace(FormatString))
 			{
 				return Column.GetDisplayValue(RowHandle);
@@ -1099,7 +1127,8 @@ namespace ExpressCraft
 		public int Width
 		{
 			get { return _width; }
-			set {
+			set
+			{
 				if(value < 24)
 					value = 24;
 				if(_width != value)

@@ -30,6 +30,8 @@ namespace ExpressCraft
 		public static int MessageFormTextMinimumHeightInPx = 32;
 		public static int MessageFormMinimumWidthInPx = 195;
 
+		public static int MaximumPixelScrollingRows = 500000;
+
 		private static bool _WindowManagerVisible;
 
 		public static bool WindowManagerVisible
