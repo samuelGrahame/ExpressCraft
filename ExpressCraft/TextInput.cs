@@ -72,6 +72,7 @@ namespace ExpressCraft
 			get { return this.Content.As<HTMLInputElement>().Value; }
 			set
 			{
+                
 				this.Content.As<HTMLInputElement>().Value = value;
 
                 CheckTextChanged();
