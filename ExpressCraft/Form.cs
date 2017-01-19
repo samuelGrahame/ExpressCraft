@@ -634,7 +634,7 @@ namespace ExpressCraft
                     InErrorDialog = false;
                 }
                 
-                return true;
+                return false;
             });
 
             WindowHolder.AppendChild(FormOverLay);

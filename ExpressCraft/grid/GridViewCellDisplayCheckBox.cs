@@ -11,12 +11,10 @@ namespace ExpressCraft
 			var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
 			
 			
-			var input = Control.Input(null, InputType.Checkbox);			
+			var input = Control.Input("cell", InputType.Checkbox);			
 
 			input.SetChecked(value);
-
-			input.Style.Height = (GridView.UnitHeight - 8).ToPx();
-		
+            		
 			return input;
 		}
 	}
