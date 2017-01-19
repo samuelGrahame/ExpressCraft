@@ -86,4 +86,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Bridge.Min.15.6.0\build\Bridge.Min.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Bridge.Min.15.6.0\build\Bridge.Min.targets'))" />
   </Target>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)"
+          DestinationFiles="%(Content.Link)"
+          SkipUnchangedFiles='true'
+          OverwriteReadOnlyFiles='true'
+          Condition="'%(Content.Link)' != ''" />
+  </Target>
 </Project>
