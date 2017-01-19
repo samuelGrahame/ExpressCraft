@@ -73,7 +73,7 @@ namespace ExpressCraft
                 {
                     var prev = _focusedcolumn;
                     _focusedcolumn = value;
-                    RenderGrid();
+                    //RenderGrid();
                 }
             }
         }
