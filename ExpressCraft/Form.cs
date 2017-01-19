@@ -29,6 +29,8 @@ namespace ExpressCraft
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
 
+        protected static bool InErrorDialog = false;
+
         public jQuery Self;
 
         protected bool _IsDialog = false;
@@ -370,11 +372,7 @@ namespace ExpressCraft
                 ev.PreventDefault();
             };
             FormOverLay.Style.Visibility = Visibility.Visible;
-
-			Window.OnBeforeUnload = (ev) =>
-			{
-				Script.Write("return 'Would you like to close this application?'");
-			};
+			
 			Window.OnResize = (ev) => {
 				if(FormCollections == null)
 					return;
@@ -600,6 +598,7 @@ namespace ExpressCraft
 					}
 				}
 			};
+
 			Window.OnMouseUp = (ev) =>
 			{
 				if(MovingForm != null)
@@ -611,8 +610,34 @@ namespace ExpressCraft
 				Mouse_Down = false;
 				MoveAction = MouseMoveAction.Move;
 			};
-			
-			WindowHolder.AppendChild(FormOverLay);
+            Window.OnBeforeUnload = (ev) =>
+            {
+                Script.Write("return 'Would you like to close this application?'");
+            };
+            Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {
+                if(InErrorDialog)
+                {
+                    return false;
+                }
+                try
+                {
+                    InErrorDialog = true;
+                    
+                    var msgBox = new MessageBoxForm("Error: " + message + "\nurl: " + url + "\nline: " + lineNumber + "\ncol: " + columnNumber + "\nError: " + (error ?? "").ToString(), MessageBoxLayout.Error);
+                    msgBox.ShowDialog();
+                }
+                catch (Exception)
+                {
+                    
+                } finally
+                {
+                    InErrorDialog = false;
+                }
+                
+                return true;
+            });
+
+            WindowHolder.AppendChild(FormOverLay);
 			WindowManager.AppendChildren(WindowManagerStart, WindowManagerSearch);
 
 			Parent.AppendChild(WindowHolder);

@@ -176,7 +176,7 @@ namespace ExpressCraft
 							{								
 								if(inputNum.Type == InputType.Checkbox)
 								{									
-									DataRow[dtIndex] = inputNum.Text.IsTrue();
+									DataRow[dtIndex] = inputNum.Text.IsTrue() == 1;
 								}
 								else
 								{

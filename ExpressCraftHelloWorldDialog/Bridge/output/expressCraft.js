@@ -5628,7 +5628,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             if (!grCol.readOnly) {
                                 inputNum.onTextChanged = Bridge.fn.bind(this, function (ev) {
                                     if (inputNum.type === "checkbox") {
-                                        this.dataRow.setItem(dtIndex, ExpressCraft.Helper.isTrue(inputNum.getText()));
+                                        this.dataRow.setItem(dtIndex, ExpressCraft.Helper.isTrue(inputNum.getText()) === 1);
                                     } else {
                                         this.dataRow.setItem(dtIndex, inputNum.getText());
                                     }
