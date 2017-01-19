@@ -298,5 +298,35 @@ namespace ExpressCraft
             c.Style.Left = left;
             c.Style.Top = top;
         }
+
+        /// <summary>
+        /// Escape XSS
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string HtmlEscape(this string input) {
+            return input
+                .Replace("&", "&amp")
+                .Replace("<", "&lt")
+                .Replace(">", "&gt")
+                .Replace("'", "&#x27")
+                .Replace("/", "&#x2F")
+                .Replace("\"", "&quot");
+        }
+
+        /// <summary>
+        /// Unescape XSS
+        /// </summary>
+        /// <returns></returns>
+        public static string HtmlUnescape(this string input) {
+            return input
+                .Replace("&amp", "&")
+                .Replace("&lt", "<")
+                .Replace("&gt", ">")
+                .Replace("&#x27", "'")
+                .Replace("&#x2F", "/")
+                .Replace("&quot", "\"");
+
+        }
     }
 }

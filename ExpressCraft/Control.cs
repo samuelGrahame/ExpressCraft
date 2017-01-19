@@ -87,7 +87,7 @@ namespace ExpressCraft
 		{
 			var lbl = new HTMLSpanElement() { ClassName = BaseClass(false) };
 
-			lbl.InnerHTML = Caption;
+			lbl.InnerHTML = Caption.HtmlEscape();
 			lbl.SetLocation(X, Y);
             SetBT(lbl, IsBold, IsTiny);
 
@@ -98,7 +98,7 @@ namespace ExpressCraft
 		{
 			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
 
-			lbl.InnerHTML = Caption;
+			lbl.InnerHTML = Caption.HtmlEscape();
 			lbl.SetBounds(X, Y, width, height);			
 			if(Alignment != TextAlign.Left)
 			{
@@ -117,7 +117,7 @@ namespace ExpressCraft
 		{
 			var lbl = new HTMLSpanElement();
 			lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr));
-			lbl.InnerHTML = Caption;
+			lbl.InnerHTML = Caption.HtmlEscape();
 			lbl.SetLocation(X, Y);
 			lbl.Style.Width = width.ToPx();
 			if(Alignment != TextAlign.Left)
@@ -156,7 +156,7 @@ namespace ExpressCraft
 		{
 			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
 
-			lbl.InnerHTML = c;
+			lbl.InnerHTML = c.HtmlEscape();
 			lbl.SetBounds(X, Y, width, height);
             SetBT(lbl, IsBold, IsTiny);
             
@@ -167,7 +167,7 @@ namespace ExpressCraft
 		{
 			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
 
-			lbl.InnerHTML = c;
+			lbl.InnerHTML = c.HtmlEscape();
 			lbl.SetLocation(X, Y);
 			lbl.Style.Width = width.ToPx();
 			SetBT(lbl, IsBold, IsTiny);
