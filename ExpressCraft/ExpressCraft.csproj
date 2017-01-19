@@ -45,7 +45,7 @@
     <Compile Include="DialogResult.cs" />
     <Compile Include="Form.cs" />
     <Compile Include="FormCollection.cs" />
-    <Compile Include="forms\FormDataRowEdit.cs" />
+    <Compile Include="forms\DataRowEditForm.cs" />
     <Compile Include="grid\GridViewCellDisplayCheckBox.cs" />
     <Compile Include="grid\GridViewCellDisplayImage.cs" />
     <Compile Include="grid\GridView.cs" />
