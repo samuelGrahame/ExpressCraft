@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>ExpressCraft</id>
+    <version>0.0.0.1</version>
+    <title>ExpressCraft</title>
+    <authors>SG - BL - PH</authors>
+    <owners>SG - BL - PH</owners>
+    <projectUrl>https://github.com/samuelGrahame/ExpressCraft</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ExpressCraft - Library</description>
+    <releaseNotes>.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Bridge Javascript Forms</tags>
+	<dependencies>
+		<dependency id="Bridge" version="[15.6.0]"/>
+		<dependency id="Bridge.Core" version="[15.6.0]"/>
+		<dependency id="Bridge.Html5" version="[15.6.0]"/>
+		<dependency id="Bridge.jQuery" version="[2.9.2]"/>
+		<dependency id="Bridge.Min" version="[15.6.0]"/>
+	  </dependencies>
+  </metadata>
+  <files>
+	<file src="ExpressCraft\bin\Release\ExpressCraft.dll" target="lib\ExpressCraft.dll" />
+  </files>
+  
+</package>

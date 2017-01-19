@@ -1586,6 +1586,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             messageFormTextMaximumHeightInPx: 500,
             messageFormTextMinimumHeightInPx: 32,
             messageFormMinimumWidthInPx: 195,
+            maximumPixelScrollingRows: 500000,
             _WindowManagerVisible: false,
             isChrome: false,
             config: {
@@ -3592,6 +3593,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         setDataSource: function (value) {
             this.setFocusedDataHandle(-1);
             this.selectedRows = new (ExpressCraft.HardSoftList$1(Boolean))(false);
+            this.visibleRowHandles = new (System.Collections.Generic.List$1(System.Int32))();
+
             this._dataSource = value;
 
             if (this._dataSource != null) {
@@ -3857,7 +3860,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             return this.gridBodyContainer.clientHeight === 0 ? 0.0 : this.gridBodyContainer.clientHeight / ExpressCraft.GridView.UnitHeight;
         },
         getRawTopRowIndex: function () {
-            return this.gridBodyContainer.scrollTop === 0 ? 0.0 : this.gridBodyContainer.scrollTop / ExpressCraft.GridView.UnitHeight;
+            return this.gridBodyContainer.scrollTop === 0 ? 0.0 : this.gridBodyContainer.scrollTop / this.pixelsPerRow(this.rowCount());
         },
         validateGridWidth: function () {
             var width = this.getColumnWidths();
@@ -3874,15 +3877,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.setBounds$2(this.rightOfTable, width - 1, 0, 1, 1);
             ExpressCraft.Helper.setBounds$2(this.rightOfTableHeader, width - 1, 0, 1, 1);
         },
+        pixelsPerRow: function (rowCount) {
+            if (rowCount > ExpressCraft.Settings.maximumPixelScrollingRows) {
+                return 1.0;
+            } else {
+                return ExpressCraft.GridView.UnitHeight;
+            }
+        },
         validateGridHeight: function () {
             var i = this.rowCount();
+            var ppr = this.pixelsPerRow(i);
 
-            this.gridBody.style.height = ExpressCraft.Helper.toPx$2((i * ExpressCraft.GridView.UnitHeight));
+
+            this.gridBody.style.height = ExpressCraft.Helper.toPx$2((i * ppr));
             if (this.bottonOfTable == null) {
                 this.bottonOfTable = ExpressCraft.Control.div();
                 this.gridBody.appendChild(this.bottonOfTable);
             }
-            ExpressCraft.Helper.setBounds$2(this.bottonOfTable, 0, (i * ExpressCraft.GridView.UnitHeight) - 1, 1, 1);
+            ExpressCraft.Helper.setBounds$2(this.bottonOfTable, 0, (i * ppr) - 1, 1, 1);
         },
         validateGridSize: function () {
             this.validateGridHeight();
@@ -3906,6 +3918,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         clearView: function () {
             this.columns = new (System.Collections.Generic.List$1(ExpressCraft.GridViewColumn))();
+            this.visibleRowHandles = new (System.Collections.Generic.List$1(System.Int32))();
+            this.selectedRows = new (ExpressCraft.HardSoftList$1(Boolean))(false);
             this._dataSource = null;
         },
         clearBody: function () {
