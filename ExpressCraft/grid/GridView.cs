@@ -439,6 +439,12 @@ namespace ExpressCraft
 			}
 		}
 
+        public void ClearSelection()
+        {
+            SelectedRows = new HardSoftList<bool>(false);
+            RenderGrid();
+        }
+
 		public void SelectAllRows()
 		{
 			int length = RowCount();
@@ -639,8 +645,9 @@ namespace ExpressCraft
 				new ContextItem("Filter Editor..."),
 				new ContextItem("Show Find Panel"),
 				new ContextItem("Show Auto Filter Row"),
-				new ContextItem("Select All", (cm) => { SelectAllRows(); })
-			});
+				new ContextItem("Select All", (cm) => { SelectAllRows(); }),
+                new ContextItem("Unselect All", (cm) => { ClearSelection(); })
+            });
 
 			Content.OnContextMenu = (ev) => {
 				if(ContextMenu != null)
