@@ -40,6 +40,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\ExpressCraft\Bridge\output\ExpressCraft.css">
+      <Link>Bridge\output\ExpressCraft.css</Link>
+    </Content>
+    <Content Include="..\ExpressCraft\Bridge\output\ExpressCraftPlugin.css">
+      <Link>Bridge\output\ExpressCraftPlugin.css</Link>
+    </Content>
     <Content Include="Bridge\output\expressCraftGridView.js" />
     <Content Include="Bridge\output\expressCraftGridView.min.js" />
     <Content Include="Bridge\output\readme.txt" />
