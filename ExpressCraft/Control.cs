@@ -208,7 +208,7 @@ namespace ExpressCraft
 		public static HTMLInputElement Input(string cn, InputType it)
 		{
 			var input = new HTMLInputElement();
-			input.ClassName = cn + BaseClass(true);
+			input.ClassName = cn + BaseClass(!string.IsNullOrWhiteSpace(cn));
 			dynamic ty = it;
 			if((ty == "text" || ty == "date" || ty == 19 || ty == 3) && Browser.IsIE)
 			{

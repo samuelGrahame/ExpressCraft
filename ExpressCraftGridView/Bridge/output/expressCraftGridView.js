@@ -35,7 +35,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             this.gridView.setDataSource(dataTable);
 
-            ExpressCraft.Helper.setBoundsFull(this.gridView);
+            ExpressCraft.Helper.setBoundsFull$1(this.gridView);
 
             this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add New a Row"

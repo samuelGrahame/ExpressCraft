@@ -140,27 +140,28 @@ namespace ExpressCraft
 
 		public static void SetChecked(this HTMLElement input, object value)
 		{
-			string attribute = "";
+			bool check = false;
 			if(value != null)
 			{
 				if(value is bool || value.IsNumber())
 				{
-					if((bool)value)
-					{
-						attribute = GridViewCellDisplayCheckBox.resource_checked;
-					}
+					check = (bool)value;					
 				}
 				else if(value is string)
 				{
 					string strValue = ((string)value);
-
-					if(strValue == "1" || string.Compare(strValue.ToLower(), "true") == 0)
-					{
-						attribute = GridViewCellDisplayCheckBox.resource_checked;
-					}
+					check = (strValue == "1" || string.Compare(strValue.ToLower(), "true") == 0);					
 				}
 			}
-			input.SetAttribute(attribute, "");
+			if(!check)
+			{
+				input.RemoveAttribute(GridViewCellDisplayCheckBox.resource_checked);
+			}
+			else
+			{
+				input.SetAttribute(GridViewCellDisplayCheckBox.resource_checked, null);
+			}
+			
 		}
 
 
@@ -268,7 +269,12 @@ namespace ExpressCraft
 
 		public static void SetBoundsFull(this Control c)
 		{
-			c.Content.SetBounds("0", "0", "100%", "100%");
+			c.Content.SetBoundsFull();
+		}
+
+		public static void SetBoundsFull(this HTMLElement c)
+		{
+			c.SetBounds("0", "0", "100%", "100%");
 		}
 
 		public static void SetSize(this Control c, string width, string height)

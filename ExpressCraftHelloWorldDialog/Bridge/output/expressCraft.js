@@ -194,7 +194,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             },
             input: function (cn, it) {
                 var input = document.createElement('input');
-                input.className = System.String.concat(cn, ExpressCraft.Control.baseClass(true));
+                input.className = System.String.concat(cn, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(cn)));
                 var ty = it;
                 if ((Bridge.referenceEquals(ty, "text") || Bridge.referenceEquals(ty, "date") || Bridge.referenceEquals(ty, 19) || Bridge.referenceEquals(ty, 3)) && Bridge.Browser.isIE) {
                     return input;
@@ -1115,6 +1115,26 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 			
                 return new ExpressCraft.Point.$ctor1(x, y);
             },
+            setChecked$1: function (input, value) {
+                ExpressCraft.Helper.setChecked(input.content, value);
+            },
+            setChecked: function (input, value) {
+                var check = false;
+                if (value != null) {
+                    if (Bridge.is(value, Boolean) || ExpressCraft.Helper.isNumber(value)) {
+                        check = System.Nullable.getValue(Bridge.cast(value, Boolean));
+                    } else if (Bridge.is(value, String)) {
+                        var strValue = Bridge.cast(value, String);
+                        check = (Bridge.referenceEquals(strValue, "1") || System.String.compare(strValue.toLowerCase(), "true") === 0);
+                    }
+                }
+                if (!check) {
+                    input.removeAttribute(ExpressCraft.GridViewCellDisplayCheckBox.resource_checked);
+                } else {
+                    input.setAttribute(ExpressCraft.GridViewCellDisplayCheckBox.resource_checked, null);
+                }
+
+            },
             /**
              * IE does not support .remove on Element use delete
              *
@@ -1203,8 +1223,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 c.style.width = width;
                 c.style.height = height;
             },
+            setBoundsFull$1: function (c) {
+                ExpressCraft.Helper.setBoundsFull(c.content);
+            },
             setBoundsFull: function (c) {
-                ExpressCraft.Helper.setBounds$3(c.content, "0", "0", "100%", "100%");
+                ExpressCraft.Helper.setBounds$3(c, "0", "0", "100%", "100%");
             },
             setImage$1: function (c, str, useURL) {
                 if (useURL === void 0) { useURL = true; }
@@ -4162,7 +4185,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                             dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
                         } else {
-                            dr.appendChild(col1.cellDisplay.onCreate(this, DataRowhandle1, x3));
+                            cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
+                            //cell.SetBounds(col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, UnitHeight);
+                            ExpressCraft.Helper.setLocation$2(cell, col1.cachedX, 0);
+                            cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
+
+                            dr.appendChild(cell);
                         }
                     }
                     Rows.add(dr);
@@ -4392,34 +4420,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         onCreate: function (gridView, dataRowIndex, columnIndex) {
             var value = gridView.getRowCellValue$2(dataRowIndex, columnIndex);
-            var attribute = "";
-            if (value != null) {
-                if (Bridge.is(value, Boolean) || ExpressCraft.Helper.isNumber(value)) {
-                    if (System.Nullable.getValue(Bridge.cast(value, Boolean))) {
-                        attribute = ExpressCraft.GridViewCellDisplayCheckBox.resource_checked;
-                    }
-                } else if (Bridge.is(value, String)) {
-                    var strValue = Bridge.cast(value, String);
 
-                    if (Bridge.referenceEquals(strValue, "1") || System.String.compare(strValue.toLowerCase(), "true") === 0) {
-                        attribute = ExpressCraft.GridViewCellDisplayCheckBox.resource_checked;
-                    }
-                }
-            }
 
-            var ChkDiv = ExpressCraft.Control.div();
-            ChkDiv.style.textAlign = "center";
-            ChkDiv.style.verticalAlign = "middle";
+            var input = ExpressCraft.Control.input(null, "checkbox");
 
-            var input = Bridge.merge(document.createElement('input'), {
-                type: "checkbox"
-            } );
+            ExpressCraft.Helper.setChecked(input, value);
 
-            input.setAttribute(attribute, "");
+            input.style.height = ExpressCraft.Helper.toPx$2((20.0));
 
-            ChkDiv.appendChild(input);
-
-            return ChkDiv;
+            return input;
         }
     });
 
@@ -5565,13 +5574,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         case ExpressCraft.DataType.Byte: 
                         case ExpressCraft.DataType.Short: 
                             var lblnmb = ExpressCraft.Control.label(grCol.caption, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), height);
-                            var inputNum = new ExpressCraft.TextInput("number");
+                            var inputNum;
+                            if (Bridge.is(grCol.cellDisplay, ExpressCraft.GridViewCellDisplayCheckBox)) {
+                                inputNum = new ExpressCraft.TextInput("checkbox");
+                                ExpressCraft.Helper.setChecked$1(inputNum, this.dataRow.getItem(dtIndex));
+                            } else {
+                                inputNum = new ExpressCraft.TextInput("number");
+                                inputNum.setText(System.Convert.toString(this.dataRow.getItem(dtIndex)));
+                            }
                             ExpressCraft.Helper.setBounds$4(inputNum, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
-                            inputNum.setText(System.Convert.toString(this.dataRow.getItem(dtIndex)));
                             inputNum.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
                                 inputNum.onTextChanged = Bridge.fn.bind(this, function (ev) {
-                                    this.dataRow.setItem(dtIndex, inputNum.getText());
+                                    if (inputNum.content.type === "checkbox") {
+                                        this.dataRow.setItem(dtIndex, inputNum.content.checked);
+                                    } else {
+                                        this.dataRow.setItem(dtIndex, inputNum.getText());
+                                    }
                                     if (this.liveData) {
                                         this.gridView.renderGrid();
                                     }
@@ -5904,7 +5923,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         render: function () {
             this.setHasRendered(true);
 
-            ExpressCraft.Helper.setBoundsFull(this);
+            ExpressCraft.Helper.setBoundsFull$1(this);
 
             this.ribbonControl = new ExpressCraft.RibbonControl();
 
