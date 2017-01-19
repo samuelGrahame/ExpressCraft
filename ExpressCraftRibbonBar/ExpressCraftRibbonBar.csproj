@@ -42,9 +42,11 @@
   <ItemGroup>
     <Content Include="..\ExpressCraft\external\ExpressCraft.css">
       <Link>Bridge\output\ExpressCraft.css</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\ExpressCraft\external\ExpressCraftPlugin.css">
       <Link>Bridge\output\ExpressCraftPlugin.css</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Bridge\output\bridge.js" />
     <Content Include="Bridge\output\bridge.min.js" />
