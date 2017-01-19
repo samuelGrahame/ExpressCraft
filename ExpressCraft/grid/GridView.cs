@@ -118,6 +118,8 @@ namespace ExpressCraft
 			}
 		}
 
+	    private SortSetting SortSettings;
+
 		public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc)
 		{
 			column.SortedMode = sort;
@@ -161,6 +163,10 @@ namespace ExpressCraft
 			}
 
 			RenderGrid();
+		    SortSettings = new SortSetting() {
+		        Column = column,
+                SortMode = sort
+		    };
 		}
 
 		public int ColumnCount()
@@ -246,9 +252,13 @@ namespace ExpressCraft
 						sw.Stop();
 						Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
 					}
-
-					RenderGrid();
-				}
+				    if ( SortSettings != null ) {
+				        SortColumn(SortSettings.Column, SortSettings.SortMode);
+				    }
+				    else {
+					    RenderGrid();
+                    }
+                }
 			}
 		}
 
@@ -1036,4 +1046,10 @@ namespace ExpressCraft
 			}
 		}
 	}
+
+    public class SortSetting
+    {
+        public GridViewColumn Column;
+        public GridViewSortMode SortMode;
+    }
 }
