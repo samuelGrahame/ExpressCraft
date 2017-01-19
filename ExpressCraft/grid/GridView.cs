@@ -28,6 +28,8 @@ namespace ExpressCraft
 		public Action<MouseEvent<HTMLDivElement>> OnRowClick;
 		public Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
 
+		public Action<MouseEvent> OnCellRowMouseDown;
+
 		public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
 		public List<int> VisibleRowHandles = null;
 		public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
@@ -545,7 +547,10 @@ namespace ExpressCraft
 			OnLoaded = (ev) => {
 				RenderGrid();
 			};
-
+			OnCellRowMouseDown = (ev) =>
+			{				
+				FocusedColumn = Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"));
+			};
 			OnRowClick = (ev) => {
 				if(!Settings.IsChrome)
 				{
@@ -765,7 +770,7 @@ namespace ExpressCraft
 
 		public void ClearBody()
 		{
-			GridBody.Empty();
+			GridBody.Empty();			
 			GridBody.AppendChildren(RightOfTable, BottonOfTable);
 		}
 
@@ -1074,8 +1079,7 @@ namespace ExpressCraft
 
 					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 					{
-						var col = Columns[x];
-                        int colIndex = x;
+						var col = Columns[x];                        
 						var apparence = col.BodyApparence;
 						bool useDefault = false;
 						HTMLElement cell;
@@ -1090,18 +1094,15 @@ namespace ExpressCraft
 						}
 						else
 						{
-							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
-							//cell.SetBounds(col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, UnitHeight);
+							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);							
 							cell.SetLocation(col.CachedX, 0);
 							cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
 
 							dr.AppendChild(cell);
 						}
-
-                        cell.OnMouseDown = (ev) => {
-                            FocusedColumn = colIndex;
-                        };
-                    }
+						cell.SetAttribute("i", x.ToString());
+						cell.OnMouseDown = OnCellRowMouseDown;
+					}
 					Rows.Add(dr);
 
 					Y += UnitHeight;
