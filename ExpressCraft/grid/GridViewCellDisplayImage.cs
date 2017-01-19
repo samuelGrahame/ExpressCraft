@@ -12,8 +12,8 @@ namespace ExpressCraft
 		public bool UseBase64Resource;
 		public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
 		{
-			var src = gridView.GetRowCellValue(dataRowIndex, columnIndex).HtmlEscape();
-			var imgDiv = Control.Div();
+			var src = (gridView.GetRowCellValue(dataRowIndex, columnIndex) + "").HtmlUrlEscape();
+			var imgDiv = Control.Div("cell");
 
 			imgDiv.SetImage(src, !UseBase64Resource);
 

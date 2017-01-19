@@ -28,7 +28,9 @@ namespace ExpressCraftGridView
             private int x = 0;
             public GridForm()
             {
-                GridView = new GridView(true, true);
+				Settings.ResourceURL = "";
+
+				GridView = new GridView(true, true);
 
                 var dataTable = new DataTable();
 
@@ -36,10 +38,14 @@ namespace ExpressCraftGridView
                 dataTable.AddColumn("String", DataType.String);                
                 dataTable.AddColumn("Date", DataType.DateTime);
 				dataTable.AddColumn("Boolean", DataType.Bool);
+				dataTable.AddColumn("Image", DataType.String);
 
 				GridView.DataSource = dataTable;
 
-                GridView.SetBoundsFull();
+				var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
+				gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
+
+				GridView.SetBoundsFull();
                 
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
                 AddNewRowButton.SetBounds("3px", "3px", "auto", "24px");

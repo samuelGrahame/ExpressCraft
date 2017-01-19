@@ -21,12 +21,9 @@ namespace ExpressCraft
 
 			public static DataTableJson FromExternal(object o)
 			{
-				var sw = Stopwatch.StartNew();
-				//var obj = JSON.Parse<DataTableJson>(JSON.Stringify(o));				
+				var sw = Stopwatch.StartNew();				
 				var obj = Script.Write<DataTableJson>("Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);");
-
-				//Console.WriteLine(JSON.Stringify(o));
-
+				
 				sw.Stop();
 
 				Console.WriteLine("FromExternal: " + sw.ElapsedMilliseconds);
@@ -165,11 +162,9 @@ namespace ExpressCraft
 			else
 			{
 				input.SetAttribute(GridViewCellDisplayCheckBox.resource_checked, null);
-			}
-			
+			}			
 		}
-
-
+		
 		/// <summary>
 		/// IE does not support .remove on Element use delete
 		/// </summary>
@@ -181,21 +176,17 @@ namespace ExpressCraft
 
 		public static string ToPx(this float i)
 		{
-			Script.Write("return i + 'px';");
-			//return i.ToString() + "px";
-			return "";
+			return Script.Write<string>("return i + 'px';");			
 		}
 
 		public static string ToPx(this int i)
 		{
-			Script.Write("return i + 'px';");
-			return "";
+			return Script.Write<string>("return i + 'px';");			
 		}
 
 		public static string ToPx(this decimal i)
 		{
-			Script.Write("return i + 'px';");
-			return "";
+			return Script.Write<string>("return i + 'px';");			
 		}
 
 		public static void Log(object jso)
@@ -358,7 +349,7 @@ namespace ExpressCraft
         }
 
 		/// <summary>
-		/// Escape XSS
+		/// HtmlEscape XSS
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -368,36 +359,55 @@ namespace ExpressCraft
 		}
 
 		/// <summary>
-		/// Escape XSS
+		/// HtmlUrlUnescape XSS
+		/// </summary>
+		/// <returns></returns>
+		public static string HtmlUrlUnescape(this string input)
+		{
+			return !string.IsNullOrEmpty(input)
+				? input
+					.Replace("&amp", "&")
+					.Replace("&lt", "<")
+					.Replace("&gt", ">")
+					.Replace("&#x27", "'")					
+				: "";
+		}
+
+		/// <summary>
+		/// HtmlUrlEscape XSS
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string HtmlUrlEscape(this string input)
+		{
+			return !string.IsNullOrEmpty(input)
+				? input
+					.Replace("&", "&amp")
+					.Replace("<", "&lt")
+					.Replace(">", "&gt")
+					.Replace("'", "&#x27")					
+				: string.Empty;
+		}
+
+		/// <summary>
+		/// HtmlEscape XSS
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
 		public static string HtmlEscape(this string input) {
-            return !string.IsNullOrEmpty(input)
-                ? input
-                    .Replace("&", "&amp")
-                    .Replace("<", "&lt")
-                    .Replace(">", "&gt")
-                    .Replace("'", "&#x27")
-                    .Replace(@"\/", "&#x2F")
-                    .Replace("\"", "&quot")
-                : string.Empty;
+			return !string.IsNullOrEmpty(input) ? 
+				HtmlUrlEscape(input).Replace(@"\/", "&#x2F").Replace("\"", "&quot") : 
+				string.Empty;			
         }
 
-        /// <summary>
-        /// Unescape XSS
-        /// </summary>
-        /// <returns></returns>
-        public static string HtmlUnescape(this string input) {
-            return !string.IsNullOrEmpty(input)
-                ? input
-                    .Replace("&amp", "&")
-                    .Replace("&lt", "<")
-                    .Replace("&gt", ">")
-                    .Replace("&#x27", "'")
-                    .Replace("&#x2F", "/")
-                    .Replace("&quot", "\"")
-                : "";
+		/// <summary>
+		/// HtmlUnescape XSS
+		/// </summary>
+		/// <returns></returns>
+		public static string HtmlUnescape(this string input) {
+			return !string.IsNullOrEmpty(input) ?
+				HtmlUrlUnescape(input).Replace("&#x2F", @"\/").Replace("&quot", "\"") :
+				string.Empty;
         }
     }
 }

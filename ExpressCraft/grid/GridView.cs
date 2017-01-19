@@ -319,7 +319,7 @@ namespace ExpressCraft
 			return GetFocusedRowCellValue(Columns[columnIndex]);
 		}
 
-		public GridViewColumn GetColumnFromFieldName(string FieldName)
+		public GridViewColumn GetGridViewColumnByFieldName(string FieldName)
 		{
 			for(int i = 0; i < ColumnCount(); i++)
 			{

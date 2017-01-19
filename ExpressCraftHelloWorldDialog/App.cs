@@ -66,7 +66,7 @@ namespace ExpressCraftHelloWorldDialog
             informationBtn2.Content.Style.Position = Position.Relative;
             informationBtn2.Content.Style.Width = "auto";
 
-            Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2);
+            Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2);			
         }
 
         public static string GetRandomText()

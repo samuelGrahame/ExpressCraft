@@ -3882,7 +3882,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         getFocusedRowCellValue: function (column) {
             return this.getRowCellValue(this.getFocusedDataHandle(), column);
         },
-        getColumnFromFieldName: function (FieldName) {
+        getGridViewColumnByFieldName: function (FieldName) {
             for (var i = 0; i < this.columnCount(); i = (i + 1) | 0) {
                 if (Bridge.referenceEquals(this.columns.getItem(i).column.fieldName, FieldName)) {
                     return this.columns.getItem(i);
@@ -4257,7 +4257,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 Length = (Length + ExpressCraft.Settings.gridViewRowScrollPadding) | 0;
             }
             var Y = (start * (ppr)) - RawTopRowScrollPadding;
-
+            // #TODO - CLEAN...
             var Last = this.columns.getItem(((RawLeftCellCount - 1) | 0));
             var MaxWidth = (Last.cachedX + Last.getWidth());
 
@@ -4542,8 +4542,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         inherits: [ExpressCraft.GridViewCellDisplay],
         useBase64Resource: false,
         onCreate: function (gridView, dataRowIndex, columnIndex) {
-            var src = ExpressCraft.Helper.htmlEscape(gridView.getRowCellValue$2(dataRowIndex, columnIndex));
-            var imgDiv = ExpressCraft.Control.div();
+            var src = (System.String.concat(gridView.getRowCellValue$2(dataRowIndex, columnIndex), ""));
+            var imgDiv = ExpressCraft.Control.div$1("cell");
 
             ExpressCraft.Helper.setImage(imgDiv, src, !this.useBase64Resource);
 

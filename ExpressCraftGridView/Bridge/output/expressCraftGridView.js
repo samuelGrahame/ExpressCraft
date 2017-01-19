@@ -24,6 +24,8 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         ctor: function () {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
+            ExpressCraft.Settings.resourceURL = "";
+
             this.gridView = new ExpressCraft.GridView(true, true);
 
             var dataTable = new ExpressCraft.DataTable();
@@ -32,8 +34,14 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             dataTable.addColumn("String", ExpressCraft.DataType.String);
             dataTable.addColumn("Date", ExpressCraft.DataType.DateTime);
             dataTable.addColumn("Boolean", ExpressCraft.DataType.Bool);
+            dataTable.addColumn("Image", ExpressCraft.DataType.String);
 
             this.gridView.setDataSource(dataTable);
+
+            var gridColumn = this.gridView.getGridViewColumnByFieldName("Image");
+            gridColumn.cellDisplay = Bridge.merge(new ExpressCraft.GridViewCellDisplayImage(), {
+                useBase64Resource: false
+            } );
 
             ExpressCraft.Helper.setBoundsFull$1(this.gridView);
 
