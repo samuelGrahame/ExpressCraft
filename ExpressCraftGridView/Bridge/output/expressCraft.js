@@ -4464,12 +4464,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         onCreate: function (gridView, dataRowIndex, columnIndex) {
             var value = gridView.getRowCellValue$2(dataRowIndex, columnIndex);
 
-
-            var input = ExpressCraft.Control.input("cell", "checkbox");
-
+            var cell = ExpressCraft.Control.div$1("cell");
+            var input = ExpressCraft.Control.input("", "checkbox");
+            ExpressCraft.Helper.setBoundsFull(input);
             ExpressCraft.Helper.setChecked(input, value);
+            input.style.margin = "0";
+            cell.appendChild(input);
 
-            return input;
+            return cell;
         }
     });
 

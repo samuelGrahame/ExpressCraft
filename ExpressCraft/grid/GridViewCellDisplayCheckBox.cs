@@ -9,13 +9,15 @@ namespace ExpressCraft
 		public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
 		{
 			var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
-			
-			
-			var input = Control.Input("cell", InputType.Checkbox);			
 
+            var cell = Control.Div("cell");
+			var input = Control.Input("", InputType.Checkbox);
+            input.SetBoundsFull();
 			input.SetChecked(value);
-            		
-			return input;
+            input.Style.Margin = "0";
+            cell.AppendChild(input);
+            
+            return cell;
 		}
 	}
 }
