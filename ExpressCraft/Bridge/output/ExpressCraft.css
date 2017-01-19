@@ -447,7 +447,7 @@
     text-indent:4px;             
     height: 27px !important;  
     margin: 0 !important;  
-    box-sizing: initial !important;
+    box-sizing: content-box !important;
 
     overflow:hidden;
     text-overflow:ellipsis;
