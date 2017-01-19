@@ -299,12 +299,22 @@ namespace ExpressCraft
             c.Style.Top = top;
         }
 
-        /// <summary>
-        /// Escape XSS
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string HtmlEscape(this string input) {
+		/// <summary>
+		/// Escape XSS
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static string HtmlEscape(this object obj)
+		{
+			return (obj as string).HtmlEscape();			
+		}
+
+		/// <summary>
+		/// Escape XSS
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		public static string HtmlEscape(this string input) {
             return !string.IsNullOrEmpty(input)
                 ? input
                     .Replace("&", "&amp")
@@ -313,7 +323,7 @@ namespace ExpressCraft
                     .Replace("'", "&#x27")
                     .Replace("/", "&#x2F")
                     .Replace("\"", "&quot")
-                : "";
+                : string.Empty;
         }
 
         /// <summary>

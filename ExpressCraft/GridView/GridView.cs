@@ -13,21 +13,44 @@ namespace ExpressCraft {
         public HTMLDivElement GridBodyContainer;
         public HTMLDivElement GridBody;
 
-        private DataTable _dataSource = null;
+		private HTMLDivElement BottonOfTable;
+		private HTMLDivElement RightOfTable;
+		private HTMLDivElement RightOfTableHeader;
+
+		private DataTable _dataSource = null;
         public Action<int> OnRowSizeChanged = null;
         public Action<int> OnColumnSizeChanged = null;
         public Action<int, int> OnFocusedRowChanged = null;
+		public Action<int> OnRowDoubleClick = null;
 
-        public Action<int> OnRowDoubleClick = null;
-
-        private HTMLDivElement BottonOfTable;
-        private HTMLDivElement RightOfTable;
-        private HTMLDivElement RightOfTableHeader;
-
+		public Action<MouseEvent<HTMLDivElement>> OnRowClick;
+		public Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
+		
         public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
+		public List<int> VisibleRowHandles = null;
+		public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
+		{
+			if(asc)
+			{
+				var sorted = Cells
+					.Select((x, i) => new KeyValuePair<T, int>(x, i))
+					.OrderBy(x => x.Key)
+					.ToList();
 
-        public bool AutoGenerateColumnsFromSource = true;
+				VisibleRowHandles = sorted.Select(x => x.Value).ToList();
+			}
+			else
+			{
+				var sorted = Cells
+					.Select((x, i) => new KeyValuePair<T, int>(x, i))
+					.OrderByDescending(x => x.Key)
+					.ToList();
 
+				VisibleRowHandles = sorted.Select(x => x.Value).ToList();
+			}
+		}
+
+		public bool AutoGenerateColumnsFromSource = true;
         public bool AllowMultiSelection = true;
 
         private const string SortDownBase64 = "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";
@@ -75,7 +98,6 @@ namespace ExpressCraft {
         }
 
         private bool _useEditForm = true;
-
         public bool UseEditForm
         {
             get
@@ -90,40 +112,15 @@ namespace ExpressCraft {
                 }
             }
         }
-
-
-        public Action<MouseEvent<HTMLDivElement>> OnRowClick;
-        public Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
-
-        public List<int> VisibleRowHandles = null;
-
-        public void SetVisibleRowHandles<T>(List<T> Cells, bool asc) {
-            if( asc ) {
-                var sorted = Cells
-                    .Select((x, i) => new KeyValuePair<T, int>(x, i))
-                    .OrderBy(x => x.Key)
-                    .ToList();
-
-                VisibleRowHandles = sorted.Select(x => x.Value).ToList();
-            }
-            else {
-                var sorted = Cells
-                    .Select((x, i) => new KeyValuePair<T, int>(x, i))
-                    .OrderByDescending(x => x.Key)
-                    .ToList();
-
-                VisibleRowHandles = sorted.Select(x => x.Value).ToList();
-            }
-        }
-
-        public void SortColumn(GridViewColumn column, SortMode sort = SortMode.Asc) {
+		
+        public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc) {
             column.SortedMode = sort;
 
-            if( sort == SortMode.None ) {
+            if( sort == GridViewSortMode.None ) {
                 VisibleRowHandles = null;
             }
             else {
-                bool sort1 = sort == SortMode.Asc;
+                bool sort1 = sort == GridViewSortMode.Asc;
 
                 switch( column.Column.DataType ) {
                     default:
@@ -303,7 +300,7 @@ namespace ExpressCraft {
         }
 
         public void AddColumn(string caption, DataColumn column, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false) {
-            AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new CellApparence(isBold, alignment, forecolor), FormatString = formatstring, Column = column });
+            AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new GridViewCellApparence(isBold, alignment, forecolor), FormatString = formatstring, Column = column });
         }
 
         public void AddColumn(GridViewColumn column) {
@@ -632,24 +629,23 @@ namespace ExpressCraft {
 
                 for( int i = 0; i < ColumnCount(); i++ ) {
                     if( Columns[i] != gcol ) {
-                        Columns[i].SortedMode = SortMode.None;
+                        Columns[i].SortedMode = GridViewSortMode.None;
                     }
                 }
                 switch( gcol.SortedMode ) {
                     default:
-                    case SortMode.None:
-                        SortColumn(gcol, SortMode.Asc);
+                    case GridViewSortMode.None:
+                        SortColumn(gcol, GridViewSortMode.Asc);
                         break;
-                    case SortMode.Asc:
-                        SortColumn(gcol, SortMode.Desc);
+                    case GridViewSortMode.Asc:
+                        SortColumn(gcol, GridViewSortMode.Desc);
                         break;
-                    case SortMode.Desc:
-                        SortColumn(gcol, SortMode.None);
+                    case GridViewSortMode.Desc:
+                        SortColumn(gcol, GridViewSortMode.None);
                         break;
                 }
             };
-            se.OnDragStart = (ev) => {
-                //ev.dataTransfer.setData("text", ev.target.id);
+            se.OnDragStart = (ev) => {                
                 Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", index.ToString());
             };
             se.OnDragOver = (ev) => {
@@ -811,10 +807,10 @@ namespace ExpressCraft {
                     (_columnAutoWidth ? gcol.CachedX : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
                     apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
 
-                if( gcol.SortedMode != SortMode.None ) {
+                if( gcol.SortedMode != GridViewSortMode.None ) {
                     var sortImage = Div();
                     sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
-                    sortImage.Style.Background = GetImageString(gcol.SortedMode == SortMode.Asc ? SortUpBase64 : SortDownBase64);
+                    sortImage.Style.Background = GetImageString(gcol.SortedMode == GridViewSortMode.Asc ? SortUpBase64 : SortDownBase64);
                     col.AppendChild(sortImage);
                 }
 
@@ -906,105 +902,5 @@ namespace ExpressCraft {
                 GridBodyContainer.AppendChild(GridBody);
             }
         }
-    }
-
-
-
-    public class CellApparence {
-        public bool IsBold = false;
-        public TextAlign Alignment = TextAlign.Left;
-        public string Forecolor = null;
-
-        public CellApparence() {
-
-        }
-        public CellApparence(bool isBold) {
-            IsBold = isBold;
-        }
-        public CellApparence(bool isBold, TextAlign alignment) {
-            IsBold = isBold;
-            Alignment = alignment;
-        }
-        public CellApparence(bool isBold, TextAlign alignment, string forecolor) {
-            IsBold = isBold;
-            Alignment = alignment;
-            Forecolor = forecolor;
-        }
-    }
-
-    public enum SortMode {
-        None,
-        Asc,
-        Desc
-    }
-
-    public class GridViewColumn {
-        public DataColumn Column;
-        public GridView View;
-        public string Caption;
-        public bool Visible;
-        public float CachedX;
-        public string FormatString = string.Empty;
-        public CellApparence HeadingApparence = new CellApparence();
-        public CellApparence BodyApparence = new CellApparence();
-        public SortMode SortedMode = SortMode.None;
-
-        public bool AllowEdit = true;
-        public bool ReadOnly = false;
-
-        public int GetDataColumnIndex() {
-            var length = View.DataSource.ColumnCount;
-            for( int i = 0; i < length; i++ ) {
-                if( View.DataSource.Columns[i] == Column )
-                    return i;
-            }
-            return -1;
-        }
-
-        public string GetDisplayValueByDataRowHandle(int RowHandle) {
-            if( string.IsNullOrWhiteSpace(FormatString) ) {
-                return Column.GetDisplayValue(RowHandle);
-            }
-            else {
-                return Column.GetDisplayValue(RowHandle, FormatString);
-            }
-        }
-
-        public string GetDisplayValue(int RowHandle) {
-            if( View.VisibleRowHandles != null ) {
-                RowHandle = View.VisibleRowHandles[RowHandle];
-            }
-
-            if( string.IsNullOrWhiteSpace(FormatString) ) {
-                return Column.GetDisplayValue(RowHandle);
-            }
-            else {
-                return Column.GetDisplayValue(RowHandle, FormatString);
-            }
-        }
-
-        private int _width;
-
-        public int Width
-        {
-            get
-            {
-                return _width;
-            }
-            set
-            {
-                if( value < 24 )
-                    value = 24;
-                if( _width != value ) {
-                    _width = value;
-                    View.RenderGrid();
-                }
-            }
-        }
-
-        public GridViewColumn(GridView view, int width = 100) {
-            View = view;
-            _width = width;
-        }
-    }
+    }	 
 }

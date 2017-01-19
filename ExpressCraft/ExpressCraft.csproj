@@ -47,7 +47,12 @@
     <Compile Include="FormCollection.cs" />
     <Compile Include="FormDataRowEdit.cs" />
     <Compile Include="GridControl.cs" />
-    <Compile Include="GridView.cs" />
+    <Compile Include="GridView\CellDisplay\GridViewCellDisplayImage.cs" />
+    <Compile Include="GridView\GridView.cs" />
+    <Compile Include="GridView\GridViewCellApparence.cs" />
+    <Compile Include="GridView\CellDisplay\GridViewCellDisplay.cs" />
+    <Compile Include="GridView\GridViewColumn.cs" />
+    <Compile Include="GridView\GridViewEnums.cs" />
     <Compile Include="HardSoftList.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MessageBoxForm.cs" />
@@ -100,6 +105,7 @@
       <HintPath>..\packages\Bridge.jQuery.2.9.2\lib\net40\Bridge.jQuery2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Bridge.Min.15.6.0\build\Bridge.Min.targets" Condition="Exists('..\packages\Bridge.Min.15.6.0\build\Bridge.Min.targets')" />
