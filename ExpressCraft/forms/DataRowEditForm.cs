@@ -65,8 +65,20 @@ namespace ExpressCraft
 
             this.AllowSizeChange = false;
 		}
-		
-		protected override void OnShowed()
+
+	    protected override void OnClosed() {
+	        for ( int x = 0; x < prevData.Length - 1; x++ ) {
+	            if ( prevData[x] == DataRow[x] )
+	                continue;
+	            GridView.SortColumn();
+	            base.OnClosed();
+	            return;
+	        }
+            base.OnClosed();
+	    }
+
+
+	    protected override void OnShowed()
 		{
 			base.OnShowed();
 

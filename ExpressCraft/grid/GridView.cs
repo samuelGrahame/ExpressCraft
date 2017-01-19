@@ -35,20 +35,20 @@ namespace ExpressCraft
 			if(asc)
 			{
 				var sorted = Cells
-					.Select((x, i) => new KeyValuePair<T, int>(x, i))
-					.OrderBy(x => x.Key)
+					.Select((x, i) => new KeyValuePair<int, T>(i, x))
+					.OrderBy(x => x.Value)
 					.ToList();
 
-				VisibleRowHandles = sorted.Select(x => x.Value).ToList();
+				VisibleRowHandles = sorted.Select(x => x.Key).ToList();
 			}
 			else
 			{
 				var sorted = Cells
-					.Select((x, i) => new KeyValuePair<T, int>(x, i))
-					.OrderByDescending(x => x.Key)
+					.Select((x, i) => new KeyValuePair<int, T>(i, x))
+					.OrderByDescending(x => x.Value)
 					.ToList();
 
-				VisibleRowHandles = sorted.Select(x => x.Value).ToList();
+				VisibleRowHandles = sorted.Select(x => x.Key).ToList();
 			}
 		}
 
@@ -120,6 +120,13 @@ namespace ExpressCraft
 
 	    private SortSetting SortSettings;
 
+	    public void SortColumn()
+	    {
+	        if ( SortSettings != null ) {
+                SortColumn(SortSettings.Column, SortSettings.SortMode);
+            }
+	        
+	    }
 		public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc)
 		{
 			column.SortedMode = sort;
@@ -252,12 +259,7 @@ namespace ExpressCraft
 						sw.Stop();
 						Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
 					}
-				    if ( SortSettings != null ) {
-				        SortColumn(SortSettings.Column, SortSettings.SortMode);
-				    }
-				    else {
-					    RenderGrid();
-                    }
+					RenderGrid();
                 }
 			}
 		}
@@ -555,6 +557,7 @@ namespace ExpressCraft
 
 					var fdre = new DataRowEditForm(idr, this, true);
 					fdre.ShowDialog();
+
 				}
 			};
 

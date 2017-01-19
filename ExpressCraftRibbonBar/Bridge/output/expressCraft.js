@@ -1786,6 +1786,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.SortSetting", {
+        column: null,
+        sortMode: 0
+    });
+
     Bridge.define("ExpressCraft.StyleController", {
         statics: {
             cSS_calc: "calc",
@@ -3563,6 +3568,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _columnAutoWidth: false,
         _focusedDataHandle: -1,
         _useEditForm: true,
+        sortSettings: null,
         columns: null,
         prevRenderGridScrollId: -1,
         clickTimeDiff: null,
@@ -3717,26 +3723,31 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     sw.stop();
                     Bridge.Console.log("DataSource AutoColumns: " + sw.milliseconds());
                 }
-
                 this.renderGrid();
             }
         },
         setVisibleRowHandles: function (T, Cells, asc) {
             if (asc) {
                 var sorted = System.Linq.Enumerable.from(Cells).select(function (x, i) {
-                        return new (System.Collections.Generic.KeyValuePair$2(T,System.Int32))(x, i);
-                    }).orderBy($asm.$.ExpressCraft.GridView.f10).toList(System.Collections.Generic.KeyValuePair$2(T,System.Int32));
+                        return new (System.Collections.Generic.KeyValuePair$2(System.Int32,T))(i, x);
+                    }).orderBy($asm.$.ExpressCraft.GridView.f10).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
 
                 this.visibleRowHandles = System.Linq.Enumerable.from(sorted).select($asm.$.ExpressCraft.GridView.f11).toList(System.Int32);
             } else {
                 var sorted1 = System.Linq.Enumerable.from(Cells).select(function (x, i) {
-                        return new (System.Collections.Generic.KeyValuePair$2(T,System.Int32))(x, i);
-                    }).orderByDescending($asm.$.ExpressCraft.GridView.f10).toList(System.Collections.Generic.KeyValuePair$2(T,System.Int32));
+                        return new (System.Collections.Generic.KeyValuePair$2(System.Int32,T))(i, x);
+                    }).orderByDescending($asm.$.ExpressCraft.GridView.f10).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
 
                 this.visibleRowHandles = System.Linq.Enumerable.from(sorted1).select($asm.$.ExpressCraft.GridView.f11).toList(System.Int32);
             }
         },
-        sortColumn: function (column, sort) {
+        sortColumn: function () {
+            if (this.sortSettings != null) {
+                this.sortColumn$1(this.sortSettings.column, this.sortSettings.sortMode);
+            }
+
+        },
+        sortColumn$1: function (column, sort) {
             if (sort === void 0) { sort = 1; }
             column.sortedMode = sort;
 
@@ -3775,6 +3786,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             this.renderGrid();
+            this.sortSettings = Bridge.merge(new ExpressCraft.SortSetting(), {
+                column: column,
+                sortMode: sort
+            } );
         },
         columnCount: function () {
             return this.columns.getCount();
@@ -4023,13 +4038,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 switch (gcol.sortedMode) {
                     default: 
                     case ExpressCraft.GridViewSortMode.None: 
-                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.Asc);
+                        this.sortColumn$1(gcol, ExpressCraft.GridViewSortMode.Asc);
                         break;
                     case ExpressCraft.GridViewSortMode.Asc: 
-                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.Desc);
+                        this.sortColumn$1(gcol, ExpressCraft.GridViewSortMode.Desc);
                         break;
                     case ExpressCraft.GridViewSortMode.Desc: 
-                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.None);
+                        this.sortColumn$1(gcol, ExpressCraft.GridViewSortMode.None);
                         break;
                 }
             });
@@ -4293,6 +4308,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 var fdre = new ExpressCraft.DataRowEditForm(idr, this, true);
                 fdre.showDialog();
+
             }
         },
         f8: function (ev) {
@@ -4314,10 +4330,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f10: function (x) {
-            return x.key;
+            return x.value;
         },
         f11: function (x) {
-            return x.value;
+            return x.key;
         },
         f12: function () {
             this.renderGrid();
@@ -5506,6 +5522,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.appendChildren(this.getBody(), [this.panel, buttonSection]);
 
             this.allowSizeChange = false;
+        },
+        onClosed: function () {
+            for (var x = 0; x < ((this.prevData.length - 1) | 0); x = (x + 1) | 0) {
+                if (Bridge.referenceEquals(this.prevData[x], this.dataRow.getItem(x))) {
+                    continue;
+                }
+                this.gridView.sortColumn();
+                ExpressCraft.Form.prototype.onClosed.call(this);
+                return;
+            }
+            ExpressCraft.Form.prototype.onClosed.call(this);
         },
         onShowed: function () {
             ExpressCraft.Form.prototype.onShowed.call(this);
