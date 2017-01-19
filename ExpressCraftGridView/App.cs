@@ -32,12 +32,12 @@ namespace ExpressCraftGridView
 
                 var dataTable = new DataTable();
 
-                dataTable.AddColumn("Account Number", DataType.Integer);
-                dataTable.AddColumn("Last Name", DataType.String);
-                dataTable.AddColumn("First Name", DataType.String);
-                dataTable.AddColumn("Date Contacted", DataType.DateTime);
+                dataTable.AddColumn("Number", DataType.Integer);
+                dataTable.AddColumn("String", DataType.String);                
+                dataTable.AddColumn("Date", DataType.DateTime);
+				dataTable.AddColumn("Boolean", DataType.Bool);
 
-                GridView.DataSource = dataTable;
+				GridView.DataSource = dataTable;
 
                 GridView.SetBoundsFull();
                 
