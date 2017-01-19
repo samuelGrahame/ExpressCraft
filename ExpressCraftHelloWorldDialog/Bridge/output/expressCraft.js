@@ -107,7 +107,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: ExpressCraft.Control.baseClass(false)
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = Caption; //.HtmlEscape();
                 ExpressCraft.Helper.setLocation$2(lbl, X, Y);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
@@ -123,7 +123,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = Caption; //.HtmlEscape();
                 ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
                 if (Alignment !== "left") {
                     lbl.style.textAlign = Alignment;
@@ -143,7 +143,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (Forecolor === void 0) { Forecolor = null; }
                 var lbl = document.createElement('span');
                 lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = Caption; //.HtmlEscape();
                 ExpressCraft.Helper.setLocation$2(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$2(width);
                 if (Alignment !== "left") {
@@ -168,7 +168,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(c);
+                lbl.innerHTML = c; //.HtmlEscape();
                 ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
@@ -182,7 +182,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(c);
+                lbl.innerHTML = c; //.HtmlEscape();
                 ExpressCraft.Helper.setLocation$1(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$1(width);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
