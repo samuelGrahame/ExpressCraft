@@ -1232,7 +1232,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
              * @return  {string}
              */
             htmlEscape: function (input) {
-                return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(input, "&", "&amp"), "<", "&lt"), ">", "&gt"), "'", "&#x27"), "/", "&#x2F"), "\"", "&quot") : "";
+                return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(input, "&", "&amp"), "<", "&lt"), ">", "&gt"), "'", "&#x27"), "\\/", "&#x2F"), "\"", "&quot") : "";
             },
             /**
              * Unescape XSS
