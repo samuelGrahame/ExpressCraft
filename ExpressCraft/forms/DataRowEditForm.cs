@@ -173,10 +173,12 @@ namespace ExpressCraft
 						if(!grCol.ReadOnly)
 						{
 							inputNum.OnTextChanged = (ev) =>
-							{							
+							{
+								Global.Alert(inputNum.Text);
 								if(inputNum.Content.As<HTMLInputElement>().Type == InputType.Checkbox)
 								{
-									DataRow[dtIndex] = inputNum.Content.As<HTMLInputElement>().Checked;
+									Global.Alert(inputNum.Text);
+									DataRow[dtIndex] = inputNum.Text;
 								}
 								else
 								{

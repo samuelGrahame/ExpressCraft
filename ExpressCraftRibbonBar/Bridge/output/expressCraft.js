@@ -5613,8 +5613,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             inputNum.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
                                 inputNum.onTextChanged = Bridge.fn.bind(this, function (ev) {
+                                    Bridge.global.alert(inputNum.getText());
                                     if (inputNum.content.type === "checkbox") {
-                                        this.dataRow.setItem(dtIndex, inputNum.content.checked);
+                                        Bridge.global.alert(inputNum.getText());
+                                        this.dataRow.setItem(dtIndex, inputNum.getText());
                                     } else {
                                         this.dataRow.setItem(dtIndex, inputNum.getText());
                                     }
