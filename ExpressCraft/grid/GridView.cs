@@ -60,7 +60,25 @@ namespace ExpressCraft
 		public const float UnitHeight = 28.0f;
 		private bool _columnAutoWidth = false;
 
-		private int _focusedDataHandle = -1;
+        private int _focusedcolumn = -1;
+        public int FocusedColumn
+        {
+            get
+            {
+                return _focusedcolumn;
+            }
+            set
+            {
+                if (value != FocusedColumn)
+                {
+                    var prev = _focusedcolumn;
+                    _focusedcolumn = value;
+                    RenderGrid();
+                }
+            }
+        }
+
+        private int _focusedDataHandle = -1;
 		public int FocusedDataHandle
 		{
 			get
@@ -124,9 +142,17 @@ namespace ExpressCraft
 	    {
 	        if ( SortSettings != null ) {
                 SortColumn(SortSettings.Column, SortSettings.SortMode);
-            }
-	        
+            }	        
 	    }
+
+        public void ClearSortColumn()
+        {
+            if (SortSettings != null)
+            {
+                SortColumn(SortSettings.Column, GridViewSortMode.None);
+            }
+        }
+
 		public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc)
 		{
 			column.SortedMode = sort;
@@ -145,13 +171,22 @@ namespace ExpressCraft
 					case DataType.Object:
 						SetVisibleRowHandles((column.Column as DataColumnObject).Cells, sort1);
 						break;
-					case DataType.DateTime:
+                    case DataType.Bool:
+                        SetVisibleRowHandles((column.Column as DataColumnBool).Cells, sort1);
+                        break;
+                    case DataType.DateTime:
 						SetVisibleRowHandles((column.Column as DataColumnDateTime).Cells, sort1);
 						break;
 					case DataType.String:
 						SetVisibleRowHandles((column.Column as DataColumnString).Cells, sort1);
 						break;
-					case DataType.Integer:
+                    case DataType.Byte:
+                        SetVisibleRowHandles((column.Column as DataColumnByte).Cells, sort1);
+                        break;
+                    case DataType.Short:
+                        SetVisibleRowHandles((column.Column as DataColumnShort).Cells, sort1);
+                        break;
+                    case DataType.Integer:
 						SetVisibleRowHandles((column.Column as DataColumnInteger).Cells, sort1);
 						break;
 					case DataType.Long:
@@ -579,9 +614,21 @@ namespace ExpressCraft
 			ContextMenu = new ContextMenu();
 
 			ContextMenu.ContextItems.AddRange(new ContextItem[] {
-				new ContextItem("Sort Ascending"),
-				new ContextItem("Sort Descending"),
-				new ContextItem("Clear All Sorting", true),
+				new ContextItem("Sort Ascending", (cm) => {
+                    if(FocusedColumn > -1)
+                    {
+                        SortColumn(Columns[FocusedColumn], GridViewSortMode.Asc);
+                    }
+                }),
+				new ContextItem("Sort Descending", (cm) => {
+                    if(FocusedColumn > -1)
+                    {
+                        SortColumn(Columns[FocusedColumn], GridViewSortMode.Desc);
+                    }
+                }),
+				new ContextItem("Clear All Sorting", (cm) => {
+                    ClearSortColumn();
+                },  true),
 				new ContextItem("Group By This Column"),
 				new ContextItem("Hide Group By Box", true),
 				new ContextItem("Hide This Column"),
@@ -592,7 +639,7 @@ namespace ExpressCraft
 				new ContextItem("Filter Editor..."),
 				new ContextItem("Show Find Panel"),
 				new ContextItem("Show Auto Filter Row"),
-				new ContextItem("Select All")
+				new ContextItem("Select All", (cm) => { SelectAllRows(); })
 			});
 
 			Content.OnContextMenu = (ev) => {
@@ -1012,6 +1059,7 @@ namespace ExpressCraft
 					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 					{
 						var col = Columns[x];
+                        int colIndex = x;
 						var apparence = col.BodyApparence;
 						bool useDefault = false;
 						HTMLElement cell;
@@ -1033,7 +1081,11 @@ namespace ExpressCraft
 
 							dr.AppendChild(cell);
 						}
-					}
+
+                        cell.OnClick = (ev) => {
+                            FocusedColumn = colIndex;
+                        };
+                    }
 					Rows.Add(dr);
 
 					Y += UnitHeight;

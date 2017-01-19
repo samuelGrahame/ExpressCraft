@@ -58,8 +58,15 @@ namespace ExpressCraft
 				
 				item.OnClick = (ev) =>
 				{
-					if(contextItem.Enabled && contextItem.OnItemClick != null)
-						contextItem.OnItemClick(contextItem);
+					if(contextItem.Enabled)
+                    {
+                        if(contextItem.OnItemClick != null)
+                        {
+                            contextItem.OnItemClick(contextItem);
+                        }
+                        this.Close();
+                    }
+						
 				};
 
 				Content.AppendChild(item);
