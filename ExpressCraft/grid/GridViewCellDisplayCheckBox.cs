@@ -11,15 +11,13 @@ namespace ExpressCraft
 			var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
 			
 			
-			var ChkDiv = Control.Div();
-			ChkDiv.Style.TextAlign = TextAlign.Center;
-			ChkDiv.Style.VerticalAlign = VerticalAlign.Middle;
-			
-			var input = new HTMLInputElement() { Type = InputType.Checkbox };
-			input.SetChecked(value);
-			ChkDiv.AppendChild(input);			
+			var input = Control.Input(null, InputType.Checkbox);			
 
-			return ChkDiv;
+			input.SetChecked(value);
+
+			input.Style.Height = (GridView.UnitHeight - 8).ToPx();
+		
+			return input;
 		}
 	}
 }

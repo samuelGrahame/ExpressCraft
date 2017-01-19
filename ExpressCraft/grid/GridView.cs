@@ -1013,7 +1013,12 @@ namespace ExpressCraft
 						}
 						else
 						{
-							dr.AppendChild(col.CellDisplay.OnCreate(this, DataRowhandle, x));
+							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
+							//cell.SetBounds(col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, UnitHeight);
+							cell.SetLocation(col.CachedX, 0);
+							cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+
+							dr.AppendChild(cell);
 						}
 					}
 					Rows.Add(dr);
