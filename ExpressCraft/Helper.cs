@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Bridge;
 using Bridge.Html5;
 using Bridge.jQuery2;
+using Bridge.Text.RegularExpressions;
 
 namespace ExpressCraft
 {
@@ -321,7 +322,7 @@ namespace ExpressCraft
                     .Replace("<", "&lt")
                     .Replace(">", "&gt")
                     .Replace("'", "&#x27")
-                    .Replace("/", "&#x2F")
+                    .Replace(@"\/", "&#x2F")
                     .Replace("\"", "&quot")
                 : string.Empty;
         }
