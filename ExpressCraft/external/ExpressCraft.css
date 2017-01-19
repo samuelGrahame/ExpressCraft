@@ -442,10 +442,12 @@
 }
 /****************GridView****************/
 .cell{    
-    border: 1px solid #F0F0F0;       
+    border: 1px solid #F0F0F0 !important;       
     line-height:27px;
     text-indent:4px;             
     height: 27px !important;    
+
+    margin: 0 !important;
 
     overflow:hidden;
     text-overflow:ellipsis;
