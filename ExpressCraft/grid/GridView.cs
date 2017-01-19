@@ -216,6 +216,8 @@ namespace ExpressCraft
 
 							switch(_dataSource.Columns[i].DataType)
 							{
+								case DataType.Byte:
+								case DataType.Short:
 								case DataType.Integer:
 								case DataType.Long:
 								case DataType.Float:
@@ -229,6 +231,9 @@ namespace ExpressCraft
 									else
 										gvc.FormatString = "{0:yyyy-MM-dd}";
 
+									break;
+								case DataType.Bool:
+									gvc.CellDisplay = new GridViewCellDisplayCheckBox();
 									break;
 							}
 
@@ -995,9 +1000,21 @@ namespace ExpressCraft
 					{
 						var col = Columns[x];
 						var apparence = col.BodyApparence;
-
-						dr.AppendChild(Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
-							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor));
+						bool useDefault = false;
+						HTMLElement cell;
+						if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
+						{
+							cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
+							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);						
+							
+							dr.AppendChild(useDefault ?
+								col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
+								cell);
+						}
+						else
+						{
+							dr.AppendChild(col.CellDisplay.OnCreate(this, DataRowhandle, x));
+						}
 					}
 					Rows.Add(dr);
 

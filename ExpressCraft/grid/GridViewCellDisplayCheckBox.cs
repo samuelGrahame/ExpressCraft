@@ -6,7 +6,7 @@ namespace ExpressCraft
 	{
 		private static string resource_checked = "checked";
 
-		public override HTMLDivElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
+		public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
 		{
 			var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
 			string attribute = "";
@@ -30,15 +30,15 @@ namespace ExpressCraft
 				}
 			}
 			
-
 			var ChkDiv = Control.Div();
-
+			ChkDiv.Style.TextAlign = TextAlign.Center;
+			ChkDiv.Style.VerticalAlign = VerticalAlign.Middle;
+			
 			var input = new HTMLInputElement() { Type = InputType.Checkbox };
 
-			//< input type = "checkbox" name = "vehicle" value = "Bike" > I have a bike < br >
-		
-		 // < input type = "checkbox" name = "vehicle" value = "Car" checked> I have a car < br >
-			   
+			input.SetAttribute(attribute, "");
+
+			ChkDiv.AppendChild(input);			
 
 			return ChkDiv;
 		}

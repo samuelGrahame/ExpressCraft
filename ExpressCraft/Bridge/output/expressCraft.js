@@ -3664,6 +3664,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         gvc.visible = true;
 
                         switch (this._dataSource.columns.getItem(i).dataType) {
+                            case ExpressCraft.DataType.Byte: 
+                            case ExpressCraft.DataType.Short: 
                             case ExpressCraft.DataType.Integer: 
                             case ExpressCraft.DataType.Long: 
                             case ExpressCraft.DataType.Float: 
@@ -3677,6 +3679,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                 } else {
                                     gvc.formatString = "{0:yyyy-MM-dd}";
                                 }
+                                break;
+                            case ExpressCraft.DataType.Bool: 
+                                gvc.cellDisplay = new ExpressCraft.GridViewCellDisplayCheckBox();
                                 break;
                         }
 
@@ -4150,8 +4155,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
                         var col1 = this.columns.getItem(x3);
                         var apparence1 = col1.bodyApparence;
+                        var useDefault = false;
+                        var cell;
+                        if (col1.cellDisplay == null || ((useDefault = col1.cellDisplay.useDefaultElement))) {
+                            cell = ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor);
 
-                        dr.appendChild(ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor));
+                            dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
+                        } else {
+                            dr.appendChild(col1.cellDisplay.onCreate(this, DataRowhandle1, x3));
+                        }
                     }
                     Rows.add(dr);
 
@@ -4395,17 +4407,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             }
 
-
             var ChkDiv = ExpressCraft.Control.div();
+            ChkDiv.style.textAlign = "center";
+            ChkDiv.style.verticalAlign = "middle";
 
             var input = Bridge.merge(document.createElement('input'), {
                 type: "checkbox"
             } );
 
-            //< input type = "checkbox" name = "vehicle" value = "Bike" > I have a bike < br >
+            input.setAttribute(attribute, "");
 
-            // < input type = "checkbox" name = "vehicle" value = "Car" checked> I have a car < br >
-
+            ChkDiv.appendChild(input);
 
             return ChkDiv;
         }

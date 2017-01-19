@@ -10,7 +10,7 @@ namespace ExpressCraft
 	public class GridViewCellDisplayImage : GridViewCellDisplay
 	{
 		public bool UseBase64Resource;
-		public override HTMLDivElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
+		public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
 		{
 			var src = gridView.GetRowCellValue(dataRowIndex, columnIndex).HtmlEscape();
 			var imgDiv = Control.Div();

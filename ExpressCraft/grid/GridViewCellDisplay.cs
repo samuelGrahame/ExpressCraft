@@ -11,12 +11,12 @@ namespace ExpressCraft
 	{
 		public bool UseDefaultElement;
 
-		public virtual HTMLDivElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
+		public virtual HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
 		{
 			return null;
 		}
 
-		public virtual HTMLDivElement OnCreateDefault(HTMLDivElement originalElement, GridView gridView, int dataRowIndex, int columnIndex)
+		public virtual HTMLElement OnCreateDefault(HTMLElement originalElement, GridView gridView, int dataRowIndex, int columnIndex)
 		{
 			return originalElement;
 		}
