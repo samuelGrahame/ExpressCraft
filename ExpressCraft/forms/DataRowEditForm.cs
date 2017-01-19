@@ -162,7 +162,7 @@ namespace ExpressCraft
 						}
 						else
 						{
-							inputNum = new TextInput(Bridge.Html5.InputType.Number);
+							inputNum = new TextInput(InputType.Number);
 							inputNum.Text = Convert.ToString(DataRow[dtIndex]);
 						}
 						
@@ -173,12 +173,10 @@ namespace ExpressCraft
 						if(!grCol.ReadOnly)
 						{
 							inputNum.OnTextChanged = (ev) =>
-							{
-								Global.Alert(inputNum.Text);
-								if(inputNum.Content.As<HTMLInputElement>().Type == InputType.Checkbox)
-								{
-									Global.Alert(inputNum.Text);
-									DataRow[dtIndex] = inputNum.Text;
+							{								
+								if(inputNum.Type == InputType.Checkbox)
+								{									
+									DataRow[dtIndex] = inputNum.Text.IsTrue();
 								}
 								else
 								{

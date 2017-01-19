@@ -55,7 +55,7 @@ namespace ExpressCraft
 					dt.AcceptNewRows();
 				}
 				return dt;
-			}
+			}            
 
 			public DataTable ToTable()
 			{
@@ -87,7 +87,12 @@ namespace ExpressCraft
 			}
 		}
 
-		public static bool IsNumber(this object value)
+        public static int IsTrue(this string value)
+        {
+            return ((value = value.ToLower()) == "true" || value == "1" || value == "on") ? 1 : 0;
+        }
+
+        public static bool IsNumber(this object value)
 		{
 			return value is sbyte
 					|| value is byte

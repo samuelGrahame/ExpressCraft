@@ -1085,6 +1085,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
     Bridge.define("ExpressCraft.Helper", {
         statics: {
+            isTrue: function (value) {
+                return (Bridge.referenceEquals(((value = value.toLowerCase())), "true") || Bridge.referenceEquals(value, "1") || Bridge.referenceEquals(value, "on")) ? 1 : 0;
+            },
             isNumber: function (value) {
                 return Bridge.is(value, System.SByte) || Bridge.is(value, System.Byte) || Bridge.is(value, System.Int16) || Bridge.is(value, System.UInt16) || Bridge.is(value, System.Int32) || Bridge.is(value, System.UInt32) || Bridge.is(value, System.Int64) || Bridge.is(value, System.UInt64) || Bridge.is(value, System.Single) || Bridge.is(value, System.Double) || Bridge.is(value, System.Decimal);
             },
@@ -5347,6 +5350,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         onKeyDown: null,
         onKeyUp: null,
         onKeyPress: null,
+        type: "button",
         enabled: true,
         _readonly: false,
         ctor: function (type) {
@@ -5354,6 +5358,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.$initialize();
             ExpressCraft.Control.$ctor3.call(this, "inputcontrol", type);
+            this.type = type;
             this.content.onchange = Bridge.fn.bind(this, $asm.$.ExpressCraft.TextInput.f1);
             this.content.oncontextmenu = $asm.$.ExpressCraft.TextInput.f2;
             this.content.onkeypress = Bridge.fn.bind(this, $asm.$.ExpressCraft.TextInput.f3);
@@ -5363,11 +5368,20 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.content.addEventListener("cut", Bridge.fn.bind(this, $asm.$.ExpressCraft.TextInput.f6));
         },
         getText: function () {
-            return this.content.value;
+            if (this.type === "checkbox") {
+                return System.Boolean.toString(this.content.checked);
+            } else {
+                return this.content.value;
+            }
         },
         setText: function (value) {
+            if (this.type === "checkbox") {
+                value = value.toLowerCase();
+                this.content.checked = ExpressCraft.Helper.isTrue(value) === 1;
+            } else {
+                this.content.value = value;
+            }
 
-            this.content.value = value;
 
             this.checkTextChanged();
         },
@@ -5613,10 +5627,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             inputNum.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
                                 inputNum.onTextChanged = Bridge.fn.bind(this, function (ev) {
-                                    Bridge.global.alert(inputNum.getText());
-                                    if (inputNum.content.type === "checkbox") {
-                                        Bridge.global.alert(inputNum.getText());
-                                        this.dataRow.setItem(dtIndex, inputNum.getText());
+                                    if (inputNum.type === "checkbox") {
+                                        this.dataRow.setItem(dtIndex, ExpressCraft.Helper.isTrue(inputNum.getText()));
                                     } else {
                                         this.dataRow.setItem(dtIndex, inputNum.getText());
                                     }
