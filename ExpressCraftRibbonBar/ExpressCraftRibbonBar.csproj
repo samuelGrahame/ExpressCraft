@@ -40,21 +40,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\ExpressCraft\external\ExpressCraft.css">
-      <Link>Bridge\output\ExpressCraft.css</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\ExpressCraft\external\ExpressCraftPlugin.css">
-      <Link>Bridge\output\ExpressCraftPlugin.css</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Bridge\output\bridge.js" />
-    <Content Include="Bridge\output\bridge.min.js" />
-    <Content Include="Bridge\output\expressCraft.js" />
-    <Content Include="Bridge\output\expressCraft.min.js" />
     <Content Include="Bridge\output\expressCraftRibbonBar.js" />
     <Content Include="Bridge\output\expressCraftRibbonBar.min.js" />
-    <Content Include="Bridge\output\jquery-1.12.0.min.js" />
     <Content Include="Bridge\output\readme.txt" />
     <Content Include="Bridge\www\demo.html" />
   </ItemGroup>
