@@ -133,6 +133,37 @@ namespace ExpressCraft
 			return new Point(x, y);
 		}
 
+		public static void SetChecked(this Control input, object value)
+		{
+			input.Content.SetChecked(value);			
+		}
+
+		public static void SetChecked(this HTMLElement input, object value)
+		{
+			string attribute = "";
+			if(value != null)
+			{
+				if(value is bool || value.IsNumber())
+				{
+					if((bool)value)
+					{
+						attribute = GridViewCellDisplayCheckBox.resource_checked;
+					}
+				}
+				else if(value is string)
+				{
+					string strValue = ((string)value);
+
+					if(strValue == "1" || string.Compare(strValue.ToLower(), "true") == 0)
+					{
+						attribute = GridViewCellDisplayCheckBox.resource_checked;
+					}
+				}
+			}
+			input.SetAttribute(attribute, "");
+		}
+
+
 		/// <summary>
 		/// IE does not support .remove on Element use delete
 		/// </summary>

@@ -72,7 +72,7 @@ namespace ExpressCraft
 		{
 			HasRendered = true;
 		}
-		
+
 		public static HTMLDivElement Div()
 		{
 			return new HTMLDivElement() { ClassName = BaseClass(false) };

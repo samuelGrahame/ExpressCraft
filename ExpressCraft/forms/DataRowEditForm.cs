@@ -140,17 +140,36 @@ namespace ExpressCraft
 					case DataType.Bool:						
 					case DataType.Byte:					
 					case DataType.Short:
+
 						var lblnmb = Label(grCol.Caption, 25 + (col * eachWidth + (col * 3)), height);
-						var inputNum = new TextInput(Bridge.Html5.InputType.Number);
+						TextInput inputNum;
+						if(grCol.CellDisplay is GridViewCellDisplayCheckBox)
+						{
+							inputNum = new TextInput(Bridge.Html5.InputType.Checkbox);							
+							inputNum.SetChecked(DataRow[dtIndex]);
+						}
+						else
+						{
+							inputNum = new TextInput(Bridge.Html5.InputType.Number);
+							inputNum.Text = Convert.ToString(DataRow[dtIndex]);
+						}
+						
 						inputNum.SetBounds(25 + (col * eachWidth + (col * 3)), height + 16 + 3, eachWidth, 24);
-						inputNum.Text = Convert.ToString(DataRow[dtIndex]);
+						
 						inputNum.Readonly = grCol.ReadOnly;
 
 						if(!grCol.ReadOnly)
 						{
 							inputNum.OnTextChanged = (ev) =>
 							{							
-								DataRow[dtIndex] = inputNum.Text;
+								if(inputNum.Content.As<HTMLInputElement>().Type == InputType.Checkbox)
+								{
+									DataRow[dtIndex] = inputNum.Content.As<HTMLInputElement>().Checked;
+								}
+								else
+								{
+									DataRow[dtIndex] = inputNum.Text;
+								}								
 								if(LiveData)
 									GridView.RenderGrid();
 							};
