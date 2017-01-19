@@ -45,7 +45,7 @@
     <Compile Include="DialogResult.cs" />
     <Compile Include="Form.cs" />
     <Compile Include="FormCollection.cs" />
-    <Compile Include="FormDataRowEdit.cs" />
+    <Compile Include="forms\FormDataRowEdit.cs" />
     <Compile Include="grid\GridViewCellDisplayCheckBox.cs" />
     <Compile Include="grid\GridViewCellDisplayImage.cs" />
     <Compile Include="grid\GridView.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="grid\GridViewEnums.cs" />
     <Compile Include="HardSoftList.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="MessageBoxForm.cs" />
+    <Compile Include="forms\MessageBoxForm.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="ProgressControl.cs" />

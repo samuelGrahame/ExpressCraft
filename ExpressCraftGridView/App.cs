@@ -80,7 +80,7 @@ namespace ExpressCraftGridView
                 AddNewRowButton.ItemClick = (ev) =>
                 {                    
                     var dr = dataTable.NewRow();
-                    var fdre = new FormDataRowEdit(dr, GridView, true);
+                    var fdre = new DataRowEditForm(dr, GridView, true);
                     
                     fdre.ShowDialog(new ExpressCraft.DialogResult(DialogResultEnum.OK, () => {
                         dataTable.AcceptNewRows();

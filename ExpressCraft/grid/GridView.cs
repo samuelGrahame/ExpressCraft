@@ -543,7 +543,7 @@ namespace ExpressCraft
 				{
 					var idr = DataSource[drh];
 
-					var fdre = new FormDataRowEdit(idr, this, true);
+					var fdre = new DataRowEditForm(idr, this, true);
 					fdre.ShowDialog();
 				}
 			};

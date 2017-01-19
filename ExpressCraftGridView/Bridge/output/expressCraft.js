@@ -4263,7 +4263,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this._useEditForm) {
                 var idr = this.getDataSource().getItem(drh);
 
-                var fdre = new ExpressCraft.FormDataRowEdit(idr, this, true);
+                var fdre = new ExpressCraft.DataRowEditForm(idr, this, true);
                 fdre.showDialog();
             }
         },
@@ -5436,7 +5436,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraft.FormDataRowEdit", {
+    Bridge.define("ExpressCraft.DataRowEditForm", {
         inherits: [ExpressCraft.Form],
         liveData: false,
         gridView: null,

@@ -28,10 +28,10 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             var dataTable = new ExpressCraft.DataTable();
 
-            dataTable.addColumn("Account Number", ExpressCraft.DataType.Integer);
-            dataTable.addColumn("Last Name", ExpressCraft.DataType.String);
-            dataTable.addColumn("First Name", ExpressCraft.DataType.String);
-            dataTable.addColumn("Date Contacted", ExpressCraft.DataType.DateTime);
+            dataTable.addColumn("Number", ExpressCraft.DataType.Integer);
+            dataTable.addColumn("String", ExpressCraft.DataType.String);
+            dataTable.addColumn("Date", ExpressCraft.DataType.DateTime);
+            dataTable.addColumn("Boolean", ExpressCraft.DataType.Bool);
 
             this.gridView.setDataSource(dataTable);
 
@@ -78,7 +78,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             this.addNewRowButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 var dr = dataTable.newRow();
-                var fdre = new ExpressCraft.FormDataRowEdit(dr, this.gridView, true);
+                var fdre = new ExpressCraft.DataRowEditForm(dr, this.gridView, true);
 
                 fdre.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
                     dataTable.acceptNewRows();

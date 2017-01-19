@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-	public class FormDataRowEdit : Form
+	public class DataRowEditForm : Form
 	{
 		public bool LiveData;
 		public GridView GridView;
@@ -17,7 +17,7 @@ namespace ExpressCraft
 
         object[] prevData;    
 
-		public FormDataRowEdit(DataRow _dataRow, GridView _gridView, bool _liveData = true) : base()
+		public DataRowEditForm(DataRow _dataRow, GridView _gridView, bool _liveData = true) : base()
 		{
             prevData = new object[_dataRow.ParentTable.ColumnCount];
 
