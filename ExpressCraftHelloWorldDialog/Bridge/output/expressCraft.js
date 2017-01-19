@@ -38,31 +38,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraft.CellApparence", {
-        isBold: false,
-        alignment: "left",
-        forecolor: null,
-        ctor: function () {
-            this.$initialize();
-
-        },
-        $ctor1: function (isBold) {
-            this.$initialize();
-            this.isBold = isBold;
-        },
-        $ctor2: function (isBold, alignment) {
-            this.$initialize();
-            this.isBold = isBold;
-            this.alignment = alignment;
-        },
-        $ctor3: function (isBold, alignment, forecolor) {
-            this.$initialize();
-            this.isBold = isBold;
-            this.alignment = alignment;
-            this.forecolor = forecolor;
-        }
-    });
-
     Bridge.define("ExpressCraft.Control", {
         statics: {
             ControlClass: "control",
@@ -107,7 +82,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: ExpressCraft.Control.baseClass(false)
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
                 ExpressCraft.Helper.setLocation$2(lbl, X, Y);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
@@ -123,7 +98,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
                 ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
                 if (Alignment !== "left") {
                     lbl.style.textAlign = Alignment;
@@ -143,7 +118,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (Forecolor === void 0) { Forecolor = null; }
                 var lbl = document.createElement('span');
                 lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(Caption);
+                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
                 ExpressCraft.Helper.setLocation$2(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$2(width);
                 if (Alignment !== "left") {
@@ -168,7 +143,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(c);
+                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
                 ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
@@ -182,7 +157,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
                 } );
 
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape(c);
+                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
                 ExpressCraft.Helper.setLocation$1(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$1(width);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
@@ -765,6 +740,41 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.GridViewCellApparence", {
+        isBold: false,
+        alignment: "left",
+        forecolor: null,
+        ctor: function () {
+            this.$initialize();
+
+        },
+        $ctor1: function (isBold) {
+            this.$initialize();
+            this.isBold = isBold;
+        },
+        $ctor2: function (isBold, alignment) {
+            this.$initialize();
+            this.isBold = isBold;
+            this.alignment = alignment;
+        },
+        $ctor3: function (isBold, alignment, forecolor) {
+            this.$initialize();
+            this.isBold = isBold;
+            this.alignment = alignment;
+            this.forecolor = forecolor;
+        }
+    });
+
+    Bridge.define("ExpressCraft.GridViewCellDisplay", {
+        useDefaultElement: false,
+        onCreate: function (gridView, dataRowIndex, columnIndex) {
+            return null;
+        },
+        onCreateDefault: function (originalElement, gridView, dataRowIndex, columnIndex) {
+            return originalElement;
+        }
+    });
+
     Bridge.define("ExpressCraft.GridViewColumn", {
         column: null,
         view: null,
@@ -774,14 +784,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         formatString: "",
         headingApparence: null,
         bodyApparence: null,
+        cellDisplay: null,
         sortedMode: 0,
         allowEdit: true,
         readOnly: false,
         _width: 0,
         config: {
             init: function () {
-                this.headingApparence = new ExpressCraft.CellApparence.ctor();
-                this.bodyApparence = new ExpressCraft.CellApparence.ctor();
+                this.headingApparence = new ExpressCraft.GridViewCellApparence.ctor();
+                this.bodyApparence = new ExpressCraft.GridViewCellApparence.ctor();
             }
         },
         ctor: function (view, width) {
@@ -829,6 +840,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } else {
                 return this.column.getDisplayValue$1(RowHandle, this.formatString);
             }
+        }
+    });
+
+    Bridge.define("ExpressCraft.GridViewSortMode", {
+        $kind: "enum",
+        statics: {
+            None: 0,
+            Asc: 1,
+            Desc: 2
         }
     });
 
@@ -1065,6 +1085,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
     Bridge.define("ExpressCraft.Helper", {
         statics: {
+            isNumber: function (value) {
+                return Bridge.is(value, System.SByte) || Bridge.is(value, System.Byte) || Bridge.is(value, System.Int16) || Bridge.is(value, System.UInt16) || Bridge.is(value, System.Int32) || Bridge.is(value, System.UInt32) || Bridge.is(value, System.Int64) || Bridge.is(value, System.UInt64) || Bridge.is(value, System.Single) || Bridge.is(value, System.Double) || Bridge.is(value, System.Decimal);
+            },
             empty: function (element) {
                 
 			var len = element.childNodes.length;
@@ -1228,10 +1251,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
              * @public
              * @this ExpressCraft.Helper
              * @memberof ExpressCraft.Helper
+             * @param   {Object}    obj
+             * @return  {string}
+             */
+            htmlEscape: function (obj) {
+                return ExpressCraft.Helper.htmlEscape$1((Bridge.as(obj, String)));
+            },
+            /**
+             * Escape XSS
+             *
+             * @static
+             * @public
+             * @this ExpressCraft.Helper
+             * @memberof ExpressCraft.Helper
              * @param   {string}    input
              * @return  {string}
              */
-            htmlEscape: function (input) {
+            htmlEscape$1: function (input) {
                 return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(System.String.replaceAll(input, "&", "&amp"), "<", "&lt"), ">", "&gt"), "'", "&#x27"), "\\/", "&#x2F"), "\"", "&quot") : "";
             },
             /**
@@ -1724,15 +1760,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             s.width = this.width;
             s.height = this.height;
             return s;
-        }
-    });
-
-    Bridge.define("ExpressCraft.SortMode", {
-        $kind: "enum",
-        statics: {
-            None: 0,
-            Asc: 1,
-            Desc: 2
         }
     });
 
@@ -3496,23 +3523,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         gridHeaderContainer: null,
         gridBodyContainer: null,
         gridBody: null,
+        bottonOfTable: null,
+        rightOfTable: null,
+        rightOfTableHeader: null,
         _dataSource: null,
         onRowSizeChanged: null,
         onColumnSizeChanged: null,
         onFocusedRowChanged: null,
         onRowDoubleClick: null,
-        bottonOfTable: null,
-        rightOfTable: null,
-        rightOfTableHeader: null,
+        onRowClick: null,
+        onDoubleClick: null,
         selectedRows: null,
+        visibleRowHandles: null,
         autoGenerateColumnsFromSource: true,
         allowMultiSelection: true,
         _columnAutoWidth: false,
         _focusedDataHandle: -1,
         _useEditForm: true,
-        onRowClick: null,
-        onDoubleClick: null,
-        visibleRowHandles: null,
         columns: null,
         prevRenderGridScrollId: -1,
         clickTimeDiff: null,
@@ -3685,10 +3712,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (sort === void 0) { sort = 1; }
             column.sortedMode = sort;
 
-            if (sort === ExpressCraft.SortMode.None) {
+            if (sort === ExpressCraft.GridViewSortMode.None) {
                 this.visibleRowHandles = null;
             } else {
-                var sort1 = sort === ExpressCraft.SortMode.Asc;
+                var sort1 = sort === ExpressCraft.GridViewSortMode.Asc;
 
                 switch (column.column.dataType) {
                     default: 
@@ -3808,7 +3835,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (isBold === void 0) { isBold = false; }
             this.addColumn(Bridge.merge(new ExpressCraft.GridViewColumn(this, width), {
                 caption: caption,
-                bodyApparence: new ExpressCraft.CellApparence.$ctor3(isBold, alignment, forecolor),
+                bodyApparence: new ExpressCraft.GridViewCellApparence.$ctor3(isBold, alignment, forecolor),
                 formatString: formatstring,
                 column: column
             } ));
@@ -3962,24 +3989,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 for (var i = 0; i < this.columnCount(); i = (i + 1) | 0) {
                     if (!Bridge.referenceEquals(this.columns.getItem(i), gcol)) {
-                        this.columns.getItem(i).sortedMode = ExpressCraft.SortMode.None;
+                        this.columns.getItem(i).sortedMode = ExpressCraft.GridViewSortMode.None;
                     }
                 }
                 switch (gcol.sortedMode) {
                     default: 
-                    case ExpressCraft.SortMode.None: 
-                        this.sortColumn(gcol, ExpressCraft.SortMode.Asc);
+                    case ExpressCraft.GridViewSortMode.None: 
+                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.Asc);
                         break;
-                    case ExpressCraft.SortMode.Asc: 
-                        this.sortColumn(gcol, ExpressCraft.SortMode.Desc);
+                    case ExpressCraft.GridViewSortMode.Asc: 
+                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.Desc);
                         break;
-                    case ExpressCraft.SortMode.Desc: 
-                        this.sortColumn(gcol, ExpressCraft.SortMode.None);
+                    case ExpressCraft.GridViewSortMode.Desc: 
+                        this.sortColumn(gcol, ExpressCraft.GridViewSortMode.None);
                         break;
                 }
             });
             se.ondragstart = function (ev) {
-                //ev.dataTransfer.setData("text", ev.target.id);
                 ev.dataTransfer.setData("gridviewColumnDrag", index.toString());
             };
             se.ondragover = $asm.$.ExpressCraft.GridView.f13;
@@ -4054,10 +4080,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX) + 1, 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
 
-                if (gcol.sortedMode !== ExpressCraft.SortMode.None) {
+                if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
                     var sortImage = ExpressCraft.Control.div();
                     ExpressCraft.Helper.setBounds$3(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
-                    sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.SortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
+                    sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
                     col.appendChild(sortImage);
                 }
 
@@ -4344,6 +4370,57 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         f17: function () {
             this.gridBody.classList.remove("blur");
+        }
+    });
+
+    Bridge.define("ExpressCraft.GridViewCellDisplayCheckBox", {
+        inherits: [ExpressCraft.GridViewCellDisplay],
+        statics: {
+            resource_checked: "checked"
+        },
+        onCreate: function (gridView, dataRowIndex, columnIndex) {
+            var value = gridView.getRowCellValue$2(dataRowIndex, columnIndex);
+            var attribute = "";
+            if (value != null) {
+                if (Bridge.is(value, Boolean) || ExpressCraft.Helper.isNumber(value)) {
+                    if (System.Nullable.getValue(Bridge.cast(value, Boolean))) {
+                        attribute = ExpressCraft.GridViewCellDisplayCheckBox.resource_checked;
+                    }
+                } else if (Bridge.is(value, String)) {
+                    var strValue = Bridge.cast(value, String);
+
+                    if (Bridge.referenceEquals(strValue, "1") || System.String.compare(strValue.toLowerCase(), "true") === 0) {
+                        attribute = ExpressCraft.GridViewCellDisplayCheckBox.resource_checked;
+                    }
+                }
+            }
+
+
+            var ChkDiv = ExpressCraft.Control.div();
+
+            var input = Bridge.merge(document.createElement('input'), {
+                type: "checkbox"
+            } );
+
+            //< input type = "checkbox" name = "vehicle" value = "Bike" > I have a bike < br >
+
+            // < input type = "checkbox" name = "vehicle" value = "Car" checked> I have a car < br >
+
+
+            return ChkDiv;
+        }
+    });
+
+    Bridge.define("ExpressCraft.GridViewCellDisplayImage", {
+        inherits: [ExpressCraft.GridViewCellDisplay],
+        useBase64Resource: false,
+        onCreate: function (gridView, dataRowIndex, columnIndex) {
+            var src = ExpressCraft.Helper.htmlEscape(gridView.getRowCellValue$2(dataRowIndex, columnIndex));
+            var imgDiv = ExpressCraft.Control.div();
+
+            ExpressCraft.Helper.setImage(imgDiv, src, !this.useBase64Resource);
+
+            return imgDiv;
         }
     });
 

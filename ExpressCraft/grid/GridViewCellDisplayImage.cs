@@ -15,7 +15,7 @@ namespace ExpressCraft
 			var src = gridView.GetRowCellValue(dataRowIndex, columnIndex).HtmlEscape();
 			var imgDiv = Control.Div();
 
-			imgDiv.SetImage(src, !UseBase64Resource);			
+			imgDiv.SetImage(src, !UseBase64Resource);
 
 			return imgDiv;
 		}
