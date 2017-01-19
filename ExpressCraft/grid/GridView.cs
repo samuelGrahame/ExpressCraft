@@ -157,6 +157,12 @@ namespace ExpressCraft
 		{
 			column.SortedMode = sort;
 
+            if(SortSettings != null && SortSettings.Column != column)
+            {
+                SortSettings.Column.SortedMode = GridViewSortMode.None;
+                VisibleRowHandles = null;
+            }
+
 			if(sort == GridViewSortMode.None)
 			{
 				VisibleRowHandles = null;
@@ -976,13 +982,18 @@ namespace ExpressCraft
 			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 			{
 				var gcol = Columns[x];
+                var colIndex = x;
 				var apparence = gcol.HeadingApparence;
 
 				var col = Label(gcol.Caption,
 					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
 					apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
+                col.OnMouseDown = (ev) =>
+                {
+                    FocusedColumn = colIndex;
+                };
 
-				if(gcol.SortedMode != GridViewSortMode.None)
+                if (gcol.SortedMode != GridViewSortMode.None)
 				{
 					var sortImage = Div();
 					sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
@@ -1089,7 +1100,7 @@ namespace ExpressCraft
 							dr.AppendChild(cell);
 						}
 
-                        cell.OnClick = (ev) => {
+                        cell.OnMouseDown = (ev) => {
                             FocusedColumn = colIndex;
                         };
                     }
