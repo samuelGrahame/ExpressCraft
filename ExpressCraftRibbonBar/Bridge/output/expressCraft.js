@@ -4118,9 +4118,27 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             se.ondragover = $asm.$.ExpressCraft.GridView.f18;
             se.ondrop = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f19);
 
-            se.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f20);
+            se.onmousedown = Bridge.fn.bind(this, function (ev) {
+                var x = ev.layerX;
+                var target = ev.target;
+                x = (x - target.clientLeft) | 0;
+                this.resizePageX = ev.pageX;
 
-            se.onmousemove = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f21);
+                this.setFocusedColumn(index);
+
+                if (x >= ((target.clientWidth - 2) | 0)) {
+                    this.resizeIndex = parseInt(target.getAttribute("i"));
+                    this.resizeSpan = target;
+                    this.resizeSpan.style.cursor = "ew-resize";
+
+                    ev.preventDefault();
+                } else {
+                    this.resizeSpan = null;
+                    this.resizeIndex = -1;
+                }
+            });
+
+            se.onmousemove = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f20);
         },
         processBlur: function () {
             if (this.prevScroll !== this.gridBodyContainer.scrollTop) {
@@ -4130,7 +4148,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.lastId = -1;
                 }
 
-                this.lastId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f22), 100);
+                this.lastId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f21), 100);
             }
             this.prevScroll = this.gridBodyContainer.scrollTop;
         },
@@ -4183,6 +4201,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var uboundRowCount = (RawLeftCellCount - 1) | 0;
             for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
                 var gcol = this.columns.getItem(x1);
+                var colIndex = x1;
                 var apparence = gcol.headingApparence;
 
                 var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX) + 1, 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
@@ -4258,7 +4277,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
                             (function () {
                                 var col1 = this.columns.getItem(x3);
-                                var colIndex = x3;
+                                var colIndex1 = x3;
                                 var apparence1 = col1.bodyApparence;
                                 var useDefault = false;
                                 var cell;
@@ -4276,7 +4295,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                 }
 
                                 cell.onmousedown = Bridge.fn.bind(this, function (ev) {
-                                    this.setFocusedColumn(colIndex);
+                                    this.setFocusedColumn(colIndex1);
                                 });
                             }).call(this);
                         }
@@ -4487,23 +4506,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.renderGrid();
         },
         f20: function (ev) {
-            var x = ev.layerX;
-            var target = ev.target;
-            x = (x - target.clientLeft) | 0;
-            this.resizePageX = ev.pageX;
-
-            if (x >= ((target.clientWidth - 2) | 0)) {
-                this.resizeIndex = parseInt(target.getAttribute("i"));
-                this.resizeSpan = target;
-                this.resizeSpan.style.cursor = "ew-resize";
-
-                ev.preventDefault();
-            } else {
-                this.resizeSpan = null;
-                this.resizeIndex = -1;
-            }
-        },
-        f21: function (ev) {
             if (this.resizeIndex === -1) {
                 var x = ev.layerX;
                 var target = ev.target;
@@ -4516,7 +4518,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 target.style.cursor = "default";
             }
         },
-        f22: function () {
+        f21: function () {
             this.gridBody.classList.remove("blur");
         }
     });

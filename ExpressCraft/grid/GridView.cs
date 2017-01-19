@@ -873,7 +873,9 @@ namespace ExpressCraft
 				x -= target.ClientLeft;
 				ResizePageX = Script.Write<int>("ev.pageX");
 
-				if(x >= target.ClientWidth - 2)
+                FocusedColumn = index;
+                
+                if (x >= target.ClientWidth - 2)
 				{
 					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
 					ResizeSpan = target;
@@ -988,11 +990,7 @@ namespace ExpressCraft
 				var col = Label(gcol.Caption,
 					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
 					apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
-                col.OnMouseDown = (ev) =>
-                {
-                    FocusedColumn = colIndex;
-                };
-
+                
                 if (gcol.SortedMode != GridViewSortMode.None)
 				{
 					var sortImage = Div();
