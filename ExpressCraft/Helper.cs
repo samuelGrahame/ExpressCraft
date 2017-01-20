@@ -177,17 +177,17 @@ namespace ExpressCraft
 
 		public static string ToPx(this float i)
 		{
-			return Script.Write<string>("return i + 'px';");			
+			return Script.Write<string>("i + 'px'");			
 		}
 
 		public static string ToPx(this int i)
 		{
-			return Script.Write<string>("return i + 'px';");			
+			return Script.Write<string>("i + 'px'");
 		}
 
 		public static string ToPx(this decimal i)
 		{
-			return Script.Write<string>("return i + 'px';");			
+			return Script.Write<string>("i + 'px'");
 		}
 
 		public static void Log(object jso)

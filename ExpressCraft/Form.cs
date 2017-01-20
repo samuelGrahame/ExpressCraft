@@ -696,8 +696,9 @@ namespace ExpressCraft
 			switch(Type)
 			{
 				case FormButtonType.Close:
-					butt.ClassList.Add("form-heading-button-close");					
-		
+					butt.ClassList.Add("form-heading-button-close");
+					butt.InnerHTML = "X";
+
 					butt.OnMouseDown = (ev) =>
 					{
 						if(MovingForm != null) //  || WindowHolderSelectionBox != null

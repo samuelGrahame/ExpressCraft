@@ -436,7 +436,6 @@
 }
 .form-heading-button-close{
     left:calc(100% - 45px);
-    content: 'X';
 }
 .form-heading-button-close:hover{
     background-color:#E81123;

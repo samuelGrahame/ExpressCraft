@@ -1151,19 +1151,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 $(c).remove();
             },
             toPx$2: function (i) {
-                return return i + 'px';
-                ;
+                return i + 'px';
             },
             toPx$1: function (i) {
-                return return i + 'px';
-                ;
+                return i + 'px';
             },
             toPx: function (i) {
-                return return i + 'px';
-                ;
+                return i + 'px';
             },
             log: function (jso) {
-                console.log(jso)},
+                console.log(jso);
+            },
             appendChildren: function (c, Nodes) {
                 if (Nodes === void 0) { Nodes = []; }
                 if (Nodes != null && Nodes.length > 0) {
@@ -2734,6 +2732,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             switch (Type) {
                 case ExpressCraft.Form.FormButtonType.Close: 
                     butt.classList.add("form-heading-button-close");
+                    butt.innerHTML = "X";
                     butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f22);
                     butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f23);
                     butt.onmouseenter = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f24);

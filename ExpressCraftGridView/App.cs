@@ -28,6 +28,8 @@ namespace ExpressCraftGridView
             private int x = 0;
             public GridForm()
             {
+				SetWindowState(WindowState.Maximized);
+
 				Settings.ResourceURL = "";
 
 				GridView = new GridView(true, true);
