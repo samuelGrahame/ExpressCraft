@@ -54,7 +54,9 @@ namespace ExpressCraft
 			_buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
 			_buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
 
-            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());			
+            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
+
+            this.Body.AppendChild(Panel);
 
             this.AllowSizeChange = false;
 		}

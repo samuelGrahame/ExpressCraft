@@ -5524,8 +5524,68 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraft.DataRowEditForm", {
+    Bridge.define("ExpressCraft.DialogForm", {
         inherits: [ExpressCraft.Form],
+        _buttonCollection: null,
+        buttonSection: null,
+        ctor: function (text) {
+            if (text === void 0) { text = ""; }
+
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.setText(text);
+            this.buttonSection = ExpressCraft.Control.div$1("dialogbuttonsection");
+        },
+        onShowing: function () {
+            this.getBody().appendChild(this.buttonSection);
+            ExpressCraft.Form.prototype.onShowing.call(this);
+        }
+    });
+
+    Bridge.define("ExpressCraft.Network.NetworkProgressForm", {
+        inherits: [ExpressCraft.Form],
+        progressControl: null,
+        buttonCancel: null,
+        ctor: function (_text) {
+            if (_text === void 0) { _text = "Loading..."; }
+
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.setText(_text);
+            this.setWidth("400px");
+            this.setHeight("200px");
+
+            this.progressControl = new ExpressCraft.ProgressControl();
+            ExpressCraft.Helper.setBounds$5(this.progressControl, "50px", "50px", "calc(100% - 100px)", "23px");
+
+            this.buttonCancel = Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                setText: "Cancel"
+            } );
+            ExpressCraft.Helper.setLocation$5(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
+            this.buttonCancel.content.tabIndex = 0;
+
+            ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.buttonCancel, this.progressControl]);
+
+            this.allowSizeChange = false;
+        }
+    });
+
+    Bridge.define("ExpressCraft.SimpleDialogButton", {
+        inherits: [ExpressCraft.SimpleButton],
+        ctor: function (parentForm, dialogResult) {
+            if (dialogResult === void 0) { dialogResult = 0; }
+
+            this.$initialize();
+            ExpressCraft.SimpleButton.ctor.call(this);
+            this.parentForm = parentForm;
+            this.dialogResult = dialogResult;
+
+            ExpressCraft.Helper.setSize$2(this, 75, 23);
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataRowEditForm", {
+        inherits: [ExpressCraft.DialogForm],
         liveData: false,
         gridView: null,
         dataRow: null,
@@ -5535,7 +5595,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_liveData === void 0) { _liveData = true; }
 
             this.$initialize();
-            ExpressCraft.Form.ctor.call(this);
+            ExpressCraft.DialogForm.ctor.call(this);
             this.prevData = System.Array.init(_dataRow.parentTable.getColumnCount(), null);
 
             for (var i = 0; i < _dataRow.parentTable.getColumnCount(); i = (i + 1) | 0) {
@@ -5556,12 +5616,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.setBounds$3(this.panel, "0", "0", "100%", "calc(100% - 60px)");
             this.getBody().style.backgroundColor = "white";
 
-            var buttonSection = ExpressCraft.Control.div();
-
-            ExpressCraft.Helper.setBounds$3(buttonSection, "0", "calc(100% - 48px)", "100%", "48px");
-            buttonSection.style.backgroundColor = "#F0F0F0";
-
-            var lsdb = Bridge.fn.bind(this, function (_o1) {
+            this._buttonCollection = Bridge.fn.bind(this, function (_o1) {
                     _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
                         setText: "Cancel",
                         itemClick: Bridge.fn.bind(this, function (ev) {
@@ -5577,12 +5632,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     } ));
                     return _o1;
                 })(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-            ExpressCraft.Helper.setLocation$5(lsdb.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-            ExpressCraft.Helper.setLocation$5(lsdb.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
 
-            ExpressCraft.Helper.appendChildrenTabIndex(buttonSection, lsdb.toArray());
-
-            ExpressCraft.Helper.appendChildren(this.getBody(), [this.panel, buttonSection]);
+            ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
             this.allowSizeChange = false;
         },
@@ -5592,13 +5645,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     continue;
                 }
                 this.gridView.sortColumn();
-                ExpressCraft.Form.prototype.onClosed.call(this);
+                ExpressCraft.DialogForm.prototype.onClosed.call(this);
                 return;
             }
-            ExpressCraft.Form.prototype.onClosed.call(this);
+            ExpressCraft.DialogForm.prototype.onClosed.call(this);
         },
         onShowed: function () {
-            ExpressCraft.Form.prototype.onShowed.call(this);
+            ExpressCraft.DialogForm.prototype.onShowed.call(this);
 
             if (this.dataRow == null) {
                 this.dialogResult = ExpressCraft.DialogResultEnum.Cancel;
@@ -5727,64 +5780,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if($t.jump == 1) continue;
             }
             // Add Accept Changes
-        }
-    });
-
-    Bridge.define("ExpressCraft.DialogForm", {
-        inherits: [ExpressCraft.Form],
-        _buttonCollection: null,
-        buttonSection: null,
-        ctor: function (text) {
-            if (text === void 0) { text = ""; }
-
-            this.$initialize();
-            ExpressCraft.Form.ctor.call(this);
-            this.setText(text);
-            this.buttonSection = ExpressCraft.Control.div$1("dialogbuttonsection");
-
-            this.getBody().appendChild(this.buttonSection);
-        }
-    });
-
-    Bridge.define("ExpressCraft.Network.NetworkProgressForm", {
-        inherits: [ExpressCraft.Form],
-        progressControl: null,
-        buttonCancel: null,
-        ctor: function (_text) {
-            if (_text === void 0) { _text = "Loading..."; }
-
-            this.$initialize();
-            ExpressCraft.Form.ctor.call(this);
-            this.setText(_text);
-            this.setWidth("400px");
-            this.setHeight("200px");
-
-            this.progressControl = new ExpressCraft.ProgressControl();
-            ExpressCraft.Helper.setBounds$5(this.progressControl, "50px", "50px", "calc(100% - 100px)", "23px");
-
-            this.buttonCancel = Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
-                setText: "Cancel"
-            } );
-            ExpressCraft.Helper.setLocation$5(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
-            this.buttonCancel.content.tabIndex = 0;
-
-            ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.buttonCancel, this.progressControl]);
-
-            this.allowSizeChange = false;
-        }
-    });
-
-    Bridge.define("ExpressCraft.SimpleDialogButton", {
-        inherits: [ExpressCraft.SimpleButton],
-        ctor: function (parentForm, dialogResult) {
-            if (dialogResult === void 0) { dialogResult = 0; }
-
-            this.$initialize();
-            ExpressCraft.SimpleButton.ctor.call(this);
-            this.parentForm = parentForm;
-            this.dialogResult = dialogResult;
-
-            ExpressCraft.Helper.setSize$2(this, 75, 23);
         }
     });
 
