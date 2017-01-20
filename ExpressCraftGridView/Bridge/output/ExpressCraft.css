@@ -354,7 +354,7 @@
 .form-manager-search:hover:not(:focus){
     background-color:#575757;
 }
-.form-manager-search:hover:not(:not(:focus)){
+.form-manager-search:hover:focus{
     background-color:#F3F3F3;
 }
 
@@ -433,6 +433,10 @@
 }
 .form-heading-button:active:not(.form-heading-button-close){
     background-color:#015C9F;
+}
+.form-heading-button-close{
+    left:calc(100% - 45px);
+    content: 'X';
 }
 .form-heading-button-close:hover{
     background-color:#E81123;

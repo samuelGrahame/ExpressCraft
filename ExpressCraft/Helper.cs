@@ -21,6 +21,7 @@ namespace ExpressCraft
 
 			public static DataTableJson FromExternal(object o)
 			{
+				// #TODO - Get Namespace auto..
 				var sw = Stopwatch.StartNew();				
 				var obj = Script.Write<DataTableJson>("Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);");
 				

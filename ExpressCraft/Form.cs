@@ -330,8 +330,7 @@ namespace ExpressCraft
 		}
 
 		public static void Setup(HTMLElement parent = null)
-		{
-			StyleController.Setup();
+		{			
             //Settings.Setup();
 
             if (parent == null)
@@ -698,8 +697,6 @@ namespace ExpressCraft
 			{
 				case FormButtonType.Close:
 					butt.ClassList.Add("form-heading-button-close");					
-					butt.Style.Left = StyleController.Calc(100, 45);					
-					butt.InnerHTML = "X";
 		
 					butt.OnMouseDown = (ev) =>
 					{
@@ -740,7 +737,7 @@ namespace ExpressCraft
 
 					break;
 				case FormButtonType.Maximize:
-					butt.Style.Left = StyleController.Calc(100, 91);				
+					butt.Style.Left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
 					butt.InnerHTML = "&#9633;";
 			
 					butt.OnMouseUp = (ev) =>
@@ -758,7 +755,7 @@ namespace ExpressCraft
 
 					break;
 				case FormButtonType.Minimize:
-					butt.Style.Left = StyleController.Calc(100, 137);
+					butt.Style.Left = "calc(100% - 137px)"; // StyleController.Calc(100, 137);
 					
 					butt.InnerHTML = "-";
 
@@ -1533,32 +1530,6 @@ namespace ExpressCraft
             OnClosed();			
 		}
 
-		private bool InDialogResult = false;
-
-		public void FillControlWithParent(HTMLElement element, int widthOffset = 8, int heightOffset = 9)
-		{
-			element.Style.Position = Position.Absolute;
-			element.Style.Width = StyleController.Calc(100, widthOffset);
-			element.Style.Height = StyleController.Calc(100, heightOffset);
-
-			element.Style.Top = "1px";
-			element.Style.Left = "1px";
-		}
-
-		public void FillHorizontalControlWithParent(HTMLElement element, int widthOffset = 8)
-		{
-			element.Style.Position = Position.Absolute;
-			element.Style.Width = StyleController.Calc(100, widthOffset);
-
-			element.Style.Left = "1px";
-		}
-
-		public void FillVerticalControlWithParent(HTMLElement element, int heightOffset = 9)
-		{
-			element.Style.Position = Position.Absolute;
-			element.Style.Height = StyleController.Calc(100, heightOffset);
-
-			element.Style.Top = "1px";
-		}
+		private bool InDialogResult = false;				
 	}
 }

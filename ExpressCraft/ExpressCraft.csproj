@@ -70,8 +70,6 @@
     <Compile Include="SimpleDialogButton.cs" />
     <Compile Include="Size.cs" />
     <Compile Include="SplitControlContainer.cs" />
-    <Compile Include="StatusListForm.cs" />
-    <Compile Include="StyleController.cs" />
     <Compile Include="TabControl.cs" />
     <Compile Include="TabControlPage.cs" />
     <Compile Include="TextBlock.cs" />
