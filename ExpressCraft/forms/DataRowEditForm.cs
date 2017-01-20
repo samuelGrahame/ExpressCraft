@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-	public class DataRowEditForm : Form
+	public class DataRowEditForm : DialogForm
 	{
 		public bool LiveData;
 		public GridView GridView;
@@ -39,13 +39,8 @@ namespace ExpressCraft
             Panel.Style.OverflowY = Overflow.Auto;
             Panel.SetBounds("0", "0", "100%", "calc(100% - 60px)");
             Body.Style.BackgroundColor = "white";
-
-            var buttonSection = Div();
-
-            buttonSection.SetBounds("0", "calc(100% - 48px)", "100%", "48px");
-            buttonSection.Style.BackgroundColor = "#F0F0F0";
-
-            var lsdb = new List<SimpleDialogButton>() {
+            
+            _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", ItemClick = (ev) => {
                             for (int i = 0; i < DataRow.ParentTable.ColumnCount; i++)
                             {
@@ -56,12 +51,10 @@ namespace ExpressCraft
                         }},
                         new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK"  }
                     };
-            lsdb[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-            lsdb[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
+			_buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
+			_buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
 
-            buttonSection.AppendChildrenTabIndex(lsdb.ToArray());
-
-            this.Body.AppendChildren(Panel, buttonSection);
+            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());			
 
             this.AllowSizeChange = false;
 		}
