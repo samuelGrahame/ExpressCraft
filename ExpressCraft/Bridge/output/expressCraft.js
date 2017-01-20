@@ -5920,6 +5920,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.allowSizeChange = false;
         },
         onShowed: function () {
+            ExpressCraft.MessageBoxForm.beep();
             ExpressCraft.Form.prototype.onShowed.call(this);
             this._buttonCollection.getItem(0).content.focus();
         }
