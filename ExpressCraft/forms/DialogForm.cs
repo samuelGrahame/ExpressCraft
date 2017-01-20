@@ -14,9 +14,13 @@ namespace ExpressCraft
 		public DialogForm(string text = "") : base()
 		{
 			this.Text = text;
-			ButtonSection = Div("dialogbuttonsection");
+			ButtonSection = Div("dialogbuttonsection");			
+		}
 
+		protected override void OnShowing()
+		{
 			this.Body.AppendChild(ButtonSection);
+			base.OnShowing();
 		}
 	}
 }
