@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="forms\DialogForm.cs" />
     <Compile Include="utils\Application.cs" />
     <Compile Include="controls\ComboBoxEdit.cs" />
     <Compile Include="controls\ContextMenu.cs" />
