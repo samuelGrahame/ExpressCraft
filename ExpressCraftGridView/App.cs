@@ -29,9 +29,7 @@ namespace ExpressCraftGridView
             public GridForm()
             {
 				SetWindowState(WindowState.Maximized);
-
-				Document.Location.Href = "chrome://inducebrowsercrashforrealz";
-
+				
 				Settings.ResourceURL = "";
 
 				GridView = new GridView(true, true);
