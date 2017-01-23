@@ -457,6 +457,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.DataTable", {
         columns: null,
         _inDataChange: false,
+        _requestedOnDataChange: false,
         _ColCount: 0,
         _RowCount: 0,
         newRows: null,
@@ -480,7 +481,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         requireOnDataChangeEvent: function () {
             if (!this._inDataChange) {
-                this.OnDataSourceChanged(this, null);
+                this._requestedOnDataChange = false;
+                if (!Bridge.staticEquals(this.OnDataSourceChanged, null)) {
+                    this.OnDataSourceChanged(this, null);
+                }
+            } else {
+                this._requestedOnDataChange = true;
             }
         },
         clearRows: function () {
@@ -641,10 +647,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         beginDataUpdate: function () {
             this._inDataChange = true;
+            this._requestedOnDataChange = false;
         },
         endDataUpdate: function () {
             this._inDataChange = false;
-            this.requireOnDataChangeEvent();
+            if (this._requestedOnDataChange) {
+                this._requestedOnDataChange = false;
+                if (!Bridge.staticEquals(this.OnDataSourceChanged, null)) {
+                    this.OnDataSourceChanged(this, null);
+                }
+            }
         },
         rejectNewRows: function () {
             this.newRows.clear();
@@ -3568,8 +3580,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         rightOfTable: null,
         rightOfTableHeader: null,
         _dataSource: null,
-        onRowSizeChanged: null,
-        onColumnSizeChanged: null,
         onFocusedRowChanged: null,
         onRowDoubleClick: null,
         onRowClick: null,
@@ -3625,23 +3635,22 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.gridHeaderContainer.appendChild(this.gridHeader);
 
             this.content.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f1);
-            this.onRowSizeChanged = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f2);
-            this.onColumnSizeChanged = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f3);
-            this.onResize = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f4);
-            this.gridBodyContainer.onscroll = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f4);
-            this.onLoaded = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f5);
-            this.onCellRowMouseDown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f6);
-            this.onRowClick = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f7);
-            this.content.tabIndex = 0;
-            this.onDoubleClick = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f8);
 
-            this.content.onkeydown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f9);
+            this.onResize = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f2);
+            this.gridBodyContainer.onscroll = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f2);
+            this.onLoaded = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f3);
+            this.onCellRowMouseDown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f4);
+            this.onRowClick = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f5);
+            this.content.tabIndex = 0;
+            this.onDoubleClick = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f6);
+
+            this.content.onkeydown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f7);
 
             this.contextMenu = new ExpressCraft.ContextMenu();
 
-            this.contextMenu.contextItems.addRange([new ExpressCraft.ContextItem.$ctor1("Sort Ascending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f10)), new ExpressCraft.ContextItem.$ctor1("Sort Descending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f11)), new ExpressCraft.ContextItem.$ctor1("Clear All Sorting", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f12), true), new ExpressCraft.ContextItem.$ctor2("Group By This Column"), new ExpressCraft.ContextItem.$ctor2("Hide Group By Box", true), new ExpressCraft.ContextItem.$ctor2("Hide This Column"), new ExpressCraft.ContextItem.$ctor2("View Columns"), new ExpressCraft.ContextItem.$ctor2("Save Column Layout"), new ExpressCraft.ContextItem.$ctor2("Best Fit"), new ExpressCraft.ContextItem.$ctor2("Best Fit (all columns)", true), new ExpressCraft.ContextItem.$ctor2("Filter Editor..."), new ExpressCraft.ContextItem.$ctor2("Show Find Panel"), new ExpressCraft.ContextItem.$ctor2("Show Auto Filter Row"), new ExpressCraft.ContextItem.$ctor1("Select All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f13)), new ExpressCraft.ContextItem.$ctor1("Unselect All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f14))]);
+            this.contextMenu.contextItems.addRange([new ExpressCraft.ContextItem.$ctor1("Sort Ascending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f8)), new ExpressCraft.ContextItem.$ctor1("Sort Descending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f9)), new ExpressCraft.ContextItem.$ctor1("Clear All Sorting", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f10), true), new ExpressCraft.ContextItem.$ctor2("Group By This Column"), new ExpressCraft.ContextItem.$ctor2("Hide Group By Box", true), new ExpressCraft.ContextItem.$ctor2("Hide This Column"), new ExpressCraft.ContextItem.$ctor2("View Columns"), new ExpressCraft.ContextItem.$ctor2("Save Column Layout"), new ExpressCraft.ContextItem.$ctor2("Best Fit"), new ExpressCraft.ContextItem.$ctor2("Best Fit (all columns)", true), new ExpressCraft.ContextItem.$ctor2("Filter Editor..."), new ExpressCraft.ContextItem.$ctor2("Show Find Panel"), new ExpressCraft.ContextItem.$ctor2("Show Auto Filter Row"), new ExpressCraft.ContextItem.$ctor1("Select All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f11)), new ExpressCraft.ContextItem.$ctor1("Unselect All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f12))]);
 
-            this.content.oncontextmenu = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f15);
+            this.content.oncontextmenu = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f13);
 
             ExpressCraft.Helper.appendChildren(this.content, [this.gridHeaderContainer, this.gridBodyContainer]);
 
@@ -3703,9 +3712,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.selectedRows = new (ExpressCraft.HardSoftList$1(Boolean))(false);
             this.visibleRowHandles = new (System.Collections.Generic.List$1(System.Int32))();
 
+            if (this._dataSource != null) {
+                this._dataSource.removeOnDataSourceChanged(Bridge.fn.bind(this, this.dataSource_OnDataSourceChanged));
+            }
+
             this._dataSource = value;
 
             if (this._dataSource != null) {
+                this._dataSource.addOnDataSourceChanged(Bridge.fn.bind(this, this.dataSource_OnDataSourceChanged));
+
                 if (this.columns.getCount() === 0 && this.autoGenerateColumnsFromSource) {
                     var sw = System.Diagnostics.Stopwatch.startNew();
 
@@ -3755,15 +3770,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (asc) {
                 var sorted = System.Linq.Enumerable.from(Cells).select(function (x, i) {
                         return new (System.Collections.Generic.KeyValuePair$2(System.Int32,T))(i, x);
-                    }).orderBy($asm.$.ExpressCraft.GridView.f16).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
+                    }).orderBy($asm.$.ExpressCraft.GridView.f14).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
 
-                this.visibleRowHandles = System.Linq.Enumerable.from(sorted).select($asm.$.ExpressCraft.GridView.f17).toList(System.Int32);
+                this.visibleRowHandles = System.Linq.Enumerable.from(sorted).select($asm.$.ExpressCraft.GridView.f15).toList(System.Int32);
             } else {
                 var sorted1 = System.Linq.Enumerable.from(Cells).select(function (x, i) {
                         return new (System.Collections.Generic.KeyValuePair$2(System.Int32,T))(i, x);
-                    }).orderByDescending($asm.$.ExpressCraft.GridView.f16).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
+                    }).orderByDescending($asm.$.ExpressCraft.GridView.f14).toList(System.Collections.Generic.KeyValuePair$2(System.Int32,T));
 
-                this.visibleRowHandles = System.Linq.Enumerable.from(sorted1).select($asm.$.ExpressCraft.GridView.f17).toList(System.Int32);
+                this.visibleRowHandles = System.Linq.Enumerable.from(sorted1).select($asm.$.ExpressCraft.GridView.f15).toList(System.Int32);
             }
         },
         sortColumn: function () {
@@ -3990,10 +4005,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     Bridge.global.clearTimeout(this.prevRenderGridScrollId);
                     this.prevRenderGridScrollId = -1;
                 }
-                this.prevRenderGridScrollId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f18), Math.max(1, ExpressCraft.Settings.gridViewScrollDelayMS));
+                this.prevRenderGridScrollId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f16), Math.max(1, ExpressCraft.Settings.gridViewScrollDelayMS));
             } else {
                 this.renderGrid();
             }
+        },
+        dataSource_OnDataSourceChanged: function (sender, e) {
+            this.sortColumn();
+            this.renderGrid();
         },
         render: function () {
             ExpressCraft.Control.prototype.render.call(this);
@@ -4098,8 +4117,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             se.ondragstart = function (ev) {
                 ev.dataTransfer.setData("gridviewColumnDrag", index.toString());
             };
-            se.ondragover = $asm.$.ExpressCraft.GridView.f19;
-            se.ondrop = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f20);
+            se.ondragover = $asm.$.ExpressCraft.GridView.f17;
+            se.ondrop = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f18);
 
             se.onmousedown = Bridge.fn.bind(this, function (ev) {
                 var x = ev.layerX;
@@ -4121,7 +4140,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             });
 
-            se.onmousemove = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f21);
+            se.onmousemove = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f19);
         },
         processBlur: function () {
             if (this.prevScroll !== this.gridBodyContainer.scrollTop) {
@@ -4131,7 +4150,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.lastId = -1;
                 }
 
-                this.lastId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f22), 100);
+                this.lastId = Bridge.global.setTimeout(Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f20), 100);
             }
             this.prevScroll = this.gridBodyContainer.scrollTop;
         },
@@ -4318,22 +4337,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.resizeIndex = -1;
             this.resizeSpan = null;
         },
-        f2: function (i) {
-            this.validateGridHeight();
-        },
-        f3: function (i) {
-            this.validateGridWidth();
-        },
-        f4: function (ev) {
+        f2: function (ev) {
             this.delayedRenderGrid();
         },
-        f5: function (ev) {
+        f3: function (ev) {
             this.renderGrid();
         },
-        f6: function (ev) {
+        f4: function (ev) {
             this.setFocusedColumn(parseInt(ev.currentTarget.getAttribute("i")));
         },
-        f7: function (ev) {
+        f5: function (ev) {
             if (!ExpressCraft.Settings.isChrome) {
                 if (this.clickTimeDiff == null) {
                     this.clickTimeDiff = System.Diagnostics.Stopwatch.startNew();
@@ -4367,7 +4380,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.renderGrid();
             }
         },
-        f8: function (ev) {
+        f6: function (ev) {
             var drh = parseInt(ev.currentTarget.getAttribute("i"));
             if (!Bridge.staticEquals(this.onRowDoubleClick, null)) {
                 this.onRowDoubleClick(drh);
@@ -4381,7 +4394,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             }
         },
-        f9: function (ev) {
+        f7: function (ev) {
             var kev = ev;
             //Global.Alert("CONTROL + A");
             if (this.allowMultiSelection && kev.ctrlKey && (kev.keyCode === 65 || kev.keyCode === 97)) {
@@ -4392,45 +4405,45 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 //Global.Alert("AllowMultiSelection = FALSE");
             }
         },
-        f10: function (cm) {
+        f8: function (cm) {
             if (this.getFocusedColumn() > -1) {
                 this.sortColumn$1(this.columns.getItem(this.getFocusedColumn()), ExpressCraft.GridViewSortMode.Asc);
             }
         },
-        f11: function (cm) {
+        f9: function (cm) {
             if (this.getFocusedColumn() > -1) {
                 this.sortColumn$1(this.columns.getItem(this.getFocusedColumn()), ExpressCraft.GridViewSortMode.Desc);
             }
         },
-        f12: function (cm) {
+        f10: function (cm) {
             this.clearSortColumn();
         },
-        f13: function (cm) {
+        f11: function (cm) {
             this.selectAllRows();
         },
-        f14: function (cm) {
+        f12: function (cm) {
             this.clearSelection();
         },
-        f15: function (ev) {
+        f13: function (ev) {
             if (this.contextMenu != null) {
                 this.contextMenu.show(ExpressCraft.Helper.getClientMouseLocation(ev).$clone());
                 ev.preventDefault();
                 ev.stopPropagation();
             }
         },
-        f16: function (x) {
+        f14: function (x) {
             return x.value;
         },
-        f17: function (x) {
+        f15: function (x) {
             return x.key;
         },
-        f18: function () {
+        f16: function () {
             this.renderGrid();
         },
-        f19: function (ev) {
+        f17: function (ev) {
             ev.preventDefault();
         },
-        f20: function (ev) {
+        f18: function (ev) {
             if (ev.target == null || !(Bridge.is(ev.target, HTMLSpanElement))) {
                 return;
             }
@@ -4483,7 +4496,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.renderGrid();
         },
-        f21: function (ev) {
+        f19: function (ev) {
             if (this.resizeIndex === -1) {
                 var x = ev.layerX;
                 var target = ev.target;
@@ -4496,7 +4509,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 target.style.cursor = "default";
             }
         },
-        f22: function () {
+        f20: function () {
             this.gridBody.classList.remove("blur");
         }
     });
@@ -5662,14 +5675,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.allowSizeChange = false;
         },
         onClosed: function () {
-            for (var x = 0; x < ((this.prevData.length - 1) | 0); x = (x + 1) | 0) {
-                if (Bridge.referenceEquals(this.prevData[x], this.dataRow.getItem(x))) {
-                    continue;
-                }
-                this.gridView.sortColumn();
-                ExpressCraft.DialogForm.prototype.onClosed.call(this);
-                return;
-            }
+            this.gridView.getDataSource().endDataUpdate();
+
             ExpressCraft.DialogForm.prototype.onClosed.call(this);
         },
         onShowed: function () {
@@ -5679,6 +5686,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.dialogResult = ExpressCraft.DialogResultEnum.Cancel;
                 this.close();
             } else {
+                this.gridView.getDataSource().beginDataUpdate();
+
                 this.generateForm();
             }
         },

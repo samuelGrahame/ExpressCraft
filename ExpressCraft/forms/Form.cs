@@ -611,7 +611,10 @@ namespace ExpressCraft
 			};
             Window.OnBeforeUnload = (ev) =>
             {
-                Script.Write("return 'Would you like to close this application?'");
+				if(!Settings.AllowCloseWithoutQuestion)
+				{
+					Script.Write("return 'Would you like to close this application?'");
+				}                
             };
             Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {
                 if(InErrorDialog)

@@ -25,7 +25,7 @@ namespace ExpressCraft
 	public class DataTable
 	{
 		public List<DataColumn> Columns = new List<DataColumn>();
-		public event EventHandler OnDataSourceChanged;		
+		public event EventHandler OnDataSourceChanged = null;		
 		
 		private bool _inDataChange = false;
 		private bool _requestedOnDataChange = false;
@@ -35,6 +35,7 @@ namespace ExpressCraft
 			if(!_inDataChange)
 			{
 				_requestedOnDataChange = false;
+				if(OnDataSourceChanged != null)
 				OnDataSourceChanged(this, null);				
 			}
 			else
@@ -270,7 +271,8 @@ namespace ExpressCraft
 			if(_requestedOnDataChange)
 			{
 				_requestedOnDataChange = false;
-				OnDataSourceChanged(this, null);
+				if(OnDataSourceChanged != null)
+					OnDataSourceChanged(this, null);
 			}
 		}
 

@@ -50,6 +50,8 @@ namespace ExpressCraft
 
 		public static bool IsChrome = Browser.IsChrome;
 
+		public static bool AllowCloseWithoutQuestion = false;
+
 		public static void Setup()
 		{
 			SetupStyleDefaults();			

@@ -37,14 +37,14 @@ namespace ExpressCraftGridView
 				GridView = new GridView(true, true);
 
                 var dataTable = new DataTable();
-
+				
                 dataTable.AddColumn("Number", DataType.Integer);
                 dataTable.AddColumn("String", DataType.String);                
                 dataTable.AddColumn("Date", DataType.DateTime);
 				dataTable.AddColumn("Boolean", DataType.Bool);
 				dataTable.AddColumn("Image", DataType.String);
 
-				GridView.DataSource = dataTable;
+				GridView.DataSource = dataTable;				
 
 				var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
 				gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
