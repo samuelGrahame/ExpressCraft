@@ -78,6 +78,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                     dr.setItem(1, "Some Last Name");
                     dr.setItem(2, "Some First Name");
                     dr.setItem(3, Bridge.Date.today());
+                    dr.setItem(4, "");
                 }
 
                 dataTable.acceptNewRows();

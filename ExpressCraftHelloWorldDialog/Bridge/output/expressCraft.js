@@ -2745,6 +2745,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                     if (visible) {
                         this.setButtonMinimize(this.createFormButton(button));
+
                     }
                     break;
                 case ExpressCraft.FormButtonType.Maximize: 

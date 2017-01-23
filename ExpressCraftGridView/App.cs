@@ -77,7 +77,8 @@ namespace ExpressCraftGridView
                         dr[1] = "Some Last Name";
                         dr[2] = "Some First Name";
                         dr[3] = DateTime.Today;
-                    }
+						dr[4] = "";
+					}
 
                     dataTable.AcceptNewRows();
 

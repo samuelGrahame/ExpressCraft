@@ -19,6 +19,49 @@ namespace ExpressCraft
 		public GridViewCellDisplay CellDisplay = null;
 		public GridViewSortMode SortedMode = GridViewSortMode.None;
 
+		private object filterValue;
+
+		public object FilterValue
+		{
+			get { return filterValue; }
+			set {
+				if(filterValue != value)
+				{
+					filterValue = value;
+					if(View.ShowAutoFilterRow)
+					{
+						View.CalculateVisibleRows();
+					}
+				}
+			}
+		}
+
+		public bool ValueMatchFilter(int index)
+		{
+			if(filterValue == null)
+				return true;
+
+			object abc = GetDisplayValue(index);
+
+			switch(Column.DataType)
+			{
+				default:
+				case DataType.Object:
+				case DataType.Integer:				
+				case DataType.Long:
+				case DataType.Float:
+				case DataType.Double:
+				case DataType.Decimal:
+				case DataType.Bool:
+				case DataType.Byte:
+				case DataType.Short:
+					return abc == filterValue;
+				case DataType.DateTime:
+				case DataType.String:
+					return (abc + "").StartsWith(filterValue + "");				
+			}
+		}
+
 		public bool AllowEdit = true;
 		public bool ReadOnly = false;
 

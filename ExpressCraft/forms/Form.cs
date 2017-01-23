@@ -175,6 +175,7 @@ namespace ExpressCraft
 					if(visible)
 					{
 						ButtonMinimize = CreateFormButton(button);
+
 					}
 
 					break;
