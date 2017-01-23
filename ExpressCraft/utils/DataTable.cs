@@ -21,12 +21,21 @@ namespace ExpressCraft
 		Byte,
 		Short
 	}
-
+	
 	public class DataTable
 	{
 		public List<DataColumn> Columns = new List<DataColumn>();
+		public event EventHandler OnDataSourceChanged;		
+		
+		private bool _inDataChange = false;
 
-		public Action<int> RowSizeChanged = null;
+		public void RequireOnDataChangeEvent()
+		{
+			if(!_inDataChange)
+			{
+				OnDataSourceChanged(this, null);
+			}
+		}
 
         public void ClearRows()
         {
@@ -102,7 +111,8 @@ namespace ExpressCraft
                     ClearCells<short?>(_column);
                     break;
             }
-        }
+			RequireOnDataChangeEvent();
+		}
 
         public DataColumn GetColumnByDataType(DataType type = DataType.Object)
         {
@@ -141,6 +151,8 @@ namespace ExpressCraft
 
             Columns.Add(col);
 			_ColCount = Columns.Count;
+
+			RequireOnDataChangeEvent();
 		}
 
 		public DataRow this[int rowIndex]
@@ -154,6 +166,7 @@ namespace ExpressCraft
 		public void BeginNewRow(int EstimatedNewRows)
 		{
 			NewRows = new List<DataRow>(EstimatedNewRows);
+			BeginDataUpdate();
 		}
 
 		public DataRow AddRow()
@@ -163,11 +176,11 @@ namespace ExpressCraft
 			for(int x = 0; x < colLength; x++)
 			{
 				dynamic col = Columns[x];
-				col.cells.add(null);
-				//Columns[x].Cells.Add(null);
+				col.cells.add(null);				
 			}
-			if(RowSizeChanged != null)
-				RowSizeChanged(RowCount);
+
+			RequireOnDataChangeEvent();
+
 			return dr;
 		}
 
@@ -180,17 +193,14 @@ namespace ExpressCraft
 				for(int x = 0; x < colLength; x++)
 				{
 					dynamic col = Columns[x];
-					col.cells.add(row[x]);
-					//Columns[x].Cells.Add(row[x]);
+					col.cells.add(row[x]);					
 				}
-				if(RowSizeChanged != null)
-					RowSizeChanged(RowCount);
+				RequireOnDataChangeEvent();
 			}
 		}
 
 		public DataRow NewRow()
 		{
-
 			var dr = new DataRow(this);
 
 			NewRows.Add(dr);
@@ -239,13 +249,24 @@ namespace ExpressCraft
 			}
 			NewRows.Clear();
 
-			if(RowSizeChanged != null)
-				RowSizeChanged(RowCount);
+			EndDataUpdate();
+		}
+
+		public void BeginDataUpdate()
+		{
+			_inDataChange = true;
+		}
+
+		public void EndDataUpdate()
+		{
+			_inDataChange = false;
+			RequireOnDataChangeEvent();
 		}
 
 		public void RejectNewRows()
 		{
 			NewRows.Clear();
+			_inDataChange = false;
 		}
 	}	
 	
@@ -272,14 +293,23 @@ namespace ExpressCraft
 				}
 				dynamic col = ParentTable.Columns[columnIndex];
 				return col.cells.items[RowIndex];
-			} set {
+			} set {				
 				if(RowIndex == -1)
 				{
-					batchData[columnIndex] = value;
+					if(batchData[columnIndex] != value)
+					{
+						batchData[columnIndex] = value;
+						ParentTable.RequireOnDataChangeEvent();
+					}
+					
 					return;
 				}
 				dynamic col = ParentTable.Columns[columnIndex];
-				col.cells.items[RowIndex] = value;
+				if(col.cells.items[RowIndex] != value)
+				{
+					col.cells.items[RowIndex] = value;
+					ParentTable.RequireOnDataChangeEvent();
+				}				
 			}
 		}
 	}	

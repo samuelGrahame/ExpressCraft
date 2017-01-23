@@ -439,21 +439,31 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         setItem: function (columnIndex, value) {
             if (this.rowIndex === -1) {
-                this.batchData[columnIndex] = value;
+                if (!Bridge.referenceEquals(this.batchData[columnIndex], value)) {
+                    this.batchData[columnIndex] = value;
+                    this.parentTable.requireOnDataChangeEvent();
+                }
+
                 return;
             }
             var col = this.parentTable.columns.getItem(columnIndex);
-            col.cells.items[this.rowIndex] = value;
+            if (!Bridge.referenceEquals(col.cells.items[this.rowIndex], value)) {
+                col.cells.items[this.rowIndex] = value;
+                this.parentTable.requireOnDataChangeEvent();
+            }
         }
     });
 
     Bridge.define("ExpressCraft.DataTable", {
         columns: null,
-        rowSizeChanged: null,
+        _inDataChange: false,
         _ColCount: 0,
         _RowCount: 0,
         newRows: null,
         config: {
+            events: {
+                OnDataSourceChanged: null
+            },
             init: function () {
                 this.columns = new (System.Collections.Generic.List$1(ExpressCraft.DataColumn))();
                 this.newRows = new (System.Collections.Generic.List$1(ExpressCraft.DataRow))();
@@ -467,6 +477,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         getItem: function (rowIndex) {
             return new ExpressCraft.DataRow(this, rowIndex);
+        },
+        requireOnDataChangeEvent: function () {
+            if (!this._inDataChange) {
+                this.OnDataSourceChanged(this, null);
+            }
         },
         clearRows: function () {
             this._RowCount = 0;
@@ -515,6 +530,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.clearCells$1(System.Nullable$1(System.Int16), _column);
                     break;
             }
+            this.requireOnDataChangeEvent();
         },
         getColumnByDataType: function (type) {
             if (type === void 0) { type = 0; }
@@ -551,9 +567,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.columns.add(col);
             this._ColCount = this.columns.getCount();
+
+            this.requireOnDataChangeEvent();
         },
         beginNewRow: function (EstimatedNewRows) {
             this.newRows = new (System.Collections.Generic.List$1(ExpressCraft.DataRow))(EstimatedNewRows);
+            this.beginDataUpdate();
         },
         addRow: function () {
             var dr = new ExpressCraft.DataRow(this, Bridge.identity(this._RowCount, (this._RowCount = (this._RowCount + 1) | 0)));
@@ -561,11 +580,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             for (var x = 0; x < colLength; x = (x + 1) | 0) {
                 var col = this.columns.getItem(x);
                 col.cells.add(null);
-                //Columns[x].Cells.Add(null);
             }
-            if (!Bridge.staticEquals(this.rowSizeChanged, null)) {
-                this.rowSizeChanged(this.getRowCount());
-            }
+
+            this.requireOnDataChangeEvent();
+
             return dr;
         },
         addRow$1: function (row) {
@@ -576,11 +594,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 for (var x = 0; x < colLength; x = (x + 1) | 0) {
                     var col = this.columns.getItem(x);
                     col.cells.add(row[x]);
-                    //Columns[x].Cells.Add(row[x]);
                 }
-                if (!Bridge.staticEquals(this.rowSizeChanged, null)) {
-                    this.rowSizeChanged(this.getRowCount());
-                }
+                this.requireOnDataChangeEvent();
             }
         },
         newRow: function () {
@@ -623,12 +638,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
             this.newRows.clear();
 
-            if (!Bridge.staticEquals(this.rowSizeChanged, null)) {
-                this.rowSizeChanged(this.getRowCount());
-            }
+            this.endDataUpdate();
+        },
+        beginDataUpdate: function () {
+            this._inDataChange = true;
+        },
+        endDataUpdate: function () {
+            this._inDataChange = false;
+            this.requireOnDataChangeEvent();
         },
         rejectNewRows: function () {
             this.newRows.clear();
+            this._inDataChange = false;
         }
     });
 
