@@ -75,8 +75,8 @@ namespace ExpressCraftGridView
                         var dr = dataTable.NewRow();
                         dr[0] = x;
                         dr[1] = "Some Last Name";
-                        dr[2] = "Some First Name";
-                        dr[3] = DateTime.Today;
+                        dr[2] = DateTime.Today;
+                        dr[3] = i % 2 == 0;
 						dr[4] = "";
 					}
 
@@ -102,9 +102,9 @@ namespace ExpressCraftGridView
                 this.Heading.AppendChildren(AddNewRowButton, Add100000RowsButton, ClearRowsButton);                
                 this.Body.AppendChild(GridView);
 
-                this.LinkchildToForm(GridView);
+                this.LinkchildToForm(GridView);				
 
-                GridView.RenderGrid();
+				GridView.RenderGrid();
             }
         }
     }

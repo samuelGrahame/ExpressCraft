@@ -67,9 +67,11 @@ namespace ExpressCraft
 					showAutoFilterRow = value;
 					if(!showAutoFilterRow)
 					{
-						// Remove Filter.
+						// Remove Filter.						
 						for(int i = 0; i < ColumnCount(); i++)
 						{
+							//FilterEdit = null;
+							Columns[i].FilterEdit = null;
 							Columns[i].FilterValue = null;
 						}
 						CalculateVisibleRows();
@@ -844,6 +846,11 @@ namespace ExpressCraft
 
 			Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
 
+			FilterRowOnChange = (te) =>
+			{
+				Columns[Global.ParseInt(te.Content.GetAttribute("i"))].FilterValue = te.Text;
+			};
+
 			AutoGenerateColumnsFromSource = autoGenerateColumns;
 			ColumnAutoWidth = columnAutoWidth;
 		}
@@ -1003,6 +1010,8 @@ namespace ExpressCraft
 			PrevScroll = GridBodyContainer.ScrollTop;
 		}
 
+		private Action<TextInput> FilterRowOnChange;
+
 		public void RenderGrid()
 		{
 			GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
@@ -1133,51 +1142,13 @@ namespace ExpressCraft
 			var MaxWidth = (Last.CachedX + Last.Width);
 
 			if(ShowAutoFilterRow)
-			{
-				var dr = Div("cellrow");
-
-				dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);				
-
-				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-				{
-					var col = Columns[x];
-					var apparence = col.BodyApparence;
-					bool useDefault = false;
-
-					HTMLElement cell;
-
-					if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
-					{
-						cell = Input("cell", col.Column.DataType == DataType.DateTime ? InputType.DateTime : InputType.Text);
-						cell.SetLocation(col.CachedX, 0);
-						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-
-						//	Label(col.FilterValue + "",
-						//col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
-
-						//dr.AppendChild(useDefault ?
-						//	col.CellDisplay.OnCreateDefault(cell, this, -1, x) :
-						//	cell);
-					}
-					else
-					{
-						cell = col.CellDisplay.OnCreate(this, -1, x);
-						cell.SetLocation(col.CachedX, 0);
-						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-
-						dr.AppendChild(cell);
-					}
-
-					cell.SetAttribute("i", x.ToString());					
-				}
-				Rows.Add(dr);
-
+			{				
 				Length -= 1;
 				Y += UnitHeight;
 			}
-
-			// #TODO - CLEAN...
 			
+			// #TODO - CLEAN...
+
 			for(int i = start; i < Length; i++)
 			{
 				if(i < DataSource.RowCount && i >= 0)
@@ -1224,6 +1195,52 @@ namespace ExpressCraft
 
 					Y += UnitHeight;
 				}
+			}
+
+			if(ShowAutoFilterRow)
+			{
+				var dr = Div("cellrow");
+
+				dr.SetBounds(0, 0, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+				dr.Style.Position = Position.Sticky;
+				dr.Style.BorderBottomColor = "darkgray";
+				dr.Style.BorderBottomStyle = BorderStyle.Solid;
+				dr.Style.BorderBottomWidth = BorderWidth.Thin;
+
+				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+				{
+					var col = Columns[x];
+					var apparence = col.BodyApparence;
+					
+					HTMLElement cell;
+					TextInput tx;
+					if(col.FilterEdit == null)
+					{
+						tx = new TextInput(col.Column.DataType == DataType.DateTime ? InputType.DateTime : InputType.Text); ;
+						tx.Content.ClassList.Add("cell");
+					}
+					else
+					{						
+						tx = col.FilterEdit;
+					}
+					
+					tx.Text = (col.FilterValue + "");
+
+					tx.OnTextChanged = FilterRowOnChange;
+
+					cell = tx.Content;
+
+					cell.SetLocation(col.CachedX, 0);
+					cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+
+					//	Label(col.FilterValue + "",
+					//col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
+
+					dr.AppendChild(cell);
+
+					cell.SetAttribute("i", x.ToString());
+				}
+				Rows.Add(dr);
 			}
 
 			ClearGrid();

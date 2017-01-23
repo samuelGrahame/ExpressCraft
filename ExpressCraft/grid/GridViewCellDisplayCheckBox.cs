@@ -12,7 +12,7 @@ namespace ExpressCraft
 
             var cell = Control.Div("cell");
 			var input = Control.Input("", InputType.Checkbox);
-            input.SetBoundsFull();
+			input.SetBoundsFull();
 			input.SetChecked(value);
             input.Style.Margin = "0";
             cell.AppendChild(input);

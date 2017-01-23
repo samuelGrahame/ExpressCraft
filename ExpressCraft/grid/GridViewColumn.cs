@@ -19,6 +19,8 @@ namespace ExpressCraft
 		public GridViewCellDisplay CellDisplay = null;
 		public GridViewSortMode SortedMode = GridViewSortMode.None;
 
+		public TextInput FilterEdit = null;
+
 		private object filterValue;
 
 		public object FilterValue
@@ -31,7 +33,7 @@ namespace ExpressCraft
 					if(View.ShowAutoFilterRow)
 					{
 						View.CalculateVisibleRows();
-					}
+					}					
 				}
 			}
 		}
@@ -41,7 +43,7 @@ namespace ExpressCraft
 			if(filterValue == null)
 				return true;
 
-			object abc = GetDisplayValue(index);
+			object abc = GetDisplayValueByDataRowHandle(index);
 
 			switch(Column.DataType)
 			{
