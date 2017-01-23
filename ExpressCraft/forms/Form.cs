@@ -25,9 +25,36 @@ namespace ExpressCraft
 		public static bool Mouse_Down { get; set; } = false;
 		public static int FadeLength { get; set; } = 100;
         public static HTMLElement FormOverLay;
-		
+				
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
+		
+		public bool ShowMinimize
+		{
+			get { return ButtonMinimize != null; }
+			set {
+				ChangeHeadingButton(FormButtonType.Minimize, value);				
+			}
+		}
+
+		public bool ShowClose
+		{
+			get { return ButtonClose != null; }
+			set
+			{
+				ChangeHeadingButton(FormButtonType.Close, value);
+			}
+		}
+
+		public bool ShowMaximize
+		{
+			get { return ButtonClose != null; }
+			set
+			{
+				ChangeHeadingButton(FormButtonType.Maximize, value);
+			}
+		}
+
 
 		public bool ForReuse = false;
 
@@ -134,6 +161,49 @@ namespace ExpressCraft
 		{
 			return Content != null && Content.Style.Visibility == Visibility.Visible;
 		}
+		
+		public void ChangeHeadingButton(FormButtonType button, bool visible = true)
+		{
+			switch(button)
+			{
+				case FormButtonType.Minimize:
+					if(ButtonMinimize != null)
+					{
+						ButtonMinimize.Delete();
+						ButtonMinimize = null;
+					}
+					if(visible)
+					{
+						ButtonMinimize = CreateFormButton(button);
+					}
+
+					break;
+				case FormButtonType.Maximize:
+					if(ButtonExpand != null)
+					{
+						ButtonExpand.Delete();
+						ButtonExpand = null;
+					}
+					if(visible)
+					{
+						ButtonExpand = CreateFormButton(button);
+					}
+					break;
+				case FormButtonType.Close:
+					if(ButtonClose != null)
+					{
+						ButtonClose.Delete();
+						ButtonClose = null;
+					}
+					if(visible)
+					{						
+						ButtonClose = CreateFormButton(button);
+					}
+					break;
+				default:
+					break;
+			}
+		}
 
 		protected virtual void Initialise()
 		{
@@ -158,35 +228,7 @@ namespace ExpressCraft
         protected virtual void OnClosed()
         {
 
-        }
-
-        public enum WindowState
-		{
-			Normal,
-			Minimized,
-			Maximized
-		}
-		
-		public enum FormStartPosition
-		{
-			Manual,
-			Center,
-			WindowsDefaultLocation						
-		}
-
-		private enum MouseMoveAction
-		{
-			None,
-			Move,
-			TopLeftResize,
-			LeftResize,
-			BottomLeftResize,
-			BottomResize,
-			BottomRightResize,
-			RightResize,
-			TopResize,
-			TopRightResize
-		}
+        }		
 
         public static FormCollection GetActiveFormCollection()
         {
@@ -655,15 +697,7 @@ namespace ExpressCraft
 
 			//Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
 		}
-		private enum FormButtonType
-		{
-			Close,
-			Maximize,
-			Minimize,
-			Restore,
-			Help
-		}
-
+				
 		public void SetWindowState(WindowState State)
 		{    
             if(!AllowSizeChange)
@@ -696,7 +730,7 @@ namespace ExpressCraft
 
 		private HTMLDivElement CreateFormButton(FormButtonType Type)
 		{
-			var butt = Div("form-heading-button");
+			var butt = Div("form-heading-button");			
 			
 			switch(Type)
 			{
@@ -711,10 +745,10 @@ namespace ExpressCraft
 						Mouse_Down = true;
 
 						ev.StopPropagation();
-						ev.PreventDefault();						
+						ev.PreventDefault();
 
 						ActiveForm = this;
-					};
+					};					
 
 					butt.OnMouseUp = (ev) =>
 					{
@@ -761,7 +795,14 @@ namespace ExpressCraft
 
 					break;
 				case FormButtonType.Minimize:
-					butt.Style.Left = "calc(100% - 137px)"; // StyleController.Calc(100, 137);
+					if(ShowMaximize)
+					{
+						butt.Style.Left = "calc(100% - 137px)"; // StyleController.Calc(100, 137);
+					}
+					else
+					{
+						butt.Style.Left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
+					}
 					
 					butt.InnerHTML = "-";
 
@@ -795,6 +836,10 @@ namespace ExpressCraft
 					};
 					break;
 			}
+
+			butt.OnDblClick = (ev) => {
+				ev.StopPropagation();
+			};
 
 			butt.OnMouseMove = (ev) =>
 			{
@@ -857,9 +902,9 @@ namespace ExpressCraft
 
 			BodyOverLay.Style.Opacity = ShowBodyOverLay ? "0.5" : "0";
 
-			ButtonClose = CreateFormButton(FormButtonType.Close);
-			ButtonExpand = CreateFormButton(FormButtonType.Maximize);
-			ButtonMinimize = CreateFormButton(FormButtonType.Minimize);
+			ChangeHeadingButton(FormButtonType.Close);
+			ChangeHeadingButton(FormButtonType.Maximize);
+			ChangeHeadingButton(FormButtonType.Minimize);			
 
 			BodyOverLay.Style.Visibility = Visibility.Collapse;
 
