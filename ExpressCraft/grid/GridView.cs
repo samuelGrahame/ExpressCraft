@@ -20,15 +20,13 @@ namespace ExpressCraft
 		private HTMLDivElement RightOfTableHeader;
 
 		private DataTable _dataSource = null;
-		public Action<int> OnRowSizeChanged = null;
-		public Action<int> OnColumnSizeChanged = null;
+				
 		public Action<int, int> OnFocusedRowChanged = null;
 		public Action<int> OnRowDoubleClick = null;
 
-		public Action<MouseEvent<HTMLDivElement>> OnRowClick;
-		public Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
-
-		public Action<MouseEvent> OnCellRowMouseDown;
+		protected Action<MouseEvent<HTMLDivElement>> OnRowClick;
+		protected Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
+		protected Action<MouseEvent> OnCellRowMouseDown;
 
 		public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
 		public List<int> VisibleRowHandles = null;
@@ -253,10 +251,17 @@ namespace ExpressCraft
 				SelectedRows = new HardSoftList<bool>(false);
 				VisibleRowHandles = new List<int>();
 
+				if(_dataSource != null)
+				{
+					_dataSource.OnDataSourceChanged -= DataSource_OnDataSourceChanged;
+				}
+
 				_dataSource = value;
 
 				if(_dataSource != null)
 				{
+					_dataSource.OnDataSourceChanged += DataSource_OnDataSourceChanged;
+
 					if(Columns.Count == 0 && AutoGenerateColumnsFromSource)
 					{
 						var sw = Stopwatch.StartNew();
@@ -531,13 +536,8 @@ namespace ExpressCraft
 
 				ResizeIndex = -1;
 				ResizeSpan = null;
-			};
-			OnRowSizeChanged = (i) => {
-				ValidateGridHeight();
-			};
-			OnColumnSizeChanged = (i) => {
-				ValidateGridWidth();
-			};
+			};			
+
 			OnResize = (ev) => {
 				DelayedRenderGrid();
 			};
@@ -673,6 +673,12 @@ namespace ExpressCraft
 
 			AutoGenerateColumnsFromSource = autoGenerateColumns;
 			ColumnAutoWidth = columnAutoWidth;
+		}
+
+		private void DataSource_OnDataSourceChanged(object sender, EventArgs e)
+		{
+			SortColumn();
+			RenderGrid();			
 		}
 
 		public override void Render()
