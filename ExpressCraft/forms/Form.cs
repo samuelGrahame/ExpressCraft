@@ -777,6 +777,11 @@ namespace ExpressCraft
 
 					break;
 				case FormButtonType.Maximize:
+					if(ShowMinimize)
+					{
+						ButtonMinimize.Style.Left = "calc(100% - 137px)";
+					}
+
 					butt.Style.Left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
 					butt.InnerHTML = "&#9633;";
 			
