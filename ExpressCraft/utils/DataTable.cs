@@ -28,12 +28,18 @@ namespace ExpressCraft
 		public event EventHandler OnDataSourceChanged;		
 		
 		private bool _inDataChange = false;
+		private bool _requestedOnDataChange = false;
 
 		public void RequireOnDataChangeEvent()
 		{
 			if(!_inDataChange)
 			{
-				OnDataSourceChanged(this, null);
+				_requestedOnDataChange = false;
+				OnDataSourceChanged(this, null);				
+			}
+			else
+			{
+				_requestedOnDataChange = true;
 			}
 		}
 
@@ -255,12 +261,17 @@ namespace ExpressCraft
 		public void BeginDataUpdate()
 		{
 			_inDataChange = true;
+			_requestedOnDataChange = false;
 		}
 
 		public void EndDataUpdate()
 		{
 			_inDataChange = false;
-			RequireOnDataChangeEvent();
+			if(_requestedOnDataChange)
+			{
+				_requestedOnDataChange = false;
+				OnDataSourceChanged(this, null);
+			}
 		}
 
 		public void RejectNewRows()

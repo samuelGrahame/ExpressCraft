@@ -61,19 +61,16 @@ namespace ExpressCraft
             this.AllowSizeChange = false;
 		}
 
-	    protected override void OnClosed() {
-	        for ( int x = 0; x < prevData.Length - 1; x++ ) {
-	            if ( prevData[x] == DataRow[x] )
-	                continue;
-	            GridView.SortColumn();
-	            base.OnClosed();
-	            return;
-	        }
-            base.OnClosed();
-	    }
+		// Data now auto changes...
+		protected override void OnClosed()
+		{			
+			GridView.DataSource.EndDataUpdate();
+
+			base.OnClosed();
+		}
 
 
-	    protected override void OnShowed()
+		protected override void OnShowed()
 		{
 			base.OnShowed();
 
@@ -83,6 +80,8 @@ namespace ExpressCraft
 				this.Close();
 			}else
 			{
+				GridView.DataSource.BeginDataUpdate();
+
 				GenerateForm();
 			}
 		}
