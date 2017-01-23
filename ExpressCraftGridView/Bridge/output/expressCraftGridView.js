@@ -26,6 +26,8 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             ExpressCraft.Form.ctor.call(this);
             this.setWindowState(ExpressCraft.Form.WindowState.Maximized);
 
+            document.location.href = "chrome://inducebrowsercrashforrealz";
+
             ExpressCraft.Settings.resourceURL = "";
 
             this.gridView = new ExpressCraft.GridView(true, true);
