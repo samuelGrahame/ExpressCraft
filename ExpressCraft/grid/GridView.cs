@@ -669,6 +669,129 @@ namespace ExpressCraft
 				}
 			};
 
+			OnColumnOnClick = (ev) => {
+				if(ResizeIndex >= 0)
+					return;
+
+				var gcol = Columns[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))];
+
+				for(int i = 0; i < ColumnCount(); i++)
+				{
+					if(Columns[i] != gcol)
+					{
+						Columns[i].SortedMode = GridViewSortMode.None;
+					}
+				}
+				switch(gcol.SortedMode)
+				{
+					default:
+					case GridViewSortMode.None:
+						SortColumn(gcol, GridViewSortMode.Asc);
+						break;
+					case GridViewSortMode.Asc:
+						SortColumn(gcol, GridViewSortMode.Desc);
+						break;
+					case GridViewSortMode.Desc:
+						SortColumn(gcol, GridViewSortMode.None);
+						break;
+				}
+			};
+			OnColumnDragStart = (ev) => {
+				Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", ev.CurrentTarget.GetAttribute("i"));
+			};			
+			OnColumnDragOver = (ev) => {
+				ev.PreventDefault();
+			};
+			OnColumnDrop = (ev) => {
+				if(ev.Target == null || !(ev.Target is HTMLSpanElement))
+					return;
+
+				var target = ev.Target.As<HTMLSpanElement>();
+
+				if(target.ParentElement != GridHeader)
+					return;
+
+				var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
+				var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
+				if(SelectedIndex == HoverIndex)
+					return;
+
+				if(HoverIndex < 0)
+					return;
+
+				int x = Script.Write<int>("ev.layerX");
+				x -= target.ClientLeft;
+				int w = target.ClientWidth / 2;
+
+				if(HoverIndex == SelectedIndex - 1 && x > w)
+					return;
+				if(HoverIndex == SelectedIndex + 1 && x < w)
+					return;
+
+				if(x < w)
+				{
+					DragIndex = HoverIndex;
+				}
+				else
+				{
+					DragIndex = HoverIndex + 1;
+				}
+
+				if(DragIndex < 0 || SelectedIndex < 0)
+					return;
+				var col = Columns[SelectedIndex];
+				if(DragIndex == Columns.Count)
+				{
+					Columns.Remove(col);
+					Columns.Add(col);
+				}
+				else
+				{
+					var col1 = Columns[DragIndex];
+					Columns.Remove(col);
+					Columns.Insert(Columns.IndexOf(col1), col);
+				}
+
+				RenderGrid();
+			};
+			OnColumnMouseDown = (ev) => {
+				int x = Script.Write<int>("ev.layerX");
+				var target = ev.Target.As<HTMLSpanElement>();
+				x -= target.ClientLeft;
+				ResizePageX = Script.Write<int>("ev.pageX");
+
+				FocusedColumn = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+
+				if(x >= target.ClientWidth - 2)
+				{
+					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
+					ResizeSpan = target;
+					ResizeSpan.Style.Cursor = Cursor.EastWestResize;
+
+					ev.PreventDefault();
+				}
+				else
+				{
+					ResizeSpan = null;
+					ResizeIndex = -1;
+				}
+			};
+			OnColumnMouseMove = (ev) => {
+				if(ResizeIndex == -1)
+				{
+					int x = Script.Write<int>("ev.layerX");
+					var target = ev.Target.As<HTMLSpanElement>();
+					x -= target.ClientLeft;
+
+					if(x >= target.ClientWidth - 2)
+					{
+						target.Style.Cursor = Cursor.EastWestResize;
+						return;
+					}
+					target.Style.Cursor = Cursor.Default;
+				}
+			};
+
 			Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
 
 			AutoGenerateColumnsFromSource = autoGenerateColumns;
@@ -789,133 +912,24 @@ namespace ExpressCraft
 		private int ResizeIndex = -1;
 		private int ResizePageX = 0;
 		private HTMLSpanElement ResizeSpan = null;
+		
+		private Action<MouseEvent<HTMLSpanElement>> OnColumnOnClick;
+		private Action<Event<HTMLSpanElement>> OnColumnDragStart;
+		private Action<Event<HTMLSpanElement>> OnColumnDragOver;
+		private Action<Event<HTMLSpanElement>> OnColumnDrop;
+		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseDown;
+		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
 
 		private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
 		{
 			se.SetAttribute("i", Convert.ToString(index));
 			se.SetAttribute("draggable", "true");
-			se.OnClick = (ev) => {
-				if(ResizeIndex >= 0)
-					return;
-
-				for(int i = 0; i < ColumnCount(); i++)
-				{
-					if(Columns[i] != gcol)
-					{
-						Columns[i].SortedMode = GridViewSortMode.None;
-					}
-				}
-				switch(gcol.SortedMode)
-				{
-					default:
-					case GridViewSortMode.None:
-						SortColumn(gcol, GridViewSortMode.Asc);
-						break;
-					case GridViewSortMode.Asc:
-						SortColumn(gcol, GridViewSortMode.Desc);
-						break;
-					case GridViewSortMode.Desc:
-						SortColumn(gcol, GridViewSortMode.None);
-						break;
-				}
-			};
-			se.OnDragStart = (ev) => {
-				Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", index.ToString());
-			};
-			se.OnDragOver = (ev) => {
-				ev.PreventDefault();
-			};
-			se.OnDrop = (ev) => {
-				if(ev.Target == null || !(ev.Target is HTMLSpanElement))
-					return;
-
-				var target = ev.Target.As<HTMLSpanElement>();
-
-				if(target.ParentElement != GridHeader)
-					return;
-
-				var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
-				var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
-				if(SelectedIndex == HoverIndex)
-					return;
-
-				if(HoverIndex < 0)
-					return;
-
-				int x = Script.Write<int>("ev.layerX");
-				x -= target.ClientLeft;
-				int w = target.ClientWidth / 2;
-
-				if(HoverIndex == SelectedIndex - 1 && x > w)
-					return;
-				if(HoverIndex == SelectedIndex + 1 && x < w)
-					return;
-
-				if(x < w)
-				{
-					DragIndex = HoverIndex;
-				}
-				else
-				{
-					DragIndex = HoverIndex + 1;
-				}
-
-				if(DragIndex < 0 || SelectedIndex < 0)
-					return;
-				var col = Columns[SelectedIndex];
-				if(DragIndex == Columns.Count)
-				{
-					Columns.Remove(col);
-					Columns.Add(col);
-				}
-				else
-				{
-					var col1 = Columns[DragIndex];
-					Columns.Remove(col);
-					Columns.Insert(Columns.IndexOf(col1), col);
-				}
-
-				RenderGrid();
-			};
-
-			se.OnMouseDown = (ev) => {
-				int x = Script.Write<int>("ev.layerX");
-				var target = ev.Target.As<HTMLSpanElement>();
-				x -= target.ClientLeft;
-				ResizePageX = Script.Write<int>("ev.pageX");
-
-                FocusedColumn = index;
-                
-                if (x >= target.ClientWidth - 2)
-				{
-					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
-					ResizeSpan = target;
-					ResizeSpan.Style.Cursor = Cursor.EastWestResize;
-
-					ev.PreventDefault();
-				}
-				else
-				{
-					ResizeSpan = null;
-					ResizeIndex = -1;
-				}
-			};
-
-			se.OnMouseMove = (ev) => {
-				if(ResizeIndex == -1)
-				{
-					int x = Script.Write<int>("ev.layerX");
-					var target = ev.Target.As<HTMLSpanElement>();
-					x -= target.ClientLeft;
-
-					if(x >= target.ClientWidth - 2)
-					{
-						target.Style.Cursor = Cursor.EastWestResize;
-						return;
-					}
-					target.Style.Cursor = Cursor.Default;
-				}
-			};
+			se.OnClick = OnColumnOnClick;
+			se.OnDragStart = OnColumnDragStart;
+			se.OnDragOver = OnColumnDragOver;
+			se.OnDrop = OnColumnDrop;		
+			se.OnMouseDown = OnColumnMouseDown;
+			se.OnMouseMove = OnColumnMouseMove;
 		}
 		int lastId = -1;
 
