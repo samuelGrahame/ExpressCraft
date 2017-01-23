@@ -29,6 +29,8 @@ namespace ExpressCraft
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
 
+		public bool ForReuse = false;
+
         protected static bool InErrorDialog = false;
 
         public jQuery Self;
@@ -614,7 +616,7 @@ namespace ExpressCraft
 				if(!Settings.AllowCloseWithoutQuestion)
 				{
 					Script.Write("return 'Would you like to close this application?'");
-				}                
+				}
             };
             Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {
                 if(InErrorDialog)
@@ -827,7 +829,7 @@ namespace ExpressCraft
             Content.Style.Cursor = cur;
             Heading.Style.Cursor = cur;
         }		
-
+		
 		public Form() : base("form-base")
 		{		
 			Heading = Div("form-heading");
@@ -1502,19 +1504,19 @@ namespace ExpressCraft
             }
 
 			if(Content != null)
-			{
-				jQuery.Select(Content).Empty();
-				if(Content != null)
+			{				
+				if(!ForReuse)
 				{
-					Content.Delete(); Content = null;
+					Content.Empty();					
+					if(Content != null)
+					{
+						Content.Delete(); Content = null;
+					}
 				}
-				//jQuery.Select(Content).FadeOut(FadeLength, () => {
-				//	jQuery.Select(Content).Empty();
-				//	if(Content != null)
-				//	{
-				//		Content.Delete(); Content = null;
-				//	}			
-				//});
+				else
+				{
+					Content.Style.Visibility = Visibility.Collapse;
+				}
 			}
 
 			CalculateZOrder();
