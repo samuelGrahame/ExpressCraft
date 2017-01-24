@@ -53,3 +53,18 @@ for(int i = 0; i < 1000; i++)
 
 dataTable.AcceptNewRows(); // It calls EndDataUpdate...
 ```
+
+# How to use the GridView with the DataTable
+
+```csharp
+
+// Requirements - dataTable filled with data, Inside a Form class.
+
+var gridView = new GridView(true, true);
+
+gridView.DataSource = dataTable;
+
+this.LinkchildToForm(gridView); // required to manage resize events.
+this.Body.AppendChild(gridView); // add the control to the working form
+
+```
