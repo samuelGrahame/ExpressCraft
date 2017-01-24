@@ -40,4 +40,16 @@ dataTable.BeginDataUpdate();
 dataTable.AddRow("Value");
 
 dataTable.EndDataUpdate();
+
+// Batch adding
+
+dataTable.BeginNewRow(1000); //  It calls BeginDataUpdate...
+
+for(int i = 0; i < 1000; i++)
+{
+  var x = dataTable.NewRow();
+  x[0] = i.ToString();
+}
+
+dataTable.AcceptNewRows(); // It calls EndDataUpdate...
 ```
