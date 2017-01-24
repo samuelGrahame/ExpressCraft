@@ -9,7 +9,16 @@ Ribbon Control Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/Expres
 Grid View Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftGridView/Bridge/www/rawprev.html
 
 
-# Added Google Cloud Print
+# How to create a form
+
+```csharp
+Form.Setup();
+var x = new Form();
+x.Text = "Hello World";
+x.Show();
+```
+
+# How to use Google Cloud Print
 
 ```csharp
 GoogleCloudPrint.Setup();
