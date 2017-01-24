@@ -9,7 +9,7 @@ Ribbon Control Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/Expres
 Grid View Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftGridView/Bridge/www/rawprev.html
 
 
-# How to create a form
+# How to create a Form
 
 ```csharp
 Form.Setup();
