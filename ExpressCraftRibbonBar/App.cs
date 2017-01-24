@@ -17,8 +17,8 @@ namespace ExpressCraftRibbonBar
             ribbonForm.Text = "ExpressCraft RibbonBar Test";
             ribbonForm.RibbonControl.AddRibbonPages(CreateRandomRibbonPage("Page 01"), CreateRandomRibbonPage("Page 02"), CreateRandomRibbonPage("Page 03"));
             ribbonForm.SetWindowState(WindowState.Maximized);
-
-            Application.Run(ribbonForm);
+			
+			Application.Run(ribbonForm);
         }
 
         public static RibbonPage CreateRandomRibbonPage(string caption)

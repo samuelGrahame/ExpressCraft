@@ -46,7 +46,7 @@ namespace ExpressCraft
 		public void Show()
 		{			
 			if(!printerSetup)
-				throw new Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.SetupPrinter();");
+				throw new Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.Setup();");
 			if(inLoad)
 				throw new Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
 			

@@ -37,7 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="forms\CloudPrintForm.cs" />
+    <Compile Include="controls\AceCodeEditor.cs" />
+    <Compile Include="utils\GoogleCloudPrint.cs" />
     <Compile Include="forms\DialogForm.cs" />
     <Compile Include="forms\EnumForms.cs" />
     <Compile Include="utils\Application.cs" />
@@ -106,6 +107,7 @@
       <HintPath>..\packages\Bridge.jQuery.2.9.2\lib\net40\Bridge.jQuery2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />

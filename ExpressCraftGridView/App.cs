@@ -40,7 +40,7 @@ namespace ExpressCraftGridView
                 dataTable.AddColumn("String", DataType.String);                
                 dataTable.AddColumn("Date", DataType.DateTime);
 				dataTable.AddColumn("Boolean", DataType.Bool);
-				dataTable.AddColumn("Image", DataType.String);
+				dataTable.AddColumn("Image", DataType.String);				
 
 				GridView.DataSource = dataTable;				
 
