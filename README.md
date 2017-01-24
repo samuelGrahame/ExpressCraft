@@ -67,3 +67,17 @@ gridView.DataSource = dataTable;
 this.LinkchildToForm(gridView); // required to manage resize events.
 this.Body.AppendChild(gridView); // add the control to the working form
 ```
+
+# How to access the HTML Element for Control Clases
+
+```csharp
+var x = new Control();
+
+HTMLElement element =  x.Content;
+
+var y = new Form();
+
+HTMLElement body = y.Body;
+HTMLElement baseContent = y.Content;
+
+```
