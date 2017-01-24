@@ -27,6 +27,7 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             var $t, $t1, $t2, $t3;
             // Setup the form events and containers*
             ExpressCraft.Form.setup();
+            ExpressCraft.CloudPrintForm.setupPrinter();
 
             var errorBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: ($t=ExpressCraft.MessageBoxLayout.Error, System.Enum.format(ExpressCraft.MessageBoxLayout, $t, "G")),
@@ -59,7 +60,14 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             informationBtn2.content.style.position = "relative";
             informationBtn2.content.style.width = "auto";
 
-            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2]);
+            var googlecloudPrintBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Google Cloud Print",
+                itemClick: $asm.$.ExpressCraftHelloWorldDialog.App.f6
+            } );
+            googlecloudPrintBtn.content.style.position = "relative";
+            googlecloudPrintBtn.content.style.width = "auto";
+
+            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn]);
         }
     });
 
@@ -80,6 +88,9 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
         },
         f5: function (ev) {
             (new ExpressCraft.MessageBoxForm.ctor(ExpressCraftHelloWorldDialog.App.getRandomText(), ExpressCraft.MessageBoxLayout.Information)).showDialog();
+        },
+        f6: function (ev) {
+            (new ExpressCraft.CloudPrintForm("https://www.google.com/landing/cloudprint/testpage.pdf", "Test Print")).show();
         }
     });
 });

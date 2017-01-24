@@ -35,6 +35,92 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.CloudPrintForm", {
+        statics: {
+            printerSetup: false,
+            inLoad: false,
+            setupPrinter: function () {
+                if (!ExpressCraft.CloudPrintForm.printerSetup) {
+                    if (ExpressCraft.CloudPrintForm.inLoad) {
+                        return;
+                    }
+                    ExpressCraft.CloudPrintForm.inLoad = true;
+
+                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
+                        onload: $asm.$.ExpressCraft.CloudPrintForm.f1,
+                        src: "https://www.google.com/cloudprint/client/cpgadget.js"
+                    } ));
+                }
+            }
+        },
+        _source: null,
+        _mimetype: null,
+        _encoding: "",
+        _title: null,
+        _gadget: null,
+        ctor: function (source, title, gcpmt, encoding) {
+            if (title === void 0) { title = ""; }
+            if (gcpmt === void 0) { gcpmt = 0; }
+            if (encoding === void 0) { encoding = ""; }
+
+            this.$initialize();
+            this._title = title;
+            this._source = source;
+            this._encoding = encoding;
+            this._mimetype = System.String.replaceAll(System.Enum.format(ExpressCraft.GoogleCloudPrintingMimeType, gcpmt, "G").toLowerCase(), "_", ".");
+        },
+        show: function () {
+            if (!ExpressCraft.CloudPrintForm.printerSetup) {
+                throw new System.Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.SetupPrinter();");
+            }
+            if (ExpressCraft.CloudPrintForm.inLoad) {
+                throw new System.Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
+            }
+
+            
+			this._gadget = new cloudprint.Gadget();			
+			
+            if (!System.String.isNullOrWhiteSpace(this._encoding)) {
+                
+				this._gadget.setPrintDocument(this._mimetype, this._title, this._source, this._encoding);
+				
+            } else {
+                
+				this._gadget.setPrintDocument(this._mimetype, this._title, this._source);
+				
+            }
+            
+			this._gadget.openPrintDialog();
+			this._gadget.setOnCloseCallback(this.clearContent);			
+			
+        },
+        clearContent: function () {
+            try {
+                ExpressCraft.Helper.delete($(".__gcp_dialog_container_cls").parent().get(0));
+            }
+            catch ($e1) {
+                $e1 = System.Exception.create($e1);
+            }
+        },
+        close: function () {
+            if (this._gadget != null) {
+                			
+				this._gadget.closePrintDialog();
+				this._gadget = null;
+				
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.CloudPrintForm", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.CloudPrintForm, {
+        f1: function (ele) {
+            ExpressCraft.CloudPrintForm.printerSetup = true;
+            ExpressCraft.CloudPrintForm.inLoad = false;
+        }
+    });
+
     Bridge.define("ExpressCraft.Control", {
         statics: {
             ControlClass: "control",
@@ -741,6 +827,20 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             Manual: 0,
             Center: 1,
             WindowsDefaultLocation: 2
+        }
+    });
+
+    Bridge.define("ExpressCraft.GoogleCloudPrintingMimeType", {
+        $kind: "enum",
+        statics: {
+            Url: 0,
+            DataUrl: 1,
+            Google_Drawing: 2,
+            Google_Drive: 3,
+            Google_Kix: 4,
+            Google_Mail: 5,
+            Google_Presentation: 6,
+            Google_Spreadsheet: 7
         }
     });
 

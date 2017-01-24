@@ -14,6 +14,7 @@ namespace ExpressCraftHelloWorldDialog
         {
             // Setup the form events and containers*
             Form.Setup();
+			GoogleCloudPrint.Setup();
 
             var errorBtn = new SimpleButton()
             {
@@ -66,7 +67,18 @@ namespace ExpressCraftHelloWorldDialog
             informationBtn2.Content.Style.Position = Position.Relative;
             informationBtn2.Content.Style.Width = "auto";
 
-            Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2);			
+			var googlecloudPrintBtn = new SimpleButton()
+			{
+				Text = "Google Cloud Print",
+				ItemClick = (ev) =>
+				{
+					(new GoogleCloudPrint("https://www.google.com/landing/cloudprint/testpage.pdf", "Test Print")).Show();
+				}
+			};
+			googlecloudPrintBtn.Content.Style.Position = Position.Relative;
+			googlecloudPrintBtn.Content.Style.Width = "auto";
+
+			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn);			
         }
 
         public static string GetRandomText()

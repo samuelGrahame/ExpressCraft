@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="forms\CloudPrintForm.cs" />
     <Compile Include="forms\DialogForm.cs" />
     <Compile Include="forms\EnumForms.cs" />
     <Compile Include="utils\Application.cs" />

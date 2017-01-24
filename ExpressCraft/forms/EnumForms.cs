@@ -42,4 +42,25 @@ namespace ExpressCraft
 		Restore,
 		Help
 	}
+
+	public enum GoogleCloudPrintingMimeType
+	{
+		Url,
+		DataUrl,
+		Google_Drawing,
+		Google_Drive,
+		Google_Kix,
+		Google_Mail,
+		Google_Presentation,
+		Google_Spreadsheet
+	}
+
+//	"url"	URL to be printed
+//"dataUrl"	Content of a URL data document as a string
+//"google.drawing"	Document ID of a Google Drawing
+//"google.drive"	ID of a file in a user's Google Drive
+//"google.kix"	ID of a Google Document
+//"google.mail"	ID of a Gmail thread
+//"google.presentation"	ID of a Google Presentation
+//"google.spreadsheet"	ID of a Google Spreadsheet
 }
