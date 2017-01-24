@@ -25,3 +25,19 @@ GoogleCloudPrint.Setup();
 var x = new GoogleCloudPrint("www.google.com", "title", GoogleCloudPrintingMimeType.Url);
 x.Show();
 ```
+
+# How to use DataTable Class
+
+```csharp
+var dataTable = new DataTable();				
+
+dataTable.AddColumn("FieldName", DataType.String);
+
+// Update direcly to datatable
+
+dataTable.BeginDataUpdate();
+
+dataTable.AddRow("Value");
+
+dataTable.EndDataUpdate();
+```
