@@ -7,3 +7,12 @@ Dialog Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftHe
 Ribbon Control Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftRibbonBar/Bridge/www/rawprev.html
 
 Grid View Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftGridView/Bridge/www/rawprev.html
+
+
+# Added Google Cloud Print
+
+```
+GoogleCloudPrint.Setup();
+var x = new GoogleCloudPrint("www.google.com", "title", GoogleCloudPrintingMimeType.Url);
+x.Show();
+```
