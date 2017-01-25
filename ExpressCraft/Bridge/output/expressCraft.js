@@ -2282,24 +2282,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var theme = ($t=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t, "G"));
             var mode = ($t1=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t1, "G"));
 
-            this.content.classList.remove("control");
-            this.content.style.position = "absolute";
-            // position:absolute;
-            var div = ExpressCraft.Control.div();
-            this.content.appendChild(div);
-
-            ExpressCraft.Helper.setBoundsFull(div);
-
             			
-			this.editor = ace.edit(div);
+			this.editor = ace.edit(this.content);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);	
 			
             this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f2;
 
-            div.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f3);
+            this.content.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f3);
 
-            div.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f4);
+            this.content.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f4);
         }
     });
 

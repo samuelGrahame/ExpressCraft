@@ -52,17 +52,9 @@ namespace ExpressCraft
 
 			var theme = _modeType.ToString("G");
 			var mode = _modeType.ToString("G");
-
-			this.Content.ClassList.Remove("control");
-			this.Content.Style.Position = Position.Absolute;
-			// position:absolute;
-			var div = Div();
-			this.Content.AppendChild(div);
-
-			div.SetBoundsFull();
-
+			
 			/*@			
-			this.editor = ace.edit(div);
+			this.editor = ace.edit(this.content);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);	
 			*/
@@ -72,13 +64,13 @@ namespace ExpressCraft
 				this.editor.resize(true);
 				*/
 			};
-						
-			div.AddEventListener(EventType.MouseDown, (ev) =>
+
+			this.Content.AddEventListener(EventType.MouseDown, (ev) =>
 			{
 				Form.InExternalMouseEvent = true;
 			});
 
-			div.AddEventListener(EventType.MouseUp, (ev) =>
+			this.Content.AddEventListener(EventType.MouseUp, (ev) =>
 			{
 				Form.InExternalMouseEvent = false;
 			});
