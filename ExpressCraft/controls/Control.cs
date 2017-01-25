@@ -25,6 +25,8 @@ namespace ExpressCraft
 
 		public ContextMenu ContextMenu = null;
 
+		public Form LinkedForm = null;		
+
 		public static string BaseClass(bool add = true)
 		{
 			return add ? " " + ControlClass :

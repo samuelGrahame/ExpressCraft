@@ -16,6 +16,7 @@ namespace ExpressCraftHelloWorldDialog
             Form.Setup();
 			GoogleCloudPrint.Setup();
 			AceCodeEditor.Setup();
+			Settings.AllowCloseWithoutQuestion = true;
 
             var errorBtn = new SimpleButton()
             {

@@ -31,33 +31,58 @@ namespace ExpressCraft
 				});
 			}
 		}
+		private AceModeTypes _modeType;
+		private AceThemeTypes _themeType;
+
+		public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.xcode)
+		{						
+			_modeType = modeType;
+			_themeType = themeType;			
+		}
 		
-		public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.terminal) : base("selection")
+
+		public override void Render()
 		{
+			base.Render();
+
 			if(!aceCodeSetup)
 				throw new Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
 			if(inLoad)
 				throw new Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
-						
-			var theme = themeType.ToString("G");
-			var mode = modeType.ToString("G");
+
+			var theme = _modeType.ToString("G");
+			var mode = _modeType.ToString("G");
+
+			this.Content.ClassList.Remove("control");
+			this.Content.Style.Position = Position.Absolute;
+			// position:absolute;
+			var div = Div();
+			this.Content.AppendChild(div);
+
+			div.SetBoundsFull();
+
 			/*@			
-			this.editor = ace.edit(this.content);
+			this.editor = ace.edit(div);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);	
 			*/
-			
-			this.Content.OnMouseMove = (ev) =>
-			{
-
-			};
 			this.OnResize = (cont) =>
 			{
 				/*@
 				this.editor.resize(true);
-				*/				
+				*/
 			};
-		}		
+						
+			div.AddEventListener(EventType.MouseDown, (ev) =>
+			{
+				Form.InExternalMouseEvent = true;
+			});
+
+			div.AddEventListener(EventType.MouseUp, (ev) =>
+			{
+				Form.InExternalMouseEvent = false;
+			});
+		}
 	}
 
 	public enum AceThemeTypes

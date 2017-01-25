@@ -219,6 +219,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         onResize: null,
         onLoaded: null,
         contextMenu: null,
+        linkedForm: null,
         config: {
             properties: {
                 Name: null,
@@ -2256,12 +2257,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         editor: null,
+        _modeType: 0,
+        _themeType: 0,
         ctor: function (modeType, themeType) {
             if (modeType === void 0) { modeType = 17; }
-            if (themeType === void 0) { themeType = 22; }
+            if (themeType === void 0) { themeType = 11; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "selection");
+            ExpressCraft.Control.ctor.call(this);
+            this._modeType = modeType;
+            this._themeType = themeType;
+        },
+        render: function () {
+            var $t, $t1;
+            ExpressCraft.Control.prototype.render.call(this);
+
             if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
                 throw new System.Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
             }
@@ -2269,16 +2279,27 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 throw new System.Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
             }
 
-            var theme = System.Enum.format(ExpressCraft.AceThemeTypes, themeType, "G");
-            var mode = System.Enum.format(ExpressCraft.AceModeTypes, modeType, "G");
+            var theme = ($t=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t, "G"));
+            var mode = ($t1=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t1, "G"));
+
+            this.content.classList.remove("control");
+            this.content.style.position = "absolute";
+            // position:absolute;
+            var div = ExpressCraft.Control.div();
+            this.content.appendChild(div);
+
+            ExpressCraft.Helper.setBoundsFull(div);
+
             			
-			this.editor = ace.edit(this.content);
+			this.editor = ace.edit(div);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);	
 			
+            this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f2;
 
-            this.content.onmousemove = $asm.$.ExpressCraft.AceCodeEditor.f2;
-            this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f3;
+            div.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f3);
+
+            div.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f4);
         }
     });
 
@@ -2289,13 +2310,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.AceCodeEditor.aceCodeSetup = true;
             ExpressCraft.AceCodeEditor.inLoad = false;
         },
-        f2: function (ev) {
-
-        },
-        f3: function (cont) {
+        f2: function (cont) {
             
 				this.editor.resize(true);
 				
+        },
+        f3: function (ev) {
+            ExpressCraft.Form.inExternalMouseEvent = true;
+        },
+        f4: function (ev) {
+            ExpressCraft.Form.inExternalMouseEvent = false;
         }
     });
 
@@ -2694,6 +2718,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             movingForm: null,
             parent: null,
             formOverLay: null,
+            inExternalMouseEvent: false,
             inErrorDialog: false,
             formCollections: null,
             _ActiveForm: null,
@@ -3087,6 +3112,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return;
             }
             this.children.add(child);
+            child.linkedForm = this;
         },
         linkchildrenToForm: function (children) {
             if (children === void 0) { children = []; }
@@ -3094,6 +3120,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return;
             }
             this.children.addRange(children);
+            for (var i = 0; i < children.length; i = (i + 1) | 0) {
+                children[i].linkedForm = this;
+            }
         },
         resizing: function () {
             if (!Bridge.staticEquals(this.onResize, null)) {
@@ -3558,6 +3587,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f8: function (ev) {
+            if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
+
             var mev = ev;
 
             if (ExpressCraft.Form.movingForm != null) {
@@ -3703,6 +3736,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f9: function (ev) {
+            ExpressCraft.Form.inExternalMouseEvent = false;
             if (ExpressCraft.Form.movingForm != null) {
                 ExpressCraft.Form.movingForm.getBodyOverLay().style.visibility = "collapse";
             }
@@ -3744,6 +3778,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f13: function (ev) {
+            if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
             if (!this.isActiveFormCollection()) {
                 return;
             }
@@ -3820,6 +3857,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopPropagation();
         },
         f15: function (ev) {
+            if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
+
             if (Bridge.referenceEquals(ev.target, this.getHeadingTitle())) {
                 return;
             }
@@ -3879,16 +3920,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.setActiveForm(this);
         },
         f17: function (ev) {
+            if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
             if (!this.isActiveFormCollection()) {
                 return;
             }
 
             ExpressCraft.Form.setActiveForm(this);
             ExpressCraft.Form.movingForm = null;
+
             this.setCursor("default");
             ev.stopPropagation();
         },
         f18: function (ev) {
+            if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
+
             if (ExpressCraft.Form.movingForm == null) {
                 if (!this.isActiveFormCollection()) {
                     return;
@@ -3906,6 +3955,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.setActiveForm(this);
         },
         f20: function (ev) {
+            Bridge.Console.log("Body Mouse Leave");
             if (ExpressCraft.Form.movingForm == null) {
                 ExpressCraft.Form.setBodyOverLay();
             }

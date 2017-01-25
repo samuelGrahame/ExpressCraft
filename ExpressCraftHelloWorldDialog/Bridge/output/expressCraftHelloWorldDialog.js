@@ -29,6 +29,7 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             ExpressCraft.Form.setup();
             ExpressCraft.GoogleCloudPrint.setup();
             ExpressCraft.AceCodeEditor.setup();
+            ExpressCraft.Settings.allowCloseWithoutQuestion = true;
 
             var errorBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: ($t=ExpressCraft.MessageBoxLayout.Error, System.Enum.format(ExpressCraft.MessageBoxLayout, $t, "G")),

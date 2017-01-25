@@ -28,6 +28,8 @@ namespace ExpressCraft
 				
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
+
+		public static bool InExternalMouseEvent = false;
 		
 		public bool ShowMinimize
 		{
@@ -76,6 +78,7 @@ namespace ExpressCraft
 			if(child == null)
 				return;
 			Children.Add(child);
+			child.LinkedForm = this;
 		}
 
 		public void LinkchildrenToForm(params Control[] children)
@@ -83,6 +86,10 @@ namespace ExpressCraft
 			if(children == null || children.Length == 0)
 				return;
 			Children.AddRange(children);
+			for(int i = 0; i < children.Length; i++)
+			{
+				children[i].LinkedForm = this;
+			}
 		}
 
 		public static List<FormCollection> FormCollections = new List<FormCollection>();        
@@ -436,7 +443,10 @@ namespace ExpressCraft
 				}
 			};
 			Window.OnMouseMove = (ev) =>
-			{				
+			{
+				if( InExternalMouseEvent)
+					return;
+
 				var mev = ev.As<MouseEvent>();
 
 				if(MovingForm != null)
@@ -644,6 +654,7 @@ namespace ExpressCraft
 
 			Window.OnMouseUp = (ev) =>
 			{
+				InExternalMouseEvent = false;
 				if(MovingForm != null)
 				{
 					MovingForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
@@ -914,9 +925,11 @@ namespace ExpressCraft
 			BodyOverLay.Style.Visibility = Visibility.Collapse;
 
             Self = jQuery.Select(Content);
-
+			
             Content.AddEventListener(EventType.MouseDown, (ev) => {
-                if (!IsActiveFormCollection())
+				if(InExternalMouseEvent)
+					return;
+				if (!IsActiveFormCollection())
                     return;
 
 				var mev = ev.As<MouseEvent>();
@@ -1017,6 +1030,9 @@ namespace ExpressCraft
 			});
 
 			Content.AddEventListener(EventType.MouseMove, (ev) => {
+				if(InExternalMouseEvent)
+					return;
+
 				if(ev.Target == HeadingTitle)
 					return;
 				var mev = ev.As<MouseEvent>();
@@ -1101,20 +1117,26 @@ namespace ExpressCraft
 			});												
 
 			Body.AddEventListener(EventType.MouseDown, (ev) => {
-                if (!IsActiveFormCollection())
+				if(InExternalMouseEvent)
+					return;				
+				if (!IsActiveFormCollection())
                     return;
-
+				
 				ActiveForm = this;
-				MovingForm = null;
+				MovingForm = null;				
+
 				SetCursor(Cursor.Default);
 				ev.StopPropagation();
 			});
 
 			Body.AddEventListener(EventType.MouseMove, (ev) => {
+				if(InExternalMouseEvent)
+					return;
+
 				if(MovingForm == null)
 				{
                     if (!IsActiveFormCollection())
-                        return;
+                        return;					
 
 					SetCursor(Cursor.Default);
 					ev.StopPropagation();
@@ -1131,6 +1153,7 @@ namespace ExpressCraft
 			
 			Body.AddEventListener(EventType.MouseLeave, (ev) =>
 			{
+				Console.WriteLine("Body Mouse Leave");
 				if(MovingForm == null)
 				{
 					SetBodyOverLay();
@@ -1138,7 +1161,7 @@ namespace ExpressCraft
 			});
 
 			BodyOverLay.AddEventListener(EventType.MouseEnter, (ev) =>
-			{
+			{				
 				if(MovingForm == null && IsActiveFormCollection()) // WindowHolderSelectionBox == null && 
 				{
 					BodyOverLay.Style.Visibility = Visibility.Collapse;
