@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using Bridge.jQuery2;
 
 namespace ExpressCraft
 {
@@ -11,7 +12,7 @@ namespace ExpressCraft
 	{
 		private static bool aceCodeSetup = false;
 		private static bool inLoad = false;
-		private static int uid = 0;
+		private object editor = null;
 
 		public static void Setup()
 		{
@@ -23,32 +24,40 @@ namespace ExpressCraft
 				Document.Head.AppendChild(new HTMLScriptElement()
 				{
 					OnLoad = (ele) => {
-						inLoad = true;
+						aceCodeSetup = true;
 						inLoad = false;
 					},
 					Src = "https://ace.c9.io/build/src/ace.js"
 				});
 			}
 		}
-
-		public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.github)
+		
+		public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.terminal) : base("selection")
 		{
 			if(!aceCodeSetup)
 				throw new Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
 			if(inLoad)
 				throw new Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
-
-			uid++;
-
-			this.Content.Id = uid.ToString();
+						
 			var theme = themeType.ToString("G");
 			var mode = modeType.ToString("G");
 			/*@			
-			var editor = ace.edit(this.content.id);
-			editor.setTheme("ace/theme/" + theme);
-			editor.getSession().setMode("ace/mode/" + mode);	
+			this.editor = ace.edit(this.content);
+			this.editor.setTheme("ace/theme/" + theme);
+			this.editor.getSession().setMode("ace/mode/" + mode);	
 			*/
-		}
+			
+			this.Content.OnMouseMove = (ev) =>
+			{
+
+			};
+			this.OnResize = (cont) =>
+			{
+				/*@
+				this.editor.resize(true);
+				*/				
+			};
+		}		
 	}
 
 	public enum AceThemeTypes

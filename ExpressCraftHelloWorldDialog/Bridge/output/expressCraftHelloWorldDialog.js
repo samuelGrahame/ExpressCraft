@@ -27,7 +27,8 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             var $t, $t1, $t2, $t3;
             // Setup the form events and containers*
             ExpressCraft.Form.setup();
-            ExpressCraft.CloudPrintForm.setupPrinter();
+            ExpressCraft.GoogleCloudPrint.setup();
+            ExpressCraft.AceCodeEditor.setup();
 
             var errorBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: ($t=ExpressCraft.MessageBoxLayout.Error, System.Enum.format(ExpressCraft.MessageBoxLayout, $t, "G")),
@@ -67,7 +68,14 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             googlecloudPrintBtn.content.style.position = "relative";
             googlecloudPrintBtn.content.style.width = "auto";
 
-            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn]);
+            var aceCodeBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Ace Code Editor",
+                itemClick: $asm.$.ExpressCraftHelloWorldDialog.App.f7
+            } );
+            aceCodeBtn.content.style.position = "relative";
+            aceCodeBtn.content.style.width = "auto";
+
+            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn]);
         }
     });
 
@@ -90,7 +98,19 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             (new ExpressCraft.MessageBoxForm.ctor(ExpressCraftHelloWorldDialog.App.getRandomText(), ExpressCraft.MessageBoxLayout.Information)).showDialog();
         },
         f6: function (ev) {
-            (new ExpressCraft.CloudPrintForm("https://www.google.com/landing/cloudprint/testpage.pdf", "Test Print")).show();
+            (new ExpressCraft.GoogleCloudPrint("https://www.google.com/landing/cloudprint/testpage.pdf", "Test Print")).show();
+        },
+        f7: function (ev) {
+            var frm = Bridge.merge(new ExpressCraft.Form(), {
+                setText: "Ace Code Editor"
+            } );
+            var codeEditor = new ExpressCraft.AceCodeEditor();
+            ExpressCraft.Helper.setBoundsFull$1(codeEditor);
+
+            frm.linkchildToForm(codeEditor);
+
+            frm.getBody().appendChild(ExpressCraft.Control.op_Implicit(codeEditor));
+            frm.show();
         }
     });
 });

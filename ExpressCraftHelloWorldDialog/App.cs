@@ -15,6 +15,7 @@ namespace ExpressCraftHelloWorldDialog
             // Setup the form events and containers*
             Form.Setup();
 			GoogleCloudPrint.Setup();
+			AceCodeEditor.Setup();
 
             var errorBtn = new SimpleButton()
             {
@@ -78,7 +79,25 @@ namespace ExpressCraftHelloWorldDialog
 			googlecloudPrintBtn.Content.Style.Position = Position.Relative;
 			googlecloudPrintBtn.Content.Style.Width = "auto";
 
-			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn);			
+			var aceCodeBtn = new SimpleButton()
+			{
+				Text = "Ace Code Editor",
+				ItemClick = (ev) =>
+				{
+					var frm = new Form() { Text = "Ace Code Editor" };
+					var codeEditor = new AceCodeEditor();
+					codeEditor.SetBoundsFull();
+
+					frm.LinkchildToForm(codeEditor);
+
+					frm.Body.AppendChild(codeEditor);
+					frm.Show();
+				}
+			};
+			aceCodeBtn.Content.Style.Position = Position.Relative;
+			aceCodeBtn.Content.Style.Width = "auto";
+
+			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn);			
         }
 
         public static string GetRandomText()

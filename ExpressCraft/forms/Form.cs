@@ -436,8 +436,7 @@ namespace ExpressCraft
 				}
 			};
 			Window.OnMouseMove = (ev) =>
-			{
-
+			{				
 				var mev = ev.As<MouseEvent>();
 
 				if(MovingForm != null)

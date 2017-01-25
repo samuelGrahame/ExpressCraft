@@ -12,115 +12,6 @@
 Bridge.assembly("ExpressCraft", function ($asm, globals) {
     "use strict";
 
-    Bridge.define("ExpressCraft.App", {
-        $main: function () {
-            ExpressCraft.Settings.setup();
-        }
-    });
-
-    Bridge.define("ExpressCraft.Application", {
-        statics: {
-            mainForm: null,
-            close: function () {
-                if (ExpressCraft.Application.mainForm != null) {
-                    ExpressCraft.Application.mainForm.close();
-                }
-                window.close();
-                window.location.reload();
-            },
-            run: function (_Mainform) {
-                ExpressCraft.Application.mainForm = _Mainform;
-                ExpressCraft.Application.mainForm.showStartNewLevel();
-            }
-        }
-    });
-
-    Bridge.define("ExpressCraft.CloudPrintForm", {
-        statics: {
-            printerSetup: false,
-            inLoad: false,
-            setupPrinter: function () {
-                if (!ExpressCraft.CloudPrintForm.printerSetup) {
-                    if (ExpressCraft.CloudPrintForm.inLoad) {
-                        return;
-                    }
-                    ExpressCraft.CloudPrintForm.inLoad = true;
-
-                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
-                        onload: $asm.$.ExpressCraft.CloudPrintForm.f1,
-                        src: "https://www.google.com/cloudprint/client/cpgadget.js"
-                    } ));
-                }
-            }
-        },
-        _source: null,
-        _mimetype: null,
-        _encoding: "",
-        _title: null,
-        _gadget: null,
-        ctor: function (source, title, gcpmt, encoding) {
-            if (title === void 0) { title = ""; }
-            if (gcpmt === void 0) { gcpmt = 0; }
-            if (encoding === void 0) { encoding = ""; }
-
-            this.$initialize();
-            this._title = title;
-            this._source = source;
-            this._encoding = encoding;
-            this._mimetype = System.String.replaceAll(System.Enum.format(ExpressCraft.GoogleCloudPrintingMimeType, gcpmt, "G").toLowerCase(), "_", ".");
-        },
-        show: function () {
-            if (!ExpressCraft.CloudPrintForm.printerSetup) {
-                throw new System.Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.SetupPrinter();");
-            }
-            if (ExpressCraft.CloudPrintForm.inLoad) {
-                throw new System.Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
-            }
-
-            
-			this._gadget = new cloudprint.Gadget();			
-			
-            if (!System.String.isNullOrWhiteSpace(this._encoding)) {
-                
-				this._gadget.setPrintDocument(this._mimetype, this._title, this._source, this._encoding);
-				
-            } else {
-                
-				this._gadget.setPrintDocument(this._mimetype, this._title, this._source);
-				
-            }
-            
-			this._gadget.openPrintDialog();
-			this._gadget.setOnCloseCallback(this.clearContent);			
-			
-        },
-        clearContent: function () {
-            try {
-                ExpressCraft.Helper.delete($(".__gcp_dialog_container_cls").parent().get(0));
-            }
-            catch ($e1) {
-                $e1 = System.Exception.create($e1);
-            }
-        },
-        close: function () {
-            if (this._gadget != null) {
-                			
-				this._gadget.closePrintDialog();
-				this._gadget = null;
-				
-            }
-        }
-    });
-
-    Bridge.ns("ExpressCraft.CloudPrintForm", $asm.$);
-
-    Bridge.apply($asm.$.ExpressCraft.CloudPrintForm, {
-        f1: function (ele) {
-            ExpressCraft.CloudPrintForm.printerSetup = true;
-            ExpressCraft.CloudPrintForm.inLoad = false;
-        }
-    });
-
     Bridge.define("ExpressCraft.Control", {
         statics: {
             ControlClass: "control",
@@ -363,6 +254,207 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.content.classList.remove(sf);
             } else {
                 this.content.classList.add(sf);
+            }
+        }
+    });
+
+    Bridge.define("ExpressCraft.AceModeTypes", {
+        $kind: "enum",
+        statics: {
+            abap: 0,
+            abc: 1,
+            actionscript: 2,
+            ada: 3,
+            apache_conf: 4,
+            asciidoc: 5,
+            assembly_x86: 6,
+            autohotkey: 7,
+            batchfile: 8,
+            bro: 9,
+            c_cpp: 10,
+            c9search: 11,
+            cirru: 12,
+            clojure: 13,
+            cobol: 14,
+            coffee: 15,
+            coldfusion: 16,
+            csharp: 17,
+            css: 18,
+            curly: 19,
+            d: 20,
+            dart: 21,
+            diff: 22,
+            dockerfile: 23,
+            dot: 24,
+            drools: 25,
+            dummy: 26,
+            dummysyntax: 27,
+            eiffel: 28,
+            ejs: 29,
+            elixir: 30,
+            elm: 31,
+            erlang: 32,
+            forth: 33,
+            fortran: 34,
+            ftl: 35,
+            gcode: 36,
+            gherkin: 37,
+            gitignore: 38,
+            glsl: 39,
+            gobstones: 40,
+            golang: 41,
+            groovy: 42,
+            haml: 43,
+            handlebars: 44,
+            haskell: 45,
+            haskell_cabal: 46,
+            haxe: 47,
+            hjson: 48,
+            html: 49,
+            html_elixir: 50,
+            html_ruby: 51,
+            ini: 52,
+            io: 53,
+            jack: 54,
+            jade: 55,
+            java: 56,
+            javascript: 57,
+            json: 58,
+            jsoniq: 59,
+            jsp: 60,
+            jsx: 61,
+            julia: 62,
+            kotlin: 63,
+            latex: 64,
+            less: 65,
+            liquid: 66,
+            lisp: 67,
+            livescript: 68,
+            logiql: 69,
+            lsl: 70,
+            lua: 71,
+            luapage: 72,
+            lucene: 73,
+            makefile: 74,
+            markdown: 75,
+            mask: 76,
+            matlab: 77,
+            maze: 78,
+            mel: 79,
+            mushcode: 80,
+            mysql: 81,
+            nix: 82,
+            nsis: 83,
+            objectivec: 84,
+            ocaml: 85,
+            pascal: 86,
+            perl: 87,
+            pgsql: 88,
+            php: 89,
+            powershell: 90,
+            praat: 91,
+            prolog: 92,
+            properties: 93,
+            protobuf: 94,
+            python: 95,
+            r: 96,
+            razor: 97,
+            rdoc: 98,
+            rhtml: 99,
+            rst: 100,
+            ruby: 101,
+            rust: 102,
+            sass: 103,
+            scad: 104,
+            scala: 105,
+            scheme: 106,
+            scss: 107,
+            sh: 108,
+            sjs: 109,
+            smarty: 110,
+            snippets: 111,
+            soy_template: 112,
+            space: 113,
+            sql: 114,
+            sqlserver: 115,
+            stylus: 116,
+            svg: 117,
+            swift: 118,
+            tcl: 119,
+            tex: 120,
+            text: 121,
+            textile: 122,
+            toml: 123,
+            tsx: 124,
+            twig: 125,
+            typescript: 126,
+            vala: 127,
+            vbscript: 128,
+            velocity: 129,
+            verilog: 130,
+            vhdl: 131,
+            wollok: 132,
+            xml: 133,
+            xquery: 134,
+            yaml: 135,
+            django: 136
+        }
+    });
+
+    Bridge.define("ExpressCraft.AceThemeTypes", {
+        $kind: "enum",
+        statics: {
+            label: 0,
+            chrome: 1,
+            clouds: 2,
+            crimson_editor: 3,
+            dawn: 4,
+            dreamweaver: 5,
+            eclipse: 6,
+            github: 7,
+            solarized_light: 8,
+            textmate: 9,
+            tomorrow: 10,
+            xcode: 11,
+            clouds_midnight: 12,
+            cobalt: 13,
+            idle_fingers: 14,
+            kr_theme: 15,
+            merbivore: 16,
+            merbivore_soft: 17,
+            mono_industrial: 18,
+            monokai: 19,
+            pastel_on_dark: 20,
+            solarized_dark: 21,
+            terminal: 22,
+            tomorrow_night: 23,
+            tomorrow_night_blue: 24,
+            tomorrow_night_bright: 25,
+            tomorrow_night_eighties: 26,
+            twilight: 27,
+            vibrant_ink: 28
+        }
+    });
+
+    Bridge.define("ExpressCraft.App", {
+        $main: function () {
+            ExpressCraft.Settings.setup();
+        }
+    });
+
+    Bridge.define("ExpressCraft.Application", {
+        statics: {
+            mainForm: null,
+            close: function () {
+                if (ExpressCraft.Application.mainForm != null) {
+                    ExpressCraft.Application.mainForm.close();
+                }
+                window.close();
+                window.location.reload();
+            },
+            run: function (_Mainform) {
+                ExpressCraft.Application.mainForm = _Mainform;
+                ExpressCraft.Application.mainForm.showStartNewLevel();
             }
         }
     });
@@ -827,6 +919,92 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             Manual: 0,
             Center: 1,
             WindowsDefaultLocation: 2
+        }
+    });
+
+    Bridge.define("ExpressCraft.GoogleCloudPrint", {
+        statics: {
+            printerSetup: false,
+            inLoad: false,
+            setup: function () {
+                if (!ExpressCraft.GoogleCloudPrint.printerSetup) {
+                    if (ExpressCraft.GoogleCloudPrint.inLoad) {
+                        return;
+                    }
+                    ExpressCraft.GoogleCloudPrint.inLoad = true;
+
+                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
+                        onload: $asm.$.ExpressCraft.GoogleCloudPrint.f1,
+                        src: "https://www.google.com/cloudprint/client/cpgadget.js"
+                    } ));
+                }
+            }
+        },
+        _source: null,
+        _mimetype: null,
+        _encoding: "",
+        _title: null,
+        _gadget: null,
+        ctor: function (source, title, gcpmt, encoding) {
+            if (title === void 0) { title = ""; }
+            if (gcpmt === void 0) { gcpmt = 0; }
+            if (encoding === void 0) { encoding = ""; }
+
+            this.$initialize();
+            this._title = title;
+            this._source = source;
+            this._encoding = encoding;
+            this._mimetype = System.String.replaceAll(System.Enum.format(ExpressCraft.GoogleCloudPrintingMimeType, gcpmt, "G").toLowerCase(), "_", ".");
+        },
+        show: function () {
+            if (!ExpressCraft.GoogleCloudPrint.printerSetup) {
+                throw new System.Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.Setup();");
+            }
+            if (ExpressCraft.GoogleCloudPrint.inLoad) {
+                throw new System.Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
+            }
+
+            
+			this._gadget = new cloudprint.Gadget();			
+			
+            if (!System.String.isNullOrWhiteSpace(this._encoding)) {
+                
+				this._gadget.setPrintDocument(this._mimetype, this._title, this._source, this._encoding);
+				
+            } else {
+                
+				this._gadget.setPrintDocument(this._mimetype, this._title, this._source);
+				
+            }
+            
+			this._gadget.openPrintDialog();
+			this._gadget.setOnCloseCallback(this.clearContent);			
+			
+        },
+        clearContent: function () {
+            try {
+                ExpressCraft.Helper.delete($(".__gcp_dialog_container_cls").parent().get(0));
+            }
+            catch ($e1) {
+                $e1 = System.Exception.create($e1);
+            }
+        },
+        close: function () {
+            if (this._gadget != null) {
+                			
+				this._gadget.closePrintDialog();
+				this._gadget = null;
+				
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.GoogleCloudPrint", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.GoogleCloudPrint, {
+        f1: function (ele) {
+            ExpressCraft.GoogleCloudPrint.printerSetup = true;
+            ExpressCraft.GoogleCloudPrint.inLoad = false;
         }
     });
 
@@ -2055,6 +2233,69 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             Normal: 0,
             Minimized: 1,
             Maximized: 2
+        }
+    });
+
+    Bridge.define("ExpressCraft.AceCodeEditor", {
+        inherits: [ExpressCraft.Control],
+        statics: {
+            aceCodeSetup: false,
+            inLoad: false,
+            setup: function () {
+                if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
+                    if (ExpressCraft.AceCodeEditor.inLoad) {
+                        return;
+                    }
+                    ExpressCraft.AceCodeEditor.inLoad = true;
+
+                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
+                        onload: $asm.$.ExpressCraft.AceCodeEditor.f1,
+                        src: "https://ace.c9.io/build/src/ace.js"
+                    } ));
+                }
+            }
+        },
+        editor: null,
+        ctor: function (modeType, themeType) {
+            if (modeType === void 0) { modeType = 17; }
+            if (themeType === void 0) { themeType = 22; }
+
+            this.$initialize();
+            ExpressCraft.Control.$ctor1.call(this, "selection");
+            if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
+                throw new System.Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
+            }
+            if (ExpressCraft.AceCodeEditor.inLoad) {
+                throw new System.Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
+            }
+
+            var theme = System.Enum.format(ExpressCraft.AceThemeTypes, themeType, "G");
+            var mode = System.Enum.format(ExpressCraft.AceModeTypes, modeType, "G");
+            			
+			this.editor = ace.edit(this.content);
+			this.editor.setTheme("ace/theme/" + theme);
+			this.editor.getSession().setMode("ace/mode/" + mode);	
+			
+
+            this.content.onmousemove = $asm.$.ExpressCraft.AceCodeEditor.f2;
+            this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f3;
+        }
+    });
+
+    Bridge.ns("ExpressCraft.AceCodeEditor", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.AceCodeEditor, {
+        f1: function (ele) {
+            ExpressCraft.AceCodeEditor.aceCodeSetup = true;
+            ExpressCraft.AceCodeEditor.inLoad = false;
+        },
+        f2: function (ev) {
+
+        },
+        f3: function (cont) {
+            
+				this.editor.resize(true);
+				
         }
     });
 
@@ -3317,7 +3558,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f8: function (ev) {
-
             var mev = ev;
 
             if (ExpressCraft.Form.movingForm != null) {
