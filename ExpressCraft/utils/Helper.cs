@@ -242,42 +242,12 @@ namespace ExpressCraft
 					c.AppendChild(Nodes[i]);
 				}
 			}
-		}
-
-		public static void SetBounds(this HTMLElement c, int left, int top, int width, int height)
+		}		
+        
+		public static void SetBounds(this Control c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
 		{
-			c.SetBounds(left.ToPx(), top.ToPx(), width.ToPx(), height.ToPx());
-		}
-
-		public static void SetBounds(this HTMLElement c, decimal left, decimal top, decimal width, decimal height)
-		{
-			c.SetBounds(left.ToPx(), top.ToPx(), width.ToPx(), height.ToPx());
-		}
-
-		public static void SetBounds(this HTMLElement c, float left, float top, float width, float height)
-		{
-			c.SetBounds(left.ToPx(), top.ToPx(), width.ToPx(), height.ToPx());
-		}
-
-		public static void SetSize(this HTMLElement c, int width, int height)
-		{
-			c.SetSize(width.ToPx(), height.ToPx());
-		}
-
-		public static void SetBounds(this Control c, int left, int top, int width, int height)
-		{
-			c.Content.SetBounds(left.ToPx(), top.ToPx(), width.ToPx(), height.ToPx());
-		}
-
-		public static void SetSize(this Control c, int width, int height)
-		{
-			c.Content.SetSize(width.ToPx(), height.ToPx());
-		}
-
-		public static void SetBounds(this Control c, string left, string top, string width, string height)
-		{
-			c.Content.SetBounds(left, top, width, height);			
-		}
+			c.Content.SetBounds(left, top, width, height);
+		}        
 
 		public static void SetBoundsFull(this Control c)
 		{
@@ -286,21 +256,31 @@ namespace ExpressCraft
 
 		public static void SetBoundsFull(this HTMLElement c)
 		{
-			c.SetBounds("0", "0", "100%", "100%");
+			c.SetBounds(0, 0, "100%", "100%");
 		}
 
-		public static void SetSize(this Control c, string width, string height)
+		public static void SetSize(this Control c, Union<string, int, float> width, Union<string, int, float> height)
 		{
 			c.Content.SetSize(width, height);
 		}    
 
-        public static void SetBounds(this HTMLElement c, string left, string top, string width, string height)
+        public static void SetBounds(this HTMLElement c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
 		{
-			c.Style.Left = left;
-			c.Style.Top = top;
-			c.Style.Width = width;
-			c.Style.Height = height;
+			c.Style.Left = left.ToHtmlValue();
+			c.Style.Top = top.ToHtmlValue();
+			c.Style.Width = width.ToHtmlValue();
+			c.Style.Height = height.ToHtmlValue();
 		}
+
+        public static string ToHtmlValue(this Union<string, int, float> value)
+        {
+            if (value.Is<string>())
+                return value.As<string>();
+            else if (value.Is<int>())
+                return value.As<int>().ToPx();
+            else
+                return value.As<float>().ToPx();
+        }
 
         public static void SetImage(this Control c, string str, bool useURL = true)
         {
@@ -327,10 +307,10 @@ namespace ExpressCraft
             c.Style.BackgroundSize = "100% 100%";
         }
 
-        public static void SetSize(this HTMLElement c, string width, string height)
+        public static void SetSize(this HTMLElement c, Union<string, int, float> width, Union<string, int, float> height)
 		{
-			c.Style.Width = width;
-			c.Style.Height = height;
+			c.Style.Width = width.ToHtmlValue();
+			c.Style.Height = height.ToString();
 		}
 
         public static void SetLocation(this Control c, int left, int top)
@@ -338,30 +318,15 @@ namespace ExpressCraft
             c.Content.SetLocation(left.ToPx(), top.ToPx());
         }
 
-        public static void SetLocation(this Control c, string left, string top)
+        public static void SetLocation(this Control c, Union<string, int, float> left, Union<string, int, float> top)
         {
             c.Content.SetLocation(left, top);
-        }
+        }        
 
-		public static void SetLocation(this HTMLElement c, decimal left, decimal top)
-		{
-			c.SetLocation(left.ToPx(), top.ToPx());
-		}
-
-		public static void SetLocation(this HTMLElement c, float left, float top)
-		{
-			c.SetLocation(left.ToPx(), top.ToPx());
-		}
-
-		public static void SetLocation(this HTMLElement c, int left, int top)
+        public static void SetLocation(this HTMLElement c, Union<string, int, float> left, Union<string, int, float> top)
         {
-            c.SetLocation(left.ToPx(), top.ToPx());
-        }
-
-        public static void SetLocation(this HTMLElement c, string left, string top)
-        {
-            c.Style.Left = left;
-            c.Style.Top = top;
+            c.Style.Left = left.ToHtmlValue();
+            c.Style.Top = top.ToHtmlValue();
         }
 
 		/// <summary>

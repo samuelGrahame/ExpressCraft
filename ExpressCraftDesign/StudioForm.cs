@@ -10,12 +10,17 @@ namespace ExpressCraftDesign
     public class StudioForm : Form
     {
         public RibbonControl ribbonControl;
+        public Control panel1;
 
         public StudioForm()
         {
             ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);
 
-            this.AppendChildren(ribbonControl);
+            panel1 = new Control();
+
+            panel1.SetBounds()
+
+            this.AppendChildren(ribbonControl, panel1);
         }
     }
 }
