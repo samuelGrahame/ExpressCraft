@@ -390,5 +390,10 @@ namespace ExpressCraft
 				HtmlUrlUnescape(input).Replace("&#x2F", @"\/").Replace("&quot", "\"") :
 				string.Empty;
         }
+
+        public static string oneHundrendTake(int value)
+        {
+            return string.Format("calc(100% - {0}px)", value);
+        }
     }
 }

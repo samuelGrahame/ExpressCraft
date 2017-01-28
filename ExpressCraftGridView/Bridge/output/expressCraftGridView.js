@@ -50,17 +50,17 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add New a Row"
             } );
-            ExpressCraft.Helper.setBounds$5(this.addNewRowButton, "3px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds$1(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
             this.add100000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add 100000 Row's"
             } );
-            ExpressCraft.Helper.setBounds$5(this.add100000RowsButton, "98px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds$1(this.add100000RowsButton, "98px", "3px", "auto", "24px");
 
             this.clearRowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Clear Rows"
             } );
-            ExpressCraft.Helper.setBounds$5(this.clearRowsButton, "205px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds$1(this.clearRowsButton, "205px", "3px", "auto", "24px");
 
             this.clearRowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 dataTable.clearRows();

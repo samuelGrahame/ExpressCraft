@@ -57,7 +57,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
-                ExpressCraft.Helper.setLocation$2(lbl, X, Y);
+                ExpressCraft.Helper.setLocation(lbl, X, Y);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
                 return lbl;
@@ -73,7 +73,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
-                ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
+                ExpressCraft.Helper.setBounds(lbl, X, Y, width, height);
                 if (Alignment !== "left") {
                     lbl.style.textAlign = Alignment;
                 }
@@ -93,7 +93,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 var lbl = document.createElement('span');
                 lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
-                ExpressCraft.Helper.setLocation$2(lbl, X, Y);
+                ExpressCraft.Helper.setLocation(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$2(width);
                 if (Alignment !== "left") {
                     if (Alignment === "right") {
@@ -118,7 +118,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
-                ExpressCraft.Helper.setBounds$2(lbl, X, Y, width, height);
+                ExpressCraft.Helper.setBounds(lbl, X, Y, width, height);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
                 return lbl;
@@ -132,7 +132,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
-                ExpressCraft.Helper.setLocation$1(lbl, X, Y);
+                ExpressCraft.Helper.setLocation(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$1(width);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
@@ -1490,6 +1490,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                 }
             },
+            appendChildren$2: function (c, Nodes) {
+                if (Nodes === void 0) { Nodes = []; }
+                ExpressCraft.Helper.appendChildren$1(c.content, Nodes);
+            },
             appendChildren$1: function (c, Nodes) {
                 if (Nodes === void 0) { Nodes = []; }
                 if (Nodes != null && Nodes.length > 0) {
@@ -1507,45 +1511,45 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                 }
             },
+            appendChildrenTabIndex$1: function (c, Nodes) {
+                if (Nodes === void 0) { Nodes = []; }
+                ExpressCraft.Helper.appendChildrenTabIndex(c.content, Nodes);
+            },
+            appendChild: function (c, Node) {
+                c.content.appendChild(ExpressCraft.Control.op_Implicit(Node));
+            },
             setBounds$1: function (c, left, top, width, height) {
-                ExpressCraft.Helper.setBounds$3(c, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top), ExpressCraft.Helper.toPx$1(width), ExpressCraft.Helper.toPx$1(height));
+                ExpressCraft.Helper.setBounds(c.content, left, top, width, height);
             },
             setBounds: function (c, left, top, width, height) {
-                ExpressCraft.Helper.setBounds$3(c, ExpressCraft.Helper.toPx(left), ExpressCraft.Helper.toPx(top), ExpressCraft.Helper.toPx(width), ExpressCraft.Helper.toPx(height));
-            },
-            setBounds$2: function (c, left, top, width, height) {
-                ExpressCraft.Helper.setBounds$3(c, ExpressCraft.Helper.toPx$2(left), ExpressCraft.Helper.toPx$2(top), ExpressCraft.Helper.toPx$2(width), ExpressCraft.Helper.toPx$2(height));
-            },
-            setBounds$4: function (c, left, top, width, height) {
-                ExpressCraft.Helper.setBounds$3(c.content, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top), ExpressCraft.Helper.toPx$1(width), ExpressCraft.Helper.toPx$1(height));
-            },
-            setBounds$5: function (c, left, top, width, height) {
-                ExpressCraft.Helper.setBounds$3(c.content, left, top, width, height);
-            },
-            setBounds$3: function (c, left, top, width, height) {
-                c.style.left = left;
-                c.style.top = top;
-                c.style.width = width;
-                c.style.height = height;
-            },
-            setSize: function (c, width, height) {
-                ExpressCraft.Helper.setSize$1(c, ExpressCraft.Helper.toPx$1(width), ExpressCraft.Helper.toPx$1(height));
-            },
-            setSize$2: function (c, width, height) {
-                ExpressCraft.Helper.setSize$1(c.content, ExpressCraft.Helper.toPx$1(width), ExpressCraft.Helper.toPx$1(height));
-            },
-            setSize$3: function (c, width, height) {
-                ExpressCraft.Helper.setSize$1(c.content, width, height);
-            },
-            setSize$1: function (c, width, height) {
-                c.style.width = width;
-                c.style.height = height;
+                c.style.left = ExpressCraft.Helper.toHtmlValue(left);
+                c.style.top = ExpressCraft.Helper.toHtmlValue(top);
+                c.style.width = ExpressCraft.Helper.toHtmlValue(width);
+                c.style.height = ExpressCraft.Helper.toHtmlValue(height);
             },
             setBoundsFull$1: function (c) {
                 ExpressCraft.Helper.setBoundsFull(c.content);
             },
             setBoundsFull: function (c) {
-                ExpressCraft.Helper.setBounds$3(c, "0", "0", "100%", "100%");
+                ExpressCraft.Helper.setBounds(c, 0, 0, "100%", "100%");
+            },
+            setSize$1: function (c, width, height) {
+                ExpressCraft.Helper.setSize(c.content, width, height);
+            },
+            setSize: function (c, width, height) {
+                c.style.width = ExpressCraft.Helper.toHtmlValue(width);
+                c.style.height = height.toString();
+            },
+            toHtmlValue: function (value) {
+                if (Bridge.is(value, String)) {
+                    return value;
+                } else {
+                    if (Bridge.is(value, System.Int32)) {
+                        return ExpressCraft.Helper.toPx$1(value);
+                    } else {
+                        return ExpressCraft.Helper.toPx$2(value);
+                    }
+                }
             },
             setImage$1: function (c, str, useURL) {
                 if (useURL === void 0) { useURL = true; }
@@ -1566,24 +1570,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 c.style.background = str;
                 c.style.backgroundSize = "100% 100%";
             },
-            setLocation$4: function (c, left, top) {
-                ExpressCraft.Helper.setLocation$3(c.content, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top));
-            },
-            setLocation$5: function (c, left, top) {
-                ExpressCraft.Helper.setLocation$3(c.content, left, top);
-            },
-            setLocation: function (c, left, top) {
-                ExpressCraft.Helper.setLocation$3(c, ExpressCraft.Helper.toPx(left), ExpressCraft.Helper.toPx(top));
-            },
             setLocation$2: function (c, left, top) {
-                ExpressCraft.Helper.setLocation$3(c, ExpressCraft.Helper.toPx$2(left), ExpressCraft.Helper.toPx$2(top));
+                ExpressCraft.Helper.setLocation(c.content, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top));
             },
             setLocation$1: function (c, left, top) {
-                ExpressCraft.Helper.setLocation$3(c, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top));
+                ExpressCraft.Helper.setLocation(c.content, left, top);
             },
-            setLocation$3: function (c, left, top) {
-                c.style.left = left;
-                c.style.top = top;
+            setLocation: function (c, left, top) {
+                c.style.left = ExpressCraft.Helper.toHtmlValue(left);
+                c.style.top = ExpressCraft.Helper.toHtmlValue(top);
             },
             /**
              * HtmlEscape XSS
@@ -2508,7 +2503,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.close();
             }
             if (!this.visible) {
-                ExpressCraft.Helper.setLocation$1(this.content, ((Location.x - 5) | 0), ((Location.y - 5) | 0));
+                ExpressCraft.Helper.setLocation(this.content, ((Location.x - 5) | 0), ((Location.y - 5) | 0));
                 this.renderContextMenu();
 
                 ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
@@ -3195,11 +3190,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             if (((this.setwindowState(State), State)) === ExpressCraft.WindowState.Normal) {
-                ExpressCraft.Helper.setBounds$4(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
+                ExpressCraft.Helper.setBounds$1(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
             } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
                 ExpressCraft.Rectange.setBounds(Bridge.ref(this, "prev_left"), Bridge.ref(this, "prev_top"), Bridge.ref(this, "prev_width"), Bridge.ref(this, "prev_height"), this.self);
-                ExpressCraft.Helper.setBounds$5(this, "0", "0", "calc(100% - 2px)", "calc(100% - 2px)");
+                ExpressCraft.Helper.setBounds$1(this, "0", "0", "calc(100% - 2px)", "calc(100% - 2px)");
             }
             this.resizing();
         },
@@ -3622,7 +3617,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 switch (ExpressCraft.Form.moveAction) {
                     case ExpressCraft.MouseMoveAction.Move: 
-                        ExpressCraft.Helper.setLocation$1(ExpressCraft.Form.movingForm.content, X, Y);
+                        ExpressCraft.Helper.setLocation(ExpressCraft.Form.movingForm.content, X, Y);
                         break;
                     case ExpressCraft.MouseMoveAction.TopLeftResize: 
                         ExpressCraft.Rectange.setBounds(X1, Y1, W, H, obj);
@@ -3636,7 +3631,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             Y = (Y - (((ExpressCraft.Form.movingForm.getMinHeight() - H.v) | 0))) | 0;
                             H.v = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        ExpressCraft.Helper.setBounds$1(ExpressCraft.Form.movingForm.content, X, Y, W.v, H.v);
+                        ExpressCraft.Helper.setBounds(ExpressCraft.Form.movingForm.content, X, Y, W.v, H.v);
                         ExpressCraft.Form.movingForm.resizing();
                         break;
                     case ExpressCraft.MouseMoveAction.TopResize: 
@@ -4109,12 +4104,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "grid");
             this.gridHeaderContainer = ExpressCraft.Control.div$1("heading-container");
-            ExpressCraft.Helper.setBounds$3(this.gridHeaderContainer, "0", "0", "100%", "29px");
+            ExpressCraft.Helper.setBounds(this.gridHeaderContainer, "0", "0", "100%", "29px");
 
             this.gridHeader = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds$3(this.gridHeader, "0", "0", "0", "29px");
+            ExpressCraft.Helper.setBounds(this.gridHeader, "0", "0", "0", "29px");
             this.gridBodyContainer = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds$3(this.gridBodyContainer, "1px", "31px", "calc(100% - 2px)", "calc(100% - 31px)");
+            ExpressCraft.Helper.setBounds(this.gridBodyContainer, "1px", "31px", "calc(100% - 2px)", "calc(100% - 31px)");
 
             this.gridBodyContainer.style.overflowX = "auto";
             this.gridBodyContainer.style.overflowY = "auto";
@@ -4122,7 +4117,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.gridHeaderContainer.style.overflow = "hidden";
 
             this.gridBody = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds$3(this.gridBody, "0", "0", "0", "0");
+            ExpressCraft.Helper.setBounds(this.gridBody, "0", "0", "0", "0");
 
             this.gridBodyContainer.appendChild(this.gridBody);
             this.gridHeaderContainer.appendChild(this.gridHeader);
@@ -4577,8 +4572,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.rightOfTableHeader = ExpressCraft.Control.div();
                 this.gridHeader.appendChild(this.rightOfTableHeader);
             }
-            ExpressCraft.Helper.setBounds$2(this.rightOfTable, width - 1, 0, 1, 1);
-            ExpressCraft.Helper.setBounds$2(this.rightOfTableHeader, width - 1, 0, 1, 1);
+            ExpressCraft.Helper.setBounds(this.rightOfTable, width - 1, 0, 1, 1);
+            ExpressCraft.Helper.setBounds(this.rightOfTableHeader, width - 1, 0, 1, 1);
         },
         pixelsPerRow: function (rowCount) {
             if (rowCount > ExpressCraft.Settings.maximumPixelScrollingRows) {
@@ -4601,7 +4596,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.bottonOfTable = ExpressCraft.Control.div();
                 this.gridBody.appendChild(this.bottonOfTable);
             }
-            ExpressCraft.Helper.setBounds$2(this.bottonOfTable, 0, height - 1, 1, 1);
+            ExpressCraft.Helper.setBounds(this.bottonOfTable, 0, height - 1, 1, 1);
         },
         validateGridSize: function () {
             this.validateGridHeight();
@@ -4706,7 +4701,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
                     var sortImage = ExpressCraft.Control.div();
-                    ExpressCraft.Helper.setBounds$3(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
+                    ExpressCraft.Helper.setBounds(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
                     sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
                     col.appendChild(sortImage);
                 }
@@ -4771,7 +4766,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     var DataRowhandle1 = this.getDataSourceRow(i1);
                     var dr = ExpressCraft.Control.div$1(System.String.concat((i1 % 2 === 0 ? "cellrow even" : "cellrow"), (this.selectedRows.getValue(DataRowhandle1, true) ? " cellrow-selected" : ""), (DataRowhandle1 === this.getFocusedDataHandle() ? " focusedrow" : "")));
 
-                    ExpressCraft.Helper.setBounds$2(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
+                    ExpressCraft.Helper.setBounds(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
                     dr.setAttribute("i", System.Convert.toString(DataRowhandle1));
 
                     dr.onclick = this.onRowClick;
@@ -4790,7 +4785,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
                         } else {
                             cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
-                            ExpressCraft.Helper.setLocation$2(cell, col1.cachedX, 0);
+                            ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
                             cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
 
                             dr.appendChild(cell);
@@ -4807,7 +4802,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this.getShowAutoFilterRow()) {
                 var dr1 = ExpressCraft.Control.div$1("cellrow");
 
-                ExpressCraft.Helper.setBounds$2(dr1, 0, 0, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
+                ExpressCraft.Helper.setBounds(dr1, 0, 0, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
                 dr1.style.position = "sticky";
                 dr1.style.borderBottomColor = "darkgray";
                 dr1.style.borderBottomStyle = "solid";
@@ -4833,7 +4828,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                     cell1 = tx.content;
 
-                    ExpressCraft.Helper.setLocation$2(cell1, col2.cachedX, 0);
+                    ExpressCraft.Helper.setLocation(cell1, col2.cachedX, 0);
                     cell1.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col2.getWidth()));
 
                     //	Label(col.FilterValue + "",
@@ -5800,7 +5795,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Control.$ctor2.call(this, "simplebutton", button);
             this.content.oncontextmenu = $asm.$.ExpressCraft.SimpleButton.f1;
 
-            ExpressCraft.Helper.setSize$3(this, "69px", "20px");
+            ExpressCraft.Helper.setSize$1(this, "69px", "20px");
 
             this.content.onclick = Bridge.fn.bind(this, $asm.$.ExpressCraft.SimpleButton.f2);
             this.content.ondblclick = $asm.$.ExpressCraft.SimpleButton.f3;
@@ -6185,12 +6180,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.setHeight("200px");
 
             this.progressControl = new ExpressCraft.ProgressControl();
-            ExpressCraft.Helper.setBounds$5(this.progressControl, "50px", "50px", "calc(100% - 100px)", "23px");
+            ExpressCraft.Helper.setBounds$1(this.progressControl, "50px", "50px", "calc(100% - 100px)", "23px");
 
             this.buttonCancel = Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
                 setText: "Cancel"
             } );
-            ExpressCraft.Helper.setLocation$5(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
+            ExpressCraft.Helper.setLocation$1(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
             this.buttonCancel.content.tabIndex = 0;
 
             ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.buttonCancel, this.progressControl]);
@@ -6209,7 +6204,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.parentForm = parentForm;
             this.dialogResult = dialogResult;
 
-            ExpressCraft.Helper.setSize$2(this, 75, 23);
+            ExpressCraft.Helper.setSize$1(this, 75, 23);
         }
     });
 
@@ -6242,7 +6237,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.panel = ExpressCraft.Control.div();
             this.panel.style.overflowY = "auto";
-            ExpressCraft.Helper.setBounds$3(this.panel, "0", "0", "100%", "calc(100% - 60px)");
+            ExpressCraft.Helper.setBounds(this.panel, "0", "0", "100%", "calc(100% - 60px)");
             this.getBody().style.backgroundColor = "white";
 
             this._buttonCollection = Bridge.fn.bind(this, function (_o1) {
@@ -6261,8 +6256,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     } ));
                     return _o1;
                 })(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-            ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-            ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
 
             ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
@@ -6322,7 +6317,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         case ExpressCraft.DataType.DateTime: 
                             var lbldate = ExpressCraft.Control.label(grCol.caption, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), height);
                             var inputDate = new ExpressCraft.TextInput("date");
-                            ExpressCraft.Helper.setBounds$4(inputDate, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
+                            ExpressCraft.Helper.setBounds$1(inputDate, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
                             inputDate.setDate(System.Convert.toString(this.dataRow.getItem(dtIndex)));
                             inputDate.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
@@ -6352,7 +6347,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                 inputNum = new ExpressCraft.TextInput("number");
                                 inputNum.setText(System.Convert.toString(this.dataRow.getItem(dtIndex)));
                             }
-                            ExpressCraft.Helper.setBounds$4(inputNum, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
+                            ExpressCraft.Helper.setBounds$1(inputNum, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
                             inputNum.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
                                 inputNum.onTextChanged = Bridge.fn.bind(this, function (ev) {
@@ -6373,7 +6368,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         case ExpressCraft.DataType.String: 
                             var lblstr = ExpressCraft.Control.label(grCol.caption, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), height);
                             var inputstr = new ExpressCraft.TextInput("text");
-                            ExpressCraft.Helper.setBounds$4(inputstr, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
+                            ExpressCraft.Helper.setBounds$1(inputstr, ((25 + (((((col * eachWidth) | 0) + (((col * 3) | 0))) | 0))) | 0), ((((height + 16) | 0) + 3) | 0), eachWidth, 24);
                             inputstr.setText(System.Convert.toString(this.dataRow.getItem(dtIndex)));
                             inputstr.setReadonly(grCol.readOnly);
                             if (!grCol.readOnly) {
@@ -6524,24 +6519,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             switch (this._buttons) {
                 case ExpressCraft.MessageBoxButtons.Ok: 
                     this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.MessageBoxForm.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(50% - 37.5px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(50% - 37.5px)", "calc(100% - 35px)");
                     break;
                 case ExpressCraft.MessageBoxButtons.YesNo: 
                     this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.MessageBoxForm.f2)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
                     break;
                 case ExpressCraft.MessageBoxButtons.YesNoCancel: 
                     this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.MessageBoxForm.f3)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(2), "calc(100% - 255px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(2), "calc(100% - 255px)", "calc(100% - 35px)");
                     break;
                 case ExpressCraft.MessageBoxButtons.AbortIgnoreRetry: 
                     this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.MessageBoxForm.f4)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
-                    ExpressCraft.Helper.setLocation$5(this._buttonCollection.getItem(2), "calc(100% - 255px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
+                    ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(2), "calc(100% - 255px)", "calc(100% - 35px)");
                     break;
                 default: 
                     throw new System.ArgumentOutOfRangeException();

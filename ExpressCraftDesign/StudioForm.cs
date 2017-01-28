@@ -18,7 +18,7 @@ namespace ExpressCraftDesign
 
             panel1 = new Control();
 
-            panel1.SetBounds()
+            panel1.SetBounds(0, 154, "100%", Helper.oneHundrendTake(154));
 
             this.AppendChildren(ribbonControl, panel1);
         }

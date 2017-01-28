@@ -1,7 +1,7 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.7.0
+ * @compiler Bridge.NET 15.6.0
  */
 Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
     "use strict";
@@ -33,6 +33,23 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             // When Button is clicked, 
             // the Bridge Console should open.
             Bridge.Console.log("Success!");
+        }
+    });
+
+    Bridge.define("ExpressCraftDesign.StudioForm", {
+        inherits: [ExpressCraft.Form],
+        ribbonControl: null,
+        panel1: null,
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.ribbonControl = new ExpressCraft.RibbonControl(ExpressCraft.RibbonControl.RibbonType.Compact);
+
+            this.panel1 = new ExpressCraft.Control.ctor();
+
+            ExpressCraft.Helper.setBounds$1(this.panel1, 0, 154, "100%", "calc(100% - 154px)");
+
+            ExpressCraft.Helper.appendChildren$2(this, [this.ribbonControl, this.panel1]);
         }
     });
 });
