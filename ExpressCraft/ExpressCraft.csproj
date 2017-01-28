@@ -107,7 +107,6 @@
       <HintPath>..\packages\Bridge.jQuery.2.9.2\lib\net40\Bridge.jQuery2.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />
