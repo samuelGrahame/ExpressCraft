@@ -218,7 +218,22 @@ namespace ExpressCraft
 			}
 		}
 
-		public static void AppendChildren(this Node c, params Control[] Nodes)
+        public static void AppendChildrenTabIndex(this Control c, params Control[] Nodes)
+        {
+            c.Content.AppendChildrenTabIndex(Nodes);
+        }
+
+        public static void AppendChild(this Control c, Control Node)
+        {
+            c.Content.AppendChild(Node);
+        }
+
+        public static void AppendChildren(this Control c, params Control[] Nodes)
+        {
+            c.Content.AppendChildren(Nodes);
+        }
+
+        public static void AppendChildren(this Node c, params Control[] Nodes)
 		{
 			if(Nodes != null && Nodes.Length > 0)
 			{
