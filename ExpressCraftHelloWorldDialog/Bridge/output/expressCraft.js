@@ -1644,6 +1644,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
              */
             htmlUnescape: function (input) {
                 return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(ExpressCraft.Helper.htmlUrlUnescape(input), "&#x2F", "\\/"), "&quot", "\"") : "";
+            },
+            oneHundrendTake: function (value) {
+                return System.String.format("calc(100% - {0}px)", value);
             }
         }
     });

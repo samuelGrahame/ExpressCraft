@@ -16,11 +16,16 @@ namespace ExpressCraftDesign
         {
             ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);
 
-            panel1 = new Control();
+			var ribbonPage = new RibbonPage("Actions");
+			ribbonPage.AddRibbonGroups(new RibbonGroup("Project"));
 
-            panel1.SetBounds(0, 154, "100%", Helper.oneHundrendTake(154));
 
-            this.AppendChildren(ribbonControl, panel1);
+			ribbonControl.AddRibbonPages(ribbonPage);				
+
+			panel1 = new Control();
+            panel1.SetBounds(0, 154, "100%", "calc(100% - 154px)");			
+
+            this.Body.AppendChildren(ribbonControl, panel1);
         }
     }
 }
