@@ -10,6 +10,7 @@ namespace ExpressCraftDesign
         public static void Main()
         {
 			Form.Setup();
+			AceCodeEditor.Setup();
 
 			var studio = new StudioForm();
 			studio.Show();

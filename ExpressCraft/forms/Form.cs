@@ -30,6 +30,18 @@ namespace ExpressCraft
 		public bool AllowMoveChange = true;
 
 		public static bool InExternalMouseEvent = false;
+
+		public static Form CreateFormFromXML(string source)
+		{
+			var x = new Form();
+			
+			if(string.IsNullOrWhiteSpace(source))
+			{
+				
+			}
+
+			return x;
+		}
 		
 		public bool ShowMinimize
 		{
@@ -492,7 +504,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.TopLeftResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
 
 							W -= X - X1;
 							H -= Y - Y1;
@@ -533,7 +545,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.TopRightResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
 
 							H -= Y - Y1;
 							W = mev.PageX - X1;
@@ -572,7 +584,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.BottomLeftResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
 
 							W -= X - X1;
 							H = mev.PageY - Y1;
@@ -626,7 +638,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.BottomRightResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
 
 							W = mev.PageX - X1;
 
@@ -721,7 +733,7 @@ namespace ExpressCraft
 			}
 			else if(windowState == WindowState.Maximized)
 			{                				
-				Rectange.SetBounds(out prev_left, out prev_top, out prev_width, out prev_height, Self);				
+				this.GetBoundInteger(out prev_left, out prev_top, out prev_width, out prev_height);				
 				this.SetBounds("0", "0", "calc(100% - 2px)", "calc(100% - 2px)");				
 			}
 			Resizing();
@@ -948,8 +960,10 @@ namespace ExpressCraft
 
 				var width = Content.ClientWidth;
 				var height = Content.ClientHeight;
-				Point mouse = new Point(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
 
+				int X = mev.PageX - Content.OffsetLeft;
+				int Y = mev.PageY - Content.OffsetTop;
+				
 				if(windowState == WindowState.Maximized)
 				{
 					SetCursor(Cursor.Default);
@@ -964,43 +978,43 @@ namespace ExpressCraft
 					{
 						if(AllowSizeChange)
 						{
-							if(mouse.X <= ResizeCorners && mouse.Y <= ResizeCorners)
+							if(X <= ResizeCorners && Y <= ResizeCorners)
 							{
 								SetCursor(Cursor.NorthWestSouthEastResize);
 								MoveAction = MouseMoveAction.TopLeftResize;
 							}
-							else if(mouse.Y <= ResizeCorners && mouse.X >= width - ResizeCorners)
+							else if(Y <= ResizeCorners && X >= width - ResizeCorners)
 							{
 								SetCursor(Cursor.NorthEastSouthWestResize);
 								MoveAction = MouseMoveAction.TopRightResize;
 							}
-							else if(mouse.Y <= ResizeCorners)
+							else if(Y <= ResizeCorners)
 							{
 								SetCursor(Cursor.NorthResize);
 								MoveAction = MouseMoveAction.TopResize;
 							}
-							else if(mouse.X <= ResizeCorners && mouse.Y >= height - ResizeCorners)
+							else if(X <= ResizeCorners && Y >= height - ResizeCorners)
 							{
 								SetCursor(Cursor.NorthEastSouthWestResize);
 								MoveAction = MouseMoveAction.BottomLeftResize;
 							}
-							else if(mouse.Y >= height - ResizeCorners && mouse.X >= width - ResizeCorners)
+							else if(Y >= height - ResizeCorners && X >= width - ResizeCorners)
 							{
 								SetCursor(Cursor.NorthWestSouthEastResize);
 								MoveAction = MouseMoveAction.BottomRightResize;
 							}
-							else if(mouse.Y >= height - ResizeCorners)
+							else if(Y >= height - ResizeCorners)
 							{
 								SetCursor(Cursor.SouthResize);							
 								MoveAction = MouseMoveAction.BottomResize;
 							}
-							else if(mouse.X <= ResizeCorners)
+							else if(X <= ResizeCorners)
 							{
 								SetCursor(Cursor.WestResize);
 								MoveAction = MouseMoveAction.LeftResize;
 
 							}
-							else if(mouse.X >= width - ResizeCorners)
+							else if(X >= width - ResizeCorners)
 							{
 								SetCursor(Cursor.EastResize);
 								MoveAction = MouseMoveAction.RightResize;
@@ -1039,7 +1053,8 @@ namespace ExpressCraft
 
 				var width = Content.ClientWidth;
 				var height = Content.ClientHeight;
-				Point mouse = new Point(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
+				int X = mev.PageX - Content.OffsetLeft;
+				int Y = mev.PageY - Content.OffsetTop;
 
 				if(MovingForm != null && MoveAction == MouseMoveAction.Move)
 				{
@@ -1053,35 +1068,35 @@ namespace ExpressCraft
 				}
                 if(AllowSizeChange)
                 {
-                    if (MoveAction == MouseMoveAction.TopLeftResize || mouse.X <= ResizeCorners && mouse.Y <= ResizeCorners)
+                    if (MoveAction == MouseMoveAction.TopLeftResize || X <= ResizeCorners && Y <= ResizeCorners)
                     {
                         SetCursor(Cursor.NorthWestSouthEastResize);
                     }
-                    else if (MoveAction == MouseMoveAction.TopRightResize || mouse.Y <= ResizeCorners && mouse.X >= width - ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.TopRightResize || Y <= ResizeCorners && X >= width - ResizeCorners)
                     {
                         SetCursor(Cursor.NorthEastSouthWestResize);
                     }
-                    else if (mouse.Y <= ResizeCorners || MoveAction == MouseMoveAction.TopResize)
+                    else if (Y <= ResizeCorners || MoveAction == MouseMoveAction.TopResize)
                     {
                         SetCursor(Cursor.NorthResize);
                     }
-                    else if (MoveAction == MouseMoveAction.BottomLeftResize || mouse.X <= ResizeCorners && mouse.Y >= height - ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.BottomLeftResize || X <= ResizeCorners && Y >= height - ResizeCorners)
                     {
                         SetCursor(Cursor.NorthEastSouthWestResize);
                     }
-                    else if (MoveAction == MouseMoveAction.BottomRightResize || mouse.Y >= height - ResizeCorners && mouse.X >= width - ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.BottomRightResize || Y >= height - ResizeCorners && X >= width - ResizeCorners)
                     {
                         SetCursor(Cursor.NorthWestSouthEastResize);
                     }
-                    else if (MoveAction == MouseMoveAction.BottomResize || mouse.Y >= height - ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.BottomResize || Y >= height - ResizeCorners)
                     {
                         SetCursor(Cursor.SouthResize);
                     }
-                    else if (MoveAction == MouseMoveAction.LeftResize || mouse.X <= ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.LeftResize || X <= ResizeCorners)
                     {
                         SetCursor(Cursor.WestResize);
                     }
-                    else if (MoveAction == MouseMoveAction.RightResize || mouse.X >= width - ResizeCorners)
+                    else if (MoveAction == MouseMoveAction.RightResize || X >= width - ResizeCorners)
                     {
                         SetCursor(Cursor.EastResize);
                     }

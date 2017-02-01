@@ -116,7 +116,7 @@ namespace ExpressCraft
 			*/
 		}
 
-		public static Point GetClientMouseLocation(object e)
+		public static Vector2 GetClientMouseLocation(object e)
 		{
 			var x = 0;
 			var y = 0;
@@ -133,7 +133,7 @@ namespace ExpressCraft
 								   document.documentElement.scrollTop;
 			  }			  
 			*/
-			return new Point(x, y);
+			return new Vector2(x, y);
 		}
 
 		public static void SetChecked(this Control input, object value)
@@ -310,7 +310,7 @@ namespace ExpressCraft
         public static void SetSize(this HTMLElement c, Union<string, int, float> width, Union<string, int, float> height)
 		{
 			c.Style.Width = width.ToHtmlValue();
-			c.Style.Height = height.ToString();
+			c.Style.Height = height.ToHtmlValue();
 		}
 
         public static void SetLocation(this Control c, int left, int top)
@@ -391,9 +391,33 @@ namespace ExpressCraft
 				string.Empty;
         }
 
-        public static string oneHundrendTake(int value)
-        {
-            return string.Format("calc(100% - {0}px)", value);
-        }
-    }
+		public static void GetBoundInteger(this Control control, out int x, out int y, out int w, out int h)
+		{
+			if(control == null || control.Content == null)
+			{
+				x = 0;
+				y = 0;
+				w = 0;
+				h = 0;
+				return;
+			}
+			x = Global.ParseInt(control.Content.Style.Left);
+			y = Global.ParseInt(control.Content.Style.Top);
+			w = Global.ParseInt(control.Content.Style.Width);
+			h = Global.ParseInt(control.Content.Style.Height);
+		}
+
+		public static void ExchangeClass(this Control control, string oldClass, string newClass)
+		{
+			ExchangeClass(control.Content, oldClass, newClass);
+
+		}
+		public static void ExchangeClass(this HTMLElement control, string oldClass, string newClass)
+		{
+			if(control.ClassList.Contains(oldClass))
+				control.ClassList.Remove(oldClass);
+			if(!control.ClassList.Contains(newClass))
+				control.ClassList.Add(newClass);
+		}
+	}
 }

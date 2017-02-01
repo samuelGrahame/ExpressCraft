@@ -23,6 +23,8 @@ namespace ExpressCraft
 		public void AddPages(params TabControlPage[] Pages)
 		{
 			TabPages.AddRange(Pages);
+			if(this.HasRendered)
+				ResizeTabHeaders();
 		}
 
 		private int selectedindex = 0;
