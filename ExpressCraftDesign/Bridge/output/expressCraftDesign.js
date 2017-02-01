@@ -1,7 +1,7 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.6.0
+ * @compiler Bridge.NET 15.7.0
  */
 Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
     "use strict";
@@ -117,11 +117,14 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                 onItemClick: Bridge.fn.bind(this, $asm.$.ExpressCraftDesign.StudioForm.f2)
             } )])]);
 
-
             this.ribbonControl.addRibbonPages([ribbonPage]);
 
             this.tabControl1 = new ExpressCraft.TabControl();
             ExpressCraft.Helper.setBounds$1(this.tabControl1, 0, 128, "100%", "calc(100% - 128px)");
+            this.tabControl1.content.style.borderTopStyle = "solid";
+            this.tabControl1.content.style.borderTopColor = "#C3C3C3";
+            this.tabControl1.content.style.borderTopWidth = "thin";
+
 
             ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl, this.tabControl1]);
 

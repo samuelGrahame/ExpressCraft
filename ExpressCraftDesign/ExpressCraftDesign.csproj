@@ -49,6 +49,7 @@
     <Content Include="Bridge\output\expressCraftDesign.min.js" />
     <Content Include="Bridge\output\readme.txt" />
     <Content Include="Bridge\www\demo.html" />
+    <Content Include="Bridge\www\rawprev.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bridge\bridge.json" />

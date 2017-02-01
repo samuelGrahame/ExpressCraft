@@ -15,7 +15,7 @@ namespace ExpressCraftDesign
         public StudioForm()
         {
             ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);
-
+			
 			var ribbonPage = new RibbonPage("Actions");
 			ribbonPage.AddRibbonGroups(new RibbonGroup("Project", 
 			new RibbonButton("New Form")
@@ -57,13 +57,16 @@ namespace ExpressCraftDesign
 				}
 			}));
 
-
 			ribbonControl.AddRibbonPages(ribbonPage);				
 
 			tabControl1 = new TabControl();
-            tabControl1.SetBounds(0, 128, "100%", "calc(100% - 128px)");			
+            tabControl1.SetBounds(0, 128, "100%", "calc(100% - 128px)");
+			tabControl1.Content.Style.BorderTopStyle = Bridge.Html5.BorderStyle.Solid;
+			tabControl1.Content.Style.BorderTopColor = "#C3C3C3";
+			tabControl1.Content.Style.BorderTopWidth = Bridge.Html5.BorderWidth.Thin;
 
-            this.Body.AppendChildren(ribbonControl, tabControl1);
+
+			this.Body.AppendChildren(ribbonControl, tabControl1);
 
 			this.SetWindowState(WindowState.Maximized);
 		}
