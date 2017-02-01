@@ -14,8 +14,8 @@ namespace ExpressCraftDesign
 		
         public StudioForm()
         {
-            ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);
-			
+            ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);			
+
 			var ribbonPage = new RibbonPage("Actions");
 			ribbonPage.AddRibbonGroups(new RibbonGroup("Project", 
 			new RibbonButton("New Form")
