@@ -48,7 +48,7 @@ namespace ExpressCraftDesign
 						var tabpage = tabControl1.TabPages[tabControl1.SelectedIndex].As<SourceTabControlPage>();
 						var code = tabpage.CodeEdtor.Source;
 
-						CreateFormFromXML(code).Show(tabpage.splitControlContainer1.Panel2.Content);
+						CreateFormFromXML(code).Show();
 					}
 					else
 					{

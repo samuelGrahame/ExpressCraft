@@ -3440,7 +3440,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var visbileForms = activeCollect.visibleForms;
 
             if (!visbileForms.contains(this)) {
-                this.addFormToParentElement();
+                this.addFormToParentElement(owner);
 
                 this.content.style.visibility = "visible";
                 if (this.startPosition !== ExpressCraft.FormStartPosition.Manual && this.getwindowState() === ExpressCraft.WindowState.Normal) {
