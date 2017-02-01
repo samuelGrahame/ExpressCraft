@@ -13,7 +13,7 @@ namespace ExpressCraft
 
         public FormCollection(Form formOwner)
         {
-            FormOwner = formOwner;
-        }
+            FormOwner = formOwner;			
+		}
     }
 }

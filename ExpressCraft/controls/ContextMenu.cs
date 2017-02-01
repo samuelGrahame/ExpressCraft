@@ -92,7 +92,7 @@ namespace ExpressCraft
 			this.Content.SetSize(width, top);
 		}
 
-		public void Show(Point Location)
+		public void Show(Vector2 Location)
 		{		
 			if(MainContextMenu != null)
 			{

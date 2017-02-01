@@ -31,8 +31,75 @@ namespace ExpressCraft
 		{
 			return add ? " " + ControlClass :
 				ControlClass;
+		}		
+
+		public Union<string, int, float> Width
+		{
+			get { return this.Content.Style.Width; }
+			set {
+				this.Content.Style.Width = value.ToHtmlValue();				
+			}
 		}
-		
+
+		public Union<string, int, float> Height
+		{
+			get { return this.Content.Style.Height; }
+			set
+			{
+				this.Content.Style.Height = value.ToHtmlValue();
+			}
+		}
+
+		public Union<string, int, float> Left
+		{
+			get { return this.Content.Style.Left; }
+			set
+			{
+				this.Content.Style.Left = value.ToHtmlValue();
+			}
+		}
+
+		public Union<string, int, float> Top
+		{
+			get { return this.Content.Style.Top; }
+			set
+			{
+				this.Content.Style.Top = value.ToHtmlValue();
+			}
+		}
+
+		public Vector2 Size
+		{
+			get { return new Vector2(this.Width, this.Height); }
+			set
+			{
+				this.Width = value.X;
+				this.Height = value.Y;
+			}
+		}
+
+		public Vector2 Location
+		{
+			get { return new Vector2(this.Left, this.Top); }
+			set
+			{
+				this.Left = value.X;
+				this.Top = value.Y;
+			}
+		}
+
+		public Vector4 Bounds
+		{
+			get { return new Vector4(this.Left, this.Top, this.Width, this.Height); }
+			set
+			{
+				this.Left = value.X;
+				this.Top = value.Y;
+				this.Width = value.Z;
+				this.Height = value.M;
+			}
+		}
+
 		public static string GetImageString(string s)
         {
 			//url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat

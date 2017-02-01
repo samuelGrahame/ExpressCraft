@@ -61,10 +61,9 @@
     <Compile Include="utils\Helper.cs" />
     <Compile Include="forms\MessageBoxForm.cs" />
     <Compile Include="utils\Network.cs" />
-    <Compile Include="utils\Point.cs" />
+    <Compile Include="utils\Vector2.cs" />
     <Compile Include="controls\ProgressControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="utils\Rectangle.cs" />
     <Compile Include="controls\RibbonButton.cs" />
     <Compile Include="controls\RibbonControl.cs" />
     <Compile Include="controls\RibbonGroup.cs" />
@@ -72,12 +71,12 @@
     <Compile Include="utils\Settings.cs" />
     <Compile Include="controls\SimpleButton.cs" />
     <Compile Include="controls\SimpleDialogButton.cs" />
-    <Compile Include="utils\Size.cs" />
     <Compile Include="controls\SplitControlContainer.cs" />
     <Compile Include="controls\TabControl.cs" />
     <Compile Include="controls\TabControlPage.cs" />
     <Compile Include="utils\TextBlock.cs" />
     <Compile Include="controls\TextInput.cs" />
+    <Compile Include="utils\Vector4.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bridge\output\bridge.js" />

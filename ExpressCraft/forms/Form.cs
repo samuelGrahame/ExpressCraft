@@ -491,8 +491,8 @@ namespace ExpressCraft
 							MovingForm.Content.SetLocation(X, Y);
 
 							break;
-						case MouseMoveAction.TopLeftResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+						case MouseMoveAction.TopLeftResize:							
+							Helper.ExtractLTWHOut(out X1, out Y1, out W, out H, obj);
 
 							W -= X - X1;
 							H -= Y - Y1;
@@ -533,7 +533,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.TopRightResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							Helper.ExtractLTWHOut(out X1, out Y1, out W, out H, obj);
 
 							H -= Y - Y1;
 							W = mev.PageX - X1;
@@ -572,7 +572,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.BottomLeftResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							Helper.ExtractLTWHOut(out X1, out Y1, out W, out H, obj);
 
 							W -= X - X1;
 							H = mev.PageY - Y1;
@@ -626,7 +626,7 @@ namespace ExpressCraft
 
 							break;
 						case MouseMoveAction.BottomRightResize:
-							Rectange.SetBounds(out X1, out Y1, out W, out H, obj);
+							Helper.ExtractLTWHOut(out X1, out Y1, out W, out H, obj);
 
 							W = mev.PageX - X1;
 
@@ -721,7 +721,7 @@ namespace ExpressCraft
 			}
 			else if(windowState == WindowState.Maximized)
 			{                				
-				Rectange.SetBounds(out prev_left, out prev_top, out prev_width, out prev_height, Self);				
+				Helper.ExtractLTWHOut(out prev_left, out prev_top, out prev_width, out prev_height, Self);				
 				this.SetBounds("0", "0", "calc(100% - 2px)", "calc(100% - 2px)");				
 			}
 			Resizing();
@@ -948,7 +948,7 @@ namespace ExpressCraft
 
 				var width = Content.ClientWidth;
 				var height = Content.ClientHeight;
-				Point mouse = new Point(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
+				Vector2 mouse = new Vector2(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
 
 				if(windowState == WindowState.Maximized)
 				{
@@ -1039,7 +1039,7 @@ namespace ExpressCraft
 
 				var width = Content.ClientWidth;
 				var height = Content.ClientHeight;
-				Point mouse = new Point(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
+				Vector2 mouse = new Vector2(mev.PageX - Content.OffsetLeft, mev.PageY - Content.OffsetTop);				
 
 				if(MovingForm != null && MoveAction == MouseMoveAction.Move)
 				{
