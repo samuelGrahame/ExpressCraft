@@ -8,6 +8,7 @@ Ribbon Control Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/Expres
 
 Grid View Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftGridView/Bridge/www/rawprev.html
 
+Design XML UI Designer (Not Finished): https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftDesign/Bridge/www/rawprev.html
 
 # How to create a Form
 
@@ -16,6 +17,18 @@ Form.Setup();
 var x = new Form();
 x.Text = "Hello World";
 x.Show();
+```
+
+# How to use SplitterContainerControl
+
+```csharp
+var splitContainerControl = new SplitControlContainer();
+
+splitContainerControl.SplitterPosition = 150;
+splitContainerControl.SetBoundsFull();
+
+this.LinkchildToForm(splitContainerControl);
+this.AppendChild(splitContainerControl);
 ```
 
 # How to use Google Cloud Print
