@@ -158,7 +158,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                 var tabpage = this.tabControl1.getTabPages().getItem(this.tabControl1.getSelectedIndex());
                 var code = tabpage.codeEdtor.getSource();
 
-                ExpressCraft.Form.createFormFromXML(code).showDialog();
+                ExpressCraft.Form.createFormFromXML(code).show();
             } else {
                 new ExpressCraft.MessageBoxForm.ctor("Please create a new form before trying to view the designer.", ExpressCraft.MessageBoxLayout.Information).showDialog();
             }
