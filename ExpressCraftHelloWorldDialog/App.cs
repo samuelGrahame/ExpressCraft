@@ -18,6 +18,15 @@ namespace ExpressCraftHelloWorldDialog
 			AceCodeEditor.Setup();
 			Settings.AllowCloseWithoutQuestion = true;
 
+            var dialogTestButton = new SimpleButton()
+            {
+                Text = "dialog test",
+                ItemClick = (ev) =>
+                {
+                    (new InputDialogText("Question", "This is a question. This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.")).ShowDialog();
+                }
+            };
+
             var errorBtn = new SimpleButton()
             {
                 Text = MessageBoxLayout.Error.ToString("G"),
@@ -98,7 +107,7 @@ namespace ExpressCraftHelloWorldDialog
 			aceCodeBtn.Content.Style.Position = Position.Relative;
 			aceCodeBtn.Content.Style.Width = "auto";
 
-			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn);			
+			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton);			
         }
 
         public static string GetRandomText()

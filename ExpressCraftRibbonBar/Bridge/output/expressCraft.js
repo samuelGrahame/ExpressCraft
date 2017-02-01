@@ -6243,8 +6243,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.setBounds(this.panel, "0", "0", "100%", "calc(100% - 60px)");
             this.getBody().style.backgroundColor = "white";
 
-            this._buttonCollection = Bridge.fn.bind(this, function (_o1) {
-                    _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+            this._buttonCollection = Bridge.fn.bind(this, function (_o2) {
+                    _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
                         setText: "Cancel",
                         itemClick: Bridge.fn.bind(this, function (ev) {
                             for (var i1 = 0; i1 < this.dataRow.parentTable.getColumnCount(); i1 = (i1 + 1) | 0) {
@@ -6254,10 +6254,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             this.gridView.renderGrid();
                         })
                     } ));
-                    _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+                    _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
                         setText: "OK"
                     } ));
-                    return _o1;
+                    return _o2;
                 })(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
             ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
             ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
@@ -6408,6 +6408,66 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.InputDialogBase", {
+        inherits: [ExpressCraft.DialogForm],
+        config: {
+            properties: {
+                Wrapper: null,
+                QuestionDiv: null,
+                AnswerDiv: null,
+                ImageDiv: null
+            }
+        },
+        ctor: function (title, width) {
+            this.$initialize();
+            ExpressCraft.DialogForm.ctor.call(this, title);
+            this.setWidth(ExpressCraft.Helper.toPx$1(width));
+            this.setWrapper(ExpressCraft.Control.div());
+            this.setQuestionDiv(ExpressCraft.Control.div());
+            this.setAnswerDiv(ExpressCraft.Control.div());
+            this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraft.InputDialogBase.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
+
+            this.getWrapper().style.overflowY = "hidden";
+            ExpressCraft.Helper.setBounds(this.getWrapper(), "0px", "0px", "100%", "calc(100% - 60px)");
+            this.getQuestionDiv().style.position = "relative";
+            this.getQuestionDiv().style.height = "auto";
+            this.getQuestionDiv().style.marginLeft = "10px";
+            this.getQuestionDiv().style.marginRight = "10px";
+            this.getQuestionDiv().style.marginTop = "10px";
+            this.getAnswerDiv().style.position = "relative";
+            this.getAnswerDiv().style.height = "auto";
+            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 170px)", "calc(100% - 35px)");
+            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 85px)", "calc(100% - 35px)");
+        },
+        create: function (height) {
+            this.getWrapper().appendChild(this.getQuestionDiv());
+            this.getWrapper().appendChild(document.createElement('br'));
+            this.getWrapper().appendChild(this.getAnswerDiv());
+            this.getBody().appendChild(this.getWrapper());
+
+            ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
+
+            this.setHeight(ExpressCraft.Helper.toPx$1(height));
+            this.allowSizeChange = false;
+
+
+        }
+    });
+
+    Bridge.ns("ExpressCraft.InputDialogBase", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.InputDialogBase, {
+        f1: function (_o1) {
+            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+                setText: "Accept"
+            } ));
+            _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                setText: "Cancel"
+            } ));
+            return _o1;
+        }
+    });
+
     Bridge.define("ExpressCraft.MessageBoxForm", {
         inherits: [ExpressCraft.DialogForm],
         statics: {
@@ -6476,7 +6536,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
          * @this ExpressCraft.MessageBoxForm
          * @memberof ExpressCraft.MessageBoxForm
          * @param   {string}                            prompt     The text to be displayed in the message box
-         * @param   {ExpressCraft.MessageBoxLayout}     ui         The UI settings to be applied to the form
+         * @param   {ExpressCraft.MessageBoxLayout}     ui         The UI settings  to be applied to the form
          * @param   {ExpressCraft.MessageBoxButtons}    buttons    The Type of button to be displayed with this message
          * @param   {string}                            title      The title of the message box
          * @return  {void}
@@ -6599,25 +6659,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.ns("ExpressCraft.MessageBoxForm", $asm.$);
 
     Bridge.apply($asm.$.ExpressCraft.MessageBoxForm, {
-        f1: function (_o2) {
-            _o2.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
+        f1: function (_o3) {
+            _o3.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
                 setText: "Ok"
-            } ));
-            return _o2;
-        },
-        f2: function (_o3) {
-            _o3.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
-                setText: "No"
-            } ));
-            _o3.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Yes), {
-                setText: "Yes"
             } ));
             return _o3;
         },
-        f3: function (_o4) {
-            _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
-                setText: "Cancel"
-            } ));
+        f2: function (_o4) {
             _o4.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
                 setText: "No"
             } ));
@@ -6626,17 +6674,74 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } ));
             return _o4;
         },
-        f4: function (_o5) {
-            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Abort), {
-                setText: "Abort"
+        f3: function (_o5) {
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
+                setText: "Cancel"
             } ));
-            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Retry), {
-                setText: "Retry"
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.No), {
+                setText: "No"
             } ));
-            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Ignore), {
-                setText: "Ignore"
+            _o5.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Yes), {
+                setText: "Yes"
             } ));
             return _o5;
+        },
+        f4: function (_o6) {
+            _o6.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Abort), {
+                setText: "Abort"
+            } ));
+            _o6.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Retry), {
+                setText: "Retry"
+            } ));
+            _o6.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Ignore), {
+                setText: "Ignore"
+            } ));
+            return _o6;
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogText", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
+            }
+        },
+        ctor: function (title, question, size) {
+            if (size === void 0) { size = 360; }
+
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size);
+            var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
+            tb.computeString();
+
+            if (!tb.elelemtsOverMax) {
+                size = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
+                if (size < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
+                    size = ExpressCraft.Settings.messageFormMinimumWidthInPx;
+                }
+            }
+            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+            }
+            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+            }
+
+            this.getQuestionDiv().innerHTML = tb.computedSource;
+            var input = ExpressCraft.Control.input("inputcontrol", "text");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((System.Convert.toInt32(tb.computedHeight) + 25) | 0) + 60) | 0));
+        },
+        onClosing: function () {
+            this.setResult(Bridge.cast(document.getElementById("DialogAnswerBox"), HTMLInputElement).value);
+            ExpressCraft.InputDialogBase.prototype.onClosing.call(this);
+        },
+        onClosed: function () {
+            window.alert(this.getResult());
+            ExpressCraft.InputDialogBase.prototype.onClosed.call(this);
         }
     });
 });

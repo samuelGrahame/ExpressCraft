@@ -50,7 +50,7 @@ namespace ExpressCraft
         /// Create a new Message Dialog
         /// </summary>
         /// <param name="prompt">The text to be displayed in the message box</param>
-        /// <param name="ui">The UI settings to be applied to the form</param>
+        /// <param name="ui">The UI settings  to be applied to the form</param>
         /// <param name="buttons">The Type of button to be displayed with this message</param>
         /// <param name="title">The title of the message box</param>
         public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons, string title) : base(title) {            		

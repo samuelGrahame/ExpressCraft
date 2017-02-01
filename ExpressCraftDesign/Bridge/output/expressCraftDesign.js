@@ -25,8 +25,13 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.Form.ctor.call(this);
             this.ribbonControl = new ExpressCraft.RibbonControl(ExpressCraft.RibbonControl.RibbonType.Compact);
 
-            this.panel1 = new ExpressCraft.Control.ctor();
+            var ribbonPage = new ExpressCraft.RibbonPage("Actions");
+            ribbonPage.addRibbonGroups([new ExpressCraft.RibbonGroup.ctor("Project")]);
 
+
+            this.ribbonControl.addRibbonPages([ribbonPage]);
+
+            this.panel1 = new ExpressCraft.Control.ctor();
             ExpressCraft.Helper.setBounds$1(this.panel1, 0, 154, "100%", "calc(100% - 154px)");
 
             ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl, this.panel1]);
