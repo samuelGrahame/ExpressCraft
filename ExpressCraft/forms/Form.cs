@@ -1409,7 +1409,7 @@ namespace ExpressCraft
             
 			if(!visbileForms.Contains(this))
 			{				
-                AddFormToParentElement();
+                AddFormToParentElement(owner);
 
                 Content.Style.Visibility = Visibility.Visible;
 				if(StartPosition != FormStartPosition.Manual && windowState == WindowState.Normal)
