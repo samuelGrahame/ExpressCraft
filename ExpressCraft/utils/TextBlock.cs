@@ -51,9 +51,10 @@ namespace ExpressCraft {
 						
 						if(yy * sizePerChar > MaxWidth)
 						{
-							builder.AppendLine(lineBuilder.ToString());
-							lineBuilder = new StringBuilder();
 							lineBuilder.Append(line[x]);
+
+							builder.AppendLine(lineBuilder.ToString());
+							lineBuilder = new StringBuilder();							
 							LinesComputed++;
 							yy = 0;
 						}

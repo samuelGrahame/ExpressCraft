@@ -2121,9 +2121,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         yy = (yy + 1) | 0;
 
                         if (yy * sizePerChar > this.maxWidth) {
+                            lineBuilder.append(String.fromCharCode(line.charCodeAt(x)));
+
                             builder.appendLine(lineBuilder.toString());
                             lineBuilder = new System.Text.StringBuilder();
-                            lineBuilder.append(String.fromCharCode(line.charCodeAt(x)));
                             this.linesComputed = (this.linesComputed + 1) | 0;
                             yy = 0;
                         } else {
