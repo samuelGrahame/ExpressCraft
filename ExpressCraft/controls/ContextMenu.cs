@@ -107,7 +107,7 @@ namespace ExpressCraft
 			}
 			if(!Visible)
 			{
-				Content.SetLocation(Location.X - 5, Location.Y - 5);
+				Content.SetLocation(Location.Xi - 5, Location.Yi - 5);
 				RenderContextMenu();
 
 				TotalContextHandles++;

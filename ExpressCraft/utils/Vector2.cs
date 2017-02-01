@@ -11,6 +11,18 @@ namespace ExpressCraft
 	{
 		public Union<string, int, float> X;
 		public Union<string, int, float> Y;
+		
+		public int Xi
+		{
+			get { return (int)X; }
+			set { X = value; }
+		}
+
+		public int Yi
+		{
+			get { return (int)Y; }
+			set { Y = value; }
+		}
 
 		public Vector2(Union<string, int, float> x, Union<string, int, float> y)
 		{

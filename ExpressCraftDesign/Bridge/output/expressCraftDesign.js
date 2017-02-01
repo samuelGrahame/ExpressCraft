@@ -1,7 +1,7 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.6.0
+ * @compiler Bridge.NET 15.7.0
  */
 Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
     "use strict";
@@ -24,9 +24,6 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.Helper.setSize$1(this, 550, 300);
 
             this._buttonCollection = Bridge.fn.bind(this, $asm.$.ExpressCraftDesign.NewFileDialog.f1)(new (System.Collections.Generic.List$1(ExpressCraft.SimpleDialogButton))());
-
-            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 85px)", "calc(100% - 35px)");
-            ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 170px)", "calc(100% - 35px)");
         }
     });
 
@@ -35,10 +32,12 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
     Bridge.apply($asm.$.ExpressCraftDesign.NewFileDialog, {
         f1: function (_o1) {
             _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
-                setText: "Cancel"
+                setText: "Cancel",
+                setLocation: new ExpressCraft.Vector2.$ctor1("calc(100% - 85px)", "calc(100% - 35px)")
             } ));
             _o1.add(Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.OK), {
-                setText: "Add"
+                setText: "Add",
+                setLocation: new ExpressCraft.Vector2.$ctor1("calc(100% - 170px)", "calc(100% - 35px)")
             } ));
             return _o1;
         }
