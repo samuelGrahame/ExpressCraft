@@ -30,6 +30,18 @@ namespace ExpressCraft
 		public bool AllowMoveChange = true;
 
 		public static bool InExternalMouseEvent = false;
+
+		public static Form CreateFormFromXML(string source)
+		{
+			var x = new Form();
+			
+			if(string.IsNullOrWhiteSpace(source))
+			{
+				
+			}
+
+			return x;
+		}
 		
 		public bool ShowMinimize
 		{
@@ -721,7 +733,7 @@ namespace ExpressCraft
 			}
 			else if(windowState == WindowState.Maximized)
 			{                				
-				MovingForm.GetBoundInteger(out prev_left, out prev_top, out prev_width, out prev_height);				
+				this.GetBoundInteger(out prev_left, out prev_top, out prev_width, out prev_height);				
 				this.SetBounds("0", "0", "calc(100% - 2px)", "calc(100% - 2px)");				
 			}
 			Resizing();

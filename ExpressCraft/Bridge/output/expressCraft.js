@@ -936,6 +936,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.FixedSplitterPosition", {
+        $kind: "enum",
+        statics: {
+            Panel1: 0,
+            Panel2: 1,
+            None: 2
+        }
+    });
+
     Bridge.define("ExpressCraft.FormButtonType", {
         $kind: "enum",
         statics: {
@@ -1585,7 +1594,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             },
             setSize: function (c, width, height) {
                 c.style.width = ExpressCraft.Helper.toHtmlValue(width);
-                c.style.height = height.toString();
+                c.style.height = ExpressCraft.Helper.toHtmlValue(height);
             },
             toHtmlValue: function (value) {
                 if (Bridge.is(value, String)) {
@@ -1693,10 +1702,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(ExpressCraft.Helper.htmlUrlUnescape(input), "&#x2F", "\\/"), "&quot", "\"") : "";
             },
             getBoundInteger: function (control, x, y, w, h) {
+                if (control == null || control.content == null) {
+                    x.v = 0;
+                    y.v = 0;
+                    w.v = 0;
+                    h.v = 0;
+                    return;
+                }
                 x.v = parseInt(control.content.style.left);
                 y.v = parseInt(control.content.style.top);
                 w.v = parseInt(control.content.style.width);
                 h.v = parseInt(control.content.style.height);
+            },
+            exchangeClass$1: function (control, oldClass, newClass) {
+                ExpressCraft.Helper.exchangeClass(control.content, oldClass, newClass);
+
+            },
+            exchangeClass: function (control, oldClass, newClass) {
+                if (control.classList.contains(oldClass)) {
+                    control.classList.remove(oldClass);
+                }
+                if (!control.classList.contains(newClass)) {
+                    control.classList.add(newClass);
+                }
             }
         }
     });
@@ -2232,6 +2260,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         statics: {
             aceCodeSetup: false,
             inLoad: false,
+            ready: function () {
+                if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
+                    return ("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
+                }
+                if (ExpressCraft.AceCodeEditor.inLoad) {
+                    return ("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
+                }
+                return "";
+            },
             setup: function () {
                 if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
                     if (ExpressCraft.AceCodeEditor.inLoad) {
@@ -2258,15 +2295,22 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._modeType = modeType;
             this._themeType = themeType;
         },
+        getSource: function () {
+            // var code = editor.getValue();
+
+            //editor.setValue("new code here");
+
+            return this.editor.getValue();
+        },
+        setSource: function (value) {
+            this.editor.setValue(value);
+        },
         render: function () {
             var $t, $t1;
             ExpressCraft.Control.prototype.render.call(this);
-
-            if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
-                throw new System.Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
-            }
-            if (ExpressCraft.AceCodeEditor.inLoad) {
-                throw new System.Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
+            var msg = ExpressCraft.AceCodeEditor.ready();
+            if (!Bridge.referenceEquals(msg, "")) {
+                throw new System.Exception(msg);
             }
 
             var theme = ($t=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t, "G"));
@@ -2751,6 +2795,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
 
             },
+            createFormFromXML: function (source) {
+                var x = new ExpressCraft.Form();
+
+                if (System.String.isNullOrWhiteSpace(source)) {
+
+                }
+
+                return x;
+            },
             midleOfAction: function () {
                 return ExpressCraft.Form.movingForm != null; // WindowHolderSelectionBox != null ||
             },
@@ -3188,7 +3241,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.setBounds$1(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
             } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
-                ExpressCraft.Helper.getBoundInteger(ExpressCraft.Form.movingForm, Bridge.ref(this, "prev_left"), Bridge.ref(this, "prev_top"), Bridge.ref(this, "prev_width"), Bridge.ref(this, "prev_height"));
+                ExpressCraft.Helper.getBoundInteger(this, Bridge.ref(this, "prev_left"), Bridge.ref(this, "prev_top"), Bridge.ref(this, "prev_width"), Bridge.ref(this, "prev_height"));
                 ExpressCraft.Helper.setBounds$1(this, "0", "0", "calc(100% - 2px)", "calc(100% - 2px)");
             }
             this.resizing();
@@ -5858,18 +5911,52 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         panel1: null,
         panel2: null,
         splitter: null,
-        splitterPosition: 0,
+        _isMouseDown: false,
+        _startingSplitterPos: 0,
+        _splitterPosition: -1,
+        fixedSplitterPostion: 0,
+        splitterResizable: true,
         horizontal: false,
+        _prevClientRect: null,
+        config: {
+            init: function () {
+                this._mouseDownVector = new ExpressCraft.Vector2();
+                this._currentMouseDownVector = new ExpressCraft.Vector2();
+            }
+        },
         ctor: function () {
             this.$initialize();
             ExpressCraft.Control.ctor.call(this);
+            this.panel1 = new ExpressCraft.Control.ctor();
+            this.panel2 = new ExpressCraft.Control.ctor();
+            this.splitter = new ExpressCraft.Control.ctor();
 
+            this.splitter.content.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.SplitControlContainer.f1);
+
+            this.onResize = Bridge.fn.bind(this, $asm.$.ExpressCraft.SplitControlContainer.f2);
+
+            this.content.onmousemove = Bridge.fn.bind(this, $asm.$.ExpressCraft.SplitControlContainer.f3);
+
+            this.content.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.SplitControlContainer.f4);
+
+            ExpressCraft.Helper.appendChildren$2(this, [this.panel1, this.splitter, this.panel2]);
+        },
+        getFixedSplitterPostion: function () {
+            return this.fixedSplitterPostion;
+        },
+        setFixedSplitterPostion: function (value) {
+            this.fixedSplitterPostion = value;
+            this.renderControls();
         },
         getSplitterPosition: function () {
-            return this.splitterPosition;
+            return this._splitterPosition;
         },
         setSplitterPosition: function (value) {
-            this.splitterPosition = value;
+            if (value < 0) {
+                value = 0;
+            }
+
+            this._splitterPosition = value;
             this.renderControls();
         },
         getHorizontal: function () {
@@ -5886,8 +5973,126 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.renderControls();
         },
+        getMaxSplitterSize: function () {
+            var maxSize = (Bridge.Int.clip32(this.getHorizontal() ? this.content.getBoundingClientRect().height : this.content.getBoundingClientRect().width) - 12) | 0;
+            if (maxSize < 0) {
+                maxSize = 0;
+            }
+            return maxSize;
+        },
         renderControls: function () {
+            var sp = this.getSplitterPosition();
+            if (this._prevClientRect != null) {
+                var maxSize = this.getMaxSplitterSize();
+                if (sp > maxSize) {
+                    sp = maxSize;
+                }
+            }
 
+            if (this.getHorizontal()) {
+                ExpressCraft.Helper.exchangeClass$1(this.panel1, "splitvertical", "splithorizontal");
+                ExpressCraft.Helper.exchangeClass$1(this.panel2, "splitvertical", "splithorizontal");
+                ExpressCraft.Helper.exchangeClass$1(this.splitter, "splitvertical", "splitvertical");
+
+                this.panel1.setLocation(new ExpressCraft.Vector2.$ctor1(0, 0));
+                this.panel1.setWidth("");
+                this.panel1.setHeight(sp);
+
+                this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(0, sp));
+                this.splitter.setWidth("");
+
+                this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(0, ((sp + 12) | 0)));
+                this.panel2.setWidth("");
+                this.panel2.setHeight("calc(100% - " + (((sp + 12) | 0)) + "px)");
+                ;
+            } else {
+                ExpressCraft.Helper.exchangeClass$1(this.panel1, "splithorizontal", "splitvertical");
+                ExpressCraft.Helper.exchangeClass$1(this.panel2, "splithorizontal", "splitvertical");
+                ExpressCraft.Helper.exchangeClass$1(this.splitter, "splitterhorizontal", "splittervertical");
+
+                this.panel1.setLocation(new ExpressCraft.Vector2.$ctor1(0, 0));
+                this.panel1.setWidth(sp);
+                this.panel1.setHeight("");
+
+                this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(sp, 0));
+                this.splitter.setHeight("");
+
+                this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(((sp + 12) | 0), 0));
+                this.panel2.setWidth("calc(100% - " + (((sp + 12) | 0)) + "px)");
+                this.panel2.setHeight("");
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.SplitControlContainer", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.SplitControlContainer, {
+        f1: function (ev) {
+            if (!this.splitterResizable) {
+                return;
+            }
+            this._isMouseDown = true;
+            this._mouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
+            var maxSize = this.getMaxSplitterSize();
+            this._startingSplitterPos = this._splitterPosition > maxSize ? maxSize : this._splitterPosition;
+
+            ev.stopPropagation();
+        },
+        f2: function (ev) {
+            var clientRec = this.content.getBoundingClientRect();
+            if (this._prevClientRect == null) {
+                this._prevClientRect = clientRec;
+            }
+            if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel1 && this._prevClientRect != null) {
+                var V1 = 0;
+                var V2 = 0;
+                var dirty = false;
+
+                if (this.getHorizontal()) {
+                    if (clientRec.height !== this._prevClientRect.height) {
+                        V1 = clientRec.height;
+                        V2 = this._prevClientRect.height;
+                        dirty = true;
+                    }
+                } else {
+                    if (clientRec.width !== this._prevClientRect.width) {
+                        V1 = clientRec.width;
+                        V2 = this._prevClientRect.width;
+                        dirty = true;
+                    }
+                }
+                if (dirty) {
+                    switch (this.fixedSplitterPostion) {
+                        case ExpressCraft.FixedSplitterPosition.Panel2: 
+                            this.setSplitterPosition((((Bridge.Int.clip32(V1) - (((Bridge.Int.clip32(V2) - this.getSplitterPosition()) | 0))) | 0)));
+                            break;
+                        case ExpressCraft.FixedSplitterPosition.None: 
+                            this.setSplitterPosition(V1 === 0 || V2 === 0 ? 0 : Bridge.Int.clip32(this.getSplitterPosition() * (V1 / V2)));
+                            break;
+                        default: 
+                            break;
+                    }
+                }
+            }
+
+            this._prevClientRect = clientRec;
+
+            this.renderControls();
+        },
+        f3: function (ev) {
+            if (this._isMouseDown) {
+                this._currentMouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
+                if (this.horizontal) {
+                    this.setSplitterPosition((this._startingSplitterPos - (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0))) | 0);
+                } else {
+                    this.setSplitterPosition((this._startingSplitterPos - (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0))) | 0);
+                }
+                this._currentMouseDownVector = this._mouseDownVector.$clone();
+            }
+        },
+        f4: function (ev) {
+            this._isMouseDown = false;
+            this.renderControls();
         }
     });
 
@@ -6159,6 +6364,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
             this.setText(text);
+            this.getBody().style.backgroundColor = "white";
+
             this.buttonSection = ExpressCraft.Control.div$1("dialogbuttonsection");
         },
         onShowing: function () {
@@ -6570,7 +6777,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             section.style.top = "32px";
             section.style.width = "90%";
 
-            this.getBody().style.backgroundColor = "white";
             ExpressCraft.Helper.appendChildren(this.getBody(), [pic, section]);
 
             if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {

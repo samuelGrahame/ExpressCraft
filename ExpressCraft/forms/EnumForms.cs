@@ -55,6 +55,13 @@ namespace ExpressCraft
 		Google_Spreadsheet
 	}
 
+	public enum FixedSplitterPosition
+	{		
+		Panel1,
+		Panel2,
+		None
+	}
+
 //	"url"	URL to be printed
 //"dataUrl"	Content of a URL data document as a string
 //"google.drawing"	Document ID of a Google Drawing

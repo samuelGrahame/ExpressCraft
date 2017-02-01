@@ -14,6 +14,8 @@ namespace ExpressCraft
 		public DialogForm(string text = "") : base()
 		{
 			this.Text = text;
+			base.Body.Style.BackgroundColor = "white";
+
 			ButtonSection = Div("dialogbuttonsection");			
 		}
 

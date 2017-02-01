@@ -155,8 +155,7 @@ namespace ExpressCraft
             section.AppendChild(textContent);
 			section.Style.Top = "32px";
 			section.Style.Width = "90%";
-
-			base.Body.Style.BackgroundColor = "white";
+			
 			base.Body.AppendChildren(pic, section);		
 			
 			if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bridge;
 using Bridge.Html5;
 using Bridge.jQuery2;
 
@@ -12,7 +13,30 @@ namespace ExpressCraft
 	{
 		private static bool aceCodeSetup = false;
 		private static bool inLoad = false;
-		private object editor = null;
+		public object editor = null;
+
+		public static string Ready()
+		{
+			if(!aceCodeSetup)
+				return("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
+			if(inLoad)
+				return ("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
+			return string.Empty;
+		}		
+
+		public string Source
+		{
+			get {
+				// var code = editor.getValue();
+
+				//editor.setValue("new code here");
+
+				return Script.Write<string>("this.editor.getValue()");				
+			}
+
+			set { Script.Call("this.editor.setValue", value); }
+		}
+
 
 		public static void Setup()
 		{
@@ -44,11 +68,11 @@ namespace ExpressCraft
 		public override void Render()
 		{
 			base.Render();
-
-			if(!aceCodeSetup)
-				throw new Exception("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
-			if(inLoad)
-				throw new Exception("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
+			string msg = Ready();
+			if(msg != string.Empty)
+			{
+				throw new Exception(msg);
+			}			
 
 			var theme = _modeType.ToString("G");
 			var mode = _modeType.ToString("G");
