@@ -6627,7 +6627,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         ctor: function (title, width) {
             this.$initialize();
             ExpressCraft.DialogForm.ctor.call(this, title);
-            this.setWidth(ExpressCraft.Helper.toPx$1(width));
+            this.setWidth$1(ExpressCraft.Helper.toPx$1(width));
             this.setWrapper(ExpressCraft.Control.div());
             this.setQuestionDiv(ExpressCraft.Control.div());
             this.setAnswerDiv(ExpressCraft.Control.div());
@@ -6653,7 +6653,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
-            this.setHeight(ExpressCraft.Helper.toPx$1(height));
+            this.setHeight$1(ExpressCraft.Helper.toPx$1(height));
             this.allowSizeChange = false;
 
 

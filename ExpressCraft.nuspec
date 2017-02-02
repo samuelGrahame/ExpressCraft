@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.0.4</version>
+    <version>0.0.0.6</version>
     <title>ExpressCraft</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -22,6 +22,7 @@
   </metadata>
   <files>
 	<file src="ExpressCraft\bin\Release\ExpressCraft.dll" target="lib\ExpressCraft.dll" />
+	<file src="ExpressCraft\Bridge\output\ExpressCraft.css" target="content\Bridge\output" />
   </files>
-  
+ 
 </package>
