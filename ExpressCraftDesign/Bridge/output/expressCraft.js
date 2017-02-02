@@ -6626,7 +6626,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         ctor: function (title, width) {
             this.$initialize();
             ExpressCraft.DialogForm.ctor.call(this, title);
-            this.setWidth(ExpressCraft.Helper.toPx$1(width));
+            this.setWidth$1(ExpressCraft.Helper.toPx$1(width));
             this.setWrapper(ExpressCraft.Control.div());
             this.setQuestionDiv(ExpressCraft.Control.div());
             this.setAnswerDiv(ExpressCraft.Control.div());
@@ -6652,7 +6652,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
-            this.setHeight(ExpressCraft.Helper.toPx$1(height));
+            this.setHeight$1(ExpressCraft.Helper.toPx$1(height));
             this.allowSizeChange = false;
 
 
@@ -6901,6 +6901,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 setText: "Ignore"
             } ));
             return _o6;
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogNumber", {
+        inherits: [ExpressCraft.InputDialogBase],
+        ctor: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size);
+            var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
+            tb.computeString();
+
+            if (!tb.elelemtsOverMax) {
+                size = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
+                if (size < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
+                    size = ExpressCraft.Settings.messageFormMinimumWidthInPx;
+                }
+            }
+            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+            }
+            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+            }
         }
     });
 

@@ -5,21 +5,28 @@ using Bridge.Html5;
 
 namespace ExpressCraft
 {
+    class InputDialogNumber : InputDialogBase
+    {
+        public InputDialogNumber(string title, string question, int size) : base(title, size)
+        {
+            var tb = new TextBlock(question, size - 25);
+            tb.ComputeString();
+
+            if( !tb.ElelemtsOverMax ) {
+                size = (int)tb.MaxCalculatedWidth + 65 + 37;
+                if( size < Settings.MessageFormMinimumWidthInPx )
+                    size = Settings.MessageFormMinimumWidthInPx;
+            }
+            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
+                tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
+            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
+                tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
+        }
+    }
+
 
     public class InputDialogText : InputDialogBase
     {
-        protected override void OnClosing()
-        {
-            Result = ((HTMLInputElement)Document.GetElementById("DialogAnswerBox")).Value;
-            base.OnClosing();
-        }
-
-        protected override void OnClosed()
-        {
-            Window.Alert(Result);
-            base.OnClosed();
-        }
-
         public InputDialogText(string title, string question, int size = 360) : base(title, size)
         {
             var tb = new TextBlock(question, size - 25);
@@ -44,6 +51,16 @@ namespace ExpressCraft
         }
 
         private string Result { get; set; }
+
+        protected override void OnClosing() {
+            Result = ((HTMLInputElement)Document.GetElementById("DialogAnswerBox")).Value;
+            base.OnClosing();
+        }
+
+        protected override void OnClosed() {
+            Window.Alert(Result);
+            base.OnClosed();
+        }
     }
 
     public class InputDialogBase : DialogForm
