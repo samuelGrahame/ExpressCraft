@@ -6618,13 +6618,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         inherits: [ExpressCraft.DialogForm],
         config: {
             properties: {
+                QuestionSize: 0,
                 Wrapper: null,
                 QuestionDiv: null,
                 AnswerDiv: null,
                 ImageDiv: null
             }
         },
-        ctor: function (title, width) {
+        ctor: function (title, width, question) {
             this.$initialize();
             ExpressCraft.DialogForm.ctor.call(this, title);
             this.setWidth$1(ExpressCraft.Helper.toPx$1(width));
@@ -6644,6 +6645,25 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.getAnswerDiv().style.height = "auto";
             ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(0), "calc(100% - 170px)", "calc(100% - 35px)");
             ExpressCraft.Helper.setLocation$1(this._buttonCollection.getItem(1), "calc(100% - 85px)", "calc(100% - 35px)");
+
+            var tb = new ExpressCraft.TextBlock(question, ((width - 25) | 0));
+            tb.computeString();
+
+            if (!tb.elelemtsOverMax) {
+                width = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
+                if (width < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
+                    width = ExpressCraft.Settings.messageFormMinimumWidthInPx;
+                }
+            }
+            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+            }
+            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+            }
+
+            this.getQuestionDiv().innerHTML = tb.computedSource;
+            this.setQuestionSize(System.Convert.toInt32(tb.computedHeight));
         },
         create: function (height) {
             this.getWrapper().appendChild(this.getQuestionDiv());
@@ -6909,7 +6929,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         inherits: [ExpressCraft.InputDialogBase],
         ctor: function (title, question, size) {
             this.$initialize();
-            ExpressCraft.InputDialogBase.ctor.call(this, title, size);
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
             var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
             tb.computeString();
 
@@ -6939,29 +6959,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (size === void 0) { size = 360; }
 
             this.$initialize();
-            ExpressCraft.InputDialogBase.ctor.call(this, title, size);
-            var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
-            tb.computeString();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
 
-            if (!tb.elelemtsOverMax) {
-                size = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
-                if (size < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
-                    size = ExpressCraft.Settings.messageFormMinimumWidthInPx;
-                }
-            }
-            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
-            }
-            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
-            }
-
-            this.getQuestionDiv().innerHTML = tb.computedSource;
             var input = ExpressCraft.Control.input("inputcontrol", "text");
             input.id = "DialogAnswerBox";
             ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
             this.getAnswerDiv().appendChild(input);
-            this.create(((((System.Convert.toInt32(tb.computedHeight) + 25) | 0) + 60) | 0));
+            this.create(((((this.getQuestionSize() + 25) | 0) + 60) | 0));
         },
         onClosing: function () {
             this.setResult(Bridge.cast(document.getElementById("DialogAnswerBox"), HTMLInputElement).value);
