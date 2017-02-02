@@ -7,7 +7,7 @@ namespace ExpressCraft
 {
     class InputDialogNumber : InputDialogBase
     {
-        public InputDialogNumber(string title, string question, int size) : base(title, size)
+        public InputDialogNumber(string title, string question, int size) : base(title, size, question)
         {
             var tb = new TextBlock(question, size - 25);
             tb.ComputeString();
@@ -27,27 +27,14 @@ namespace ExpressCraft
 
     public class InputDialogText : InputDialogBase
     {
-        public InputDialogText(string title, string question, int size = 360) : base(title, size)
+        public InputDialogText(string title, string question, int size = 360) : base(title, size, question)
         {
-            var tb = new TextBlock(question, size - 25);
-            tb.ComputeString();
-
-            if( !tb.ElelemtsOverMax ) {
-                size = (int)tb.MaxCalculatedWidth + 65 + 37;
-                if( size < Settings.MessageFormMinimumWidthInPx )
-                    size = Settings.MessageFormMinimumWidthInPx;
-            }
-            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
-
-            base.QuestionDiv.InnerHTML = tb.ComputedSource;         
+            
             var input = Input("inputcontrol", InputType.Text);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
             base.AnswerDiv.AppendChild(input);
-            Create(Convert.ToInt32(tb.ComputedHeight) + 25 + 60);
+            Create(base.QuestionSize + 25 + 60);
         }
 
         private string Result { get; set; }
@@ -65,7 +52,7 @@ namespace ExpressCraft
 
     public class InputDialogBase : DialogForm
     {
-        protected InputDialogBase(string title, int width) : base(title)
+        protected InputDialogBase(string title, int width, string question) : base(title)
         {
             base.Width = width.ToPx();
             Wrapper = Div();
@@ -87,6 +74,22 @@ namespace ExpressCraft
             AnswerDiv.Style.Height = "auto";
             _buttonCollection[0].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
             _buttonCollection[1].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
+
+            var tb = new TextBlock(question, width - 25);
+            tb.ComputeString();
+
+            if( !tb.ElelemtsOverMax ) {
+                width = (int)tb.MaxCalculatedWidth + 65 + 37;
+                if( width < Settings.MessageFormMinimumWidthInPx )
+                    width = Settings.MessageFormMinimumWidthInPx;
+            }
+            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
+                tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
+            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
+                tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
+
+            QuestionDiv.InnerHTML = tb.ComputedSource;
+            QuestionSize = Convert.ToInt32(tb.ComputedHeight);
         }
 
         protected void Create(int height)
@@ -104,6 +107,7 @@ namespace ExpressCraft
             
         }
 
+        protected int QuestionSize { get; set; }
         private HTMLDivElement Wrapper { get;set; }
         protected HTMLDivElement QuestionDiv { get; set; }
         protected HTMLDivElement AnswerDiv { get; set; }
