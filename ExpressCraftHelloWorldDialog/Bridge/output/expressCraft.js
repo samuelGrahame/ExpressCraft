@@ -6905,6 +6905,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.InputDialogNumber", {
+        inherits: [ExpressCraft.InputDialogBase],
+        ctor: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size);
+            var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
+            tb.computeString();
+
+            if (!tb.elelemtsOverMax) {
+                size = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
+                if (size < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
+                    size = ExpressCraft.Settings.messageFormMinimumWidthInPx;
+                }
+            }
+            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+            }
+            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
+                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+            }
+        }
+    });
+
     Bridge.define("ExpressCraft.InputDialogText", {
         inherits: [ExpressCraft.InputDialogBase],
         config: {
