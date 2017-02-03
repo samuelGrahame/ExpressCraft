@@ -29,7 +29,6 @@ namespace ExpressCraft
     {
         public InputDialogText(string title, string question, int size = 360) : base(title, size, question)
         {
-            
             var input = Input("inputcontrol", InputType.Text);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
