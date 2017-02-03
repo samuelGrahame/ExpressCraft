@@ -9,44 +9,29 @@ namespace ExpressCraft
     {
         public InputDialogNumber(string title, string question, int size) : base(title, size, question)
         {
-            var tb = new TextBlock(question, size - 25);
-            tb.ComputeString();
-
-            if( !tb.ElelemtsOverMax ) {
-                size = (int)tb.MaxCalculatedWidth + 65 + 37;
-                if( size < Settings.MessageFormMinimumWidthInPx )
-                    size = Settings.MessageFormMinimumWidthInPx;
-            }
-            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
         }
     }
 
 
     public class InputDialogText : InputDialogBase
     {
-        public InputDialogText(string title, string question, int size = 360) : base(title, size, question)
+        public InputDialogText(string title, string question) : this(title, question, 360){}
+
+        public InputDialogText(string title, string question, int size) : base(title, size, question)
         {
             var input = Input("inputcontrol", InputType.Text);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = (ev) =>
+            {
+                Result = input.Value;
+            };
+
             base.AnswerDiv.AppendChild(input);
             Create(base.QuestionSize + 25 + 60);
         }
 
-        private string Result { get; set; }
-
-        protected override void OnClosing() {
-            Result = ((HTMLInputElement)Document.GetElementById("DialogAnswerBox")).Value;
-            base.OnClosing();
-        }
-
-        protected override void OnClosed() {
-            Window.Alert(Result);
-            base.OnClosed();
-        }
+        protected string Result { get; private set; }
     }
 
     public class InputDialogBase : DialogForm

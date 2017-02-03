@@ -6961,7 +6961,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.$initialize();
             ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
-
             var input = ExpressCraft.Control.input("inputcontrol", "text");
             input.id = "DialogAnswerBox";
             ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");

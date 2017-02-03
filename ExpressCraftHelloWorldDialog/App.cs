@@ -23,7 +23,12 @@ namespace ExpressCraftHelloWorldDialog
                 Text = "dialog test",
                 ItemClick = (ev) =>
                 {
-                    (new InputDialogText("Question", "This is a question. This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.")).ShowDialog();
+                    var dlg = new InputDialogText("Question", "This is a question");
+                    dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () =>
+                    {
+                        Window.Alert(dlg.Result);
+
+                    } ));
                 }
             };
 
