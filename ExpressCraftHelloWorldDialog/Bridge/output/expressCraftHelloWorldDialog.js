@@ -90,10 +90,10 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
     Bridge.apply($asm.$.ExpressCraftHelloWorldDialog.App, {
         f1: function (ev) {
 
-            var dlg = new ExpressCraft.InputDialogWeek.ctor("Question", "Is this a question?");
-            dlg.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, function () {
-                window.alert(dlg.getResult());
-            })]);
+            //var dlg = new InputDialogWeek("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result);
+            //}));
 
             //var dlg = new InputDialogMonth("Question", "Is this a question?");
             //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
