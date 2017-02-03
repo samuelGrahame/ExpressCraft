@@ -1,7 +1,7 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.7.0
+ * @compiler Bridge.NET 15.6.0
  */
 Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
     "use strict";
@@ -89,7 +89,53 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
 
     Bridge.apply($asm.$.ExpressCraftHelloWorldDialog.App, {
         f1: function (ev) {
-            (new ExpressCraft.InputDialogText("Question", "This is a question. This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.This is a question.")).showDialog();
+
+            var dlg = new ExpressCraft.InputDialogWeek.ctor("Question", "Is this a question?");
+            dlg.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, function () {
+                window.alert(dlg.getResult());
+            })]);
+
+            //var dlg = new InputDialogMonth("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result.ToDateString());
+            //}));
+
+
+            //var dlg = new InputDialogEmail("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () =>
+            //{
+            //    Window.Alert(dlg.Result);
+            //}));
+
+            //var dlg = new InputDialogDateTimeLocal("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result.ToDateString());
+            //}));
+
+            //var dlg = new InputDialogCheckbox("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result.ToString());
+            //}));
+
+            //var dlg = new InputDialogColour("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result);
+            //}));
+
+            //var dlg = new InputDialogDate("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result.ToDateString());
+            //}));
+
+            //var dlg = new InputDialogNumber("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert((dlg.Result + 1).ToString());
+            //}));
+
+            //var dlg = new InputDialogText("Question", "Is this a question?");
+            //dlg.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+            //    Window.Alert(dlg.Result);
+            //}));
         },
         f2: function (ev) {
             (new ExpressCraft.MessageBoxForm.ctor("Hello World!", ExpressCraft.MessageBoxLayout.Error)).showDialog();
