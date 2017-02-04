@@ -7,7 +7,7 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.6.0
+ * @compiler Bridge.NET 15.7.0
  */
 Bridge.assembly("ExpressCraft", function ($asm, globals) {
     "use strict";
@@ -653,7 +653,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.parentTable = parentTable;
             this.rowIndex = rowIndex;
             if (rowIndex === -1) {
-                this.batchData = System.Array.init(parentTable.getColumnCount(), null);
+                this.batchData = System.Array.init(parentTable.getColumnCount(), null, Object);
             }
         },
         getItem: function (columnIndex) {
@@ -847,7 +847,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             for (var x = 0; x < colLength; x = (x + 1) | 0) {
                 var col = this.columns.getItem(x);
-                var DataCells = System.Array.init(rowLength, null);
+                var DataCells = System.Array.init(rowLength, null, Object);
 
                 if (x === 0) {
                     for (var y = 0; y < rowLength; y = (y + 1) | 0) {
@@ -1008,6 +1008,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (encoding === void 0) { encoding = ""; }
 
             this.$initialize();
+            Object.call(this);
             this._title = title;
             this._source = source;
             this._encoding = encoding;
@@ -1383,7 +1384,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     if (addDiff > 0) {
                         var data = System.Array.init(addDiff, function (){
                             return Bridge.getDefaultValue(T);
-                        });
+                        }, T);
                         for (var i = 0; i < addDiff; i = (i + 1) | 0) {
                             data[i] = this.defaultValue;
                         }
@@ -2149,7 +2150,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.computedHeight = this.getFontSize(ExpressCraft.Settings.defaultFont) * this.linesComputed;
         },
         getFontSize: function (fontWithSize) {
-            var strs = System.String.split(fontWithSize, [32].map(function(i) {{ return String.fromCharCode(i); }}), null, 1);
+            var strs = System.String.split(fontWithSize, System.Array.init([32], System.Char).map(function(i) {{ return String.fromCharCode(i); }}), null, 1);
 
             for (var i = 0; i < strs.length; i = (i + 1) | 0) {
                 if (System.String.endsWith(strs[i], "pt")) {
@@ -4188,7 +4189,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.contextMenu = new ExpressCraft.ContextMenu();
 
-            this.contextMenu.contextItems.addRange([new ExpressCraft.ContextItem.$ctor1("Sort Ascending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f8)), new ExpressCraft.ContextItem.$ctor1("Sort Descending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f9)), new ExpressCraft.ContextItem.$ctor1("Clear All Sorting", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f10), true), new ExpressCraft.ContextItem.$ctor2("Group By This Column"), new ExpressCraft.ContextItem.$ctor2("Hide Group By Box", true), new ExpressCraft.ContextItem.$ctor2("Hide This Column"), new ExpressCraft.ContextItem.$ctor2("View Columns"), new ExpressCraft.ContextItem.$ctor2("Save Column Layout"), new ExpressCraft.ContextItem.$ctor2("Best Fit"), new ExpressCraft.ContextItem.$ctor2("Best Fit (all columns)", true), new ExpressCraft.ContextItem.$ctor2("Filter Editor..."), new ExpressCraft.ContextItem.$ctor2("Show Find Panel"), new ExpressCraft.ContextItem.$ctor2("Show Auto Filter Row"), new ExpressCraft.ContextItem.$ctor1("Select All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f11)), new ExpressCraft.ContextItem.$ctor1("Unselect All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f12))]);
+            this.contextMenu.contextItems.addRange(System.Array.init([new ExpressCraft.ContextItem.$ctor1("Sort Ascending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f8)), new ExpressCraft.ContextItem.$ctor1("Sort Descending", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f9)), new ExpressCraft.ContextItem.$ctor1("Clear All Sorting", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f10), true), new ExpressCraft.ContextItem.$ctor2("Group By This Column"), new ExpressCraft.ContextItem.$ctor2("Hide Group By Box", true), new ExpressCraft.ContextItem.$ctor2("Hide This Column"), new ExpressCraft.ContextItem.$ctor2("View Columns"), new ExpressCraft.ContextItem.$ctor2("Save Column Layout"), new ExpressCraft.ContextItem.$ctor2("Best Fit"), new ExpressCraft.ContextItem.$ctor2("Best Fit (all columns)", true), new ExpressCraft.ContextItem.$ctor2("Filter Editor..."), new ExpressCraft.ContextItem.$ctor2("Show Find Panel"), new ExpressCraft.ContextItem.$ctor2("Show Auto Filter Row"), new ExpressCraft.ContextItem.$ctor1("Select All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f11)), new ExpressCraft.ContextItem.$ctor1("Unselect All", Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f12))], ExpressCraft.ContextItem));
 
             this.content.oncontextmenu = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f13);
 
@@ -4280,13 +4281,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.visibleRowHandles = new (System.Collections.Generic.List$1(System.Int32))();
 
             if (this._dataSource != null) {
-                this._dataSource.removeOnDataSourceChanged(Bridge.fn.bind(this, this.dataSource_OnDataSourceChanged));
+                this._dataSource.removeOnDataSourceChanged(Bridge.fn.cacheBind(this, this.dataSource_OnDataSourceChanged));
             }
 
             this._dataSource = value;
 
             if (this._dataSource != null) {
-                this._dataSource.addOnDataSourceChanged(Bridge.fn.bind(this, this.dataSource_OnDataSourceChanged));
+                this._dataSource.addOnDataSourceChanged(Bridge.fn.cacheBind(this, this.dataSource_OnDataSourceChanged));
 
                 if (this.columns.getCount() === 0 && this.autoGenerateColumnsFromSource) {
                     var sw = System.Diagnostics.Stopwatch.startNew();
@@ -4578,7 +4579,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (length === 0) {
                 this.selectedRows.clearAll();
             } else {
-                var index = System.Array.init(length, 0);
+                var index = System.Array.init(length, 0, System.Int32);
                 for (var i = 0; i < length; i = (i + 1) | 0) {
                     index[i] = this.getDataSourceRow(i);
                 }
@@ -6429,7 +6430,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.$initialize();
             ExpressCraft.DialogForm.ctor.call(this);
-            this.prevData = System.Array.init(_dataRow.parentTable.getColumnCount(), null);
+            this.prevData = System.Array.init(_dataRow.parentTable.getColumnCount(), null, Object);
 
             for (var i = 0; i < _dataRow.parentTable.getColumnCount(); i = (i + 1) | 0) {
                 this.prevData[i] = _dataRow.getItem(i);
