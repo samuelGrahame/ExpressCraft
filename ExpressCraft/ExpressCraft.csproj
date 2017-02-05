@@ -89,6 +89,7 @@
     <Content Include="Bridge\output\readme.txt" />
     <Content Include="Bridge\www\demo.html" />
     <Content Include="Bridge\output\jquery-1.12.0.min.js" />
+    <Content Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bridge\bridge.json" />
@@ -104,7 +105,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Bridge.jQuery2, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bridge.jQuery.2.9.2\lib\net40\Bridge.jQuery2.dll</HintPath>
+      <HintPath>..\packages\Bridge.jQuery.2.9.3\lib\net40\Bridge.jQuery2.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

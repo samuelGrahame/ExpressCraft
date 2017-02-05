@@ -6668,8 +6668,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.setHeight$1(ExpressCraft.Helper.toPx$1(height));
             this.allowSizeChange = false;
-
-
         }
     });
 
@@ -6918,26 +6916,353 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraft.InputDialogNumber", {
+    Bridge.define("ExpressCraft.InputDialogCheckbox", {
         inherits: [ExpressCraft.InputDialogBase],
-        ctor: function (title, question, size) {
+        config: {
+            properties: {
+                Result: false
+            }
+        },
+        /**
+         * Creates a Question Dialog with a checkbox
+             The Result Property contains a boolean value of the checkbox state
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogCheckbox
+         * @memberof ExpressCraft.InputDialogCheckbox
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogCheckbox.$ctor1.call(this, title, question, 360);
+
+        },
+        /**
+         * Creates a Question Dialog with a checkbox
+             The Result Property contains a boolean value of the checkbox state
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogCheckbox
+         * @memberof ExpressCraft.InputDialogCheckbox
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
             this.$initialize();
             ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
-            var tb = new ExpressCraft.TextBlock(question, ((size - 25) | 0));
-            tb.computeString();
+            var input = ExpressCraft.Control.input("inputcontrol", "checkbox");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "40px");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.checked);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 40) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
 
-            if (!tb.elelemtsOverMax) {
-                size = (((Bridge.Int.clip32(tb.maxCalculatedWidth) + 65) | 0) + 37) | 0;
-                if (size < ExpressCraft.Settings.messageFormMinimumWidthInPx) {
-                    size = ExpressCraft.Settings.messageFormMinimumWidthInPx;
-                }
+    Bridge.define("ExpressCraft.InputDialogColour", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
             }
-            if (tb.computedHeight > ExpressCraft.Settings.messageFormTextMaximumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMaximumHeightInPx;
+        },
+        /**
+         * Creates a Question Dialog with a colour selector
+             The Result Property contains the HexCode for the selected colour
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogColour
+         * @memberof ExpressCraft.InputDialogColour
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogColour.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a colour selector
+             The Result Property contains the HexCode for the selected colour
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogColour
+         * @memberof ExpressCraft.InputDialogColour
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "color");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "40px");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.value);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 40) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogDate", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
             }
-            if (tb.computedHeight < ExpressCraft.Settings.messageFormTextMinimumHeightInPx) {
-                tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
+        },
+        /**
+         * Creates a Question Dialog with a Date Selector
+             The Result Property contains the selected Date
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogDate
+         * @memberof ExpressCraft.InputDialogDate
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogDate.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a Date Selector
+             The Result Property contains the selected Date
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogDate
+         * @memberof ExpressCraft.InputDialogDate
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "date");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.valueAsDate);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogDateTimeLocal", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
+            },
+            init: function () {
+                this.Result = new Date(-864e13);
             }
+        },
+        /**
+         * Creates a Question Dialog with a Date Selector
+             The Result Property contains the selected Date
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogDateTimeLocal
+         * @memberof ExpressCraft.InputDialogDateTimeLocal
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogDateTimeLocal.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a Date Selector
+             The Result Property contains the selected Date
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogDateTimeLocal
+         * @memberof ExpressCraft.InputDialogDateTimeLocal
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            this.setResult(new Date());
+            var input = ExpressCraft.Control.input("inputcontrol", "datetime-local");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(Bridge.Date.parseExact(input.value, "yyyy-MM-ddTHH:mm", System.Globalization.CultureInfo.invariantCulture));
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogEmail", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
+            }
+        },
+        /**
+         * Creates a Question Dialog with an email input
+             The Result Property contains the Entered email address
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogEmail
+         * @memberof ExpressCraft.InputDialogEmail
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogEmail.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with an email input
+             The Result Property contains the Entered email
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogEmail
+         * @memberof ExpressCraft.InputDialogEmail
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "email");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                //todo css for email input not showing up
+                //todo could always validate email here
+                this.setResult(input.value);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogMonth", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
+            }
+        },
+        /**
+         * Creates a Question Dialog with a Month input
+             The Result Property contains the Entered Month
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogMonth
+         * @memberof ExpressCraft.InputDialogMonth
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogMonth.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a Month input
+             The Result Property contains the Entered Month
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogMonth
+         * @memberof ExpressCraft.InputDialogMonth
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "month");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.valueAsDate);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogNumber", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: 0
+            }
+        },
+        /**
+         * Creates a Question Dialog with a Number Selector
+             The Result Property contains the selected value
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogNumber
+         * @memberof ExpressCraft.InputDialogNumber
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogNumber.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a Number Selector
+             The Result Property contains the selected value
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogNumber
+         * @memberof ExpressCraft.InputDialogNumber
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "number");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.valueAsNumber);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
         }
     });
 
@@ -6948,25 +7273,94 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 Result: null
             }
         },
-        ctor: function (title, question, size) {
-            if (size === void 0) { size = 360; }
-
+        /**
+         * Creates a Question Dialog with a Text input
+             The Result Property contains the Entered Text
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogText
+         * @memberof ExpressCraft.InputDialogText
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogText.$ctor1.call(this, title, question, 360);
+        },
+        /**
+         * Creates a Question Dialog with a Text input
+             The Result Property contains the Entered Text
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogText
+         * @memberof ExpressCraft.InputDialogText
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
             this.$initialize();
             ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
-
             var input = ExpressCraft.Control.input("inputcontrol", "text");
             input.id = "DialogAnswerBox";
             ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.value);
+            });
             this.getAnswerDiv().appendChild(input);
-            this.create(((((this.getQuestionSize() + 25) | 0) + 60) | 0));
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
+        }
+    });
+
+    Bridge.define("ExpressCraft.InputDialogWeek", {
+        inherits: [ExpressCraft.InputDialogBase],
+        config: {
+            properties: {
+                Result: null
+            }
         },
-        onClosing: function () {
-            this.setResult(Bridge.cast(document.getElementById("DialogAnswerBox"), HTMLInputElement).value);
-            ExpressCraft.InputDialogBase.prototype.onClosing.call(this);
+        /**
+         * Creates a Question Dialog with a Week input
+             The Result Property contains the Entered week
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogWeek
+         * @memberof ExpressCraft.InputDialogWeek
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @return  {void}
+         */
+        ctor: function (title, question) {
+            ExpressCraft.InputDialogWeek.$ctor1.call(this, title, question, 360);
         },
-        onClosed: function () {
-            window.alert(this.getResult());
-            ExpressCraft.InputDialogBase.prototype.onClosed.call(this);
+        /**
+         * Creates a Question Dialog with a Week input
+             The Result Property contains the Entered Week
+         *
+         * @instance
+         * @public
+         * @this ExpressCraft.InputDialogWeek
+         * @memberof ExpressCraft.InputDialogWeek
+         * @param   {string}    title       The message that will appear in the title bar of the dialog
+         * @param   {string}    question    The message that will appear about the input box on the dialog
+         * @param   {number}    size        The width of this dialog. The default size is 360
+         * @return  {void}
+         */
+        $ctor1: function (title, question, size) {
+            this.$initialize();
+            ExpressCraft.InputDialogBase.ctor.call(this, title, size, question);
+            var input = ExpressCraft.Control.input("inputcontrol", "week");
+            input.id = "DialogAnswerBox";
+            ExpressCraft.Helper.setBounds(input, "10px", "0px", "90%", "auto");
+            input.onchange = Bridge.fn.bind(this, function (ev) {
+                this.setResult(input.value);
+            });
+            this.getAnswerDiv().appendChild(input);
+            this.create(((((((this.getQuestionSize() + 25) | 0) + 25) | 0) + 78) | 0));
         }
     });
 });

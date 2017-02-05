@@ -1,66 +1,332 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Globalization;
+using Bridge;
 using Bridge.Html5;
 
 namespace ExpressCraft
 {
-    class InputDialogNumber : InputDialogBase
+    public class InputDialogCheckbox : InputDialogBase
     {
+
+        /// <summary>
+        ///     Creates a Question Dialog with a checkbox
+        ///     The Result Property contains a boolean value of the checkbox state
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogCheckbox(string title, string question) : this(title, question, 360)
+        {
+            
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a checkbox
+        ///     The Result Property contains a boolean value of the checkbox state
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogCheckbox(string title, string question, int size) : base(title, size, question)
+        {
+            var input = Input("inputcontrol", InputType.Checkbox);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "40px");
+            input.OnChange = ev => {
+                Result = input.Checked;
+            };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 40 + 25 + 78);
+        }
+
+        public bool Result { get; private set; }
+    }
+
+    public class InputDialogColour : InputDialogBase
+    {
+        /// <summary>
+        ///     Creates a Question Dialog with a colour selector
+        ///     The Result Property contains the HexCode for the selected colour
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogColour(string title, string question) : this(title, question, 360)
+        {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a colour selector
+        ///     The Result Property contains the HexCode for the selected colour
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogColour(string title, string question, int size) : base(title, size, question)
+        {
+            var input = Input("inputcontrol", InputType.Color);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "40px");
+            input.OnChange = ev => { Result = input.Value; };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 40 + 25 + 78);
+        }
+
+        public string Result { get; private set; }
+    }
+
+    public class InputDialogDate : InputDialogBase
+    {
+        /// <summary>
+        ///     Creates a Question Dialog with a Date Selector
+        ///     The Result Property contains the selected Date
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogDate(string title, string question) : this(title, question, 360)
+        {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Date Selector
+        ///     The Result Property contains the selected Date
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogDate(string title, string question, int size) : base(title, size, question)
+        {
+            var input = Input("inputcontrol", InputType.Date);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev => { Result = input.ValueAsDate; };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
+        }
+
+        public Date Result { get; private set; }
+    }
+
+
+    public class InputDialogDateTimeLocal : InputDialogBase {
+        /// <summary>
+        ///     Creates a Question Dialog with a Date Selector
+        ///     The Result Property contains the selected Date
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogDateTimeLocal(string title, string question) : this(title, question, 360) {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Date Selector
+        ///     The Result Property contains the selected Date
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogDateTimeLocal(string title, string question, int size) : base(title, size, question)
+        {
+            Result = DateTime.Now;
+            var input = Input("inputcontrol", InputType.DateTimeLocal);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev =>
+            {
+                Result = DateTime.ParseExact(input.Value, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+            };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
+        }
+
+        public DateTime Result
+        {
+            get; private set;
+        }
+    }
+
+    public class InputDialogEmail : InputDialogBase {
+        /// <summary>
+        ///     Creates a Question Dialog with an email input
+        ///     The Result Property contains the Entered email address
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogEmail(string title, string question) : this(title, question, 360) {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with an email input
+        ///     The Result Property contains the Entered email
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogEmail(string title, string question, int size) : base(title, size, question) {
+            var input = Input("inputcontrol", InputType.Email);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev => {
+                //todo css for email input not showing up
+                //todo could always validate email here
+                Result = input.Value;
+            };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
+        }
+
+        public string Result
+        {
+            get; private set;
+        }
+    }
+
+    public class InputDialogWeek : InputDialogBase {
+        /// <summary>
+        ///     Creates a Question Dialog with a Week input
+        ///     The Result Property contains the Entered week
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogWeek(string title, string question) : this(title, question, 360) {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Week input
+        ///     The Result Property contains the Entered Week
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogWeek(string title, string question, int size) : base(title, size, question) {
+            var input = Input("inputcontrol", InputType.Week);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev => {
+                Result = input.Value;
+            };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
+        }
+
+        public string Result
+        {
+            get; private set;
+        }
+    }
+
+    public class InputDialogMonth : InputDialogBase {
+        /// <summary>
+        ///     Creates a Question Dialog with a Month input
+        ///     The Result Property contains the Entered Month
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogMonth(string title, string question) : this(title, question, 360) {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Month input
+        ///     The Result Property contains the Entered Month
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogMonth(string title, string question, int size) : base(title, size, question) {
+            var input = Input("inputcontrol", InputType.Month);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev => {
+                Result = input.ValueAsDate;
+            };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
+        }
+
+        public Date Result
+        {
+            get; private set;
+        }
+    }
+
+
+    public class InputDialogNumber : InputDialogBase
+    {
+        /// <summary>
+        ///     Creates a Question Dialog with a Number Selector
+        ///     The Result Property contains the selected value
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogNumber(string title, string question) : this(title, question, 360)
+        {
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Number Selector
+        ///     The Result Property contains the selected value
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogNumber(string title, string question, int size) : base(title, size, question)
         {
-            var tb = new TextBlock(question, size - 25);
-            tb.ComputeString();
-
-            if( !tb.ElelemtsOverMax ) {
-                size = (int)tb.MaxCalculatedWidth + 65 + 37;
-                if( size < Settings.MessageFormMinimumWidthInPx )
-                    size = Settings.MessageFormMinimumWidthInPx;
-            }
-            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
-                tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
+            var input = Input("inputcontrol", InputType.Number);
+            input.Id = "DialogAnswerBox";
+            input.SetBounds("10px", "0px", "90%", "auto");
+            input.OnChange = ev => { Result = input.ValueAsNumber; };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
         }
+
+        public double Result { get; private set; }
     }
 
 
     public class InputDialogText : InputDialogBase
     {
-        public InputDialogText(string title, string question, int size = 360) : base(title, size, question)
+        /// <summary>
+        ///     Creates a Question Dialog with a Text input
+        ///     The Result Property contains the Entered Text
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        public InputDialogText(string title, string question) : this(title, question, 360)
         {
-            
+        }
+
+        /// <summary>
+        ///     Creates a Question Dialog with a Text input
+        ///     The Result Property contains the Entered Text
+        /// </summary>
+        /// <param name="title">The message that will appear in the title bar of the dialog</param>
+        /// <param name="question">The message that will appear about the input box on the dialog</param>
+        /// <param name="size">The width of this dialog. The default size is 360</param>
+        public InputDialogText(string title, string question, int size) : base(title, size, question)
+        {
             var input = Input("inputcontrol", InputType.Text);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            base.AnswerDiv.AppendChild(input);
-            Create(base.QuestionSize + 25 + 60);
+            input.OnChange = ev => { Result = input.Value; };
+            AnswerDiv.AppendChild(input);
+            Create(QuestionSize + 25 + 25 + 78);
         }
 
-        private string Result { get; set; }
-
-        protected override void OnClosing() {
-            Result = ((HTMLInputElement)Document.GetElementById("DialogAnswerBox")).Value;
-            base.OnClosing();
-        }
-
-        protected override void OnClosed() {
-            Window.Alert(Result);
-            base.OnClosed();
-        }
+        public string Result { get; private set; }
     }
+
 
     public class InputDialogBase : DialogForm
     {
         protected InputDialogBase(string title, int width, string question) : base(title)
         {
-            base.Width = width.ToPx();
+            Width = width.ToPx();
             Wrapper = Div();
             QuestionDiv = Div();
             AnswerDiv = Div();
-            _buttonCollection = new List<SimpleDialogButton>() {
-                new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Accept"},
-                new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel"}
+            _buttonCollection = new List<SimpleDialogButton>
+            {
+                new SimpleDialogButton(this, DialogResultEnum.OK) {Text = "Accept"},
+                new SimpleDialogButton(this, DialogResultEnum.Cancel) {Text = "Cancel"}
             };
 
             Wrapper.Style.OverflowY = Overflow.Hidden;
@@ -78,66 +344,38 @@ namespace ExpressCraft
             var tb = new TextBlock(question, width - 25);
             tb.ComputeString();
 
-            if( !tb.ElelemtsOverMax ) {
-                width = (int)tb.MaxCalculatedWidth + 65 + 37;
-                if( width < Settings.MessageFormMinimumWidthInPx )
+            if (!tb.ElelemtsOverMax)
+            {
+                width = (int) tb.MaxCalculatedWidth + 65 + 37;
+                if (width < Settings.MessageFormMinimumWidthInPx)
                     width = Settings.MessageFormMinimumWidthInPx;
             }
-            if( tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx )
+            if (tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-            if( tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx )
+            if (tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
 
             QuestionDiv.InnerHTML = tb.ComputedSource;
             QuestionSize = Convert.ToInt32(tb.ComputedHeight);
         }
 
+        protected int QuestionSize { get; set; }
+        private HTMLDivElement Wrapper { get; }
+        protected HTMLDivElement QuestionDiv { get; set; }
+        protected HTMLDivElement AnswerDiv { get; set; }
+        protected HTMLDivElement ImageDiv { get; set; }
+
         protected void Create(int height)
         {
             Wrapper.AppendChild(QuestionDiv);
             Wrapper.AppendChild(new HTMLBRElement());
             Wrapper.AppendChild(AnswerDiv);
-            this.Body.AppendChild(Wrapper);
+            Body.AppendChild(Wrapper);
 
-            this.ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
+            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
 
-            base.Height = height.ToPx();
-            base.AllowSizeChange = false;
-            
-            
+            Height = height.ToPx();
+            AllowSizeChange = false;
         }
-
-        protected int QuestionSize { get; set; }
-        private HTMLDivElement Wrapper { get;set; }
-        protected HTMLDivElement QuestionDiv { get; set; }
-        protected HTMLDivElement AnswerDiv { get; set; }
-        protected HTMLDivElement ImageDiv { get; set; }
     }
-
-
-
-
-
-    //public class InputDialog : DialogForm
-    //{
-    //    private InputType _inputType;
-
-
-    //    /// <summary>
-    //    /// Creates a user input dialog
-    //    /// </summary>
-    //    /// <param name="size">The size of the dialog, in px</param>
-    //    /// <param name="inputType">What type of user input the dialog contains</param>
-    //    public InputDialog(Size size , InputType inputType)
-    //    {
-    //        _inputType = inputType;
-    //        Width = size.Width.ToPx();
-    //        Height = size.Height.ToPx();
-    //    }
-    //}
-
-    //public enum InputType
-    //{
-        
-    //}
 }
