@@ -9,12 +9,14 @@ namespace ExpressCraftDesign
 {
 	public class StudioForm : Form
 	{
-		public RibbonControl ribbonControl;
+		public RibbonControl ribbonControl1;
 		public TabControl tabControl1;
+		public SplitControlContainer splitControlContainer1;
+		public GridView gridView1;
 
 		public StudioForm()
 		{
-			ribbonControl = new RibbonControl(RibbonControl.RibbonType.Compact);
+			ribbonControl1 = new RibbonControl(RibbonControl.RibbonType.Compact);
 
 			var ribbonPage = new RibbonPage("Actions");
 			ribbonPage.AddRibbonGroups(new RibbonGroup("Project",
@@ -31,7 +33,7 @@ namespace ExpressCraftDesign
 					{
 						var nfd = new NewFileDialog();
 						nfd.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
-							var stcp = new SourceTabControlPage() { Filename = nfd.Value.Text.HtmlEscape(), Caption = (nfd.Value.Text + ".xml").HtmlEscape() };
+							var stcp = new FormDesignerTabControlPage() { Filename = nfd.Value.Text.HtmlEscape(), Caption = (nfd.Value.Text + ".xml").HtmlEscape() };
 							this.LinkchildToForm(stcp.splitControlContainer1);
 							tabControl1.AddPages(stcp);
 							tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
@@ -46,12 +48,7 @@ namespace ExpressCraftDesign
 					if(tabControl1.SelectedIndex != -1)
 					{
 						// get data;
-						var tabpage = tabControl1.TabPages[tabControl1.SelectedIndex].As<SourceTabControlPage>();
-						var code = tabpage.CodeEdtor.Source;
-
-						var xmlf = CreateFormFromXML(code);
-
-						xmlf.Show();
+						
 					}
 					else
 					{
@@ -60,35 +57,45 @@ namespace ExpressCraftDesign
 				}
 			}));
 
-			ribbonControl.AddRibbonPages(ribbonPage);
+			ribbonControl1.AddRibbonPages(ribbonPage);
+
+			splitControlContainer1 = new SplitControlContainer();
+
+			splitControlContainer1.SplitterPosition = 176;
+			splitControlContainer1.SetBounds(0, 128, "100%", "calc(100% - 128px)");
 
 			tabControl1 = new TabControl();
-			tabControl1.SetBounds(0, 128, "100%", "calc(100% - 128px)");
+			
+			tabControl1.SetBoundsFull();
 			tabControl1.Content.Style.BorderTopStyle = Bridge.Html5.BorderStyle.Solid;
 			tabControl1.Content.Style.BorderTopColor = "#C3C3C3";
 			tabControl1.Content.Style.BorderTopWidth = Bridge.Html5.BorderWidth.Thin;
 
+			splitControlContainer1.Panel2.AppendChild(tabControl1);
 
-			this.Body.AppendChildren(ribbonControl, tabControl1);
+			gridView1 = new GridView(false, true);
+
+			gridView1.SetBoundsFull();
+
+			splitControlContainer1.Panel1.AppendChild(gridView1);
+
+			this.Body.AppendChildren(ribbonControl1, splitControlContainer1);
 
 			this.SetWindowState(WindowState.Maximized);
 		}
 	}
 
-	public class SourceTabControlPage : TabControlPage
+	public class FormDesignerTabControlPage : TabControlPage
 	{
 		public string Filename { get; set; }
-		public SplitControlContainer splitControlContainer1;
-		public AceCodeEditor CodeEdtor;
+		public SplitControlContainer splitControlContainer1;		
 
-		public SourceTabControlPage()
+		public FormDesignerTabControlPage()
 		{
 			splitControlContainer1 = new SplitControlContainer();
 			splitControlContainer1.SetBoundsFull();
-
-			splitControlContainer1.Panel1.AppendChild((CodeEdtor = new AceCodeEditor(AceModeTypes.xml) { Bounds = new Vector4(0, 0, "100%", "100%") }));
-
-			splitControlContainer1.SplitterPosition = 500;
+			
+			splitControlContainer1.SplitterPosition = 150;
 
 			this.AppendChild(splitControlContainer1);
 		}

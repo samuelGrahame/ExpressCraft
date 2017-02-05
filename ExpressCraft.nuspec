@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.0.6</version>
+    <version>0.0.0.7</version>
     <title>ExpressCraft</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -13,11 +13,11 @@
     <copyright>Copyright 2017</copyright>
     <tags>Bridge Javascript Forms</tags>
 	<dependencies>
-		<dependency id="Bridge" version="[15.6.0]"/>
-		<dependency id="Bridge.Core" version="[15.6.0]"/>
-		<dependency id="Bridge.Html5" version="[15.6.0]"/>
+		<dependency id="Bridge" version="[15.7.0]"/>
+		<dependency id="Bridge.Core" version="[15.7.0]"/>
+		<dependency id="Bridge.Html5" version="[15.7.0]"/>
 		<dependency id="Bridge.jQuery" version="[2.9.2]"/>
-		<dependency id="Bridge.Min" version="[15.6.0]"/>
+		<dependency id="Bridge.Min" version="[15.7.0]"/>
 	  </dependencies>
   </metadata>
   <files>

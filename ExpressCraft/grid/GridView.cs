@@ -1067,12 +1067,13 @@ namespace ExpressCraft
 			int uboundRowCount = RawLeftCellCount - 1;
 			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 			{
+				//(x == uboundRowCount ? 0 : 1)
 				var gcol = Columns[x];
                 var colIndex = x;
 				var apparence = gcol.HeadingApparence;
 
 				var col = Label(gcol.Caption,
-					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX) + 1, 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
+					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
 					apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
                 
                 if (gcol.SortedMode != GridViewSortMode.None)

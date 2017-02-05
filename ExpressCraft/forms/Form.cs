@@ -30,18 +30,6 @@ namespace ExpressCraft
 		public bool AllowMoveChange = true;
 
 		public static bool InExternalMouseEvent = false;
-
-		public static Form CreateFormFromXML(string source)
-		{
-			var x = new Form();
-			
-			if(string.IsNullOrWhiteSpace(source))
-			{
-				
-			}
-
-			return x;
-		}
 		
 		public bool ShowMinimize
 		{

@@ -17,6 +17,29 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraftDesign.FormDesignerTabControlPage", {
+        inherits: [ExpressCraft.TabControlPage],
+        splitControlContainer1: null,
+        config: {
+            properties: {
+                Filename: null
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.TabControlPage.ctor.call(this);
+            this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
+            ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer1);
+
+            this.splitControlContainer1.setSplitterPosition(150);
+
+            ExpressCraft.Helper.appendChild(this, this.splitControlContainer1);
+        },
+        render: function () {
+            ExpressCraft.TabControlPage.prototype.render.call(this);
+        }
+    });
+
     Bridge.define("ExpressCraftDesign.NewFileDialog", {
         inherits: [ExpressCraft.DialogForm],
         value: null,
@@ -73,42 +96,16 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraftDesign.SourceTabControlPage", {
-        inherits: [ExpressCraft.TabControlPage],
-        splitControlContainer1: null,
-        codeEdtor: null,
-        config: {
-            properties: {
-                Filename: null
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.TabControlPage.ctor.call(this);
-            this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
-            ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer1);
-
-            ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, ((this.codeEdtor = Bridge.merge(new ExpressCraft.AceCodeEditor(ExpressCraft.AceModeTypes.xml), {
-                setBounds: new ExpressCraft.Vector4.$ctor1(0, 0, "100%", "100%")
-            } ))));
-
-            this.splitControlContainer1.setSplitterPosition(500);
-
-            ExpressCraft.Helper.appendChild(this, this.splitControlContainer1);
-        },
-        render: function () {
-            ExpressCraft.TabControlPage.prototype.render.call(this);
-        }
-    });
-
     Bridge.define("ExpressCraftDesign.StudioForm", {
         inherits: [ExpressCraft.Form],
-        ribbonControl: null,
+        ribbonControl1: null,
         tabControl1: null,
+        splitControlContainer1: null,
+        gridView1: null,
         ctor: function () {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
-            this.ribbonControl = new ExpressCraft.RibbonControl(ExpressCraft.RibbonControl.RibbonType.Compact);
+            this.ribbonControl1 = new ExpressCraft.RibbonControl(ExpressCraft.RibbonControl.RibbonType.Compact);
 
             var ribbonPage = new ExpressCraft.RibbonPage("Actions");
             ribbonPage.addRibbonGroups([new ExpressCraft.RibbonGroup.$ctor1("Project", [Bridge.merge(new ExpressCraft.RibbonButton("New Form"), {
@@ -117,16 +114,29 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                 onItemClick: Bridge.fn.bind(this, $asm.$.ExpressCraftDesign.StudioForm.f2)
             } )])]);
 
-            this.ribbonControl.addRibbonPages([ribbonPage]);
+            this.ribbonControl1.addRibbonPages([ribbonPage]);
+
+            this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
+
+            this.splitControlContainer1.setSplitterPosition(176);
+            ExpressCraft.Helper.setBounds$1(this.splitControlContainer1, 0, 128, "100%", "calc(100% - 128px)");
 
             this.tabControl1 = new ExpressCraft.TabControl();
-            ExpressCraft.Helper.setBounds$1(this.tabControl1, 0, 128, "100%", "calc(100% - 128px)");
+
+            ExpressCraft.Helper.setBoundsFull$1(this.tabControl1);
             this.tabControl1.content.style.borderTopStyle = "solid";
             this.tabControl1.content.style.borderTopColor = "#C3C3C3";
             this.tabControl1.content.style.borderTopWidth = "thin";
 
+            ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel2, this.tabControl1);
 
-            ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl, this.tabControl1]);
+            this.gridView1 = new ExpressCraft.GridView(false, true);
+
+            ExpressCraft.Helper.setBoundsFull$1(this.gridView1);
+
+            ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, this.gridView1);
+
+            ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl1, this.splitControlContainer1]);
 
             this.setWindowState(ExpressCraft.WindowState.Maximized);
         }
@@ -142,7 +152,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             } else {
                 var nfd = new ExpressCraftDesign.NewFileDialog();
                 nfd.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
-                    var stcp = Bridge.merge(new ExpressCraftDesign.SourceTabControlPage(), {
+                    var stcp = Bridge.merge(new ExpressCraftDesign.FormDesignerTabControlPage(), {
                         setFilename: ExpressCraft.Helper.htmlEscape$1(nfd.value.getText()),
                         setCaption: ExpressCraft.Helper.htmlEscape$1((System.String.concat(nfd.value.getText(), ".xml")))
                     } );
@@ -155,12 +165,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         f2: function (rb) {
             if (this.tabControl1.getSelectedIndex() !== -1) {
                 // get data;
-                var tabpage = this.tabControl1.getTabPages().getItem(this.tabControl1.getSelectedIndex());
-                var code = tabpage.codeEdtor.getSource();
 
-                var xmlf = ExpressCraft.Form.createFormFromXML(code);
-
-                xmlf.show();
             } else {
                 new ExpressCraft.MessageBoxForm.ctor("Please create a new form before trying to view the designer.", ExpressCraft.MessageBoxLayout.Information).showDialog();
             }

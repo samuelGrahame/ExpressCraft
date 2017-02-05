@@ -2797,15 +2797,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
 
             },
-            createFormFromXML: function (source) {
-                var x = new ExpressCraft.Form();
-
-                if (System.String.isNullOrWhiteSpace(source)) {
-
-                }
-
-                return x;
-            },
             midleOfAction: function () {
                 return ExpressCraft.Form.movingForm != null; // WindowHolderSelectionBox != null ||
             },
@@ -4746,11 +4737,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             var uboundRowCount = (RawLeftCellCount - 1) | 0;
             for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
+                //(x == uboundRowCount ? 0 : 1)
                 var gcol = this.columns.getItem(x1);
                 var colIndex = x1;
                 var apparence = gcol.headingApparence;
 
-                var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX) + 1, 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
+                var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
 
                 if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
                     var sortImage = ExpressCraft.Control.div();
