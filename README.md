@@ -8,7 +8,7 @@ Ribbon Control Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/Expres
 
 Grid View Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftGridView/Bridge/www/rawprev.html
 
-Design XML UI Designer (Not Finished): https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftDesign/Bridge/www/rawprev.html
+GUI Form Designer (Not Finished): https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftDesign/Bridge/www/rawprev.html
 
 # How to create a Form
 
