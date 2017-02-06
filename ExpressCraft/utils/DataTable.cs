@@ -340,7 +340,17 @@ namespace ExpressCraft
 				case DataType.Object:
 					return string.Format(formatString, (((DataColumnObject)this).Cells[rowIndex]));
 				case DataType.DateTime:
-					return string.Format(formatString, ((DataColumnDateTime)this).Cells[rowIndex]);
+					dynamic obj = ((DataColumnDateTime)this).Cells[rowIndex];
+					if(obj is DateTime)
+					{
+						return string.Format(formatString, (DateTime)obj);
+					}
+					DateTime d;
+					if(DateTime.TryParse(obj, out d))
+					{
+						return string.Format(formatString, d);
+					}
+					return string.Format(formatString, obj as string);
 				case DataType.String:
 					return string.Format(formatString, ((DataColumnString)this).Cells[rowIndex]);
 				case DataType.Integer:

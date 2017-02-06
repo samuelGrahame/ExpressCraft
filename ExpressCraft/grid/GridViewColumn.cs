@@ -17,7 +17,7 @@ namespace ExpressCraft
 		public GridViewCellApparence HeadingApparence = new GridViewCellApparence();
 		public GridViewCellApparence BodyApparence = new GridViewCellApparence();
 		public GridViewCellDisplay CellDisplay = null;
-		public GridViewSortMode SortedMode = GridViewSortMode.None;
+		public GridViewSortMode SortedMode = GridViewSortMode.None;		
 
 		public TextInput FilterEdit = null;
 

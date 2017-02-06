@@ -550,7 +550,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 case ExpressCraft.DataType.Object: 
                     return System.String.format(formatString, (Bridge.cast(this, ExpressCraft.DataColumnObject).cells.getItem(rowIndex)));
                 case ExpressCraft.DataType.DateTime: 
-                    return System.String.format(formatString, Bridge.cast(this, ExpressCraft.DataColumnDateTime).cells.getItem(rowIndex));
+                    var obj = Bridge.cast(this, ExpressCraft.DataColumnDateTime).cells.getItem(rowIndex);
+                    if (Bridge.is(obj, Date)) {
+                        return System.String.format(formatString, Bridge.cast(obj, Date));
+                    }
+                    var d = { };
+                    if (Bridge.Date.tryParse(obj, null, d)) {
+                        return System.String.format(formatString, d.v);
+                    }
+                    return System.String.format(formatString, Bridge.as(obj, String));
                 case ExpressCraft.DataType.String: 
                     return System.String.format(formatString, Bridge.cast(this, ExpressCraft.DataColumnString).cells.getItem(rowIndex));
                 case ExpressCraft.DataType.Integer: 

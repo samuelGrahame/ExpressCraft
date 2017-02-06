@@ -47,6 +47,9 @@ namespace ExpressCraftGridView
 				var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
 				gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
 
+				gridColumn = GridView.GetGridViewColumnByFieldName("Date");
+				gridColumn.FormatString = "{0:yyyy-MM-dd}";
+
 				GridView.SetBoundsFull();
                 
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
@@ -75,7 +78,7 @@ namespace ExpressCraftGridView
                         var dr = dataTable.NewRow();
                         dr[0] = x;
                         dr[1] = "Some Last Name";
-                        dr[2] = DateTime.Today;
+                        dr[2] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                         dr[3] = i % 2 == 0;
 						dr[4] = "";
 					}

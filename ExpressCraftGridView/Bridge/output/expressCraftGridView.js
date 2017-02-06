@@ -45,6 +45,9 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 useBase64Resource: false
             } );
 
+            gridColumn = this.gridView.getGridViewColumnByFieldName("Date");
+            gridColumn.formatString = "{0:yyyy-MM-dd}";
+
             ExpressCraft.Helper.setBoundsFull$1(this.gridView);
 
             this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
@@ -76,7 +79,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                     var dr = dataTable.newRow();
                     dr.setItem(0, this.x);
                     dr.setItem(1, "Some Last Name");
-                    dr.setItem(2, Bridge.Date.today());
+                    dr.setItem(2, Bridge.Date.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
                     dr.setItem(3, i % 2 === 0);
                     dr.setItem(4, "");
                 }
