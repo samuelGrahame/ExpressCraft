@@ -8,6 +8,8 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
     Bridge.define("ExpressCraftDesign.App", {
         $main: function () {
+            ExpressCraft.Settings.allowCloseWithoutQuestion = true;
+
             ExpressCraft.Form.setup();
             ExpressCraft.AceCodeEditor.setup();
 
@@ -17,23 +19,194 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraftDesign.ControlHolder", {
+        control: null,
+        children: null,
+        parent: null,
+        config: {
+            init: function () {
+                this.children = new (System.Collections.Generic.List$1(ExpressCraftDesign.ControlHolder))();
+            }
+        },
+        ctor: function (control, parent) {
+            this.$initialize();
+            this.control = control;
+            this.parent = parent;
+        },
+        generateDeclareDesigner: function (builder) {
+            if (Bridge.is(this.control, ExpressCraft.Form) && this.parent == null) {
+                // Base
+            } else {
+                builder.v.appendLine(System.String.concat("\t\tpublic ", Bridge.Reflection.getTypeName(Bridge.getType(this.control)), " ", this.control.getName(), ";"));
+            }
+            if (this.children != null && this.children.getCount() > 0) {
+                for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
+                    this.children.getItem(i).generateDeclareDesigner(builder);
+                }
+            }
+        },
+        addSetValue: function (name, value, builder, ExternalString) {
+            if (ExternalString === void 0) { ExternalString = false; }
+            if (ExternalString) {
+                builder.v.appendLine(System.String.concat("\t\t\t", this.control.getName(), ".", name, " = ", (Bridge.as(value, String)), ";"));
+            } else {
+                if (value != null) {
+                    if (Bridge.is(value, String)) {
+                        builder.v.appendLine(System.String.concat(System.String.concat("\t\t\t", this.control.getName(), ".", name, " = \"", value), "\";"));
+                    } else if (ExpressCraft.Helper.isNumber(value)) {
+                        builder.v.appendLine(System.String.concat("\t\t\t", this.control.getName(), ".", name, " = ", (Bridge.as(value, String)), ";"));
+                    }
+                }
+            }
+        },
+        getBoundDesignValue: function (value) {
+            if (!ExpressCraft.Helper.isNumber(value)) {
+                if (System.String.endsWith(value.toString(), "px")) {
+                    return System.Double.format(parseFloat(value.toString()), 'G');
+                }
+            }
+            return ExpressCraft.Helper.isNumber(value) ? value.toString() : System.String.concat("\"", value, "\"");
+        },
+        generateIniDesigner: function (builder) {
+            if (!(Bridge.is(this.control, ExpressCraft.Form) && this.parent == null)) {
+                builder.v.appendLine(System.String.concat("\t\t\t", this.control.getName(), " = new ", Bridge.Reflection.getTypeName(Bridge.getType(this.control)), "();"));
+            }
+            this.addSetValue("Name", this.control.getName(), builder);
+            var vec = this.control.getBounds().$clone();
+
+            if (vec.x != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.x)) && vec.y != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.y))) {
+                if (vec.z != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.z)) && vec.m != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.m))) {
+                    // Bounds					
+                    this.addSetValue("Bounds", System.String.concat("new Vector4(", this.getBoundDesignValue(this.control.getLeft()), ", ", this.getBoundDesignValue(this.control.getTop()), ", ", this.getBoundDesignValue(this.control.getWidth()), ", ", this.getBoundDesignValue(this.control.getHeight()), ")"), builder, true);
+                } else {
+                    // Only Location
+                    this.addSetValue("Location", System.String.concat("new Vector2(", this.getBoundDesignValue(this.control.getLeft()), ", ", this.getBoundDesignValue(this.control.getTop()), ")"), builder, true);
+                }
+            } else if (vec.z != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.z)) && vec.m != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.m))) {
+                // Only Size
+                this.addSetValue("Size", System.String.concat("new Vector2(", this.getBoundDesignValue(this.control.getWidth()), ", ", this.getBoundDesignValue(this.control.getHeight()), ")"), builder, true);
+            } else {
+                if (vec.x != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.x))) {
+                    this.addSetValue("Left", this.getBoundDesignValue(this.control.getLeft()), builder, true);
+                }
+                if (vec.y != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.y))) {
+                    this.addSetValue("Top", this.getBoundDesignValue(this.control.getTop()), builder, true);
+                }
+                if (vec.z != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.z))) {
+                    this.addSetValue("Width", this.getBoundDesignValue(this.control.getWidth()), builder, true);
+                }
+                if (vec.m != null && !System.String.isNullOrWhiteSpace(ExpressCraft.Helper.toHtmlValue(vec.m))) {
+                    this.addSetValue("Height", this.getBoundDesignValue(this.control.getHeight()), builder, true);
+                }
+            }
+
+            if (this.children != null && this.children.getCount() > 0) {
+                for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
+                    this.children.getItem(i).generateIniDesigner(builder);
+                }
+            }
+        }
+    });
+
     Bridge.define("ExpressCraftDesign.FormDesignerTabControlPage", {
         inherits: [ExpressCraft.TabControlPage],
         splitControlContainer1: null,
+        aceCodeEditor: null,
+        formHolder: null,
+        designerContainer: null,
         config: {
             properties: {
-                Filename: null
+                ClassName: null
             }
         },
-        ctor: function () {
+        ctor: function (className) {
             this.$initialize();
             ExpressCraft.TabControlPage.ctor.call(this);
+            this.setClassName(className);
+            this.setCaption(System.String.concat(this.getClassName(), ".Form"));
             this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
             ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer1);
 
-            this.splitControlContainer1.setSplitterPosition(150);
+            this.aceCodeEditor = new ExpressCraft.AceCodeEditor(ExpressCraft.AceModeTypes.csharp, ExpressCraft.AceThemeTypes.twilight);
+            ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, (this.aceCodeEditor = Bridge.merge(new ExpressCraft.AceCodeEditor(ExpressCraft.AceModeTypes.csharp, ExpressCraft.AceThemeTypes.twilight), {
+                setBounds: new ExpressCraft.Vector4.$ctor1(0, 0, "100%", "100%")
+            } )));
+
+            this.aceCodeEditor.setReadOnly(true);
+            this.formHolder = new ExpressCraftDesign.ControlHolder(Bridge.merge(new ExpressCraft.Form(), {
+                setName: className,
+                setSize: new ExpressCraft.Vector2.$ctor1(640, 480),
+                setText: this.getClassName()
+            } ), null);
+            var frm = this.formHolder.control;
+            frm.inDesign = true;
+
+            this.designerContainer = ExpressCraft.Control.div();
+            ExpressCraft.Helper.setBounds(this.designerContainer, 15, 15, "auto", "auto");
+
+            this.designerContainer.appendChild(ExpressCraft.Control.op_Implicit(this.formHolder.control));
+
+            frm.content.style.visibility = "inherit";
+
+            this.splitControlContainer1.panel2.content.style.overflow = "auto";
+
+            this.splitControlContainer1.panel2.content.appendChild(this.designerContainer);
+
+            this.splitControlContainer1.setSplitterPosition(572);
 
             ExpressCraft.Helper.appendChild(this, this.splitControlContainer1);
+
+            this.generateSourceCode();
+
+            this.aceCodeEditor.clearSelection();
+        },
+        generateSourceCode: function () {
+            var builder = { v : new System.Text.StringBuilder() };
+
+            builder.v.appendLine("using ExpressCraft;\r\n");
+
+            builder.v.appendLine("namespace ExpressDemo");
+            builder.v.appendLine("{");
+
+
+            builder.v.appendLine(System.String.concat("\tpublic class ", this.getClassName()));
+            builder.v.appendLine("\t{");
+
+            this.formHolder.generateDeclareDesigner(builder);
+
+            builder.v.appendLine();
+
+            builder.v.appendLine(System.String.concat("\t\tpublic ", this.getClassName(), "()"));
+
+            builder.v.appendLine("\t\t{");
+
+            this.formHolder.generateIniDesigner(builder);
+
+            builder.v.appendLine("\t\t}");
+
+            builder.v.appendLine();
+
+
+            builder.v.appendLine("\t}");
+
+            builder.v.appendLine("}");
+
+            this.aceCodeEditor.setSource(builder.v.toString());
+            //	public class 
+        },
+        addControl: function (Parent, Control) {
+            Parent.children.add(Control);
+
+            this.generateSourceCode();
+        },
+        removeControl: function (Control) {
+            if (Control.parent == null) {
+                return;
+            }
+
+            Control.parent.children.remove(Control);
+
+            this.generateSourceCode();
         },
         render: function () {
             ExpressCraft.TabControlPage.prototype.render.call(this);
@@ -110,8 +283,6 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             var ribbonPage = new ExpressCraft.RibbonPage("Actions");
             ribbonPage.addRibbonGroups([new ExpressCraft.RibbonGroup.$ctor1("Project", [Bridge.merge(new ExpressCraft.RibbonButton("New Form"), {
                 onItemClick: Bridge.fn.bind(this, $asm.$.ExpressCraftDesign.StudioForm.f1)
-            } ), Bridge.merge(new ExpressCraft.RibbonButton("View Designer"), {
-                onItemClick: Bridge.fn.bind(this, $asm.$.ExpressCraftDesign.StudioForm.f2)
             } )])]);
 
             this.ribbonControl1.addRibbonPages([ribbonPage]);
@@ -152,22 +323,11 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             } else {
                 var nfd = new ExpressCraftDesign.NewFileDialog();
                 nfd.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
-                    var stcp = Bridge.merge(new ExpressCraftDesign.FormDesignerTabControlPage(), {
-                        setFilename: ExpressCraft.Helper.htmlEscape$1(nfd.value.getText()),
-                        setCaption: ExpressCraft.Helper.htmlEscape$1((System.String.concat(nfd.value.getText(), ".xml")))
-                    } );
+                    var stcp = new ExpressCraftDesign.FormDesignerTabControlPage(ExpressCraft.Helper.htmlEscape$1(nfd.value.getText()));
                     this.linkchildToForm(stcp.splitControlContainer1);
                     this.tabControl1.addPages([stcp]);
                     this.tabControl1.setSelectedIndex((this.tabControl1.getTabPages().getCount() - 1) | 0);
                 }))]);
-            }
-        },
-        f2: function (rb) {
-            if (this.tabControl1.getSelectedIndex() !== -1) {
-                // get data;
-
-            } else {
-                new ExpressCraft.MessageBoxForm.ctor("Please create a new form before trying to view the designer.", ExpressCraft.MessageBoxLayout.Information).showDialog();
             }
         }
     });

@@ -24,13 +24,23 @@ namespace ExpressCraft
 			return string.Empty;
 		}		
 
+		public void ClearSelection()
+		{
+			Script.Call("this.editor.clearSelection");
+		}
+
+		public bool ReadOnly
+		{
+			get
+			{
+				return Script.Write<bool>("this.editor.getReadOnly()");				
+			}
+			set { Script.Call("this.editor.setReadOnly", value); }
+		}
+
 		public string Source
 		{
 			get {
-				// var code = editor.getValue();
-
-				//editor.setValue("new code here");
-
 				return Script.Write<string>("this.editor.getValue()");				
 			}
 
@@ -67,16 +77,15 @@ namespace ExpressCraft
 
 		public override void Render()
 		{
-			base.Render();
 			string msg = Ready();
 			if(msg != string.Empty)
 			{
 				throw new Exception(msg);
-			}			
+			}
 
 			var theme = _modeType.ToString("G");
 			var mode = _modeType.ToString("G");
-			
+
 			/*@			
 			this.editor = ace.edit(this.content);
 			this.editor.setTheme("ace/theme/" + theme);
@@ -98,6 +107,8 @@ namespace ExpressCraft
 			{
 				Form.InExternalMouseEvent = false;
 			});
+
+			base.Render();			
 		}
 	}
 

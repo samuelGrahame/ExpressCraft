@@ -552,6 +552,8 @@ namespace ExpressCraft
 
 		public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
 		{
+			this.Content.Style.Overflow = Overflow.Hidden;
+
 			GridHeaderContainer = Div("heading-container");
 			GridHeaderContainer.SetBounds("0", "0", "100%", "29px");
 
@@ -1013,7 +1015,7 @@ namespace ExpressCraft
 		private Action<TextInput> FilterRowOnChange;
 
 		public void RenderGrid()
-		{
+		{			
 			GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
 			if(Settings.GridViewBlurOnScroll)
 				ProcessBlur();
@@ -1065,6 +1067,7 @@ namespace ExpressCraft
 			var Cols = new List<HTMLSpanElement>();
 
 			int uboundRowCount = RawLeftCellCount - 1;
+
 			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 			{
 				//(x == uboundRowCount ? 0 : 1)

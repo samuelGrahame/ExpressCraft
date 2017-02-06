@@ -9,6 +9,8 @@ namespace ExpressCraftDesign
     {
         public static void Main()
         {
+			Settings.AllowCloseWithoutQuestion = true;
+
 			Form.Setup();
 			AceCodeEditor.Setup();
 

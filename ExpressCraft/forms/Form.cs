@@ -19,6 +19,8 @@ namespace ExpressCraft
 		public static HTMLDivElement WindowManagerStart { get; set; }
 		public static TextInput WindowManagerSearch { get; set; }
 
+		public bool InDesign = false;
+
 		public static int ResizeCorners { get; set; } = 2;
 		public static Form MovingForm = null;
 		public static HTMLElement Parent = null;
@@ -769,6 +771,9 @@ namespace ExpressCraft
 						ev.StopPropagation();
 						ev.PreventDefault();
 
+						if(InDesign)
+							return;
+
 						Close();
 					};
 
@@ -805,7 +810,7 @@ namespace ExpressCraft
 						ev.PreventDefault();
 
 						Mouse_Down = false;
-
+						
 						changeWindowState();
 					};
 
@@ -830,7 +835,8 @@ namespace ExpressCraft
 						ev.StopPropagation();
 						ev.PreventDefault();
 
-						Mouse_Down = false;
+						Mouse_Down = false;						
+
 						windowState = WindowState.Minimized;
 					};
 
@@ -951,7 +957,10 @@ namespace ExpressCraft
 
 				int X = mev.PageX - Content.OffsetLeft;
 				int Y = mev.PageY - Content.OffsetTop;
-				
+
+				if(InDesign)
+					return;
+
 				if(windowState == WindowState.Maximized)
 				{
 					SetCursor(Cursor.Default);
@@ -1023,7 +1032,10 @@ namespace ExpressCraft
 			});
 
 			Heading.AddEventListener(EventType.DblClick, (ev) => {
-                if(AllowSizeChange)
+				if(InDesign)
+					return;
+
+				if(AllowSizeChange)
                 {
                     changeWindowState();
                 }				
@@ -1033,6 +1045,9 @@ namespace ExpressCraft
 
 			Content.AddEventListener(EventType.MouseMove, (ev) => {
 				if(InExternalMouseEvent)
+					return;
+
+				if(InDesign)
 					return;
 
 				if(ev.Target == HeadingTitle)
@@ -1133,6 +1148,8 @@ namespace ExpressCraft
 			});
 
 			Body.AddEventListener(EventType.MouseMove, (ev) => {
+				if(InDesign)
+					return;
 				if(InExternalMouseEvent)
 					return;
 
@@ -1155,8 +1172,7 @@ namespace ExpressCraft
 			});
 			
 			Body.AddEventListener(EventType.MouseLeave, (ev) =>
-			{
-				Console.WriteLine("Body Mouse Leave");
+			{				
 				if(MovingForm == null)
 				{
 					SetBodyOverLay();

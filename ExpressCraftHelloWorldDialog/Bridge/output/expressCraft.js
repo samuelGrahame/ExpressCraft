@@ -2297,19 +2297,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._modeType = modeType;
             this._themeType = themeType;
         },
+        getReadOnly: function () {
+            return this.editor.getReadOnly();
+        },
+        setReadOnly: function (value) {
+            this.editor.setReadOnly(value);
+        },
         getSource: function () {
-            // var code = editor.getValue();
-
-            //editor.setValue("new code here");
-
             return this.editor.getValue();
         },
         setSource: function (value) {
             this.editor.setValue(value);
         },
+        clearSelection: function () {
+            this.editor.clearSelection();
+        },
         render: function () {
             var $t, $t1;
-            ExpressCraft.Control.prototype.render.call(this);
             var msg = ExpressCraft.AceCodeEditor.ready();
             if (!Bridge.referenceEquals(msg, "")) {
                 throw new System.Exception(msg);
@@ -2328,6 +2332,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.content.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f3);
 
             this.content.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f4);
+
+            ExpressCraft.Control.prototype.render.call(this);
         }
     });
 
@@ -2978,6 +2984,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             }
         },
+        inDesign: false,
         allowSizeChange: true,
         allowMoveChange: true,
         forReuse: false,
@@ -3833,6 +3840,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var X = (mev.pageX - this.content.offsetLeft) | 0;
             var Y = (mev.pageY - this.content.offsetTop) | 0;
 
+            if (this.inDesign) {
+                return;
+            }
+
             if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
                 this.setCursor("default");
                 ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
@@ -3880,6 +3891,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f14: function (ev) {
+            if (this.inDesign) {
+                return;
+            }
+
             if (this.allowSizeChange) {
                 this.changeWindowState();
             }
@@ -3888,6 +3903,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         f15: function (ev) {
             if (ExpressCraft.Form.inExternalMouseEvent) {
+                return;
+            }
+
+            if (this.inDesign) {
                 return;
             }
 
@@ -3965,6 +3984,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopPropagation();
         },
         f18: function (ev) {
+            if (this.inDesign) {
+                return;
+            }
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }
@@ -3986,7 +4008,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.setActiveForm(this);
         },
         f20: function (ev) {
-            Bridge.Console.log("Body Mouse Leave");
             if (ExpressCraft.Form.movingForm == null) {
                 ExpressCraft.Form.setBodyOverLay();
             }
@@ -4016,6 +4037,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ev.stopPropagation();
             ev.preventDefault();
+
+            if (this.inDesign) {
+                return;
+            }
 
             this.close();
         },
@@ -4052,6 +4077,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.preventDefault();
 
             ExpressCraft.Form.setMouse_Down(false);
+
             this.setwindowState(ExpressCraft.WindowState.Minimized);
         },
         f28: function (ev) {
@@ -4147,6 +4173,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "grid");
+            this.content.style.overflow = "hidden";
+
             this.gridHeaderContainer = ExpressCraft.Control.div$1("heading-container");
             ExpressCraft.Helper.setBounds(this.gridHeaderContainer, "0", "0", "100%", "29px");
 
@@ -4736,6 +4764,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var Cols = new (System.Collections.Generic.List$1(HTMLSpanElement))();
 
             var uboundRowCount = (RawLeftCellCount - 1) | 0;
+
             for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
                 //(x == uboundRowCount ? 0 : 1)
                 var gcol = this.columns.getItem(x1);
