@@ -26,7 +26,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             },
             getPdfString: function (s) {
                 //url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
-                return System.String.format("url('data:application/pdf;base64,{0}') no-repeat", s);
+                return System.String.format("data:application/pdf;base64,{0}", s);
             },
             getImageStringURI: function (s, useResourceURL) {
                 if (useResourceURL === void 0) { useResourceURL = true; }
@@ -491,7 +491,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
-            document.body.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getBlue().$clone());
         }
     });
 
@@ -7756,8 +7755,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         onShowing: function () {
             ExpressCraft.Form.prototype.onShowing.call(this);
+            //data
+            if (this.pDFSourceType === ExpressCraft.PdfSourceType.Url) {
+                this.pdfViewer.setAttribute("Src", this.source);
+            } else {
+                this.pdfViewer.setAttribute("data", ExpressCraft.Control.getPdfString(this.source));
+            }
 
-            this.pdfViewer.setAttribute("Src", this.pDFSourceType === ExpressCraft.PdfSourceType.Url ? this.source : ExpressCraft.Control.getPdfString(this.source));
         }
     });
 

@@ -32,8 +32,15 @@ namespace ExpressCraft
 		protected override void OnShowing()
 		{
 			base.OnShowing();
+			//data
+			if(PDFSourceType == PdfSourceType.Url)
+			{
+				PdfViewer.SetAttribute("Src", Source);
+			}else
+			{
+				PdfViewer.SetAttribute("data", GetPdfString(Source));				
+			}
 
-			PdfViewer.SetAttribute("Src", PDFSourceType == PdfSourceType.Url ? Source : GetPdfString(Source));			
 		}
 
 	}
