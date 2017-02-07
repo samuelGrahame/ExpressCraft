@@ -135,6 +135,17 @@ namespace ExpressCraftHelloWorldDialog
 			googlecloudPrintBtn.Content.Style.Position = Position.Relative;
 			googlecloudPrintBtn.Content.Style.Width = "auto";
 
+			var pdfPrintBtn = new SimpleButton()
+			{
+				Text = "Pdf Preview Form",
+				ItemClick = (ev) =>
+				{
+					(new PDFPreviewForm("http://www.axmag.com/download/pdfurl-guide.pdf", PdfSourceType.Url)).Show();
+				}
+			};
+			pdfPrintBtn.Content.Style.Position = Position.Relative;
+			pdfPrintBtn.Content.Style.Width = "auto";
+
 			var aceCodeBtn = new SimpleButton()
 			{
 				Text = "Ace Code Editor",
@@ -153,7 +164,7 @@ namespace ExpressCraftHelloWorldDialog
 			aceCodeBtn.Content.Style.Position = Position.Relative;
 			aceCodeBtn.Content.Style.Width = "auto";
 
-			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton);			
+			Form.WindowHolder.AppendChildrenTabIndex(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton, pdfPrintBtn);			
         }
 
         public static string GetRandomText()

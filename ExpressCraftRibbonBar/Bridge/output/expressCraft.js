@@ -24,6 +24,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 //url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
                 return System.String.format("url('data:image/png;base64,{0}') no-repeat", s);
             },
+            getPdfString: function (s) {
+                //url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
+                return System.String.format("url('data:application/pdf;base64,{0}') no-repeat", s);
+            },
             getImageStringURI: function (s, useResourceURL) {
                 if (useResourceURL === void 0) { useResourceURL = true; }
                 //"./Images/"
@@ -1966,6 +1970,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.method = method;
             this.arguments = $arguments;
             this.interface = interfaceName;
+        }
+    });
+
+    Bridge.define("ExpressCraft.PdfSourceType", {
+        $kind: "enum",
+        statics: {
+            Url: 0,
+            Base64: 1
         }
     });
 
@@ -6430,6 +6442,34 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.buttonCancel, this.progressControl]);
 
             this.allowSizeChange = false;
+        }
+    });
+
+    Bridge.define("ExpressCraft.PDFPreviewForm", {
+        inherits: [ExpressCraft.Form],
+        source: null,
+        pDFSourceType: 0,
+        pdfViewer: null,
+        ctor: function (source, pdfSourceType) {
+            if (pdfSourceType === void 0) { pdfSourceType = 0; }
+
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.source = source;
+            this.pDFSourceType = pdfSourceType;
+
+            this.pdfViewer = document.createElement(Bridge.Browser.isIE ? "iframe" : "embed");
+            this.pdfViewer.className = "control";
+
+            ExpressCraft.Helper.setBounds(this.pdfViewer, 0, 0, "100%", "100%");
+            this.pdfViewer.setAttribute("alt", "pdf");
+
+            this.getBody().appendChild(this.pdfViewer);
+        },
+        onShowing: function () {
+            ExpressCraft.Form.prototype.onShowing.call(this);
+
+            this.pdfViewer.setAttribute("Src", this.pDFSourceType === ExpressCraft.PdfSourceType.Url ? this.source : ExpressCraft.Control.getPdfString(this.source));
         }
     });
 

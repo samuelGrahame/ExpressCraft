@@ -74,14 +74,21 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             googlecloudPrintBtn.content.style.position = "relative";
             googlecloudPrintBtn.content.style.width = "auto";
 
+            var pdfPrintBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "Pdf Preview Form",
+                itemClick: $asm.$.ExpressCraftHelloWorldDialog.App.f8
+            } );
+            pdfPrintBtn.content.style.position = "relative";
+            pdfPrintBtn.content.style.width = "auto";
+
             var aceCodeBtn = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Ace Code Editor",
-                itemClick: $asm.$.ExpressCraftHelloWorldDialog.App.f8
+                itemClick: $asm.$.ExpressCraftHelloWorldDialog.App.f9
             } );
             aceCodeBtn.content.style.position = "relative";
             aceCodeBtn.content.style.width = "auto";
 
-            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton]);
+            ExpressCraft.Helper.appendChildrenTabIndex(ExpressCraft.Form.getWindowHolder(), [errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton, pdfPrintBtn]);
         }
     });
 
@@ -156,6 +163,9 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             (new ExpressCraft.GoogleCloudPrint("https://www.google.com/landing/cloudprint/testpage.pdf", "Test Print")).show();
         },
         f8: function (ev) {
+            (new ExpressCraft.PDFPreviewForm("http://www.axmag.com/download/pdfurl-guide.pdf", ExpressCraft.PdfSourceType.Url)).show();
+        },
+        f9: function (ev) {
             var frm = Bridge.merge(new ExpressCraft.Form(), {
                 setText: "Ace Code Editor"
             } );
