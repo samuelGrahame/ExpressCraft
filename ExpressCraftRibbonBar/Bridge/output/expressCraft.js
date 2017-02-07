@@ -511,6 +511,712 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.Color", {
+        $kind: "struct",
+        statics: {
+            ctor: function () {
+                ExpressCraft.Color.empty = new ExpressCraft.Color.ctor();
+                ExpressCraft.Color.stateKnownColorValid = 1;
+                ExpressCraft.Color.stateARGBValueValid = 2;
+                ExpressCraft.Color.stateValueMask = ExpressCraft.Color.stateARGBValueValid;
+                ExpressCraft.Color.stateNameValid = 8;
+                ExpressCraft.Color.notDefinedValue = System.Int64(0);
+            },
+            stateKnownColorValid: 0,
+            stateARGBValueValid: 0,
+            stateValueMask: 0,
+            stateNameValid: 0,
+            notDefinedValue: System.Int64(0),
+            ARGBAlphaShift: 24,
+            ARGBRedShift: 16,
+            ARGBGreenShift: 8,
+            ARGBBlueShift: 0,
+            config: {
+                init: function () {
+                    this.empty = new ExpressCraft.Color();
+                }
+            },
+            getTransparent: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Transparent);
+            },
+            getAliceBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.AliceBlue);
+            },
+            getAntiqueWhite: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.AntiqueWhite);
+            },
+            getAqua: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Aqua);
+            },
+            getAquamarine: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Aquamarine);
+            },
+            getAzure: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Azure);
+            },
+            getBeige: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Beige);
+            },
+            getBisque: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Bisque);
+            },
+            getBlack: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Black);
+            },
+            getBlanchedAlmond: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.BlanchedAlmond);
+            },
+            getBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Blue);
+            },
+            getBlueViolet: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.BlueViolet);
+            },
+            getBrown: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Brown);
+            },
+            getBurlyWood: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.BurlyWood);
+            },
+            getCadetBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.CadetBlue);
+            },
+            getChartreuse: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Chartreuse);
+            },
+            getChocolate: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Chocolate);
+            },
+            getCoral: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Coral);
+            },
+            getCornflowerBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.CornflowerBlue);
+            },
+            getCornsilk: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Cornsilk);
+            },
+            getCrimson: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Crimson);
+            },
+            getCyan: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Cyan);
+            },
+            getDarkBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkBlue);
+            },
+            getDarkCyan: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkCyan);
+            },
+            getDarkGoldenrod: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkGoldenrod);
+            },
+            getDarkGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkGray);
+            },
+            getDarkGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkGreen);
+            },
+            getDarkKhaki: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkKhaki);
+            },
+            getDarkMagenta: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkMagenta);
+            },
+            getDarkOliveGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkOliveGreen);
+            },
+            getDarkOrange: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkOrange);
+            },
+            getDarkOrchid: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkOrchid);
+            },
+            getDarkRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkRed);
+            },
+            getDarkSalmon: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkSalmon);
+            },
+            getDarkSeaGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkSeaGreen);
+            },
+            getDarkSlateBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkSlateBlue);
+            },
+            getDarkSlateGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkSlateGray);
+            },
+            getDarkTurquoise: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkTurquoise);
+            },
+            getDarkViolet: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DarkViolet);
+            },
+            getDeepPink: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DeepPink);
+            },
+            getDeepSkyBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DeepSkyBlue);
+            },
+            getDimGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DimGray);
+            },
+            getDodgerBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.DodgerBlue);
+            },
+            getFirebrick: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Firebrick);
+            },
+            getFloralWhite: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.FloralWhite);
+            },
+            getForestGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.ForestGreen);
+            },
+            getFuchsia: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Fuchsia);
+            },
+            getGainsboro: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Gainsboro);
+            },
+            getGhostWhite: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.GhostWhite);
+            },
+            getGold: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Gold);
+            },
+            getGoldenrod: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Goldenrod);
+            },
+            getGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Gray);
+            },
+            getGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Green);
+            },
+            getGreenYellow: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.GreenYellow);
+            },
+            getHoneydew: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Honeydew);
+            },
+            getHotPink: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.HotPink);
+            },
+            getIndianRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.IndianRed);
+            },
+            getIndigo: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Indigo);
+            },
+            getIvory: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Ivory);
+            },
+            getKhaki: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Khaki);
+            },
+            getLavender: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Lavender);
+            },
+            getLavenderBlush: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LavenderBlush);
+            },
+            getLawnGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LawnGreen);
+            },
+            getLemonChiffon: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LemonChiffon);
+            },
+            getLightBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightBlue);
+            },
+            getLightCoral: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightCoral);
+            },
+            getLightCyan: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightCyan);
+            },
+            getLightGoldenrodYellow: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightGoldenrodYellow);
+            },
+            getLightGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightGreen);
+            },
+            getLightGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightGray);
+            },
+            getLightPink: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightPink);
+            },
+            getLightSalmon: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightSalmon);
+            },
+            getLightSeaGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightSeaGreen);
+            },
+            getLightSkyBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightSkyBlue);
+            },
+            getLightSlateGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightSlateGray);
+            },
+            getLightSteelBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightSteelBlue);
+            },
+            getLightYellow: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LightYellow);
+            },
+            getLime: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Lime);
+            },
+            getLimeGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.LimeGreen);
+            },
+            getLinen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Linen);
+            },
+            getMagenta: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Magenta);
+            },
+            getMaroon: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Maroon);
+            },
+            getMediumAquamarine: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumAquamarine);
+            },
+            getMediumBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumBlue);
+            },
+            getMediumOrchid: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumOrchid);
+            },
+            getMediumPurple: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumPurple);
+            },
+            getMediumSeaGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumSeaGreen);
+            },
+            getMediumSlateBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumSlateBlue);
+            },
+            getMediumSpringGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumSpringGreen);
+            },
+            getMediumTurquoise: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumTurquoise);
+            },
+            getMediumVioletRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MediumVioletRed);
+            },
+            getMidnightBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MidnightBlue);
+            },
+            getMintCream: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MintCream);
+            },
+            getMistyRose: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.MistyRose);
+            },
+            getMoccasin: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Moccasin);
+            },
+            getNavajoWhite: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.NavajoWhite);
+            },
+            getNavy: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Navy);
+            },
+            getOldLace: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.OldLace);
+            },
+            getOlive: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Olive);
+            },
+            getOliveDrab: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.OliveDrab);
+            },
+            getOrange: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Orange);
+            },
+            getOrangeRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.OrangeRed);
+            },
+            getOrchid: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Orchid);
+            },
+            getPaleGoldenrod: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PaleGoldenrod);
+            },
+            getPaleGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PaleGreen);
+            },
+            getPaleTurquoise: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PaleTurquoise);
+            },
+            getPaleVioletRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PaleVioletRed);
+            },
+            getPapayaWhip: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PapayaWhip);
+            },
+            getPeachPuff: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PeachPuff);
+            },
+            getPeru: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Peru);
+            },
+            getPink: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Pink);
+            },
+            getPlum: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Plum);
+            },
+            getPowderBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.PowderBlue);
+            },
+            getPurple: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Purple);
+            },
+            getRed: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Red);
+            },
+            getRosyBrown: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.RosyBrown);
+            },
+            getRoyalBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.RoyalBlue);
+            },
+            getSaddleBrown: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SaddleBrown);
+            },
+            getSalmon: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Salmon);
+            },
+            getSandyBrown: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SandyBrown);
+            },
+            getSeaGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SeaGreen);
+            },
+            getSeaShell: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SeaShell);
+            },
+            getSienna: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Sienna);
+            },
+            getSilver: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Silver);
+            },
+            getSkyBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SkyBlue);
+            },
+            getSlateBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SlateBlue);
+            },
+            getSlateGray: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SlateGray);
+            },
+            getSnow: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Snow);
+            },
+            getSpringGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SpringGreen);
+            },
+            getSteelBlue: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.SteelBlue);
+            },
+            getTan: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Tan);
+            },
+            getTeal: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Teal);
+            },
+            getThistle: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Thistle);
+            },
+            getTomato: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Tomato);
+            },
+            getTurquoise: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Turquoise);
+            },
+            getViolet: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Violet);
+            },
+            getWheat: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Wheat);
+            },
+            getWhite: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.White);
+            },
+            getWhiteSmoke: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.WhiteSmoke);
+            },
+            getYellow: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.Yellow);
+            },
+            getYellowGreen: function () {
+                return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.YellowGreen);
+            },
+            checkByte: function (value, name) {
+                if ((value < 0) || (value > 255)) {
+                    var args = System.Array.init([name, value, 0, 255], Object);
+                    throw new System.ArgumentException("InvalidEx2BoundArgument");
+                }
+            },
+            makeArgb: function (alpha, red, green, blue) {
+                return System.Int64.clip64(Bridge.Int.clipu64((((red << 16) | (green << 8)) | blue) | (alpha << 24)).and(System.UInt64(System.Int64([-1,0]))));
+            },
+            fromArgb: function (argb) {
+                return new ExpressCraft.Color.$ctor2(System.Int64(argb).and((System.Int64([-1,0]))), ExpressCraft.Color.stateARGBValueValid, null, 0);
+            },
+            fromArgb$3: function (alpha, red, green, blue) {
+                ExpressCraft.Color.checkByte(alpha, "alpha");
+                ExpressCraft.Color.checkByte(red, "red");
+                ExpressCraft.Color.checkByte(green, "green");
+                ExpressCraft.Color.checkByte(blue, "blue");
+                return new ExpressCraft.Color.$ctor2(ExpressCraft.Color.makeArgb((alpha & 255), (red & 255), (green & 255), (blue & 255)), ExpressCraft.Color.stateARGBValueValid, null, 0);
+            },
+            fromArgb$1: function (alpha, baseColor) {
+                ExpressCraft.Color.checkByte(alpha, "alpha");
+                return new ExpressCraft.Color.$ctor2(ExpressCraft.Color.makeArgb((alpha & 255), baseColor.getR(), baseColor.getG(), baseColor.getB()), ExpressCraft.Color.stateARGBValueValid, null, 0);
+            },
+            fromArgb$2: function (red, green, blue) {
+                return ExpressCraft.Color.fromArgb$3(255, red, green, blue);
+            },
+            isEnumValid: function (enumValue, value, minValue, maxValue) {
+                return ((value >= minValue) && (value <= maxValue));
+            },
+            fromKnownColor: function (color) {
+                return new ExpressCraft.Color.$ctor1(color);
+            },
+            op_Equality: function (left, right) {
+                if (((left.value.ne(right.value)) || (left.state !== right.state)) || (left.knownColor !== right.knownColor)) {
+                    return false;
+                }
+                return ((Bridge.referenceEquals(left.name, right.name)) || (((left.name != null) && (right.name != null)) && System.String.equals(left.name, right.name)));
+            },
+            op_Inequality: function (left, right) {
+                return !(ExpressCraft.Color.op_Equality(left, right));
+            },
+            getDefaultValue: function () { return new ExpressCraft.Color(); }
+        },
+        name: null,
+        value: System.Int64(0),
+        knownColor: 0,
+        state: 0,
+        $ctor1: function (knownColor) {
+            this.$initialize();
+            this.value = System.Int64(0);
+            this.state = ExpressCraft.Color.stateKnownColorValid;
+            this.name = null;
+            this.knownColor = Bridge.Int.sxs(knownColor & 65535);
+        },
+        $ctor2: function (value, state, name, knownColor) {
+            this.$initialize();
+            this.value = value;
+            this.state = state;
+            this.name = name;
+            this.knownColor = Bridge.Int.sxs(knownColor & 65535);
+        },
+        ctor: function () {
+            this.$initialize();
+        },
+        getR: function () {
+            return System.Int64.clipu8((this.getValue().shr(16)).and(System.Int64(255)));
+        },
+        getG: function () {
+            return System.Int64.clipu8((this.getValue().shr(8)).and(System.Int64(255)));
+        },
+        getB: function () {
+            return System.Int64.clipu8(this.getValue().and(System.Int64(255)));
+        },
+        getA: function () {
+            return System.Int64.clipu8((this.getValue().shr(24)).and(System.Int64(255)));
+        },
+        getIsKnownColor: function () {
+            return ((this.state & ExpressCraft.Color.stateKnownColorValid) > 0);
+        },
+        getIsEmpty: function () {
+            return (this.state === 0);
+        },
+        getIsNamedColor: function () {
+            if ((this.state & ExpressCraft.Color.stateNameValid) === 0) {
+                return this.getIsKnownColor();
+            }
+            return true;
+        },
+        getIsSystemColor: function () {
+            if (!this.getIsKnownColor()) {
+                return false;
+            }
+            if (this.knownColor > 26) {
+                return (this.knownColor > 167);
+            }
+            return true;
+        },
+        getNameAndARGBValue: function () {
+            var args = System.Array.init([this.getName(), this.getA(), this.getR(), this.getG(), this.getB()], Object);
+            return System.String.format.apply(System.String, ["{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}"].concat(args));
+        },
+        getName: function () {
+            if ((this.state & ExpressCraft.Color.stateNameValid) !== 0) {
+                return this.name;
+            }
+            if (!this.getIsKnownColor()) {
+                return System.Convert.toStringInBase(this.value, 16, 11);
+            }
+            var str = ExpressCraft.KnownColorTable.knownColorToName(this.knownColor);
+            if (str != null) {
+                return str;
+            }
+            return this.knownColor.toString();
+        },
+        getValue: function () {
+            if ((this.state & ExpressCraft.Color.stateValueMask) !== 0) {
+                return this.value;
+            }
+            if (this.getIsKnownColor()) {
+                return System.Int64(ExpressCraft.KnownColorTable.knownColorToArgb(this.knownColor));
+            }
+            return ExpressCraft.Color.notDefinedValue;
+        },
+        getBrightness: function () {
+            var num = this.getR() / 255.0;
+            var num2 = this.getG() / 255.0;
+            var num3 = this.getB() / 255.0;
+            var num4 = num;
+            var num5 = num;
+            if (num2 > num4) {
+                num4 = num2;
+            }
+            if (num3 > num4) {
+                num4 = num3;
+            }
+            if (num2 < num5) {
+                num5 = num2;
+            }
+            if (num3 < num5) {
+                num5 = num3;
+            }
+            return ((num4 + num5) / 2.0);
+        },
+        getHue: function () {
+            if ((this.getR() === this.getG()) && (this.getG() === this.getB())) {
+                return 0.0;
+            }
+            var num = this.getR() / 255.0;
+            var num2 = this.getG() / 255.0;
+            var num3 = this.getB() / 255.0;
+            var num7 = 0.0;
+            var num4 = num;
+            var num5 = num;
+            if (num2 > num4) {
+                num4 = num2;
+            }
+            if (num3 > num4) {
+                num4 = num3;
+            }
+            if (num2 < num5) {
+                num5 = num2;
+            }
+            if (num3 < num5) {
+                num5 = num3;
+            }
+            var num6 = num4 - num5;
+            if (num === num4) {
+                num7 = (num2 - num3) / num6;
+            } else if (num2 === num4) {
+                num7 = 2.0 + ((num3 - num) / num6);
+            } else if (num3 === num4) {
+                num7 = 4.0 + ((num - num2) / num6);
+            }
+            num7 *= 60.0;
+            if (num7 < 0.0) {
+                num7 += 360.0;
+            }
+            return num7;
+        },
+        getSaturation: function () {
+            var num = this.getR() / 255.0;
+            var num2 = this.getG() / 255.0;
+            var num3 = this.getB() / 255.0;
+            var num7 = 0.0;
+            var num4 = num;
+            var num5 = num;
+            if (num2 > num4) {
+                num4 = num2;
+            }
+            if (num3 > num4) {
+                num4 = num3;
+            }
+            if (num2 < num5) {
+                num5 = num2;
+            }
+            if (num3 < num5) {
+                num5 = num3;
+            }
+            if (num4 === num5) {
+                return num7;
+            }
+            var num6 = (num4 + num5) / 2.0;
+            if (num6 <= 0.5) {
+                return ((num4 - num5) / (num4 + num5));
+            }
+            return ((num4 - num5) / ((2.0 - num4) - num5));
+        },
+        toArgb: function () {
+            return System.Int64.clip32(this.getValue());
+        },
+        toKnownColor: function () {
+            return this.knownColor;
+        },
+        toString: function () {
+            var builder = new System.Text.StringBuilder("", 32);
+            builder.append(Bridge.Reflection.getTypeName(Bridge.getType(this)));
+            builder.append(" [");
+            if ((this.state & ExpressCraft.Color.stateNameValid) !== 0) {
+                builder.append(this.getName());
+            } else if ((this.state & ExpressCraft.Color.stateKnownColorValid) !== 0) {
+                builder.append(this.getName());
+            } else if ((this.state & ExpressCraft.Color.stateValueMask) !== 0) {
+                builder.append("A=");
+                builder.append(this.getA());
+                builder.append(", R=");
+                builder.append(this.getR());
+                builder.append(", G=");
+                builder.append(this.getG());
+                builder.append(", B=");
+                builder.append(this.getB());
+            } else {
+                builder.append("Empty");
+            }
+            builder.append("]");
+            return builder.toString();
+        },
+        equals: function (obj) {
+            if (Bridge.is(obj, ExpressCraft.Color)) {
+                var color = System.Nullable.getValue(Bridge.cast(obj, ExpressCraft.Color));
+                if (((this.value.equals(color.value)) && (this.state === color.state)) && (this.knownColor === color.knownColor)) {
+                    return ((Bridge.referenceEquals(this.name, color.name)) || (((this.name != null) && (color.name != null)) && System.String.equals(this.name, this.name)));
+                }
+            }
+            return false;
+        },
+        getHashCode: function () {
+            return ((Bridge.getHashCode(this.value) ^ Bridge.getHashCode(this.state)) ^ Bridge.getHashCode(this.knownColor));
+        },
+        $clone: function (to) {
+            var s = to || new ExpressCraft.Color();
+            s.name = this.name;
+            s.value = this.value;
+            s.knownColor = this.knownColor;
+            s.state = this.state;
+            return s;
+        }
+    });
+
     Bridge.define("ExpressCraft.ComboBoxTypes", {
         $kind: "enum",
         statics: {
@@ -1812,6 +2518,567 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.value = value;
         }
     }; });
+
+    Bridge.define("ExpressCraft.KnownColor", {
+        $kind: "enum",
+        statics: {
+            ActiveBorder: 1,
+            ActiveCaption: 2,
+            ActiveCaptionText: 3,
+            AliceBlue: 28,
+            AntiqueWhite: 29,
+            AppWorkspace: 4,
+            Aqua: 30,
+            Aquamarine: 31,
+            Azure: 32,
+            Beige: 33,
+            Bisque: 34,
+            Black: 35,
+            BlanchedAlmond: 36,
+            Blue: 37,
+            BlueViolet: 38,
+            Brown: 39,
+            BurlyWood: 40,
+            ButtonFace: 168,
+            ButtonHighlight: 169,
+            ButtonShadow: 170,
+            CadetBlue: 41,
+            Chartreuse: 42,
+            Chocolate: 43,
+            Control: 5,
+            ControlDark: 6,
+            ControlDarkDark: 7,
+            ControlLight: 8,
+            ControlLightLight: 9,
+            ControlText: 10,
+            Coral: 44,
+            CornflowerBlue: 45,
+            Cornsilk: 46,
+            Crimson: 47,
+            Cyan: 48,
+            DarkBlue: 49,
+            DarkCyan: 50,
+            DarkGoldenrod: 51,
+            DarkGray: 52,
+            DarkGreen: 53,
+            DarkKhaki: 54,
+            DarkMagenta: 55,
+            DarkOliveGreen: 56,
+            DarkOrange: 57,
+            DarkOrchid: 58,
+            DarkRed: 59,
+            DarkSalmon: 60,
+            DarkSeaGreen: 61,
+            DarkSlateBlue: 62,
+            DarkSlateGray: 63,
+            DarkTurquoise: 64,
+            DarkViolet: 65,
+            DeepPink: 66,
+            DeepSkyBlue: 67,
+            Desktop: 11,
+            DimGray: 68,
+            DodgerBlue: 69,
+            Firebrick: 70,
+            FloralWhite: 71,
+            ForestGreen: 72,
+            Fuchsia: 73,
+            Gainsboro: 74,
+            GhostWhite: 75,
+            Gold: 76,
+            Goldenrod: 77,
+            GradientActiveCaption: 171,
+            GradientInactiveCaption: 172,
+            Gray: 78,
+            GrayText: 12,
+            Green: 79,
+            GreenYellow: 80,
+            Highlight: 13,
+            HighlightText: 14,
+            Honeydew: 81,
+            HotPink: 82,
+            HotTrack: 15,
+            InactiveBorder: 16,
+            InactiveCaption: 17,
+            InactiveCaptionText: 18,
+            IndianRed: 83,
+            Indigo: 84,
+            Info: 19,
+            InfoText: 20,
+            Ivory: 85,
+            Khaki: 86,
+            Lavender: 87,
+            LavenderBlush: 88,
+            LawnGreen: 89,
+            LemonChiffon: 90,
+            LightBlue: 91,
+            LightCoral: 92,
+            LightCyan: 93,
+            LightGoldenrodYellow: 94,
+            LightGray: 95,
+            LightGreen: 96,
+            LightPink: 97,
+            LightSalmon: 98,
+            LightSeaGreen: 99,
+            LightSkyBlue: 100,
+            LightSlateGray: 101,
+            LightSteelBlue: 102,
+            LightYellow: 103,
+            Lime: 104,
+            LimeGreen: 105,
+            Linen: 106,
+            Magenta: 107,
+            Maroon: 108,
+            MediumAquamarine: 109,
+            MediumBlue: 110,
+            MediumOrchid: 111,
+            MediumPurple: 112,
+            MediumSeaGreen: 113,
+            MediumSlateBlue: 114,
+            MediumSpringGreen: 115,
+            MediumTurquoise: 116,
+            MediumVioletRed: 117,
+            Menu: 21,
+            MenuBar: 173,
+            MenuHighlight: 174,
+            MenuText: 22,
+            MidnightBlue: 118,
+            MintCream: 119,
+            MistyRose: 120,
+            Moccasin: 121,
+            NavajoWhite: 122,
+            Navy: 123,
+            OldLace: 124,
+            Olive: 125,
+            OliveDrab: 126,
+            Orange: 127,
+            OrangeRed: 128,
+            Orchid: 129,
+            PaleGoldenrod: 130,
+            PaleGreen: 131,
+            PaleTurquoise: 132,
+            PaleVioletRed: 133,
+            PapayaWhip: 134,
+            PeachPuff: 135,
+            Peru: 136,
+            Pink: 137,
+            Plum: 138,
+            PowderBlue: 139,
+            Purple: 140,
+            Red: 141,
+            RosyBrown: 142,
+            RoyalBlue: 143,
+            SaddleBrown: 144,
+            Salmon: 145,
+            SandyBrown: 146,
+            ScrollBar: 23,
+            SeaGreen: 147,
+            SeaShell: 148,
+            Sienna: 149,
+            Silver: 150,
+            SkyBlue: 151,
+            SlateBlue: 152,
+            SlateGray: 153,
+            Snow: 154,
+            SpringGreen: 155,
+            SteelBlue: 156,
+            Tan: 157,
+            Teal: 158,
+            Thistle: 159,
+            Tomato: 160,
+            Transparent: 27,
+            Turquoise: 161,
+            Violet: 162,
+            Wheat: 163,
+            White: 164,
+            WhiteSmoke: 165,
+            Window: 24,
+            WindowFrame: 25,
+            WindowText: 26,
+            Yellow: 166,
+            YellowGreen: 167
+        }
+    });
+
+    Bridge.define("ExpressCraft.KnownColorTable", {
+        statics: {
+            AlphaShift: 24,
+            BlueShift: 0,
+            colorNameTable: null,
+            colorTable: null,
+            GreenShift: 8,
+            RedShift: 16,
+            Win32BlueShift: 16,
+            Win32GreenShift: 8,
+            Win32RedShift: 0,
+            argbToKnownColor: function (targetARGB) {
+                ExpressCraft.KnownColorTable.ensureColorTable();
+                for (var i = 0; i < ExpressCraft.KnownColorTable.colorTable.length; i = (i + 1) | 0) {
+                    var num2 = ExpressCraft.KnownColorTable.colorTable[i];
+                    if (num2 === targetARGB) {
+                        var color = ExpressCraft.Color.fromKnownColor(i).$clone();
+                        if (!color.getIsSystemColor()) {
+                            return color.$clone();
+                        }
+                    }
+                }
+                return ExpressCraft.Color.fromArgb(targetARGB);
+            },
+            encode: function (alpha, red, green, blue) {
+                return ((((red << 16) | (green << 8)) | blue) | (alpha << 24));
+            },
+            ensureColorNameTable: function () {
+                if (ExpressCraft.KnownColorTable.colorNameTable == null) {
+                    ExpressCraft.KnownColorTable.initColorNameTable();
+                }
+            },
+            ensureColorTable: function () {
+                if (ExpressCraft.KnownColorTable.colorTable == null) {
+                    ExpressCraft.KnownColorTable.initColorTable();
+                }
+            },
+            fromWin32Value: function (value) {
+                return ExpressCraft.KnownColorTable.encode(255, value & 255, (value >> 8) & 255, (value >> 16) & 255);
+            },
+            initColorNameTable: function () {
+                var strArray = System.Array.init(175, null, String);
+                strArray[1] = "ActiveBorder";
+                strArray[2] = "ActiveCaption";
+                strArray[3] = "ActiveCaptionText";
+                strArray[4] = "AppWorkspace";
+                strArray[168] = "ButtonFace";
+                strArray[169] = "ButtonHighlight";
+                strArray[170] = "ButtonShadow";
+                strArray[5] = "Control";
+                strArray[6] = "ControlDark";
+                strArray[7] = "ControlDarkDark";
+                strArray[8] = "ControlLight";
+                strArray[9] = "ControlLightLight";
+                strArray[10] = "ControlText";
+                strArray[11] = "Desktop";
+                strArray[171] = "GradientActiveCaption";
+                strArray[172] = "GradientInactiveCaption";
+                strArray[12] = "GrayText";
+                strArray[13] = "Highlight";
+                strArray[14] = "HighlightText";
+                strArray[15] = "HotTrack";
+                strArray[16] = "InactiveBorder";
+                strArray[17] = "InactiveCaption";
+                strArray[18] = "InactiveCaptionText";
+                strArray[19] = "Info";
+                strArray[20] = "InfoText";
+                strArray[21] = "Menu";
+                strArray[173] = "MenuBar";
+                strArray[174] = "MenuHighlight";
+                strArray[22] = "MenuText";
+                strArray[23] = "ScrollBar";
+                strArray[24] = "Window";
+                strArray[25] = "WindowFrame";
+                strArray[26] = "WindowText";
+                strArray[27] = "Transparent";
+                strArray[28] = "AliceBlue";
+                strArray[29] = "AntiqueWhite";
+                strArray[30] = "Aqua";
+                strArray[31] = "Aquamarine";
+                strArray[32] = "Azure";
+                strArray[33] = "Beige";
+                strArray[34] = "Bisque";
+                strArray[35] = "Black";
+                strArray[36] = "BlanchedAlmond";
+                strArray[37] = "Blue";
+                strArray[38] = "BlueViolet";
+                strArray[39] = "Brown";
+                strArray[40] = "BurlyWood";
+                strArray[41] = "CadetBlue";
+                strArray[42] = "Chartreuse";
+                strArray[43] = "Chocolate";
+                strArray[44] = "Coral";
+                strArray[45] = "CornflowerBlue";
+                strArray[46] = "Cornsilk";
+                strArray[47] = "Crimson";
+                strArray[48] = "Cyan";
+                strArray[49] = "DarkBlue";
+                strArray[50] = "DarkCyan";
+                strArray[51] = "DarkGoldenrod";
+                strArray[52] = "DarkGray";
+                strArray[53] = "DarkGreen";
+                strArray[54] = "DarkKhaki";
+                strArray[55] = "DarkMagenta";
+                strArray[56] = "DarkOliveGreen";
+                strArray[57] = "DarkOrange";
+                strArray[58] = "DarkOrchid";
+                strArray[59] = "DarkRed";
+                strArray[60] = "DarkSalmon";
+                strArray[61] = "DarkSeaGreen";
+                strArray[62] = "DarkSlateBlue";
+                strArray[63] = "DarkSlateGray";
+                strArray[64] = "DarkTurquoise";
+                strArray[65] = "DarkViolet";
+                strArray[66] = "DeepPink";
+                strArray[67] = "DeepSkyBlue";
+                strArray[68] = "DimGray";
+                strArray[69] = "DodgerBlue";
+                strArray[70] = "Firebrick";
+                strArray[71] = "FloralWhite";
+                strArray[72] = "ForestGreen";
+                strArray[73] = "Fuchsia";
+                strArray[74] = "Gainsboro";
+                strArray[75] = "GhostWhite";
+                strArray[76] = "Gold";
+                strArray[77] = "Goldenrod";
+                strArray[78] = "Gray";
+                strArray[79] = "Green";
+                strArray[80] = "GreenYellow";
+                strArray[81] = "Honeydew";
+                strArray[82] = "HotPink";
+                strArray[83] = "IndianRed";
+                strArray[84] = "Indigo";
+                strArray[85] = "Ivory";
+                strArray[86] = "Khaki";
+                strArray[87] = "Lavender";
+                strArray[88] = "LavenderBlush";
+                strArray[89] = "LawnGreen";
+                strArray[90] = "LemonChiffon";
+                strArray[91] = "LightBlue";
+                strArray[92] = "LightCoral";
+                strArray[93] = "LightCyan";
+                strArray[94] = "LightGoldenrodYellow";
+                strArray[95] = "LightGray";
+                strArray[96] = "LightGreen";
+                strArray[97] = "LightPink";
+                strArray[98] = "LightSalmon";
+                strArray[99] = "LightSeaGreen";
+                strArray[100] = "LightSkyBlue";
+                strArray[101] = "LightSlateGray";
+                strArray[102] = "LightSteelBlue";
+                strArray[103] = "LightYellow";
+                strArray[104] = "Lime";
+                strArray[105] = "LimeGreen";
+                strArray[106] = "Linen";
+                strArray[107] = "Magenta";
+                strArray[108] = "Maroon";
+                strArray[109] = "MediumAquamarine";
+                strArray[110] = "MediumBlue";
+                strArray[111] = "MediumOrchid";
+                strArray[112] = "MediumPurple";
+                strArray[113] = "MediumSeaGreen";
+                strArray[114] = "MediumSlateBlue";
+                strArray[115] = "MediumSpringGreen";
+                strArray[116] = "MediumTurquoise";
+                strArray[117] = "MediumVioletRed";
+                strArray[118] = "MidnightBlue";
+                strArray[119] = "MintCream";
+                strArray[120] = "MistyRose";
+                strArray[121] = "Moccasin";
+                strArray[122] = "NavajoWhite";
+                strArray[123] = "Navy";
+                strArray[124] = "OldLace";
+                strArray[125] = "Olive";
+                strArray[126] = "OliveDrab";
+                strArray[127] = "Orange";
+                strArray[128] = "OrangeRed";
+                strArray[129] = "Orchid";
+                strArray[130] = "PaleGoldenrod";
+                strArray[131] = "PaleGreen";
+                strArray[132] = "PaleTurquoise";
+                strArray[133] = "PaleVioletRed";
+                strArray[134] = "PapayaWhip";
+                strArray[135] = "PeachPuff";
+                strArray[136] = "Peru";
+                strArray[137] = "Pink";
+                strArray[138] = "Plum";
+                strArray[139] = "PowderBlue";
+                strArray[140] = "Purple";
+                strArray[141] = "Red";
+                strArray[142] = "RosyBrown";
+                strArray[143] = "RoyalBlue";
+                strArray[144] = "SaddleBrown";
+                strArray[145] = "Salmon";
+                strArray[146] = "SandyBrown";
+                strArray[147] = "SeaGreen";
+                strArray[148] = "SeaShell";
+                strArray[149] = "Sienna";
+                strArray[150] = "Silver";
+                strArray[151] = "SkyBlue";
+                strArray[152] = "SlateBlue";
+                strArray[153] = "SlateGray";
+                strArray[154] = "Snow";
+                strArray[155] = "SpringGreen";
+                strArray[156] = "SteelBlue";
+                strArray[157] = "Tan";
+                strArray[158] = "Teal";
+                strArray[159] = "Thistle";
+                strArray[160] = "Tomato";
+                strArray[161] = "Turquoise";
+                strArray[162] = "Violet";
+                strArray[163] = "Wheat";
+                strArray[164] = "White";
+                strArray[165] = "WhiteSmoke";
+                strArray[166] = "Yellow";
+                strArray[167] = "YellowGreen";
+                ExpressCraft.KnownColorTable.colorNameTable = strArray;
+            },
+            initColorTable: function () {
+                var colorTable = System.Array.init(175, 0, System.Int32);
+
+                colorTable[27] = 16777215;
+                colorTable[28] = -984833;
+                colorTable[29] = -332841;
+                colorTable[30] = -16711681;
+                colorTable[31] = -8388652;
+                colorTable[32] = -983041;
+                colorTable[33] = -657956;
+                colorTable[34] = -6972;
+                colorTable[35] = -16777216;
+                colorTable[36] = -5171;
+                colorTable[37] = -16776961;
+                colorTable[38] = -7722014;
+                colorTable[39] = -5952982;
+                colorTable[40] = -2180985;
+                colorTable[41] = -10510688;
+                colorTable[42] = -8388864;
+                colorTable[43] = -2987746;
+                colorTable[44] = -32944;
+                colorTable[45] = -10185235;
+                colorTable[46] = -1828;
+                colorTable[47] = -2354116;
+                colorTable[48] = -16711681;
+                colorTable[49] = -16777077;
+                colorTable[50] = -16741493;
+                colorTable[51] = -4684277;
+                colorTable[52] = -5658199;
+                colorTable[53] = -16751616;
+                colorTable[54] = -4343957;
+                colorTable[55] = -7667573;
+                colorTable[56] = -11179217;
+                colorTable[57] = -29696;
+                colorTable[58] = -6737204;
+                colorTable[59] = -7667712;
+                colorTable[60] = -1468806;
+                colorTable[61] = -7357301;
+                colorTable[62] = -12042869;
+                colorTable[63] = -13676721;
+                colorTable[64] = -16724271;
+                colorTable[65] = -7077677;
+                colorTable[66] = -60269;
+                colorTable[67] = -16728065;
+                colorTable[68] = -9868951;
+                colorTable[69] = -14774017;
+                colorTable[70] = -5103070;
+                colorTable[71] = -1296;
+                colorTable[72] = -14513374;
+                colorTable[73] = -65281;
+                colorTable[74] = -2302756;
+                colorTable[75] = -460545;
+                colorTable[76] = -10496;
+                colorTable[77] = -2448096;
+                colorTable[78] = -8355712;
+                colorTable[79] = -16744448;
+                colorTable[80] = -5374161;
+                colorTable[81] = -983056;
+                colorTable[82] = -38476;
+                colorTable[83] = -3318692;
+                colorTable[84] = -11861886;
+                colorTable[85] = -16;
+                colorTable[86] = -989556;
+                colorTable[87] = -1644806;
+                colorTable[88] = -3851;
+                colorTable[89] = -8586240;
+                colorTable[90] = -1331;
+                colorTable[91] = -5383962;
+                colorTable[92] = -1015680;
+                colorTable[93] = -2031617;
+                colorTable[94] = -329006;
+                colorTable[95] = -2894893;
+                colorTable[96] = -7278960;
+                colorTable[97] = -18751;
+                colorTable[98] = -24454;
+                colorTable[99] = -14634326;
+                colorTable[100] = -7876870;
+                colorTable[101] = -8943463;
+                colorTable[102] = -5192482;
+                colorTable[103] = -32;
+                colorTable[104] = -16711936;
+                colorTable[105] = -13447886;
+                colorTable[106] = -331546;
+                colorTable[107] = -65281;
+                colorTable[108] = -8388608;
+                colorTable[109] = -10039894;
+                colorTable[110] = -16777011;
+                colorTable[111] = -4565549;
+                colorTable[112] = -7114533;
+                colorTable[113] = -12799119;
+                colorTable[114] = -8689426;
+                colorTable[115] = -16713062;
+                colorTable[116] = -12004916;
+                colorTable[117] = -3730043;
+                colorTable[118] = -15132304;
+                colorTable[119] = -655366;
+                colorTable[120] = -6943;
+                colorTable[121] = -6987;
+                colorTable[122] = -8531;
+                colorTable[123] = -16777088;
+                colorTable[124] = -133658;
+                colorTable[125] = -8355840;
+                colorTable[126] = -9728477;
+                colorTable[127] = -23296;
+                colorTable[128] = -47872;
+                colorTable[129] = -2461482;
+                colorTable[130] = -1120086;
+                colorTable[131] = -6751336;
+                colorTable[132] = -5247250;
+                colorTable[133] = -2396013;
+                colorTable[134] = -4139;
+                colorTable[135] = -9543;
+                colorTable[136] = -3308225;
+                colorTable[137] = -16181;
+                colorTable[138] = -2252579;
+                colorTable[139] = -5185306;
+                colorTable[140] = -8388480;
+                colorTable[141] = -65536;
+                colorTable[142] = -4419697;
+                colorTable[143] = -12490271;
+                colorTable[144] = -7650029;
+                colorTable[145] = -360334;
+                colorTable[146] = -744352;
+                colorTable[147] = -13726889;
+                colorTable[148] = -2578;
+                colorTable[149] = -6270419;
+                colorTable[150] = -4144960;
+                colorTable[151] = -7876885;
+                colorTable[152] = -9807155;
+                colorTable[153] = -9404272;
+                colorTable[154] = -1286;
+                colorTable[155] = -16711809;
+                colorTable[156] = -12156236;
+                colorTable[157] = -2968436;
+                colorTable[158] = -16744320;
+                colorTable[159] = -2572328;
+                colorTable[160] = -40121;
+                colorTable[161] = -12525360;
+                colorTable[162] = -1146130;
+                colorTable[163] = -663885;
+                colorTable[164] = -1;
+                colorTable[165] = -657931;
+                colorTable[166] = -256;
+                colorTable[167] = -6632142;
+                ExpressCraft.KnownColorTable.colorTable = colorTable;
+            },
+            knownColorToArgb: function (color) {
+                ExpressCraft.KnownColorTable.ensureColorTable();
+                if (color <= ExpressCraft.KnownColor.MenuHighlight) {
+                    return ExpressCraft.KnownColorTable.colorTable[color];
+                }
+                return 0;
+            },
+            knownColorToName: function (color) {
+                ExpressCraft.KnownColorTable.ensureColorNameTable();
+                if (color <= ExpressCraft.KnownColor.MenuHighlight) {
+                    return ExpressCraft.KnownColorTable.colorNameTable[color];
+                }
+                return null;
+            }
+        }
+    });
 
     Bridge.define("ExpressCraft.MessageBoxButtons", {
         $kind: "enum",
