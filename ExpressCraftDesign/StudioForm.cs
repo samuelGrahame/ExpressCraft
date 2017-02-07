@@ -189,7 +189,18 @@ namespace ExpressCraftDesign
 		public ControlHolder(Control control, ControlHolder parent)
 		{
 			Control = control;
+
+			if(Control is Form)
+			{
+				AttachDrop(((Form)Control).Body, this);
+			}
+
 			Parent = parent;
+		}
+
+		public void AttachDrop(HTMLElement element, ControlHolder holder)
+		{
+
 		}
 	}
 
@@ -271,8 +282,8 @@ namespace ExpressCraftDesign
 			frm.InDesign = true;
 
 			designerContainer = Div();			
-			designerContainer.SetBounds(15, 15, "auto", "auto");
-
+			designerContainer.SetBounds(15, 15, "calc(100% - 30px)", "calc(100% - 30px)");
+			
 			designerContainer.AppendChild(formHolder.Control);			
 
 			frm.Content.Style.Visibility = Visibility.Inherit;			
@@ -280,6 +291,8 @@ namespace ExpressCraftDesign
 			splitControlContainer1.Panel2.Content.Style.Overflow = Overflow.Auto;
 
 			splitControlContainer1.Panel2.Content.AppendChild(designerContainer);
+
+			splitControlContainer1.Panel2.Content.Style.BackgroundColor = Color.White;
 
 			splitControlContainer1.SplitterPosition = 572;
 

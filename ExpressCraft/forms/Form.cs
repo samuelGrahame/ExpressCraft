@@ -957,16 +957,16 @@ namespace ExpressCraft
 
 				int X = mev.PageX - Content.OffsetLeft;
 				int Y = mev.PageY - Content.OffsetTop;
-
-				if(InDesign)
-					return;
-
+				
 				if(windowState == WindowState.Maximized)
 				{
 					SetCursor(Cursor.Default);
 					MoveAction = MouseMoveAction.Move;                    
 				}else
 				{
+					if(InDesign)
+						return;
+
 					if(HeadingTitle != null && ev.Target == HeadingTitle)
 					{
 						SetCursor(Cursor.Default);						
@@ -1031,10 +1031,7 @@ namespace ExpressCraft
 				}
 			});
 
-			Heading.AddEventListener(EventType.DblClick, (ev) => {
-				if(InDesign)
-					return;
-
+			Heading.AddEventListener(EventType.DblClick, (ev) => {				
 				if(AllowSizeChange)
                 {
                     changeWindowState();
@@ -1046,10 +1043,7 @@ namespace ExpressCraft
 			Content.AddEventListener(EventType.MouseMove, (ev) => {
 				if(InExternalMouseEvent)
 					return;
-
-				if(InDesign)
-					return;
-
+				
 				if(ev.Target == HeadingTitle)
 					return;
 				var mev = ev.As<MouseEvent>();
@@ -1069,7 +1063,10 @@ namespace ExpressCraft
 					SetCursor(Cursor.Default);
 					return;
 				}
-                if(AllowSizeChange)
+				if(InDesign)
+					return;
+
+				if(AllowSizeChange)
                 {
                     if (MoveAction == MouseMoveAction.TopLeftResize || X <= ResizeCorners && Y <= ResizeCorners)
                     {
@@ -1147,9 +1144,7 @@ namespace ExpressCraft
 				ev.StopPropagation();
 			});
 
-			Body.AddEventListener(EventType.MouseMove, (ev) => {
-				if(InDesign)
-					return;
+			Body.AddEventListener(EventType.MouseMove, (ev) => {				
 				if(InExternalMouseEvent)
 					return;
 

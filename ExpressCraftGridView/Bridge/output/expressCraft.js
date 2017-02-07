@@ -5147,14 +5147,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var X = (mev.pageX - this.content.offsetLeft) | 0;
             var Y = (mev.pageY - this.content.offsetTop) | 0;
 
-            if (this.inDesign) {
-                return;
-            }
-
             if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
                 this.setCursor("default");
                 ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
             } else {
+                if (this.inDesign) {
+                    return;
+                }
+
                 if (this.getHeadingTitle() != null && Bridge.referenceEquals(ev.target, this.getHeadingTitle())) {
                     this.setCursor("default");
                     ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
@@ -5198,10 +5198,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f14: function (ev) {
-            if (this.inDesign) {
-                return;
-            }
-
             if (this.allowSizeChange) {
                 this.changeWindowState();
             }
@@ -5210,10 +5206,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         f15: function (ev) {
             if (ExpressCraft.Form.inExternalMouseEvent) {
-                return;
-            }
-
-            if (this.inDesign) {
                 return;
             }
 
@@ -5234,6 +5226,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.setCursor("default");
                 return;
             }
+            if (this.inDesign) {
+                return;
+            }
+
             if (this.allowSizeChange) {
                 if (ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.TopLeftResize || X <= ExpressCraft.Form.getResizeCorners() && Y <= ExpressCraft.Form.getResizeCorners()) {
                     this.setCursor("nwse-resize");
@@ -5291,9 +5287,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopPropagation();
         },
         f18: function (ev) {
-            if (this.inDesign) {
-                return;
-            }
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }

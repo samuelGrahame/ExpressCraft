@@ -31,6 +31,11 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         ctor: function (control, parent) {
             this.$initialize();
             this.control = control;
+
+            if (Bridge.is(this.control, ExpressCraft.Form)) {
+                this.attachDrop(Bridge.cast(this.control, ExpressCraft.Form).getBody(), this);
+            }
+
             this.parent = parent;
         },
         generateDeclareDesigner: function (builder) {
@@ -105,6 +110,9 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                     this.children.getItem(i).generateIniDesigner(builder);
                 }
             }
+        },
+        attachDrop: function (element, holder) {
+
         }
     });
 
@@ -142,7 +150,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             frm.inDesign = true;
 
             this.designerContainer = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds(this.designerContainer, 15, 15, "auto", "auto");
+            ExpressCraft.Helper.setBounds(this.designerContainer, 15, 15, "calc(100% - 30px)", "calc(100% - 30px)");
 
             this.designerContainer.appendChild(ExpressCraft.Control.op_Implicit(this.formHolder.control));
 
@@ -151,6 +159,8 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             this.splitControlContainer1.panel2.content.style.overflow = "auto";
 
             this.splitControlContainer1.panel2.content.appendChild(this.designerContainer);
+
+            this.splitControlContainer1.panel2.content.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getWhite().$clone());
 
             this.splitControlContainer1.setSplitterPosition(572);
 
