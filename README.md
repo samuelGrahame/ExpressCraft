@@ -94,3 +94,18 @@ HTMLElement body = y.Body;
 HTMLElement baseContent = y.Content;
 
 ```
+
+# How to use the Color Class
+
+```csharp
+var color = Color.Blue;
+color = Color.FromKnownColor(KnownColor.Brown);
+color = Color.FromArgb(100, Color.Black);
+
+color = Color.FromArgb(10, 10, 10);
+
+Document.Body.Style.BackgroundColor = color;
+
+// The color implicitly is casted to string using a Hex value. 
+
+```
