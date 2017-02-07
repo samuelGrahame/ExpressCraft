@@ -491,7 +491,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
-            document.body.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getBlack().$clone());
+            document.body.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getBlue().$clone());
         }
     });
 

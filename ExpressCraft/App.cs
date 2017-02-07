@@ -9,8 +9,7 @@ namespace ExpressCraft
 	{
 		public static void Main()
 		{			
-			Settings.Setup();
-			Document.Body.Style.BackgroundColor = Color.Black;
+			Settings.Setup();			
 		}		
 	}
 }
