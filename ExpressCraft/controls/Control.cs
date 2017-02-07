@@ -321,7 +321,7 @@ namespace ExpressCraft
             return GetTextMetrics(t, f).Width;	
 		}        
 
-		public static implicit operator Node(Control control)  // implicit digit to byte conversion operator
+		public static implicit operator Node(Control control)
 		{
 			if(Settings.AutoRender && !control.HasRendered)			
 				control.Render();			

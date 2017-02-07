@@ -23,288 +23,994 @@ namespace ExpressCraft
 		private readonly long value;
 		private readonly short knownColor;
 		private readonly short state;
-		public static Color Transparent =>
-			new Color(KnownColor.Transparent);
-		public static Color AliceBlue =>
-			new Color(KnownColor.AliceBlue);
-		public static Color AntiqueWhite =>
-			new Color(KnownColor.AntiqueWhite);
-		public static Color Aqua =>
-			new Color(KnownColor.Aqua);
-		public static Color Aquamarine =>
-			new Color(KnownColor.Aquamarine);
-		public static Color Azure =>
-			new Color(KnownColor.Azure);
-		public static Color Beige =>
-			new Color(KnownColor.Beige);
-		public static Color Bisque =>
-			new Color(KnownColor.Bisque);
-		public static Color Black =>
-			new Color(KnownColor.Black);
-		public static Color BlanchedAlmond =>
-			new Color(KnownColor.BlanchedAlmond);
-		public static Color Blue =>
-			new Color(KnownColor.Blue);
-		public static Color BlueViolet =>
-			new Color(KnownColor.BlueViolet);
-		public static Color Brown =>
-			new Color(KnownColor.Brown);
-		public static Color BurlyWood =>
-			new Color(KnownColor.BurlyWood);
-		public static Color CadetBlue =>
-			new Color(KnownColor.CadetBlue);
-		public static Color Chartreuse =>
-			new Color(KnownColor.Chartreuse);
-		public static Color Chocolate =>
-			new Color(KnownColor.Chocolate);
-		public static Color Coral =>
-			new Color(KnownColor.Coral);
-		public static Color CornflowerBlue =>
-			new Color(KnownColor.CornflowerBlue);
-		public static Color Cornsilk =>
-			new Color(KnownColor.Cornsilk);
-		public static Color Crimson =>
-			new Color(KnownColor.Crimson);
-		public static Color Cyan =>
-			new Color(KnownColor.Cyan);
-		public static Color DarkBlue =>
-			new Color(KnownColor.DarkBlue);
-		public static Color DarkCyan =>
-			new Color(KnownColor.DarkCyan);
-		public static Color DarkGoldenrod =>
-			new Color(KnownColor.DarkGoldenrod);
-		public static Color DarkGray =>
-			new Color(KnownColor.DarkGray);
-		public static Color DarkGreen =>
-			new Color(KnownColor.DarkGreen);
-		public static Color DarkKhaki =>
-			new Color(KnownColor.DarkKhaki);
-		public static Color DarkMagenta =>
-			new Color(KnownColor.DarkMagenta);
-		public static Color DarkOliveGreen =>
-			new Color(KnownColor.DarkOliveGreen);
-		public static Color DarkOrange =>
-			new Color(KnownColor.DarkOrange);
-		public static Color DarkOrchid =>
-			new Color(KnownColor.DarkOrchid);
-		public static Color DarkRed =>
-			new Color(KnownColor.DarkRed);
-		public static Color DarkSalmon =>
-			new Color(KnownColor.DarkSalmon);
-		public static Color DarkSeaGreen =>
-			new Color(KnownColor.DarkSeaGreen);
-		public static Color DarkSlateBlue =>
-			new Color(KnownColor.DarkSlateBlue);
-		public static Color DarkSlateGray =>
-			new Color(KnownColor.DarkSlateGray);
-		public static Color DarkTurquoise =>
-			new Color(KnownColor.DarkTurquoise);
-		public static Color DarkViolet =>
-			new Color(KnownColor.DarkViolet);
-		public static Color DeepPink =>
-			new Color(KnownColor.DeepPink);
-		public static Color DeepSkyBlue =>
-			new Color(KnownColor.DeepSkyBlue);
-		public static Color DimGray =>
-			new Color(KnownColor.DimGray);
-		public static Color DodgerBlue =>
-			new Color(KnownColor.DodgerBlue);
-		public static Color Firebrick =>
-			new Color(KnownColor.Firebrick);
-		public static Color FloralWhite =>
-			new Color(KnownColor.FloralWhite);
-		public static Color ForestGreen =>
-			new Color(KnownColor.ForestGreen);
-		public static Color Fuchsia =>
-			new Color(KnownColor.Fuchsia);
-		public static Color Gainsboro =>
-			new Color(KnownColor.Gainsboro);
-		public static Color GhostWhite =>
-			new Color(KnownColor.GhostWhite);
-		public static Color Gold =>
-			new Color(KnownColor.Gold);
-		public static Color Goldenrod =>
-			new Color(KnownColor.Goldenrod);
-		public static Color Gray =>
-			new Color(KnownColor.Gray);
-		public static Color Green =>
-			new Color(KnownColor.Green);
-		public static Color GreenYellow =>
-			new Color(KnownColor.GreenYellow);
-		public static Color Honeydew =>
-			new Color(KnownColor.Honeydew);
-		public static Color HotPink =>
-			new Color(KnownColor.HotPink);
-		public static Color IndianRed =>
-			new Color(KnownColor.IndianRed);
-		public static Color Indigo =>
-			new Color(KnownColor.Indigo);
-		public static Color Ivory =>
-			new Color(KnownColor.Ivory);
-		public static Color Khaki =>
-			new Color(KnownColor.Khaki);
-		public static Color Lavender =>
-			new Color(KnownColor.Lavender);
-		public static Color LavenderBlush =>
-			new Color(KnownColor.LavenderBlush);
-		public static Color LawnGreen =>
-			new Color(KnownColor.LawnGreen);
-		public static Color LemonChiffon =>
-			new Color(KnownColor.LemonChiffon);
-		public static Color LightBlue =>
-			new Color(KnownColor.LightBlue);
-		public static Color LightCoral =>
-			new Color(KnownColor.LightCoral);
-		public static Color LightCyan =>
-			new Color(KnownColor.LightCyan);
-		public static Color LightGoldenrodYellow =>
-			new Color(KnownColor.LightGoldenrodYellow);
-		public static Color LightGreen =>
-			new Color(KnownColor.LightGreen);
-		public static Color LightGray =>
-			new Color(KnownColor.LightGray);
-		public static Color LightPink =>
-			new Color(KnownColor.LightPink);
-		public static Color LightSalmon =>
-			new Color(KnownColor.LightSalmon);
-		public static Color LightSeaGreen =>
-			new Color(KnownColor.LightSeaGreen);
-		public static Color LightSkyBlue =>
-			new Color(KnownColor.LightSkyBlue);
-		public static Color LightSlateGray =>
-			new Color(KnownColor.LightSlateGray);
-		public static Color LightSteelBlue =>
-			new Color(KnownColor.LightSteelBlue);
-		public static Color LightYellow =>
-			new Color(KnownColor.LightYellow);
-		public static Color Lime =>
-			new Color(KnownColor.Lime);
-		public static Color LimeGreen =>
-			new Color(KnownColor.LimeGreen);
-		public static Color Linen =>
-			new Color(KnownColor.Linen);
-		public static Color Magenta =>
-			new Color(KnownColor.Magenta);
-		public static Color Maroon =>
-			new Color(KnownColor.Maroon);
-		public static Color MediumAquamarine =>
-			new Color(KnownColor.MediumAquamarine);
-		public static Color MediumBlue =>
-			new Color(KnownColor.MediumBlue);
-		public static Color MediumOrchid =>
-			new Color(KnownColor.MediumOrchid);
-		public static Color MediumPurple =>
-			new Color(KnownColor.MediumPurple);
-		public static Color MediumSeaGreen =>
-			new Color(KnownColor.MediumSeaGreen);
-		public static Color MediumSlateBlue =>
-			new Color(KnownColor.MediumSlateBlue);
-		public static Color MediumSpringGreen =>
-			new Color(KnownColor.MediumSpringGreen);
-		public static Color MediumTurquoise =>
-			new Color(KnownColor.MediumTurquoise);
-		public static Color MediumVioletRed =>
-			new Color(KnownColor.MediumVioletRed);
-		public static Color MidnightBlue =>
-			new Color(KnownColor.MidnightBlue);
-		public static Color MintCream =>
-			new Color(KnownColor.MintCream);
-		public static Color MistyRose =>
-			new Color(KnownColor.MistyRose);
-		public static Color Moccasin =>
-			new Color(KnownColor.Moccasin);
-		public static Color NavajoWhite =>
-			new Color(KnownColor.NavajoWhite);
-		public static Color Navy =>
-			new Color(KnownColor.Navy);
-		public static Color OldLace =>
-			new Color(KnownColor.OldLace);
-		public static Color Olive =>
-			new Color(KnownColor.Olive);
-		public static Color OliveDrab =>
-			new Color(KnownColor.OliveDrab);
-		public static Color Orange =>
-			new Color(KnownColor.Orange);
-		public static Color OrangeRed =>
-			new Color(KnownColor.OrangeRed);
-		public static Color Orchid =>
-			new Color(KnownColor.Orchid);
-		public static Color PaleGoldenrod =>
-			new Color(KnownColor.PaleGoldenrod);
-		public static Color PaleGreen =>
-			new Color(KnownColor.PaleGreen);
-		public static Color PaleTurquoise =>
-			new Color(KnownColor.PaleTurquoise);
-		public static Color PaleVioletRed =>
-			new Color(KnownColor.PaleVioletRed);
-		public static Color PapayaWhip =>
-			new Color(KnownColor.PapayaWhip);
-		public static Color PeachPuff =>
-			new Color(KnownColor.PeachPuff);
-		public static Color Peru =>
-			new Color(KnownColor.Peru);
-		public static Color Pink =>
-			new Color(KnownColor.Pink);
-		public static Color Plum =>
-			new Color(KnownColor.Plum);
-		public static Color PowderBlue =>
-			new Color(KnownColor.PowderBlue);
-		public static Color Purple =>
-			new Color(KnownColor.Purple);
-		public static Color Red =>
-			new Color(KnownColor.Red);
-		public static Color RosyBrown =>
-			new Color(KnownColor.RosyBrown);
-		public static Color RoyalBlue =>
-			new Color(KnownColor.RoyalBlue);
-		public static Color SaddleBrown =>
-			new Color(KnownColor.SaddleBrown);
-		public static Color Salmon =>
-			new Color(KnownColor.Salmon);
-		public static Color SandyBrown =>
-			new Color(KnownColor.SandyBrown);
-		public static Color SeaGreen =>
-			new Color(KnownColor.SeaGreen);
-		public static Color SeaShell =>
-			new Color(KnownColor.SeaShell);
-		public static Color Sienna =>
-			new Color(KnownColor.Sienna);
-		public static Color Silver =>
-			new Color(KnownColor.Silver);
-		public static Color SkyBlue =>
-			new Color(KnownColor.SkyBlue);
-		public static Color SlateBlue =>
-			new Color(KnownColor.SlateBlue);
-		public static Color SlateGray =>
-			new Color(KnownColor.SlateGray);
-		public static Color Snow =>
-			new Color(KnownColor.Snow);
-		public static Color SpringGreen =>
-			new Color(KnownColor.SpringGreen);
-		public static Color SteelBlue =>
-			new Color(KnownColor.SteelBlue);
-		public static Color Tan =>
-			new Color(KnownColor.Tan);
-		public static Color Teal =>
-			new Color(KnownColor.Teal);
-		public static Color Thistle =>
-			new Color(KnownColor.Thistle);
-		public static Color Tomato =>
-			new Color(KnownColor.Tomato);
-		public static Color Turquoise =>
-			new Color(KnownColor.Turquoise);
-		public static Color Violet =>
-			new Color(KnownColor.Violet);
-		public static Color Wheat =>
-			new Color(KnownColor.Wheat);
-		public static Color White =>
-			new Color(KnownColor.White);
-		public static Color WhiteSmoke =>
-			new Color(KnownColor.WhiteSmoke);
-		public static Color Yellow =>
-			new Color(KnownColor.Yellow);
-		public static Color YellowGreen =>
-			new Color(KnownColor.YellowGreen);
+		public static Color Transparent
+		{
+			get
+			{
+				return new Color(KnownColor.Transparent);
+			}
+		}
+		public static Color AliceBlue
+		{
+			get
+			{
+				return new Color(KnownColor.AliceBlue);
+			}
+		}
+		public static Color AntiqueWhite
+		{
+			get
+			{
+				return new Color(KnownColor.AntiqueWhite);
+			}
+		}
+		public static Color Aqua
+		{
+			get
+			{
+				return new Color(KnownColor.Aqua);
+			}
+		}
+		public static Color Aquamarine
+		{
+			get
+			{
+				return new Color(KnownColor.Aquamarine);
+			}
+		}
+		public static Color Azure
+		{
+			get
+			{
+				return new Color(KnownColor.Azure);
+			}
+		}
+		public static Color Beige
+		{
+			get
+			{
+				return new Color(KnownColor.Beige);
+			}
+		}
+		public static Color Bisque
+		{
+			get
+			{
+				return new Color(KnownColor.Bisque);
+			}
+		}
+		public static Color Black
+		{
+			get
+			{
+				return new Color(KnownColor.Black);
+			}
+		}
+		public static Color BlanchedAlmond
+		{
+			get
+			{
+				return new Color(KnownColor.BlanchedAlmond);
+			}
+		}
+		public static Color Blue
+		{
+			get
+			{
+				return new Color(KnownColor.Blue);
+			}
+		}
+		public static Color BlueViolet
+		{
+			get
+			{
+				return new Color(KnownColor.BlueViolet);
+			}
+		}
+		public static Color Brown
+		{
+			get
+			{
+				return new Color(KnownColor.Brown);
+			}
+		}
+		public static Color BurlyWood
+		{
+			get
+			{
+				return new Color(KnownColor.BurlyWood);
+			}
+		}
+		public static Color CadetBlue
+		{
+			get
+			{
+				return new Color(KnownColor.CadetBlue);
+			}
+		}
+		public static Color Chartreuse
+		{
+			get
+			{
+				return new Color(KnownColor.Chartreuse);
+			}
+		}
+		public static Color Chocolate
+		{
+			get
+			{
+				return new Color(KnownColor.Chocolate);
+			}
+		}
+		public static Color Coral
+		{
+			get
+			{
+				return new Color(KnownColor.Coral);
+			}
+		}
+		public static Color CornflowerBlue
+		{
+			get
+			{
+				return new Color(KnownColor.CornflowerBlue);
+			}
+		}
+		public static Color Cornsilk
+		{
+			get
+			{
+				return new Color(KnownColor.Cornsilk);
+			}
+		}
+		public static Color Crimson
+		{
+			get
+			{
+				return new Color(KnownColor.Crimson);
+			}
+		}
+		public static Color Cyan
+		{
+			get
+			{
+				return new Color(KnownColor.Cyan);
+			}
+		}
+		public static Color DarkBlue
+		{
+			get
+			{
+				return new Color(KnownColor.DarkBlue);
+			}
+		}
+		public static Color DarkCyan
+		{
+			get
+			{
+				return new Color(KnownColor.DarkCyan);
+			}
+		}
+		public static Color DarkGoldenrod
+		{
+			get
+			{
+				return new Color(KnownColor.DarkGoldenrod);
+			}
+		}
+		public static Color DarkGray
+		{
+			get
+			{
+				return new Color(KnownColor.DarkGray);
+			}
+		}
+		public static Color DarkGreen
+		{
+			get
+			{
+				return new Color(KnownColor.DarkGreen);
+			}
+		}
+		public static Color DarkKhaki
+		{
+			get
+			{
+				return new Color(KnownColor.DarkKhaki);
+			}
+		}
+		public static Color DarkMagenta
+		{
+			get
+			{
+				return new Color(KnownColor.DarkMagenta);
+			}
+		}
+		public static Color DarkOliveGreen
+		{
+			get
+			{
+				return new Color(KnownColor.DarkOliveGreen);
+			}
+		}
+		public static Color DarkOrange
+		{
+			get
+			{
+				return new Color(KnownColor.DarkOrange);
+			}
+		}
+		public static Color DarkOrchid
+		{
+			get
+			{
+				return new Color(KnownColor.DarkOrchid);
+			}
+		}
+		public static Color DarkRed
+		{
+			get
+			{
+				return new Color(KnownColor.DarkRed);
+			}
+		}
+		public static Color DarkSalmon
+		{
+			get
+			{
+				return new Color(KnownColor.DarkSalmon);
+			}
+		}
+		public static Color DarkSeaGreen
+		{
+			get
+			{
+				return new Color(KnownColor.DarkSeaGreen);
+			}
+		}
+		public static Color DarkSlateBlue
+		{
+			get
+			{
+				return new Color(KnownColor.DarkSlateBlue);
+			}
+		}
+		public static Color DarkSlateGray
+		{
+			get
+			{
+				return new Color(KnownColor.DarkSlateGray);
+			}
+		}
+		public static Color DarkTurquoise
+		{
+			get
+			{
+				return new Color(KnownColor.DarkTurquoise);
+			}
+		}
+		public static Color DarkViolet
+		{
+			get
+			{
+				return new Color(KnownColor.DarkViolet);
+			}
+		}
+		public static Color DeepPink
+		{
+			get
+			{
+				return new Color(KnownColor.DeepPink);
+			}
+		}
+		public static Color DeepSkyBlue
+		{
+			get
+			{
+				return new Color(KnownColor.DeepSkyBlue);
+			}
+		}
+		public static Color DimGray
+		{
+			get
+			{
+				return new Color(KnownColor.DimGray);
+			}
+		}
+		public static Color DodgerBlue
+		{
+			get
+			{
+				return new Color(KnownColor.DodgerBlue);
+			}
+		}
+		public static Color Firebrick
+		{
+			get
+			{
+				return new Color(KnownColor.Firebrick);
+			}
+		}
+		public static Color FloralWhite
+		{
+			get
+			{
+				return new Color(KnownColor.FloralWhite);
+			}
+		}
+		public static Color ForestGreen
+		{
+			get
+			{
+				return new Color(KnownColor.ForestGreen);
+			}
+		}
+		public static Color Fuchsia
+		{
+			get
+			{
+				return new Color(KnownColor.Fuchsia);
+			}
+		}
+		public static Color Gainsboro
+		{
+			get
+			{
+				return new Color(KnownColor.Gainsboro);
+			}
+		}
+		public static Color GhostWhite
+		{
+			get
+			{
+				return new Color(KnownColor.GhostWhite);
+			}
+		}
+		public static Color Gold
+		{
+			get
+			{
+				return new Color(KnownColor.Gold);
+			}
+		}
+		public static Color Goldenrod
+		{
+			get
+			{
+				return new Color(KnownColor.Goldenrod);
+			}
+		}
+		public static Color Gray
+		{
+			get
+			{
+				return new Color(KnownColor.Gray);
+			}
+		}
+		public static Color Green
+		{
+			get
+			{
+				return new Color(KnownColor.Green);
+			}
+		}
+		public static Color GreenYellow
+		{
+			get
+			{
+				return new Color(KnownColor.GreenYellow);
+			}
+		}
+		public static Color Honeydew
+		{
+			get
+			{
+				return new Color(KnownColor.Honeydew);
+			}
+		}
+		public static Color HotPink
+		{
+			get
+			{
+				return new Color(KnownColor.HotPink);
+			}
+		}
+		public static Color IndianRed
+		{
+			get
+			{
+				return new Color(KnownColor.IndianRed);
+			}
+		}
+		public static Color Indigo
+		{
+			get
+			{
+				return new Color(KnownColor.Indigo);
+			}
+		}
+		public static Color Ivory
+		{
+			get
+			{
+				return new Color(KnownColor.Ivory);
+			}
+		}
+		public static Color Khaki
+		{
+			get
+			{
+				return new Color(KnownColor.Khaki);
+			}
+		}
+		public static Color Lavender
+		{
+			get
+			{
+				return new Color(KnownColor.Lavender);
+			}
+		}
+		public static Color LavenderBlush
+		{
+			get
+			{
+				return new Color(KnownColor.LavenderBlush);
+			}
+		}
+		public static Color LawnGreen
+		{
+			get
+			{
+				return new Color(KnownColor.LawnGreen);
+			}
+		}
+		public static Color LemonChiffon
+		{
+			get
+			{
+				return new Color(KnownColor.LemonChiffon);
+			}
+		}
+		public static Color LightBlue
+		{
+			get
+			{
+				return new Color(KnownColor.LightBlue);
+			}
+		}
+		public static Color LightCoral
+		{
+			get
+			{
+				return new Color(KnownColor.LightCoral);
+			}
+		}
+		public static Color LightCyan
+		{
+			get
+			{
+				return new Color(KnownColor.LightCyan);
+			}
+		}
+		public static Color LightGoldenrodYellow
+		{
+			get
+			{
+				return new Color(KnownColor.LightGoldenrodYellow);
+			}
+		}
+		public static Color LightGreen
+		{
+			get
+			{
+				return new Color(KnownColor.LightGreen);
+			}
+		}
+		public static Color LightGray
+		{
+			get
+			{
+				return new Color(KnownColor.LightGray);
+			}
+		}
+		public static Color LightPink
+		{
+			get
+			{
+				return new Color(KnownColor.LightPink);
+			}
+		}
+		public static Color LightSalmon
+		{
+			get
+			{
+				return new Color(KnownColor.LightSalmon);
+			}
+		}
+		public static Color LightSeaGreen
+		{
+			get
+			{
+				return new Color(KnownColor.LightSeaGreen);
+			}
+		}
+		public static Color LightSkyBlue
+		{
+			get
+			{
+				return new Color(KnownColor.LightSkyBlue);
+			}
+		}
+		public static Color LightSlateGray
+		{
+			get
+			{
+				return new Color(KnownColor.LightSlateGray);
+			}
+		}
+		public static Color LightSteelBlue
+		{
+			get
+			{
+				return new Color(KnownColor.LightSteelBlue);
+			}
+		}
+		public static Color LightYellow
+		{
+			get
+			{
+				return new Color(KnownColor.LightYellow);
+			}
+		}
+		public static Color Lime
+		{
+			get
+			{
+				return new Color(KnownColor.Lime);
+			}
+		}
+		public static Color LimeGreen
+		{
+			get
+			{
+				return new Color(KnownColor.LimeGreen);
+			}
+		}
+		public static Color Linen
+		{
+			get
+			{
+				return new Color(KnownColor.Linen);
+			}
+		}
+		public static Color Magenta
+		{
+			get
+			{
+				return new Color(KnownColor.Magenta);
+			}
+		}
+		public static Color Maroon
+		{
+			get
+			{
+				return new Color(KnownColor.Maroon);
+			}
+		}
+		public static Color MediumAquamarine
+		{
+			get
+			{
+				return new Color(KnownColor.MediumAquamarine);
+			}
+		}
+		public static Color MediumBlue
+		{
+			get
+			{
+				return new Color(KnownColor.MediumBlue);
+			}
+		}
+		public static Color MediumOrchid
+		{
+			get
+			{
+				return new Color(KnownColor.MediumOrchid);
+			}
+		}
+		public static Color MediumPurple
+		{
+			get
+			{
+				return new Color(KnownColor.MediumPurple);
+			}
+		}
+		public static Color MediumSeaGreen
+		{
+			get
+			{
+				return new Color(KnownColor.MediumSeaGreen);
+			}
+		}
+		public static Color MediumSlateBlue
+		{
+			get
+			{
+				return new Color(KnownColor.MediumSlateBlue);
+			}
+		}
+		public static Color MediumSpringGreen
+		{
+			get
+			{
+				return new Color(KnownColor.MediumSpringGreen);
+			}
+		}
+		public static Color MediumTurquoise
+		{
+			get
+			{
+				return new Color(KnownColor.MediumTurquoise);
+			}
+		}
+		public static Color MediumVioletRed
+		{
+			get
+			{
+				return new Color(KnownColor.MediumVioletRed);
+			}
+		}
+		public static Color MidnightBlue
+		{
+			get
+			{
+				return new Color(KnownColor.MidnightBlue);
+			}
+		}
+		public static Color MintCream
+		{
+			get
+			{
+				return new Color(KnownColor.MintCream);
+			}
+		}
+		public static Color MistyRose
+		{
+			get
+			{
+				return new Color(KnownColor.MistyRose);
+			}
+		}
+		public static Color Moccasin
+		{
+			get
+			{
+				return new Color(KnownColor.Moccasin);
+			}
+		}
+		public static Color NavajoWhite
+		{
+			get
+			{
+				return new Color(KnownColor.NavajoWhite);
+			}
+		}
+		public static Color Navy
+		{
+			get
+			{
+				return new Color(KnownColor.Navy);
+			}
+		}
+		public static Color OldLace
+		{
+			get
+			{
+				return new Color(KnownColor.OldLace);
+			}
+		}
+		public static Color Olive
+		{
+			get
+			{
+				return new Color(KnownColor.Olive);
+			}
+		}
+		public static Color OliveDrab
+		{
+			get
+			{
+				return new Color(KnownColor.OliveDrab);
+			}
+		}
+		public static Color Orange
+		{
+			get
+			{
+				return new Color(KnownColor.Orange);
+			}
+		}
+		public static Color OrangeRed
+		{
+			get
+			{
+				return new Color(KnownColor.OrangeRed);
+			}
+		}
+		public static Color Orchid
+		{
+			get
+			{
+				return new Color(KnownColor.Orchid);
+			}
+		}
+		public static Color PaleGoldenrod
+		{
+			get
+			{
+				return new Color(KnownColor.PaleGoldenrod);
+			}
+		}
+		public static Color PaleGreen
+		{
+			get
+			{
+				return new Color(KnownColor.PaleGreen);
+			}
+		}
+		public static Color PaleTurquoise
+		{
+			get
+			{
+				return new Color(KnownColor.PaleTurquoise);
+			}
+		}
+		public static Color PaleVioletRed
+		{
+			get
+			{
+				return new Color(KnownColor.PaleVioletRed);
+			}
+		}
+		public static Color PapayaWhip
+		{
+			get
+			{
+				return new Color(KnownColor.PapayaWhip);
+			}
+		}
+		public static Color PeachPuff
+		{
+			get
+			{
+				return new Color(KnownColor.PeachPuff);
+			}
+		}
+		public static Color Peru
+		{
+			get
+			{
+				return new Color(KnownColor.Peru);
+			}
+		}
+		public static Color Pink
+		{
+			get
+			{
+				return new Color(KnownColor.Pink);
+			}
+		}
+		public static Color Plum
+		{
+			get
+			{
+				return new Color(KnownColor.Plum);
+			}
+		}
+		public static Color PowderBlue
+		{
+			get
+			{
+				return new Color(KnownColor.PowderBlue);
+			}
+		}
+		public static Color Purple
+		{
+			get
+			{
+				return new Color(KnownColor.Purple);
+			}
+		}
+		public static Color Red
+		{
+			get
+			{
+				return new Color(KnownColor.Red);
+			}
+		}
+		public static Color RosyBrown
+		{
+			get
+			{
+				return new Color(KnownColor.RosyBrown);
+			}
+		}
+		public static Color RoyalBlue
+		{
+			get
+			{
+				return new Color(KnownColor.RoyalBlue);
+			}
+		}
+		public static Color SaddleBrown
+		{
+			get
+			{
+				return new Color(KnownColor.SaddleBrown);
+			}
+		}
+		public static Color Salmon
+		{
+			get
+			{
+				return new Color(KnownColor.Salmon);
+			}
+		}
+		public static Color SandyBrown
+		{
+			get
+			{
+				return new Color(KnownColor.SandyBrown);
+			}
+		}
+		public static Color SeaGreen
+		{
+			get
+			{
+				return new Color(KnownColor.SeaGreen);
+			}
+		}
+		public static Color SeaShell
+		{
+			get
+			{
+				return new Color(KnownColor.SeaShell);
+			}
+		}
+		public static Color Sienna
+		{
+			get
+			{
+				return new Color(KnownColor.Sienna);
+			}
+		}
+		public static Color Silver
+		{
+			get
+			{
+				return new Color(KnownColor.Silver);
+			}
+		}
+		public static Color SkyBlue
+		{
+			get
+			{
+				return new Color(KnownColor.SkyBlue);
+			}
+		}
+		public static Color SlateBlue
+		{
+			get
+			{
+				return new Color(KnownColor.SlateBlue);
+			}
+		}
+		public static Color SlateGray
+		{
+			get
+			{
+				return new Color(KnownColor.SlateGray);
+			}
+		}
+		public static Color Snow
+		{
+			get
+			{
+				return new Color(KnownColor.Snow);
+			}
+		}
+		public static Color SpringGreen
+		{
+			get
+			{
+				return new Color(KnownColor.SpringGreen);
+			}
+		}
+		public static Color SteelBlue
+		{
+			get
+			{
+				return new Color(KnownColor.SteelBlue);
+			}
+		}
+		public static Color Tan
+		{
+			get
+			{
+				return new Color(KnownColor.Tan);
+			}
+		}
+		public static Color Teal
+		{
+			get
+			{
+				return new Color(KnownColor.Teal);
+			}
+		}
+		public static Color Thistle
+		{
+			get
+			{
+				return new Color(KnownColor.Thistle);
+			}
+		}
+		public static Color Tomato
+		{
+			get
+			{
+				return new Color(KnownColor.Tomato);
+			}
+		}
+		public static Color Turquoise
+		{
+			get
+			{
+				return new Color(KnownColor.Turquoise);
+			}
+		}
+		public static Color Violet
+		{
+			get
+			{
+				return new Color(KnownColor.Violet);
+			}
+		}
+		public static Color Wheat
+		{
+			get
+			{
+				return new Color(KnownColor.Wheat);
+			}
+		}
+		public static Color White
+		{
+			get
+			{
+				return new Color(KnownColor.White);
+			}
+		}
+		public static Color WhiteSmoke
+		{
+			get
+			{
+				return new Color(KnownColor.WhiteSmoke);
+			}
+		}
+		public static Color Yellow
+		{
+			get
+			{
+				return new Color(KnownColor.Yellow);
+			}
+		}
+		public static Color YellowGreen
+		{
+			get
+			{
+				return new Color(KnownColor.YellowGreen);
+			}
+		}
+
 		internal Color(KnownColor knownColor)
 		{
 			this.value = 0L;
@@ -321,18 +1027,49 @@ namespace ExpressCraft
 			this.knownColor = (short)knownColor;
 		}
 
-		public byte R =>
-			((byte)((this.Value >> 0x10) & 0xffL));
-		public byte G =>
-			((byte)((this.Value >> 8) & 0xffL));
-		public byte B =>
-			((byte)(this.Value & 0xffL));
-		public byte A =>
-			((byte)((this.Value >> 0x18) & 0xffL));
-		public bool IsKnownColor =>
-			((this.state & StateKnownColorValid) > 0);
-		public bool IsEmpty =>
-			(this.state == 0);
+		public byte R
+		{
+			get
+			{
+				return (byte)((this.Value >> 0x10) & 0xffL);
+			}
+		}
+		public byte G
+		{
+			get
+			{
+				return (byte)((this.Value >> 8) & 0xffL);
+			}
+		}
+		public byte B
+		{
+			get
+			{
+				return (byte)(this.Value & 0xffL);
+			}
+		}
+		public byte A
+		{
+			get
+			{
+				return (byte)((this.Value >> 0x18) & 0xffL);
+			}
+		}
+		public bool IsKnownColor
+		{
+			get
+			{
+				return ((this.state & StateKnownColorValid) > 0);
+			}
+		}
+		public bool IsEmpty
+		{
+			get
+			{
+				return (this.state == 0);
+			}
+		}
+
 		public bool IsNamedColor
 		{
 			get
@@ -344,6 +1081,7 @@ namespace ExpressCraft
 				return true;
 			}
 		}
+
 		public bool IsSystemColor
 		{
 			get
@@ -359,6 +1097,17 @@ namespace ExpressCraft
 				return true;
 			}
 		}
+
+		public static implicit operator string(Color color)  // implicit digit to byte conversion operator
+		{
+			return color.ToHex();		
+		}
+
+		public static implicit operator Color(string hexValue)  // implicit digit to byte conversion operator
+		{
+			return Color.FromHex(hexValue);			
+		}
+
 		private string NameAndARGBValue
 		{
 			get
@@ -411,11 +1160,15 @@ namespace ExpressCraft
 			}
 		}
 
-		private static long MakeArgb(byte alpha, byte red, byte green, byte blue) =>
-			((long)(((ulong)((((red << 0x10) | (green << 8)) | blue) | (alpha << 0x18))) & 0xffffffffL));
+		private static long MakeArgb(byte alpha, byte red, byte green, byte blue)
+		{
+			return (long)(((ulong)((((red << 0x10) | (green << 8)) | blue) | (alpha << 0x18))) & 0xffffffffL);
+		}
 
-		public static Color FromArgb(int argb) =>
-			new Color(argb & ((long)0xffffffffL), StateARGBValueValid, null, (KnownColor)0);
+		public static Color FromArgb(int argb)
+		{
+			return new Color(argb & ((long)0xffffffffL), StateARGBValueValid, null, (KnownColor)0);
+		}
 
 		public static Color FromArgb(int alpha, int red, int green, int blue)
 		{
@@ -432,8 +1185,10 @@ namespace ExpressCraft
 			return new Color(MakeArgb((byte)alpha, baseColor.R, baseColor.G, baseColor.B), StateARGBValueValid, null, (KnownColor)0);
 		}
 
-		public static Color FromArgb(int red, int green, int blue) =>
-			FromArgb(0xff, red, green, blue);
+		public static Color FromArgb(int red, int green, int blue)
+		{
+			return FromArgb(0xff, red, green, blue);
+		}
 
 		public static bool IsEnumValid(Enum enumValue, int value, int minValue, int maxValue)
 		{
@@ -449,11 +1204,11 @@ namespace ExpressCraft
 		{
 			if(A == 0)
 			{
-				return string.Format("#{0:16}{1:16}{2:16}{3:16}", A ,R, G, B); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+				return string.Format("#{0}{1}{2}{3}", A.ToString(16) ,R.ToString(16), G.ToString(16), B.ToString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
 			}
 			else
 			{
-				return string.Format("#{0:16}{1:16}{2:16}", R, G, B); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+				return string.Format("#{0}{1}{2}", R.ToString(16), G.ToString(16), B.ToString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
 			}
 		}
 
@@ -578,11 +1333,15 @@ namespace ExpressCraft
 			return ((num4 - num5) / ((2f - num4) - num5));
 		}
 
-		public int ToArgb() =>
-			((int)this.Value);
+		public int ToArgb()
+		{
+			return (int)this.Value;
+		}
 
-		public KnownColor ToKnownColor() =>
-			((KnownColor)this.knownColor);
+		public KnownColor ToKnownColor()
+		{
+			return (KnownColor)this.knownColor;
+		}
 
 		public override string ToString()
 		{
@@ -625,8 +1384,10 @@ namespace ExpressCraft
 			return ((left.name == right.name) || (((left.name != null) && (right.name != null)) && left.name.Equals(right.name)));
 		}
 
-		public static bool operator !=(Color left, Color right) =>
-			!(left == right);
+		public static bool operator !=(Color left, Color right)
+		{
+			return !(left == right);
+		}
 
 		public override bool Equals(object obj)
 		{
@@ -641,8 +1402,10 @@ namespace ExpressCraft
 			return false;
 		}
 
-		public override int GetHashCode() =>
-			((this.value.GetHashCode() ^ this.state.GetHashCode()) ^ this.knownColor.GetHashCode());
+		public override int GetHashCode()
+		{
+			return ((this.value.GetHashCode() ^ this.state.GetHashCode()) ^ this.knownColor.GetHashCode());
+		}
 
 		static Color()
 		{

@@ -491,6 +491,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
+            document.body.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getBlack().$clone());
         }
     });
 
@@ -991,6 +992,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             fromKnownColor: function (color) {
                 return new ExpressCraft.Color.$ctor1(color);
             },
+            fromHex: function (value) {
+                if (System.String.startsWith(value, "#")) {
+                    return ExpressCraft.Color.fromHex(value.substr(1));
+                } else {
+                    return ExpressCraft.Color.fromArgb(parseInt(value));
+                }
+            },
+            op_Implicit$1: function (color) {
+                return color.toHex();
+            },
+            op_Implicit: function (hexValue) {
+                return ExpressCraft.Color.fromHex(hexValue);
+            },
             op_Equality: function (left, right) {
                 if (((left.value.ne(right.value)) || (left.state !== right.state)) || (left.knownColor !== right.knownColor)) {
                     return false;
@@ -1081,6 +1095,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return System.Int64(ExpressCraft.KnownColorTable.knownColorToArgb(this.knownColor));
             }
             return ExpressCraft.Color.notDefinedValue;
+        },
+        toHex: function () {
+            if (this.getA() === 0) {
+                return System.String.format("#{0}{1}{2}{3}", this.getA().toString(16), this.getR().toString(16), this.getG().toString(16), this.getB().toString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+            } else {
+                return System.String.format("#{0}{1}{2}", this.getR().toString(16), this.getG().toString(16), this.getB().toString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+            }
         },
         getBrightness: function () {
             var num = this.getR() / 255.0;
