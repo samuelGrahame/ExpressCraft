@@ -19,11 +19,13 @@ namespace ExpressCraft
 			Source = source;
 			PDFSourceType = pdfSourceType;
 
-			PdfViewer = Document.CreateElement(Browser.IsIE ? "iframe" : "embed");
+			PdfViewer = Document.CreateElement(Browser.IsIE ? "iframe" : pdfSourceType == PdfSourceType.Url ? "embed" : "object");
 			PdfViewer.ClassName = "control";
 
 			PdfViewer.SetBounds(0, 0, "100%", "100%");
-			PdfViewer.SetAttribute("alt", "pdf");						
+			PdfViewer.SetAttribute("alt", "pdf");
+			PdfViewer.SetAttribute("type", "application/pdf");
+			//object 		
 
 			this.Body.AppendChild(PdfViewer);
 		}
@@ -40,7 +42,6 @@ namespace ExpressCraft
 			{
 				PdfViewer.SetAttribute("data", GetPdfString(Source));				
 			}
-
 		}
 
 	}

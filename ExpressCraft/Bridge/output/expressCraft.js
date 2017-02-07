@@ -7745,11 +7745,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.source = source;
             this.pDFSourceType = pdfSourceType;
 
-            this.pdfViewer = document.createElement(Bridge.Browser.isIE ? "iframe" : "embed");
+            this.pdfViewer = document.createElement(Bridge.Browser.isIE ? "iframe" : pdfSourceType === ExpressCraft.PdfSourceType.Url ? "embed" : "object");
             this.pdfViewer.className = "control";
 
             ExpressCraft.Helper.setBounds(this.pdfViewer, 0, 0, "100%", "100%");
             this.pdfViewer.setAttribute("alt", "pdf");
+            this.pdfViewer.setAttribute("type", "application/pdf");
+            //object 		
 
             this.getBody().appendChild(this.pdfViewer);
         },
@@ -7761,7 +7763,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } else {
                 this.pdfViewer.setAttribute("data", ExpressCraft.Control.getPdfString(this.source));
             }
-
         }
     });
 
