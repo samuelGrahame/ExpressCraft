@@ -5455,6 +5455,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _dataSource: null,
         onFocusedRowChanged: null,
         onRowDoubleClick: null,
+        onCustomRowStyle: null,
         onRowClick: null,
         onDoubleClick: null,
         onCellRowMouseDown: null,
@@ -6235,7 +6236,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     //col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
 
                     dr1.appendChild(cell1);
-
+                    if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
+                        this.onCustomRowStyle(dr1);
+                    }
                     cell1.setAttribute("i", x4.toString());
                 }
                 Rows.add(dr1);
