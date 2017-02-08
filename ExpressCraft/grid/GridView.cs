@@ -23,6 +23,7 @@ namespace ExpressCraft
 				
 		public Action<int, int> OnFocusedRowChanged = null;
 		public Action<int> OnRowDoubleClick = null;
+		public Action<HTMLElement> OnCustomRowStyle = null;
 
 		protected Action<MouseEvent<HTMLDivElement>> OnRowClick;
 		protected Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
@@ -1243,7 +1244,8 @@ namespace ExpressCraft
 					//col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
 
 					dr.AppendChild(cell);
-
+					if(OnCustomRowStyle != null)
+						OnCustomRowStyle(dr);
 					cell.SetAttribute("i", x.ToString());
 				}
 				Rows.Add(dr);
