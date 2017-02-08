@@ -6194,6 +6194,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         cell.setAttribute("i", x3.toString());
                         cell.onmousedown = this.onCellRowMouseDown;
                     }
+
                     Rows.add(dr);
 
                     Y += ExpressCraft.GridView.UnitHeight;
@@ -6236,9 +6237,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     //col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
 
                     dr1.appendChild(cell1);
-                    if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
-                        this.onCustomRowStyle(dr1);
-                    }
+
                     cell1.setAttribute("i", x4.toString());
                 }
                 Rows.add(dr1);
@@ -6252,7 +6251,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             if (Rows.getCount() > 0) {
                 this.gridBodyContainer.removeChild(this.gridBody);
-                ExpressCraft.Helper.appendChildren(this.gridBody, Rows.toArray());
+
+
+                var rows = Rows.toArray();
+                for (var i2 = 0; i2 < rows.length; i2 = (i2 + 1) | 0) {
+                    if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
+                        this.onCustomRowStyle(rows[i2], parseInt(rows[i2].getAttribute("i")));
+                    }
+                }
+
+                ExpressCraft.Helper.appendChildren(this.gridBody, rows);
                 this.gridBodyContainer.appendChild(this.gridBody);
             }
         }

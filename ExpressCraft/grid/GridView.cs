@@ -1198,9 +1198,7 @@ namespace ExpressCraft
 						cell.SetAttribute("i", x.ToString());
 						cell.OnMouseDown = OnCellRowMouseDown;
 					}
-					if(OnCustomRowStyle != null)
-						OnCustomRowStyle(dr, DataRowhandle);
-
+	
 					Rows.Add(dr);
 
 					Y += UnitHeight;
@@ -1262,7 +1260,16 @@ namespace ExpressCraft
 			if(Rows.Count > 0)
 			{
 				GridBodyContainer.RemoveChild(GridBody);
-				GridBody.AppendChildren(Rows.ToArray());
+
+
+				var rows = Rows.ToArray();
+				for(int i = 0; i < rows.Length; i++)
+				{
+					if(OnCustomRowStyle != null)
+						OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
+				}
+
+				GridBody.AppendChildren(rows);
 				GridBodyContainer.AppendChild(GridBody);
 			}
 		}
