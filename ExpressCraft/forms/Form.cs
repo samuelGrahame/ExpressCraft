@@ -1322,9 +1322,7 @@ namespace ExpressCraft
                 ButtonExpand.Delete();
             if (ButtonClose != null)
                 ButtonClose.Delete();
-
-            if (dialogResults != null && dialogResults.Length > 0)
-                DialogResults.AddRange(dialogResults);
+            
             StartPosition = FormStartPosition.Center;
 
             _IsDialog = true;                        
@@ -1334,7 +1332,13 @@ namespace ExpressCraft
             CentreForm();
 
             ActiveForm = this;
-        }
+
+			if(dialogResults != null && dialogResults.Length > 0)
+			{
+				DialogResults.AddRange(dialogResults);				
+			}
+		}
+		
 
 		private float MinZero(float input)
 		{
@@ -1616,7 +1620,9 @@ namespace ExpressCraft
 				DialogResults != null && DialogResults.Count > 0)
 				{
 					for(int i = 0; i < DialogResults.Count; i++)
+					{
 						DialogResults[i].InvokeIfResult(DialogResult);
+					}						
 				}
 			}
 

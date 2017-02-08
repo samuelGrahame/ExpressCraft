@@ -3193,11 +3193,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             return;
                         }
                         var pc = progressControl;
-                        pc.disableUpdate = true;
-                        pc.setMaximum(pe.total);
-                        pc.setPosition(pe.loaded);
-                        pc.disableUpdate = false;
-                        pc.update();
+
+                        var Percent = 0;
+
+                        if (pe.loaded !== 0 && pe.total !== 0) {
+                            Percent = (pe.loaded / pe.total) * 100.0;
+                        }
+                        pc.internalProgressControl.style.width = System.String.concat(System.Single.format(Percent, 'G'), "%");
+                        //pc.DisableUpdate = true;
+                        //pc.Maximum = pe.Total;
+                        //pc.Position = pe.Loaded;
+                        //pc.DisableUpdate = false;
+                        //pc.Update();
                     });
 
                     return xmlRequest;
@@ -3223,11 +3230,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             return;
                         }
                         var pc = npf.progressControl;
-                        pc.disableUpdate = true;
-                        pc.setMaximum(pe.total);
-                        pc.setPosition(pe.loaded);
-                        pc.disableUpdate = false;
-                        pc.update();
+
+                        var Percent = 0;
+
+                        if (pe.loaded !== 0 && pe.total !== 0) {
+                            Percent = (pe.loaded / pe.total) * 100.0;
+                        }
+                        pc.internalProgressControl.style.width = System.String.concat(System.Single.format(Percent, 'G'), "%");
+
+                        //pc.DisableUpdate = true;
+                        //pc.Maximum = pe.Total;
+                        //pc.Position = pe.Loaded;
+                        //pc.DisableUpdate = false;
+                        //pc.Update();
                     });
 
                     return xmlRequest;
@@ -4683,9 +4698,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.delete(this.getButtonClose());
             }
 
-            if (dialogResults != null && dialogResults.length > 0) {
-                this.dialogResults.addRange(dialogResults);
-            }
             this.startPosition = ExpressCraft.FormStartPosition.Center;
 
             this._IsDialog = true;
@@ -4695,6 +4707,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.centreForm();
 
             ExpressCraft.Form.setActiveForm(this);
+
+            if (dialogResults != null && dialogResults.length > 0) {
+                this.dialogResults.addRange(dialogResults);
+            }
         },
         minZero$1: function (input) {
             return input < 0 ? 0 : input;
@@ -6581,7 +6597,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this.maximum === 0 || this.position === 0) {
                 this.internalProgressControl.style.width = "0%";
             } else {
-                var source = this.position / this.maximum * 100.00 + '%';
+                var source = ((this.position / this.maximum) * 100.00) + '%';
                 this.internalProgressControl.style.width = System.String.concat("calc(", source, " - 2px)");
             }
         }

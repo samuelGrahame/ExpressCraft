@@ -12,7 +12,7 @@ namespace ExpressCraft
 	{
 		private int position;
 
-		private HTMLDivElement internalProgressControl;
+		public HTMLDivElement internalProgressControl;
 
 		private int maximum;
 
@@ -75,7 +75,7 @@ namespace ExpressCraft
 				internalProgressControl.Style.Width = "0%";
 			else
 			{
-				string source = Script.Write<string>("this.position / this.maximum * 100.00 + '%';");				
+				string source = Script.Write<string>("((this.position / this.maximum) * 100.00) + '%'");				
 				internalProgressControl.Style.Width = "calc(" + source + " - 2px)"; 
 			}
 		}

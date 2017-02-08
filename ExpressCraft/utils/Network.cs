@@ -76,11 +76,19 @@ namespace ExpressCraft
 					if(progressControl == null)
 						return;
 					var pc = progressControl;
-					pc.DisableUpdate = true;
-					pc.Maximum = pe.Total;
-					pc.Position = pe.Loaded;
-					pc.DisableUpdate = false;
-					pc.Update();
+
+					float Percent = 0;
+
+					if(pe.Loaded != 0 && pe.Total != 0)
+					{
+						Percent = ((float)pe.Loaded / (float)pe.Total) * 100.0f;
+					}
+					pc.internalProgressControl.Style.Width = Percent.ToString() + "%";
+					//pc.DisableUpdate = true;
+					//pc.Maximum = pe.Total;
+					//pc.Position = pe.Loaded;
+					//pc.DisableUpdate = false;
+					//pc.Update();
 				});
 
 				return xmlRequest;
@@ -106,11 +114,20 @@ namespace ExpressCraft
 					if(npf == null || npf.progressControl == null)
 						return;
 					var pc = npf.progressControl;
-					pc.DisableUpdate = true;
-					pc.Maximum = pe.Total;
-					pc.Position = pe.Loaded;
-					pc.DisableUpdate = false;
-					pc.Update();
+
+					float Percent = 0;
+
+					if(pe.Loaded != 0 && pe.Total != 0)
+					{
+						Percent = ((float)pe.Loaded / (float)pe.Total) * 100.0f;
+					}
+					pc.internalProgressControl.Style.Width = Percent.ToString() + "%";
+
+					//pc.DisableUpdate = true;
+					//pc.Maximum = pe.Total;
+					//pc.Position = pe.Loaded;
+					//pc.DisableUpdate = false;
+					//pc.Update();
 				});
 
 				return xmlRequest;
