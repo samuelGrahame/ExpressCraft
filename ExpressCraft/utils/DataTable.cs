@@ -354,12 +354,12 @@ namespace ExpressCraft
 					{
 						return string.Format(formatString, d);
 					}
-					obj = obj as string;
-					if(string.IsNullOrWhiteSpace(obj))
+					var str = obj as string;
+					if(string.IsNullOrWhiteSpace(str))
 					{
 						return string.Empty;
 					}
-					return string.Format(formatString, obj);
+					return string.Format(formatString, str);
 				case DataType.String:
 					return string.Format(formatString, ((DataColumnString)this).Cells[rowIndex]);
 				case DataType.Integer:

@@ -1281,6 +1281,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     return System.String.format(formatString, (Bridge.cast(this, ExpressCraft.DataColumnObject).cells.getItem(rowIndex)));
                 case ExpressCraft.DataType.DateTime: 
                     var obj = Bridge.cast(this, ExpressCraft.DataColumnDateTime).cells.getItem(rowIndex);
+                    if (obj == null) {
+                        return "";
+                    }
                     if (Bridge.is(obj, Date)) {
                         return System.String.format(formatString, Bridge.cast(obj, Date));
                     }
@@ -1288,7 +1291,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     if (Bridge.Date.tryParse(obj, null, d)) {
                         return System.String.format(formatString, d.v);
                     }
-                    return System.String.format(formatString, Bridge.as(obj, String));
+                    var str = Bridge.as(obj, String);
+                    if (System.String.isNullOrWhiteSpace(str)) {
+                        return "";
+                    }
+                    return System.String.format(formatString, str);
                 case ExpressCraft.DataType.String: 
                     return System.String.format(formatString, Bridge.cast(this, ExpressCraft.DataColumnString).cells.getItem(rowIndex));
                 case ExpressCraft.DataType.Integer: 
