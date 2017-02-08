@@ -6067,6 +6067,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
                 //(x == uboundRowCount ? 0 : 1)
+                if (x1 >= this.columns.getCount()) {
+                    break;
+                }
                 var gcol = this.columns.getItem(x1);
                 var colIndex = x1;
                 var apparence = gcol.headingApparence;

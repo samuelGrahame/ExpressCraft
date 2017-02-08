@@ -1071,6 +1071,8 @@ namespace ExpressCraft
 			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 			{
 				//(x == uboundRowCount ? 0 : 1)
+				if(x >= Columns.Count)
+					break;
 				var gcol = Columns[x];
                 var colIndex = x;
 				var apparence = gcol.HeadingApparence;

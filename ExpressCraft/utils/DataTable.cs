@@ -341,6 +341,10 @@ namespace ExpressCraft
 					return string.Format(formatString, (((DataColumnObject)this).Cells[rowIndex]));
 				case DataType.DateTime:
 					dynamic obj = ((DataColumnDateTime)this).Cells[rowIndex];
+					if(obj == null)
+					{
+						return string.Empty;
+					}
 					if(obj is DateTime)
 					{
 						return string.Format(formatString, (DateTime)obj);
@@ -350,7 +354,12 @@ namespace ExpressCraft
 					{
 						return string.Format(formatString, d);
 					}
-					return string.Format(formatString, obj as string);
+					obj = obj as string;
+					if(string.IsNullOrWhiteSpace(obj))
+					{
+						return string.Empty;
+					}
+					return string.Format(formatString, obj);
 				case DataType.String:
 					return string.Format(formatString, ((DataColumnString)this).Cells[rowIndex]);
 				case DataType.Integer:
