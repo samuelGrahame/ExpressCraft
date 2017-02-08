@@ -1200,15 +1200,21 @@ namespace ExpressCraft
 			return new Color(color);
 		}
 
+		public string componentToHex(byte value)
+		{
+			var x = value.ToString(16);			
+			return (x.Length == 1 ? "0" : "") + x;
+		}
+
 		public string ToHex()
 		{
-			if(A == 0)
+			if(A != 255)
 			{
-				return string.Format("#{0}{1}{2}{3}", A.ToString(16) ,R.ToString(16), G.ToString(16), B.ToString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+				return string.Format("#{0}{1}{2}{3}", componentToHex(A) , componentToHex(R), componentToHex(G), componentToHex(B)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
 			}
 			else
 			{
-				return string.Format("#{0}{1}{2}", R.ToString(16), G.ToString(16), B.ToString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+				return string.Format("#{0}{1}{2}", componentToHex(R), componentToHex(G), componentToHex(B)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
 			}
 		}
 

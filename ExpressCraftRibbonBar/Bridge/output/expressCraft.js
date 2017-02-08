@@ -1095,11 +1095,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
             return ExpressCraft.Color.notDefinedValue;
         },
+        componentToHex: function (value) {
+            var x = value.toString(16);
+            return System.String.concat((x.length === 1 ? "0" : ""), x);
+        },
         toHex: function () {
-            if (this.getA() === 0) {
-                return System.String.format("#{0}{1}{2}{3}", this.getA().toString(16), this.getR().toString(16), this.getG().toString(16), this.getB().toString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+            if (this.getA() !== 255) {
+                return System.String.format("#{0}{1}{2}{3}", this.componentToHex(this.getA()), this.componentToHex(this.getR()), this.componentToHex(this.getG()), this.componentToHex(this.getB())); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
             } else {
-                return System.String.format("#{0}{1}{2}", this.getR().toString(16), this.getG().toString(16), this.getB().toString(16)); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
+                return System.String.format("#{0}{1}{2}", this.componentToHex(this.getR()), this.componentToHex(this.getG()), this.componentToHex(this.getB())); // "#" + (155).toString(16) + (102).toString(16) + (102).toString(16);
             }
         },
         getBrightness: function () {
@@ -6254,13 +6258,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
 
                 var rows = Rows.toArray();
+
+                ExpressCraft.Helper.appendChildren(this.gridBody, rows);
                 for (var i2 = 0; i2 < rows.length; i2 = (i2 + 1) | 0) {
                     if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
                         this.onCustomRowStyle(rows[i2], parseInt(rows[i2].getAttribute("i")));
                     }
                 }
 
-                ExpressCraft.Helper.appendChildren(this.gridBody, rows);
                 this.gridBodyContainer.appendChild(this.gridBody);
             }
         }

@@ -1263,13 +1263,14 @@ namespace ExpressCraft
 
 
 				var rows = Rows.ToArray();
+			
+				GridBody.AppendChildren(rows);
 				for(int i = 0; i < rows.Length; i++)
 				{
 					if(OnCustomRowStyle != null)
 						OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
 				}
 
-				GridBody.AppendChildren(rows);
 				GridBodyContainer.AppendChild(GridBody);
 			}
 		}

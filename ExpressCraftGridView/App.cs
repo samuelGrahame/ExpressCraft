@@ -40,7 +40,18 @@ namespace ExpressCraftGridView
                 dataTable.AddColumn("String", DataType.String);                
                 dataTable.AddColumn("Date", DataType.DateTime);
 				dataTable.AddColumn("Boolean", DataType.Bool);
-				dataTable.AddColumn("Image", DataType.String);				
+				dataTable.AddColumn("Image", DataType.String);
+
+				GridView.OnCustomRowStyle = (row, handle) =>
+				{
+					if(row == null || handle < 0)
+						return;
+
+					if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
+					{
+						row.Style.BackgroundColor = Color.Green;
+					}
+				};
 
 				GridView.DataSource = dataTable;				
 
