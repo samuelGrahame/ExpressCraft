@@ -437,6 +437,19 @@ namespace ExpressCraftDesign
 
 						fdtcp.GenerateSourceCode();
 					}
+					else if(ControlName == "RibbonGroupButton" && holder.Control is RibbonGroup)
+					{
+						var ribbc = new RibbonButton(GetNewName("ribbonButton", fdtcp));
+						ribbc.Name = ribbc.Caption;
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						((RibbonControl)holder.Parent.Parent.Control).Render();
+
+						fdtcp.GenerateSourceCode();
+					}
 					else if(ControlName == "GridView")
 					{
 						var ribbc = new GridView(false, false) { Name = GetNewName("gridView", fdtcp), Location = new Vector2(x, y), Size = new Vector2(200, 200) } ;

@@ -296,21 +296,20 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                         Bridge.cast(holder.parent.control, ExpressCraft.RibbonControl).render();
 
                         fdtcp.generateSourceCode();
-                    } else if (Bridge.referenceEquals(ControlName, "GridView")) {
-                        var ribbc3 = Bridge.merge(new ExpressCraft.GridView(false, false), {
-                            setName: ExpressCraftDesign.ControlHolder.getNewName("gridView", fdtcp),
-                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
-                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
-                        } );
+                    } else if (Bridge.referenceEquals(ControlName, "RibbonGroupButton") && Bridge.is(holder.control, ExpressCraft.RibbonGroup)) {
+                        var ribbc3 = new ExpressCraft.RibbonButton(ExpressCraftDesign.ControlHolder.getNewName("ribbonButton", fdtcp));
+                        ribbc3.setName(ribbc3.getCaption());
 
                         ch = new ExpressCraftDesign.ControlHolder(ribbc3, holder);
 
                         holder.children.add(ch);
 
+                        Bridge.cast(holder.parent.parent.control, ExpressCraft.RibbonControl).render();
+
                         fdtcp.generateSourceCode();
-                    } else if (Bridge.referenceEquals(ControlName, "Control")) {
-                        var ribbc4 = Bridge.merge(new ExpressCraft.Control.ctor(), {
-                            setName: ExpressCraftDesign.ControlHolder.getNewName("control", fdtcp),
+                    } else if (Bridge.referenceEquals(ControlName, "GridView")) {
+                        var ribbc4 = Bridge.merge(new ExpressCraft.GridView(false, false), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("gridView", fdtcp),
                             setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
                             setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
                         } );
@@ -320,10 +319,11 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                         holder.children.add(ch);
 
                         fdtcp.generateSourceCode();
-                    } else if (Bridge.referenceEquals(ControlName, "TextInput")) {
-                        var ribbc5 = Bridge.merge(new ExpressCraft.TextInput(), {
-                            setName: ExpressCraftDesign.ControlHolder.getNewName("textInput", fdtcp),
-                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y)
+                    } else if (Bridge.referenceEquals(ControlName, "Control")) {
+                        var ribbc5 = Bridge.merge(new ExpressCraft.Control.ctor(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("control", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
                         } );
 
                         ch = new ExpressCraftDesign.ControlHolder(ribbc5, holder);
@@ -331,15 +331,26 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
                         holder.children.add(ch);
 
                         fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "TextInput")) {
+                        var ribbc6 = Bridge.merge(new ExpressCraft.TextInput(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("textInput", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc6, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
                     } else if (Bridge.referenceEquals(ControlName, "SplitControlContainer")) {
-                        var ribbc6 = Bridge.merge(new ExpressCraft.SplitControlContainer(), {
+                        var ribbc7 = Bridge.merge(new ExpressCraft.SplitControlContainer(), {
                             setName: ExpressCraftDesign.ControlHolder.getNewName("splitControlContainer", fdtcp),
                             setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
                             setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
                         } );
-                        ribbc6.setSplitterPosition(100);
+                        ribbc7.setSplitterPosition(100);
 
-                        ch = new ExpressCraftDesign.ControlHolder(ribbc6, holder);
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc7, holder);
 
                         holder.children.add(ch);
 

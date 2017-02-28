@@ -7428,7 +7428,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (value < 0) {
                 value = 0;
             }
-
             this._splitterPosition = value;
             this.renderControls();
         },
@@ -7574,11 +7573,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         f3: function (ev) {
             if (this._isMouseDown) {
                 this._currentMouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
+                var x;
                 if (this.horizontal) {
-                    this.setSplitterPosition((this._startingSplitterPos - (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0))) | 0);
+                    x = (this._startingSplitterPos - (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0))) | 0;
                 } else {
-                    this.setSplitterPosition((this._startingSplitterPos - (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0))) | 0);
+                    x = (this._startingSplitterPos - (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0))) | 0;
                 }
+                var y = this.getMaxSplitterSize();
+                if (x > y) {
+                    x = y;
+                }
+                this.setSplitterPosition(x);
                 this._currentMouseDownVector = this._mouseDownVector.$clone();
 
                 this.resizeChildren();

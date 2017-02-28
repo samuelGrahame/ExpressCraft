@@ -36,8 +36,7 @@ namespace ExpressCraft
 			get { return _splitterPosition; }
 			set {
 				if(value < 0)
-					value = 0;
-				
+					value = 0;				
 				_splitterPosition = value;
 				RenderControls();
 			}
@@ -166,14 +165,21 @@ namespace ExpressCraft
 				if(_isMouseDown)
 				{
 					_currentMouseDownVector = Helper.GetClientMouseLocation(ev);
+					int x;
 					if(horizontal)
 					{
-						SplitterPosition = _startingSplitterPos - (_mouseDownVector.Yi - _currentMouseDownVector.Yi);
+						x = _startingSplitterPos - (_mouseDownVector.Yi - _currentMouseDownVector.Yi);
 					}
 					else
 					{
-						SplitterPosition = _startingSplitterPos - (_mouseDownVector.Xi - _currentMouseDownVector.Xi);
+						x = _startingSplitterPos - (_mouseDownVector.Xi - _currentMouseDownVector.Xi);
 					}
+					var y = GetMaxSplitterSize();
+					if(x > y)
+					{
+						x = y;
+					}
+					SplitterPosition = x;
 					_currentMouseDownVector = _mouseDownVector;
 
 					ResizeChildren();
