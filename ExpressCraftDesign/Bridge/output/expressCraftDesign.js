@@ -7,19 +7,43 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
     "use strict";
 
     Bridge.define("ExpressCraftDesign.App", {
+        statics: {
+            studio: null
+        },
         $main: function () {
             ExpressCraft.Settings.allowCloseWithoutQuestion = true;
 
             ExpressCraft.Form.setup();
             ExpressCraft.AceCodeEditor.setup();
 
-            var studio = new ExpressCraftDesign.StudioForm();
-            studio.show();
+            ExpressCraftDesign.App.studio = new ExpressCraftDesign.StudioForm();
+            ExpressCraftDesign.App.studio.show();
 
         }
     });
 
     Bridge.define("ExpressCraftDesign.ControlHolder", {
+        statics: {
+            getNewName: function (namel, fdtcp) {
+                var listOfAllControls = fdtcp.formHolder.getListOfAllChildren();
+                var ListOfNames = new (System.Collections.Generic.List$1(String))();
+
+                var x;
+                for (x = 0; x < listOfAllControls.getCount(); x = (x + 1) | 0) {
+                    ListOfNames.add(listOfAllControls.getItem(x).control.getName());
+                }
+
+                var newName = "";
+                x = 1;
+
+                while (ListOfNames.contains(((newName = System.String.concat(namel, Bridge.identity(x, (x = (x + 1) | 0))))))) {
+                }
+
+                return newName;
+
+
+            }
+        },
         control: null,
         children: null,
         parent: null,
@@ -34,9 +58,51 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
             if (Bridge.is(this.control, ExpressCraft.Form)) {
                 this.attachDrop(Bridge.cast(this.control, ExpressCraft.Form).getBody(), this);
+            } else if (Bridge.is(this.control, ExpressCraft.TabControlPage)) {
+                var tb = Bridge.cast(parent.control, ExpressCraft.TabControl);
+                tb.addPages([Bridge.cast(control, ExpressCraft.TabControlPage)]);
+
+                this.attachDrop(Bridge.cast(this.control, ExpressCraft.TabControlPage).content, this);
+            } else if (Bridge.is(this.control, ExpressCraft.RibbonPage)) {
+                var tb1 = Bridge.cast(parent.control, ExpressCraft.RibbonControl);
+                tb1.addRibbonPages([Bridge.cast(control, ExpressCraft.RibbonPage)]);
+
+                this.attachDrop(Bridge.cast(this.control, ExpressCraft.RibbonPage).content, this);
+            } else if (Bridge.is(this.control, ExpressCraft.RibbonGroup)) {
+                var tb2 = Bridge.cast(parent.control, ExpressCraft.RibbonPage);
+                tb2.addRibbonGroups([Bridge.cast(control, ExpressCraft.RibbonGroup)]);
+
+                this.attachDrop(Bridge.cast(this.control, ExpressCraft.RibbonGroup).content, this);
+            } else if (Bridge.is(this.control, ExpressCraft.RibbonButton)) {
+                var tb3 = Bridge.cast(parent.control, ExpressCraft.RibbonGroup);
+                tb3.riList = null;
+                tb3.getButtons().add(Bridge.cast(control, ExpressCraft.RibbonButton));
+            } else {
+                if (Bridge.is(this.control, ExpressCraft.TabControl) || Bridge.is(control, ExpressCraft.RibbonControl)) {
+                    this.attachDrop(this.control.content, this);
+                }
+
+                if (Bridge.is(parent.control, ExpressCraft.Form)) {
+                    Bridge.cast(parent.control, ExpressCraft.Form).getBody().appendChild(ExpressCraft.Control.op_Implicit(control));
+                } else {
+                    ExpressCraft.Helper.appendChild(parent.control, control);
+                }
+
             }
 
             this.parent = parent;
+        },
+        getListOfAllChildren: function () {
+            var lch = new (System.Collections.Generic.List$1(ExpressCraftDesign.ControlHolder))();
+
+            lch.add(this);
+
+            if (this.children.getCount() > 0) {
+                for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
+                    lch.addRange(this.children.getItem(i).getListOfAllChildren());
+                }
+            }
+            return lch;
         },
         generateDeclareDesigner: function (builder) {
             if (Bridge.is(this.control, ExpressCraft.Form) && this.parent == null) {
@@ -74,6 +140,8 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         },
         generateIniDesigner: function (builder) {
             if (!(Bridge.is(this.control, ExpressCraft.Form) && this.parent == null)) {
+                builder.v.appendLine(System.String.concat("// ", this.control.getName()));
+
                 builder.v.appendLine(System.String.concat("\t\t\t", this.control.getName(), " = new ", Bridge.Reflection.getTypeName(Bridge.getType(this.control)), "();"));
             }
             this.addSetValue("Name", this.control.getName(), builder);
@@ -112,7 +180,190 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             }
         },
         attachDrop: function (element, holder) {
+            element.ondragover = $asm.$.ExpressCraftDesign.ControlHolder.f1;
+            element.ondrop = function (ev) {
+                ev.stopImmediatePropagation();
+                var x = ev.layerX;
+                var y = ev.layerY;
+                var offlineDataRow = Bridge.merge(Bridge.createInstance(ExpressCraft.DataRow), JSON.parse(ev.dataTransfer.getData("gridviewRowDrag")));
 
+                if (offlineDataRow.batchData.length === 1) {
+                    var ControlName = Bridge.cast(offlineDataRow.getItem(0), String);
+                    var ch = null;
+                    var fdtcp = Bridge.cast(ExpressCraftDesign.App.studio.tabControl1.getTabPages().getItem(ExpressCraftDesign.App.studio.tabControl1.getSelectedIndex()), ExpressCraftDesign.FormDesignerTabControlPage);
+                    //dt.AddRow("SimpleButton");
+                    //dt.AddRow("Control");
+                    //dt.AddRow("RibbonControl");
+                    //dt.AddRow("TabControl");
+                    //dt.AddRow("TextInput");
+                    //dt.AddRow("GridView");
+                    if (Bridge.referenceEquals(ControlName, "SimpleButton")) {
+                        var simb = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("simpleButton", fdtcp)
+                        } );
+                        simb.setText(simb.getName());
+                        ch = new ExpressCraftDesign.ControlHolder(simb, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "TabControl")) {
+                        var tabc = Bridge.merge(new ExpressCraft.TabControl(), {
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200),
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("tabControl", fdtcp)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(tabc, holder);
+
+                        holder.children.add(ch);
+
+                        var tabp1 = Bridge.merge(new ExpressCraft.TabControlPage(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("tabPage", fdtcp)
+                        } );
+                        var ch1 = new ExpressCraftDesign.ControlHolder(tabp1, ch);
+                        tabp1.setCaption(tabp1.getName());
+
+                        ch.children.add(ch1);
+
+                        var tabp2 = Bridge.merge(new ExpressCraft.TabControlPage(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("tabPage", fdtcp)
+                        } );
+                        var ch2 = new ExpressCraftDesign.ControlHolder(tabp2, ch);
+                        tabp2.setCaption(tabp2.getName());
+
+                        ch.children.add(ch2);
+
+                        tabc.resizeTabHeaders();
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "TabControlPage") && Bridge.is(holder.control, ExpressCraft.TabControl)) {
+                        var tabc1 = Bridge.merge(new ExpressCraft.TabControlPage(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("tabPage", fdtcp)
+                        } );
+                        tabc1.setCaption(tabc1.getName());
+                        ch = new ExpressCraftDesign.ControlHolder(tabc1, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "RibbonControl") && Bridge.is(holder.control, ExpressCraft.Form)) {
+                        var ribbc = Bridge.merge(new ExpressCraft.RibbonControl(ExpressCraft.RibbonControl.RibbonType.Compact), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("ribbonControl", fdtcp)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc, holder);
+
+                        holder.children.add(ch);
+
+                        var ribp = new ExpressCraft.RibbonPage(ExpressCraftDesign.ControlHolder.getNewName("ribbonPage", fdtcp));
+                        ribp.setName(ribp.getCaption());
+
+                        var ch21 = new ExpressCraftDesign.ControlHolder(ribp, ch);
+
+                        ch.children.add(ch21);
+
+                        var ribpg = new ExpressCraft.RibbonGroup.ctor(ExpressCraftDesign.ControlHolder.getNewName("ribbonGroup", fdtcp));
+                        ribpg.setName(ribpg.getCaption());
+
+                        var ch3 = new ExpressCraftDesign.ControlHolder(ribpg, ch21);
+
+                        ch21.children.add(ch3);
+
+                        ribbc.render();
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "RibbonControlPage") && Bridge.is(holder.control, ExpressCraft.RibbonControl)) {
+                        var ribbc1 = new ExpressCraft.RibbonPage(ExpressCraftDesign.ControlHolder.getNewName("ribbonPage", fdtcp));
+                        ribbc1.setName(ribbc1.getCaption());
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc1, holder);
+
+                        holder.children.add(ch);
+
+                        Bridge.cast(holder.control, ExpressCraft.RibbonControl).render();
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "RibbonPageGroup") && Bridge.is(holder.control, ExpressCraft.RibbonPage)) {
+                        var ribbc2 = new ExpressCraft.RibbonGroup.ctor(ExpressCraftDesign.ControlHolder.getNewName("ribbonGroup", fdtcp));
+                        ribbc2.setName(ribbc2.getCaption());
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc2, holder);
+
+                        holder.children.add(ch);
+
+                        Bridge.cast(holder.parent.control, ExpressCraft.RibbonControl).render();
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "GridView")) {
+                        var ribbc3 = Bridge.merge(new ExpressCraft.GridView(false, false), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("gridView", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc3, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "Control")) {
+                        var ribbc4 = Bridge.merge(new ExpressCraft.Control.ctor(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("control", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc4, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "TextInput")) {
+                        var ribbc5 = Bridge.merge(new ExpressCraft.TextInput(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("textInput", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y)
+                        } );
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc5, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    } else if (Bridge.referenceEquals(ControlName, "SplitControlContainer")) {
+                        var ribbc6 = Bridge.merge(new ExpressCraft.SplitControlContainer(), {
+                            setName: ExpressCraftDesign.ControlHolder.getNewName("splitControlContainer", fdtcp),
+                            setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
+                            setSize: new ExpressCraft.Vector2.$ctor1(200, 200)
+                        } );
+                        ribbc6.setSplitterPosition(100);
+
+                        ch = new ExpressCraftDesign.ControlHolder(ribbc6, holder);
+
+                        holder.children.add(ch);
+
+                        fdtcp.generateSourceCode();
+                    }
+
+                    //dt.AddRow("RibbonControlPage");
+                    //dt.AddRow("RibbonPageGroup");
+                    //dt.AddRow("RibbonGroupButton");
+                }
+
+                //gridviewRowDrag
+            };
+            //int x = Script.Write<int>("ev.layerX");
+            //var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
+        }
+    });
+
+    Bridge.ns("ExpressCraftDesign.ControlHolder", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraftDesign.ControlHolder, {
+        f1: function (ev) {
+            ev.preventDefault();
+            //gridviewRowDrag
         }
     });
 
@@ -315,6 +566,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.Helper.setBoundsFull$1(this.gridView1);
             this.gridView1.setDataSource(this.getToolBoxItems());
             this.gridView1.setColumnHeadersVisible(false);
+            this.gridView1.setAllowRowDrag(true);
 
             var colName = this.gridView1.getColumn(0);
             colName.allowEdit = false;
@@ -339,9 +591,17 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             dt.addRow$1(["SimpleButton"]);
             dt.addRow$1(["Control"]);
             dt.addRow$1(["RibbonControl"]);
+            dt.addRow$1(["RibbonControlPage"]);
+            dt.addRow$1(["RibbonPageGroup"]);
+            dt.addRow$1(["RibbonGroupButton"]);
+
             dt.addRow$1(["TabControl"]);
+            dt.addRow$1(["TabControlPage"]);
+
             dt.addRow$1(["TextInput"]);
+
             dt.addRow$1(["GridView"]);
+            dt.addRow$1(["SplitControlContainer"]);
 
             dt.endDataUpdate();
 

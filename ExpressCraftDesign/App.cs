@@ -7,6 +7,7 @@ namespace ExpressCraftDesign
 {
     public class App
     {
+		public static StudioForm studio;
         public static void Main()
         {
 			Settings.AllowCloseWithoutQuestion = true;
@@ -14,7 +15,7 @@ namespace ExpressCraftDesign
 			Form.Setup();
 			AceCodeEditor.Setup();
 
-			var studio = new StudioForm();
+			studio = new StudioForm();
 			studio.Show();
 
 		}

@@ -80,7 +80,7 @@ namespace ExpressCraft
 			}
 		}
 
-		public SplitControlContainer()
+		public SplitControlContainer() : base("splitcontrol")
 		{
 			Panel1 = new Control();
 			Panel2 = new Control();

@@ -64,6 +64,7 @@ namespace ExpressCraftDesign
 			gridView1.SetBoundsFull();
 			gridView1.DataSource = GetToolBoxItems();
 			gridView1.ColumnHeadersVisible = false;
+			gridView1.AllowRowDrag = true;
 
 			var colName = gridView1.GetColumn(0);
 			colName.AllowEdit = false;
@@ -90,22 +91,45 @@ namespace ExpressCraftDesign
 			dt.AddRow("SimpleButton");
 			dt.AddRow("Control");
 			dt.AddRow("RibbonControl");
+			dt.AddRow("RibbonControlPage");
+			dt.AddRow("RibbonPageGroup");
+			dt.AddRow("RibbonGroupButton");
+			
 			dt.AddRow("TabControl");
+			dt.AddRow("TabControlPage");
+
 			dt.AddRow("TextInput");
+
 			dt.AddRow("GridView");
+			dt.AddRow("SplitControlContainer");
 
 			dt.EndDataUpdate();
 
 			return dt;
 		}
 	}
-
-
+	
 	public class ControlHolder
 	{
 		public Control Control;
 		public List<ControlHolder> Children = new List<ControlHolder>();
-		public ControlHolder Parent;
+		public ControlHolder Parent;		
+
+		public List<ControlHolder> GetListOfAllChildren()
+		{
+			var lch = new List<ControlHolder>();
+
+			lch.Add(this);
+
+			if(this.Children.Count > 0)
+			{
+				for(int i = 0; i < this.Children.Count; i++)
+				{
+					lch.AddRange(this.Children[i].GetListOfAllChildren());
+				}
+			}
+			return lch;
+		}
 
 		public void GenerateDeclareDesigner(ref StringBuilder builder)
 		{
@@ -163,6 +187,8 @@ namespace ExpressCraftDesign
 		{
 			if(!(Control is Form && Parent == null))
 			{
+				builder.AppendLine("// " + Control.Name);
+				
 				builder.AppendLine("\t\t\t" + Control.Name + " = new " + Control.GetType().Name + "();");
 			}				
 			AddSetValue("Name", Control.Name, ref builder);
@@ -222,13 +248,246 @@ namespace ExpressCraftDesign
 			{
 				AttachDrop(((Form)Control).Body, this);
 			}
+			else if(Control is TabControlPage)
+			{
+				var tb = (TabControl)parent.Control;
+				tb.AddPages((TabControlPage)control);
+
+				AttachDrop(((TabControlPage)Control).Content, this);
+			}
+			else if(Control is RibbonPage)
+			{
+				var tb = (RibbonControl)parent.Control;
+				tb.AddRibbonPages((RibbonPage)control);
+
+				AttachDrop(((RibbonPage)Control).Content, this);
+			}
+			else if(Control is RibbonGroup)
+			{
+				var tb = (RibbonPage)parent.Control;
+				tb.AddRibbonGroups((RibbonGroup)control);
+
+				AttachDrop(((RibbonGroup)Control).Content, this);
+			}
+			else if(Control is RibbonButton)
+			{
+				var tb = (RibbonGroup)parent.Control;
+				tb.riList = null;
+				tb.Buttons.Add((RibbonButton)control);				
+			}
+			else
+			{
+				if(Control is TabControl || control is RibbonControl)
+				{
+					AttachDrop(Control.Content, this);
+				}
+
+				if(parent.Control is Form)
+				{
+					((Form)parent.Control).Body.AppendChild(control);
+				}
+				else
+				{
+					parent.Control.AppendChild(control);
+				}
+				
+			}
 
 			Parent = parent;
 		}
 
+		public static string GetNewName(string namel, FormDesignerTabControlPage fdtcp)
+		{
+			var listOfAllControls = fdtcp.formHolder.GetListOfAllChildren();
+			var ListOfNames = new List<string>();
+
+			int x;
+			for(x = 0; x < listOfAllControls.Count; x++)
+			{
+				ListOfNames.Add(listOfAllControls[x].Control.Name);
+			}
+
+			string newName = "";
+			x = 1;
+
+			while(ListOfNames.Contains((newName = namel + x++))){}
+
+			return newName;
+
+
+		}
+
 		public void AttachDrop(HTMLElement element, ControlHolder holder)
 		{
+			element.OnDragOver = (ev) =>
+			{
+				ev.PreventDefault();
+				//gridviewRowDrag
+			};
+			element.OnDrop = (ev) =>
+			{
+				ev.StopImmediatePropagation();
+				int x = Script.Write<int>("ev.layerX");
+				int y = Script.Write<int>("ev.layerY");
+				var offlineDataRow = JSON.Parse<DataRow>(Script.Call<string>("ev.dataTransfer.getData", "gridviewRowDrag"));
 
+				if(offlineDataRow.batchData.Length == 1)
+				{
+					string ControlName = (string)offlineDataRow[0];
+					ControlHolder ch = null;
+					var fdtcp = (FormDesignerTabControlPage)App.studio.tabControl1.TabPages[App.studio.tabControl1.SelectedIndex];
+					//dt.AddRow("SimpleButton");
+					//dt.AddRow("Control");
+					//dt.AddRow("RibbonControl");
+					//dt.AddRow("TabControl");
+					//dt.AddRow("TextInput");
+					//dt.AddRow("GridView");
+					if(ControlName == "SimpleButton")
+					{
+						var simb = new SimpleButton() { Location = new Vector2(x, y), Name = GetNewName("simpleButton", fdtcp) };
+						simb.Text = simb.Name;
+						ch = new ControlHolder(simb, holder);						
+						
+						holder.Children.Add(ch);
+						
+						fdtcp.GenerateSourceCode();
+					}else if(ControlName == "TabControl")
+					{
+						var tabc = new TabControl() { Location = new Vector2(x, y), Size = new Vector2(200, 200), Name = GetNewName("tabControl", fdtcp) };
+						
+						ch = new ControlHolder(tabc, holder);
+						
+						holder.Children.Add(ch);
+
+						var tabp1 = new TabControlPage() { Name = GetNewName("tabPage", fdtcp) };
+						var ch1 = new ControlHolder(tabp1, ch);
+						tabp1.Caption = tabp1.Name;
+
+						ch.Children.Add(ch1);
+
+						var tabp2 = new TabControlPage() { Name = GetNewName("tabPage", fdtcp) };
+						var ch2 = new ControlHolder(tabp2, ch);
+						tabp2.Caption = tabp2.Name;
+
+						ch.Children.Add(ch2);
+
+						tabc.ResizeTabHeaders();
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "TabControlPage" && holder.Control is TabControl)
+					{
+						var tabc = new TabControlPage() { Name = GetNewName("tabPage", fdtcp) };
+						tabc.Caption = tabc.Name;
+						ch = new ControlHolder(tabc, holder);
+
+						holder.Children.Add(ch);						
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "RibbonControl" && holder.Control is Form)
+					{
+						var ribbc = new RibbonControl(RibbonControl.RibbonType.Compact) { Name = GetNewName("ribbonControl", fdtcp) };
+						
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						var ribp = new RibbonPage(GetNewName("ribbonPage", fdtcp));
+						ribp.Name = ribp.Caption;
+
+						var ch2 = new ControlHolder(ribp, ch);
+
+						ch.Children.Add(ch2);
+
+						var ribpg = new RibbonGroup(GetNewName("ribbonGroup", fdtcp));
+						ribpg.Name = ribpg.Caption;
+
+						var ch3 = new ControlHolder(ribpg, ch2);
+
+						ch2.Children.Add(ch3);
+
+						ribbc.Render();
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "RibbonControlPage" && holder.Control is RibbonControl)
+					{
+						var ribbc = new RibbonPage(GetNewName("ribbonPage", fdtcp));
+						ribbc.Name = ribbc.Caption;
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						((RibbonControl)holder.Control).Render();						
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "RibbonPageGroup" && holder.Control is RibbonPage)
+					{
+						var ribbc = new RibbonGroup(GetNewName("ribbonGroup", fdtcp));
+						ribbc.Name = ribbc.Caption;
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						((RibbonControl)holder.Parent.Control).Render();
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "GridView")
+					{
+						var ribbc = new GridView(false, false) { Name = GetNewName("gridView", fdtcp), Location = new Vector2(x, y), Size = new Vector2(200, 200) } ;
+						
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+						
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "Control")
+					{
+						var ribbc = new Control() { Name = GetNewName("control", fdtcp), Location = new Vector2(x, y), Size = new Vector2(200, 200) };
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+						
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "TextInput")
+					{
+						var ribbc = new TextInput() { Name = GetNewName("textInput", fdtcp), Location = new Vector2(x, y) };
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						fdtcp.GenerateSourceCode();
+					}
+					else if(ControlName == "SplitControlContainer")
+					{
+						var ribbc = new SplitControlContainer() { Name = GetNewName("splitControlContainer", fdtcp), Location = new Vector2(x, y), Size = new Vector2(200, 200) };
+						ribbc.SplitterPosition = 100;
+
+						ch = new ControlHolder(ribbc, holder);
+
+						holder.Children.Add(ch);
+
+						fdtcp.GenerateSourceCode();
+					}
+
+					//dt.AddRow("RibbonControlPage");
+					//dt.AddRow("RibbonPageGroup");
+					//dt.AddRow("RibbonGroupButton");
+				}
+
+				//gridviewRowDrag
+			};
+			//int x = Script.Write<int>("ev.layerX");
+			//var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
 		}
 	}
 	public class FormDesignerTabControlPage : TabControlPage
@@ -306,8 +565,8 @@ namespace ExpressCraftDesign
 			aceCodeEditor.ReadOnly = true;
 			formHolder = new ControlHolder(new Form() { Name = className, Size = new Vector2(640, 480), Text = ClassName }, null);
 			var frm = formHolder.Control.As<Form>();
-			frm.InDesign = true;
-
+			frm.InDesign = true;			
+			
 			designerContainer = Div();			
 			designerContainer.SetBounds(15, 15, "calc(100% - 30px)", "calc(100% - 30px)");
 			

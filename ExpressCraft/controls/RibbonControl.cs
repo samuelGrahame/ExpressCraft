@@ -89,7 +89,9 @@ namespace ExpressCraft
 			HasRendered = true;
 			if(Type == RibbonType.Full)
 			{
-                ApplicationIcon = Div("application-icon");
+				if(ApplicationIcon != null)
+					ApplicationIcon.Delete();
+				ApplicationIcon = Div("application-icon");
 				var appIconImage = Div("fav-icon");
 				appIconImage.Style.Background = RibbonButton.GetImageStringURI(IconURL);
 				appIconImage.Style.BackgroundSize = "100% 100%";
@@ -103,7 +105,12 @@ namespace ExpressCraft
 			{
 				int width = 58;
 				for(int i = 0; i < RibbonPages.Count; i++)
-				{					
+				{
+					if(Content.Contains(RibbonPages[i]))
+					{
+						RibbonPages[i].Content.Delete();
+						RibbonPages[i].RibbonHeader.Delete();
+					}
 					RibbonPages[i].Render();
 					
 					if(Type == RibbonType.Compact)

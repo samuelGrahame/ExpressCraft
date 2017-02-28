@@ -286,8 +286,32 @@ namespace ExpressCraft
 	public class DataRow
 	{
 		public DataTable ParentTable;
-		public int RowIndex;
+		public int RowIndex = -1;
 		public object[] batchData;
+
+		public DataRow GetOfflineDataRow()
+		{
+			var dr = new DataRow(ParentTable.ColumnCount);
+			var data = new object[ParentTable.ColumnCount];
+			for(int i = 0; i < ParentTable.ColumnCount; i++)
+			{
+				data[i] = this[i];
+			}
+			dr.batchData = data;
+			return dr;
+		}
+
+		public DataRow()
+		{
+
+		}
+
+		public DataRow(int columnLength)
+		{
+			ParentTable = null;
+			RowIndex = -1;
+			batchData = new object[columnLength];
+		}
 
 		public DataRow(DataTable parentTable, int rowIndex = -1)
 		{

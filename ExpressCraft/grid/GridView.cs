@@ -53,7 +53,20 @@ namespace ExpressCraft
 				VisibleRowHandles = sorted.Select(x => x.Key).ToList();
 			}
 		}
-
+		public bool _allowRowDrag = false;
+		
+		public bool AllowRowDrag
+		{
+			get { return _allowRowDrag; }
+			set
+			{
+				if(_allowRowDrag != value)
+				{
+					_allowRowDrag = value;					
+					RenderGrid();
+				}
+			}
+		}
 		public bool AutoGenerateColumnsFromSource = true;
 		public bool AllowMultiSelection = true;
 
@@ -882,6 +895,10 @@ namespace ExpressCraft
 				}
 			};
 
+			OnRowDragStart = (ev) => {
+				Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
+			};
+
 			Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
 
 			FilterRowOnChange = (te) =>
@@ -1019,6 +1036,8 @@ namespace ExpressCraft
 		private Action<Event<HTMLSpanElement>> OnColumnDrop;
 		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseDown;
 		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
+
+		private Action<Event<HTMLDivElement>> OnRowDragStart;
 
 		private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
 		{
@@ -1242,6 +1261,13 @@ namespace ExpressCraft
 						cell.OnMouseDown = OnCellRowMouseDown;
 					}
 	
+					if(AllowRowDrag)
+					{
+						dr.SetAttribute("draggable", "true");
+						
+						dr.OnDragStart = OnRowDragStart;
+					}
+
 					Rows.Add(dr);
 
 					Y += UnitHeight;

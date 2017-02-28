@@ -109,6 +109,7 @@ namespace ExpressCraft
 		public override void Render()
 		{
 			HasRendered = true;
+			this.Content.Empty();
 
 			Content.OnClick = (ev) => {
 				if(enabled && OnItemClick != null)

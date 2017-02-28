@@ -26,7 +26,7 @@ namespace ExpressCraft
 		public static HTMLElement Parent = null;
 		public static bool Mouse_Down { get; set; } = false;
 		public static int FadeLength { get; set; } = 100;
-        public static HTMLElement FormOverLay;
+        public static HTMLElement FormOverLay;		
 				
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
@@ -295,7 +295,14 @@ namespace ExpressCraft
         {
             if (BodyOverLay != null &&
                 BodyOverLay.Style.Visibility == Visibility.Collapse)
-                BodyOverLay.Style.Visibility = Visibility.Visible;
+			{
+				if(InDesign)
+				{					
+					return;
+				}
+				BodyOverLay.Style.Visibility = Visibility.Visible;
+			}
+                
         }
 
         public static Form ActiveForm
@@ -311,6 +318,11 @@ namespace ExpressCraft
 					{
 						if(_ActiveForm.Content != null)
 						{
+							if(_ActiveForm.InDesign)
+							{
+								_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+								return;
+							}
 							_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Visible;							
 						}
 					}
@@ -465,7 +477,15 @@ namespace ExpressCraft
 
 					if(MovingForm.BodyOverLay.Style.Visibility == Visibility.Collapse)
 					{
-						MovingForm.BodyOverLay.Style.Visibility = Visibility.Visible;
+						if(MovingForm.InDesign)
+						{
+							_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+						}
+						else
+						{
+							MovingForm.BodyOverLay.Style.Visibility = Visibility.Visible;
+						}						
+						
 						MovingForm.Heading.Focus();
 					}
 
@@ -1166,14 +1186,25 @@ namespace ExpressCraft
 
 			BodyOverLay.AddEventListener(EventType.MouseDown, (ev) =>
 			{
-                if (!IsActiveFormCollection())
+				if(InDesign)
+				{
+					BodyOverLay.Style.Visibility = Visibility.Collapse;
+					return;
+				}
+				if (!IsActiveFormCollection())
                     return;
 				BodyOverLay.Style.Visibility = Visibility.Collapse;
 				ActiveForm = this;
 			});
 			
 			Body.AddEventListener(EventType.MouseLeave, (ev) =>
-			{				
+			{
+				if(InDesign)
+				{
+					BodyOverLay.Style.Visibility = Visibility.Collapse;
+					return;
+				}
+
 				if(MovingForm == null)
 				{
 					SetBodyOverLay();
@@ -1182,6 +1213,11 @@ namespace ExpressCraft
 
 			BodyOverLay.AddEventListener(EventType.MouseEnter, (ev) =>
 			{				
+				if(InDesign)
+				{
+					BodyOverLay.Style.Visibility = Visibility.Collapse;
+					return;
+				}
 				if(MovingForm == null && IsActiveFormCollection()) // WindowHolderSelectionBox == null && 
 				{
 					BodyOverLay.Style.Visibility = Visibility.Collapse;

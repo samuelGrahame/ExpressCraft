@@ -154,10 +154,10 @@ namespace ExpressCraft
 		public override void Render()
 		{
 			HasRendered = true;
-			if(Buttons == null || Buttons.Count == 0)
-				return;
-
+			
 			GenerateRList();
+
+			Content.Empty();
 
 			int width = 0;
 
