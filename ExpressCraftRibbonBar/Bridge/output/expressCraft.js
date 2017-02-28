@@ -7400,7 +7400,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         ctor: function () {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "splitcontrol");
-            this.panel1 = new ExpressCraft.Control.ctor();
+            this.panel1 = Bridge.merge(new ExpressCraft.Control.ctor(), {
+                setLocation: new ExpressCraft.Vector2.$ctor1(0, 0)
+            } );
             this.panel2 = new ExpressCraft.Control.ctor();
             this.splitter = new ExpressCraft.Control.ctor();
 
@@ -7464,8 +7466,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         renderControls: function () {
             var sp = this.getSplitterPosition();
+            var maxSize = this.getMaxSplitterSize();
+
             if (this._prevClientRect != null) {
-                var maxSize = this.getMaxSplitterSize();
                 if (sp > maxSize) {
                     sp = maxSize;
                 }
@@ -7476,32 +7479,49 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.exchangeClass$1(this.panel2, "splitvertical", "splithorizontal");
                 ExpressCraft.Helper.exchangeClass$1(this.splitter, "splitvertical", "splitvertical");
 
-                this.panel1.setLocation(new ExpressCraft.Vector2.$ctor1(0, 0));
                 this.panel1.setWidth("");
-                this.panel1.setHeight(sp);
-
-                this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(0, sp));
                 this.splitter.setWidth("");
-
-                this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(0, ((sp + 12) | 0)));
                 this.panel2.setWidth("");
-                this.panel2.setHeight("calc(100% - " + (((sp + 12) | 0)) + "px)");
-                ;
+
+                if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel2) {
+                    this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(0, sp));
+
+                    this.panel1.setHeight(sp);
+                    this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(0, ((sp + 12) | 0)));
+                    this.panel2.setHeight("calc(100% - " + (((sp + 12) | 0)) + "px)");
+                    ;
+                } else {
+                    this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(0, "calc(100% - " + sp + "px)"));
+
+                    this.panel1.setHeight("calc(100% - " + sp + "px)");
+
+                    this.panel2.setHeight(sp);
+                    this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(0, "calc(100% - " + sp + 12 + "px)"));
+                }
             } else {
                 ExpressCraft.Helper.exchangeClass$1(this.panel1, "splithorizontal", "splitvertical");
                 ExpressCraft.Helper.exchangeClass$1(this.panel2, "splithorizontal", "splitvertical");
                 ExpressCraft.Helper.exchangeClass$1(this.splitter, "splitterhorizontal", "splittervertical");
 
-                this.panel1.setLocation(new ExpressCraft.Vector2.$ctor1(0, 0));
-                this.panel1.setWidth(sp);
                 this.panel1.setHeight("");
-
-                this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(sp, 0));
                 this.splitter.setHeight("");
-
-                this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(((sp + 12) | 0), 0));
-                this.panel2.setWidth("calc(100% - " + (((sp + 12) | 0)) + "px)");
                 this.panel2.setHeight("");
+
+                if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel2) {
+                    this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1(sp, 0));
+
+                    this.panel1.setWidth(sp);
+
+                    this.panel2.setWidth("calc(100% - " + (((sp + 12) | 0)) + "px)");
+                    this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1(((sp + 12) | 0), 0));
+                } else {
+                    this.splitter.setLocation(new ExpressCraft.Vector2.$ctor1("calc(100% - " + sp + "px)", 0));
+
+                    this.panel1.setWidth("calc(100% - " + sp + "px)");
+
+                    this.panel2.setWidth(sp);
+                    this.panel2.setLocation(new ExpressCraft.Vector2.$ctor1("calc(100% - " + sp + 12 + "px)", 0));
+                }
             }
         }
     });
@@ -7532,7 +7552,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this._prevClientRect = clientRec;
             }
 
-            if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel1) {
+            if (this.fixedSplitterPostion === ExpressCraft.FixedSplitterPosition.None) {
                 var V1 = 0;
                 var V2 = 0;
                 var dirty = false;
@@ -7551,16 +7571,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                 }
                 if (dirty) {
-                    switch (this.fixedSplitterPostion) {
-                        case ExpressCraft.FixedSplitterPosition.Panel2: 
-                            this.setSplitterPosition((((Bridge.Int.clip32(V1) - (((Bridge.Int.clip32(V2) - this.getSplitterPosition()) | 0))) | 0)));
-                            break;
-                        case ExpressCraft.FixedSplitterPosition.None: 
-                            this.setSplitterPosition(V1 === 0 || V2 === 0 ? 0 : Bridge.Int.clip32(this.getSplitterPosition() * (V1 / V2)));
-                            break;
-                        default: 
-                            break;
-                    }
+                    this.setSplitterPosition(V1 === 0 || V2 === 0 ? 0 : Bridge.Int.clip32(this.getSplitterPosition() * (V1 / V2)));
                 }
             }
 
@@ -7574,13 +7585,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this._isMouseDown) {
                 this._currentMouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
                 var x;
-                if (this.horizontal) {
-                    x = (this._startingSplitterPos - (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0))) | 0;
-                } else {
-                    x = (this._startingSplitterPos - (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0))) | 0;
-                }
+                var m = this.horizontal ? (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0)) : (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0));
+
                 var y = this.getMaxSplitterSize();
-                if (x > y) {
+                if (((x = this.fixedSplitterPostion === ExpressCraft.FixedSplitterPosition.Panel2 ? ((this._startingSplitterPos + m) | 0) : ((this._startingSplitterPos - m) | 0))) > y) {
                     x = y;
                 }
                 this.setSplitterPosition(x);

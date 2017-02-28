@@ -384,6 +384,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         aceCodeEditor: null,
         formHolder: null,
         designerContainer: null,
+        splitControlContainer2: null,
         config: {
             properties: {
                 ClassName: null
@@ -394,6 +395,10 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.TabControlPage.ctor.call(this);
             this.setClassName(className);
             this.setCaption(System.String.concat(this.getClassName(), ".Form"));
+
+            this.splitControlContainer2 = new ExpressCraft.SplitControlContainer();
+            ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer2);
+
             this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
             ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer1);
 
@@ -426,7 +431,13 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
             this.splitControlContainer1.setSplitterPosition(572);
 
-            ExpressCraft.Helper.appendChild(this, this.splitControlContainer1);
+            this.splitControlContainer2.setSplitterPosition(176);
+            this.splitControlContainer2.setFixedSplitterPostion(ExpressCraft.FixedSplitterPosition.Panel2);
+            ExpressCraft.Helper.appendChild(this.splitControlContainer2.panel1, this.splitControlContainer1);
+
+            ExpressCraftDesign.App.studio.linkchildrenToForm([this.splitControlContainer1, this.splitControlContainer2]);
+
+            ExpressCraft.Helper.appendChild(this, this.splitControlContainer2);
 
             this.generateSourceCode();
 

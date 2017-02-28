@@ -81,10 +81,10 @@ namespace ExpressCraft
 
 		public SplitControlContainer() : base("splitcontrol")
 		{
-			Panel1 = new Control();
+			Panel1 = new Control() { Location = new Vector2(0, 0) };
 			Panel2 = new Control();
 			Splitter = new Control();
-
+			
 			Splitter.Content.OnMouseDown = (ev) =>
 			{
 				if(!SplitterResizable)
@@ -113,7 +113,7 @@ namespace ExpressCraft
 					_prevClientRect = clientRec;
 				}
 
-				if(fixedSplitterPostion != FixedSplitterPosition.Panel1)
+				if(fixedSplitterPostion == FixedSplitterPosition.None)
 				{
 					double V1 = 0;
 					double V2 = 0;
@@ -138,18 +138,8 @@ namespace ExpressCraft
 						}
 					}
 					if(dirty)
-					{
-						switch(fixedSplitterPostion)
-						{														
-							case FixedSplitterPosition.Panel2:
-								SplitterPosition = ((int)V1 - ((int)V2 - SplitterPosition));
-								break;
-							case FixedSplitterPosition.None:
-								SplitterPosition = V1 == 0 || V2 == 0 ? 0 : (int)(SplitterPosition * (V1 / V2));
-								break;
-							default:
-								break;
-						}
+					{						
+						SplitterPosition = V1 == 0 || V2 == 0 ? 0 : (int)(SplitterPosition * (V1 / V2));
 					}
 				}
 
@@ -166,16 +156,11 @@ namespace ExpressCraft
 				{
 					_currentMouseDownVector = Helper.GetClientMouseLocation(ev);
 					int x;
-					if(horizontal)
-					{
-						x = _startingSplitterPos - (_mouseDownVector.Yi - _currentMouseDownVector.Yi);
-					}
-					else
-					{
-						x = _startingSplitterPos - (_mouseDownVector.Xi - _currentMouseDownVector.Xi);
-					}
+					int m = horizontal ? (_mouseDownVector.Yi - _currentMouseDownVector.Yi) : (_mouseDownVector.Xi - _currentMouseDownVector.Xi);					
+					
 					var y = GetMaxSplitterSize();
-					if(x > y)
+					if((x = fixedSplitterPostion == FixedSplitterPosition.Panel2 ? _startingSplitterPos + m : _startingSplitterPos - m)
+						> y)
 					{
 						x = y;
 					}
@@ -207,14 +192,15 @@ namespace ExpressCraft
 		private void RenderControls()
 		{
 			var sp = SplitterPosition;
+			var maxSize = GetMaxSplitterSize();
+
 			if(_prevClientRect != null)
-			{
-				var maxSize = GetMaxSplitterSize();
+			{				
 				if(sp > maxSize)
 				{
 					sp = maxSize;
 				}
-			}
+			}			
 
 			if(Horizontal)
 			{
@@ -222,33 +208,56 @@ namespace ExpressCraft
 				Panel2.ExchangeClass("splitvertical", "splithorizontal");
 				Splitter.ExchangeClass("splitvertical", "splitvertical");
 
-				Panel1.Location = new Vector2(0, 0);
 				Panel1.Width = "";
-				Panel1.Height = sp;
-
-				Splitter.Location = new Vector2(0, sp);
 				Splitter.Width = "";
-
-				Panel2.Location = new Vector2(0, sp + 12);
 				Panel2.Width = "";
-				Panel2.Height = "calc(100% - " + (sp + 12) + "px)"; ;
+				
+				if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
+				{
+					Splitter.Location = new Vector2(0, sp);
+
+					Panel1.Height = sp;				
+					Panel2.Location = new Vector2(0, sp + 12);
+					Panel2.Height = "calc(100% - " + (sp + 12) + "px)"; ;
+				}
+				else
+				{					
+					Splitter.Location = new Vector2(0, "calc(100% - " + sp + "px)");
+
+					Panel1.Height = "calc(100% - " + sp + "px)";
+
+					Panel2.Height = sp;
+					Panel2.Location = new Vector2(0, "calc(100% - " + sp + 12 + "px)");
+				}
 			}
 			else
 			{
 				Panel1.ExchangeClass("splithorizontal", "splitvertical");
 				Panel2.ExchangeClass("splithorizontal", "splitvertical");
 				Splitter.ExchangeClass("splitterhorizontal", "splittervertical");
-
-				Panel1.Location = new Vector2(0, 0);
-				Panel1.Width = sp;
+				
 				Panel1.Height = "";
-
-				Splitter.Location = new Vector2(sp, 0);
 				Splitter.Height = "";
-
-				Panel2.Location = new Vector2(sp + 12, 0);
-				Panel2.Width = "calc(100% - " + (sp + 12) + "px)";
 				Panel2.Height = "";
+
+				if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
+				{
+					Splitter.Location = new Vector2(sp, 0);
+
+					Panel1.Width = sp;
+
+					Panel2.Width = "calc(100% - " + (sp + 12) + "px)";
+					Panel2.Location = new Vector2(sp + 12, 0);
+				}
+				else
+				{
+					Splitter.Location = new Vector2("calc(100% - " + sp + "px)", 0);
+
+					Panel1.Width = "calc(100% - " + sp + "px)";
+
+					Panel2.Width = sp;
+					Panel2.Location = new Vector2("calc(100% - " + sp + 12 + "px)", 0);
+				}				
 			}
 		}
 	}

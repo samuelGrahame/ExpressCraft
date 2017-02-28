@@ -510,6 +510,7 @@ namespace ExpressCraftDesign
 		public AceCodeEditor aceCodeEditor;
 		public ControlHolder formHolder;
 		public HTMLElement designerContainer;
+		public SplitControlContainer splitControlContainer2;
 
 		public void GenerateSourceCode()
 		{
@@ -568,8 +569,12 @@ namespace ExpressCraftDesign
 		{
 			ClassName = className;
 			Caption = ClassName + ".Form";
+
+			splitControlContainer2 = new SplitControlContainer();
+			splitControlContainer2.SetBoundsFull();
+
 			splitControlContainer1 = new SplitControlContainer();
-			splitControlContainer1.SetBoundsFull();
+			splitControlContainer1.SetBoundsFull();			
 
 			aceCodeEditor = new AceCodeEditor(AceModeTypes.csharp, AceThemeTypes.twilight);			
 			splitControlContainer1.Panel1.AppendChild(aceCodeEditor = new AceCodeEditor(AceModeTypes.csharp, AceThemeTypes.twilight)
@@ -595,7 +600,13 @@ namespace ExpressCraftDesign
 
 			splitControlContainer1.SplitterPosition = 572;
 
-			this.AppendChild(splitControlContainer1);
+			splitControlContainer2.SplitterPosition = 176;
+			splitControlContainer2.FixedSplitterPostion = FixedSplitterPosition.Panel2;
+			splitControlContainer2.Panel1.AppendChild(splitControlContainer1);
+
+			App.studio.LinkchildrenToForm(splitControlContainer1, splitControlContainer2);
+
+			this.AppendChild(splitControlContainer2);
 
 			GenerateSourceCode();
 
