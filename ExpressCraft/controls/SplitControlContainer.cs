@@ -65,6 +65,21 @@ namespace ExpressCraft
 		}
 		private ClientRect _prevClientRect = null;		
 
+		private void ResizeChildren()
+		{
+			if(this.LinkedForm != null)
+			{
+				if(Panel1 != null && Panel1.Content != null)
+				{
+					this.LinkedForm.Resizing(Panel1.Content);
+				}
+				if(Panel2 != null && Panel2.Content != null)
+				{
+					this.LinkedForm.Resizing(Panel2.Content);
+				}
+			}
+		}
+
 		public SplitControlContainer()
 		{
 			Panel1 = new Control();
@@ -81,16 +96,25 @@ namespace ExpressCraft
 				_startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;
 
 				ev.StopPropagation();
-			};
+			};								
 
 			OnResize = (ev) =>
 			{
+				if(this.LinkedForm != null)
+				{
+					if(!this.LinkedForm.IsVisible())
+					{
+						return;
+					}
+				}
 				var clientRec = this.Content.GetBoundingClientRect();
+
 				if(_prevClientRect == null)
 				{
 					_prevClientRect = clientRec;
 				}
-				if(fixedSplitterPostion != FixedSplitterPosition.Panel1 && _prevClientRect != null)
+
+				if(fixedSplitterPostion != FixedSplitterPosition.Panel1)
 				{
 					double V1 = 0;
 					double V2 = 0;
@@ -131,8 +155,10 @@ namespace ExpressCraft
 				}
 
 				_prevClientRect = clientRec;
-
+				
 				RenderControls();
+
+				ResizeChildren();
 			};
 
 			Content.OnMouseMove = (ev) =>
@@ -149,12 +175,15 @@ namespace ExpressCraft
 						SplitterPosition = _startingSplitterPos - (_mouseDownVector.Xi - _currentMouseDownVector.Xi);
 					}
 					_currentMouseDownVector = _mouseDownVector;
+
+					ResizeChildren();
 				}
 			};
 
 			Content.OnMouseUp = (ev) =>
 			{
 				_isMouseDown = false;
+
 				RenderControls();
 			};
 

@@ -49,7 +49,10 @@ namespace ExpressCraftGridView
 
 					if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
 					{
-						row.Style.BackgroundColor = Color.Green;
+						foreach(var item in row.Children)
+						{
+							item.Style.Color = Color.Red;
+						}						
 					}
 				};
 

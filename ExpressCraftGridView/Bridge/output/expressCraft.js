@@ -4492,7 +4492,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 children[i].linkedForm = this;
             }
         },
-        resizing: function () {
+        resizing: function (parent) {
+            if (parent === void 0) { parent = null; }
             if (!Bridge.staticEquals(this.onResize, null)) {
                 this.onResize(this);
             }
@@ -4500,7 +4501,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
                 if (this.children.getItem(i) != null && !Bridge.staticEquals(this.children.getItem(i).onResize, null)) {
-                    this.children.getItem(i).onResize(this.children.getItem(i));
+                    if (parent == null) {
+                        this.children.getItem(i).onResize(this.children.getItem(i));
+                    } else if (Bridge.referenceEquals(parent, this.children.getItem(i).content.parentElement)) {
+                        this.children.getItem(i).onResize(this.children.getItem(i));
+                    }
                 }
             }
         },
@@ -5471,6 +5476,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _columnAutoWidth: false,
         _focusedcolumn: -1,
         _focusedDataHandle: -1,
+        _columnHeadersVisible: true,
         _useEditForm: true,
         sortSettings: null,
         columns: null,
@@ -5504,12 +5510,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.content.style.overflow = "hidden";
 
             this.gridHeaderContainer = ExpressCraft.Control.div$1("heading-container");
-            ExpressCraft.Helper.setBounds(this.gridHeaderContainer, "0", "0", "100%", "29px");
 
             this.gridHeader = ExpressCraft.Control.div();
             ExpressCraft.Helper.setBounds(this.gridHeader, "0", "0", "0", "29px");
             this.gridBodyContainer = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds(this.gridBodyContainer, "1px", "31px", "calc(100% - 2px)", "calc(100% - 31px)");
 
             this.gridBodyContainer.style.overflowX = "auto";
             this.gridBodyContainer.style.overflowY = "auto";
@@ -5521,6 +5525,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.gridBodyContainer.appendChild(this.gridBody);
             this.gridHeaderContainer.appendChild(this.gridHeader);
+
+            this.setDefaultSizes();
 
             this.content.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridView.f1);
 
@@ -5593,6 +5599,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (!Bridge.staticEquals(this.onFocusedRowChanged, null)) {
                     this.onFocusedRowChanged(this._focusedDataHandle, prev);
                 }
+            }
+        },
+        getColumnHeadersVisible: function () {
+            return this._columnHeadersVisible;
+        },
+        setColumnHeadersVisible: function (value) {
+            if (value !== this._columnHeadersVisible) {
+                this._columnHeadersVisible = value;
+
+                this.setDefaultSizes();
+
+                this.renderGrid();
             }
         },
         getColumnAutoWidth: function () {
@@ -5715,6 +5733,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.visibleRowHandles = calcVisibleRows;
             this.renderGrid();
+        },
+        setDefaultSizes: function () {
+            if (this._columnHeadersVisible) {
+                ExpressCraft.Helper.setBounds(this.gridHeaderContainer, "0", "0", "100%", "29px");
+                ExpressCraft.Helper.setBounds(this.gridBodyContainer, "0px", "31px", "100%", "calc(100% - 31px)");
+                this.gridHeader.style.visibility = "visible";
+            } else {
+                this.gridHeader.style.visibility = "hidden";
+                ExpressCraft.Helper.setBounds(this.gridBodyContainer, "0px", "1px", "100%", "calc(100% - 1px)");
+            }
         },
         sortColumn: function () {
             if (this.sortSettings != null) {
@@ -5953,6 +5981,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Control.prototype.render.call(this);
             this.setHasRendered(true);
             this.renderGrid();
+
+            if (this.content.parentElement != null) {
+
+            }
         },
         getRawVisibleRowCount: function () {
             return this.gridBodyContainer.clientHeight === 0 ? 0.0 : this.gridBodyContainer.clientHeight / ExpressCraft.GridView.UnitHeight;
@@ -6092,29 +6124,31 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var Cols = new (System.Collections.Generic.List$1(HTMLSpanElement))();
 
             var uboundRowCount = (RawLeftCellCount - 1) | 0;
+            if (this._columnHeadersVisible) {
+                for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
+                    //(x == uboundRowCount ? 0 : 1)
+                    if (x1 >= this.columns.getCount()) {
+                        break;
+                    }
+                    var gcol = this.columns.getItem(x1);
+                    var colIndex = x1;
+                    var apparence = gcol.headingApparence;
 
-            for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
-                //(x == uboundRowCount ? 0 : 1)
-                if (x1 >= this.columns.getCount()) {
-                    break;
+                    var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
+
+                    if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
+                        var sortImage = ExpressCraft.Control.div();
+                        ExpressCraft.Helper.setBounds(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
+                        sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
+                        col.appendChild(sortImage);
+                    }
+
+                    this.setupColumn(col, x1, gcol);
+
+                    Cols.add(col);
                 }
-                var gcol = this.columns.getItem(x1);
-                var colIndex = x1;
-                var apparence = gcol.headingApparence;
-
-                var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
-
-                if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
-                    var sortImage = ExpressCraft.Control.div();
-                    ExpressCraft.Helper.setBounds(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
-                    sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
-                    col.appendChild(sortImage);
-                }
-
-                this.setupColumn(col, x1, gcol);
-
-                Cols.add(col);
             }
+
 
 
             if (this._dataSource == null || this._dataSource.getRowCount() === 0 || this._dataSource.getColumnCount() === 0) {
@@ -7338,6 +7372,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.renderControls();
         },
+        resizeChildren: function () {
+            if (this.linkedForm != null) {
+                if (this.panel1 != null && this.panel1.content != null) {
+                    this.linkedForm.resizing(this.panel1.content);
+                }
+                if (this.panel2 != null && this.panel2.content != null) {
+                    this.linkedForm.resizing(this.panel2.content);
+                }
+            }
+        },
         getMaxSplitterSize: function () {
             var maxSize = (Bridge.Int.clip32(this.getHorizontal() ? this.content.getBoundingClientRect().height : this.content.getBoundingClientRect().width) - 12) | 0;
             if (maxSize < 0) {
@@ -7404,11 +7448,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopPropagation();
         },
         f2: function (ev) {
+            if (this.linkedForm != null) {
+                if (!this.linkedForm.isVisible()) {
+                    return;
+                }
+            }
             var clientRec = this.content.getBoundingClientRect();
+
             if (this._prevClientRect == null) {
                 this._prevClientRect = clientRec;
             }
-            if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel1 && this._prevClientRect != null) {
+
+            if (this.fixedSplitterPostion !== ExpressCraft.FixedSplitterPosition.Panel1) {
                 var V1 = 0;
                 var V2 = 0;
                 var dirty = false;
@@ -7443,6 +7494,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._prevClientRect = clientRec;
 
             this.renderControls();
+
+            this.resizeChildren();
         },
         f3: function (ev) {
             if (this._isMouseDown) {
@@ -7453,10 +7506,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.setSplitterPosition((this._startingSplitterPos - (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0))) | 0);
                 }
                 this._currentMouseDownVector = this._mouseDownVector.$clone();
+
+                this.resizeChildren();
             }
         },
         f4: function (ev) {
             this._isMouseDown = false;
+
             this.renderControls();
         }
     });

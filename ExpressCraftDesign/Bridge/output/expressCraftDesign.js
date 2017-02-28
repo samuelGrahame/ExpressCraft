@@ -311,15 +311,41 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel2, this.tabControl1);
 
-            this.gridView1 = new ExpressCraft.GridView(false, true);
-
+            this.gridView1 = new ExpressCraft.GridView(true, true);
             ExpressCraft.Helper.setBoundsFull$1(this.gridView1);
+            this.gridView1.setDataSource(this.getToolBoxItems());
+            this.gridView1.setColumnHeadersVisible(false);
+
+            var colName = this.gridView1.getColumn(0);
+            colName.allowEdit = false;
+            colName.readOnly = true;
+
+            this.gridView1.sortColumn$1(colName);
 
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, this.gridView1);
 
+            this.linkchildrenToForm([this.gridView1, this.splitControlContainer1]);
             ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl1, this.splitControlContainer1]);
 
             this.setWindowState(ExpressCraft.WindowState.Maximized);
+        },
+        getToolBoxItems: function () {
+            var dt = new ExpressCraft.DataTable();
+
+            dt.addColumn("Name", ExpressCraft.DataType.String);
+
+            dt.beginDataUpdate();
+
+            dt.addRow$1(["SimpleButton"]);
+            dt.addRow$1(["Control"]);
+            dt.addRow$1(["RibbonControl"]);
+            dt.addRow$1(["TabControl"]);
+            dt.addRow$1(["TextInput"]);
+            dt.addRow$1(["GridView"]);
+
+            dt.endDataUpdate();
+
+            return dt;
         }
     });
 

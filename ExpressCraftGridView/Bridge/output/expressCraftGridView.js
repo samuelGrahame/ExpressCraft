@@ -38,7 +38,20 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             dataTable.addColumn("Boolean", ExpressCraft.DataType.Bool);
             dataTable.addColumn("Image", ExpressCraft.DataType.String);
 
-            this.gridView.onCustomRowStyle = Bridge.fn.bind(this, $asm.$.ExpressCraftGridView.App.GridForm.f1);
+            this.gridView.onCustomRowStyle = Bridge.fn.bind(this, function (row, handle) {
+                var $t;
+                if (row == null || handle < 0) {
+                    return;
+                }
+
+                if (System.Nullable.getValue(Bridge.cast(this.gridView.getRowCellValue$3(handle, "Number"), System.Int32)) % 2 === 0) {
+                    $t = Bridge.getEnumerator(row.children);
+                    while ($t.moveNext()) {
+                        var item = $t.getCurrent();
+                        item.style.color = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getRed().$clone());
+                    }
+                }
+            });
 
             this.gridView.setDataSource(dataTable);
 
@@ -113,20 +126,6 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         },
         onShowing: function () {
             ExpressCraft.Form.prototype.onShowing.call(this);
-        }
-    });
-
-    Bridge.ns("ExpressCraftGridView.App.GridForm", $asm.$);
-
-    Bridge.apply($asm.$.ExpressCraftGridView.App.GridForm, {
-        f1: function (row, handle) {
-            if (row == null || handle < 0) {
-                return;
-            }
-
-            if (System.Nullable.getValue(Bridge.cast(this.gridView.getRowCellValue$3(handle, "Number"), System.Int32)) % 2 === 0) {
-                row.style.backgroundColor = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getGreen().$clone());
-            }
         }
     });
 });

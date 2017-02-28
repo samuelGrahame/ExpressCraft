@@ -151,6 +151,41 @@ namespace ExpressCraft
 			}
 		}
 
+		public void SetDefaultSizes()
+		{
+			if(_columnHeadersVisible)
+			{
+				GridHeaderContainer.SetBounds("0", "0", "100%", "29px");				
+				GridBodyContainer.SetBounds("0px", "31px", "100%", "calc(100% - 31px)");
+				GridHeader.Style.Visibility = Visibility.Visible;
+			}
+			else
+			{
+				GridHeader.Style.Visibility = Visibility.Hidden;
+				GridBodyContainer.SetBounds("0px", "1px", "100%", "calc(100% - 1px)");
+			}
+		}
+
+		private bool _columnHeadersVisible = true;
+		public bool ColumnHeadersVisible
+		{
+			get
+			{
+				return _columnHeadersVisible;
+			}
+			set
+			{
+				if(value != _columnHeadersVisible)
+				{
+					_columnHeadersVisible = value;
+
+					SetDefaultSizes();
+
+					RenderGrid();
+				}
+			}
+		}
+
 		public bool ColumnAutoWidth
 		{
 			get
@@ -556,13 +591,11 @@ namespace ExpressCraft
 			this.Content.Style.Overflow = Overflow.Hidden;
 
 			GridHeaderContainer = Div("heading-container");
-			GridHeaderContainer.SetBounds("0", "0", "100%", "29px");
-
+			
 			GridHeader = Div();
 			GridHeader.SetBounds("0", "0", "0", "29px");
 			GridBodyContainer = Div();
-			GridBodyContainer.SetBounds("1px", "31px", "calc(100% - 2px)", "calc(100% - 31px)");
-
+			
 			GridBodyContainer.Style.OverflowX = Overflow.Auto;
 			GridBodyContainer.Style.OverflowY = Overflow.Auto;
 
@@ -573,6 +606,8 @@ namespace ExpressCraft
 
 			GridBodyContainer.AppendChild(GridBody);
 			GridHeaderContainer.AppendChild(GridHeader);
+
+			SetDefaultSizes();
 
 			Content.OnMouseUp = (ev) => {
 				if(ResizeIndex == -1)
@@ -869,6 +904,11 @@ namespace ExpressCraft
 			base.Render();
 			HasRendered = true;
 			RenderGrid();
+
+			if(Content.ParentElement != null)
+			{
+				
+			}
 		}
 
 		public float GetRawVisibleRowCount()
@@ -1068,32 +1108,35 @@ namespace ExpressCraft
 			var Cols = new List<HTMLSpanElement>();
 
 			int uboundRowCount = RawLeftCellCount - 1;
-
-			for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+			if(_columnHeadersVisible)
 			{
-				//(x == uboundRowCount ? 0 : 1)
-				if(x >= Columns.Count)
-					break;
-				var gcol = Columns[x];
-                var colIndex = x;
-				var apparence = gcol.HeadingApparence;
-
-				var col = Label(gcol.Caption,
-					(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
-					apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
-                
-                if (gcol.SortedMode != GridViewSortMode.None)
+				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 				{
-					var sortImage = Div();
-					sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
-					sortImage.Style.Background = GetImageString(gcol.SortedMode == GridViewSortMode.Asc ? SortUpBase64 : SortDownBase64);
-					col.AppendChild(sortImage);
+					//(x == uboundRowCount ? 0 : 1)
+					if(x >= Columns.Count)
+						break;
+					var gcol = Columns[x];
+					var colIndex = x;
+					var apparence = gcol.HeadingApparence;
+
+					var col = Label(gcol.Caption,
+						(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
+						apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
+
+					if(gcol.SortedMode != GridViewSortMode.None)
+					{
+						var sortImage = Div();
+						sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
+						sortImage.Style.Background = GetImageString(gcol.SortedMode == GridViewSortMode.Asc ? SortUpBase64 : SortDownBase64);
+						col.AppendChild(sortImage);
+					}
+
+					SetupColumn(col, x, gcol);
+
+					Cols.Add(col);
 				}
-
-				SetupColumn(col, x, gcol);
-
-				Cols.Add(col);
 			}
+			
 			#endregion
 
 

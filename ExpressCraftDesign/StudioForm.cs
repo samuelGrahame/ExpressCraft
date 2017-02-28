@@ -47,7 +47,7 @@ namespace ExpressCraftDesign
 			ribbonControl1.AddRibbonPages(ribbonPage);
 
 			splitControlContainer1 = new SplitControlContainer();
-
+			
 			splitControlContainer1.SplitterPosition = 176;
 			splitControlContainer1.SetBounds(0, 128, "100%", "calc(100% - 128px)");
 
@@ -60,15 +60,43 @@ namespace ExpressCraftDesign
 
 			splitControlContainer1.Panel2.AppendChild(tabControl1);
 
-			gridView1 = new GridView(false, true);
-
+			gridView1 = new GridView(true, true);
 			gridView1.SetBoundsFull();
+			gridView1.DataSource = GetToolBoxItems();
+			gridView1.ColumnHeadersVisible = false;
+
+			var colName = gridView1.GetColumn(0);
+			colName.AllowEdit = false;
+			colName.ReadOnly = true;
+
+			gridView1.SortColumn(colName);
 
 			splitControlContainer1.Panel1.AppendChild(gridView1);
 
+			this.LinkchildrenToForm(gridView1, splitControlContainer1);
 			this.Body.AppendChildren(ribbonControl1, splitControlContainer1);
-
+			
 			this.SetWindowState(WindowState.Maximized);
+		}
+
+		public DataTable GetToolBoxItems()
+		{
+			var dt = new DataTable();
+			
+			dt.AddColumn("Name", DataType.String);
+
+			dt.BeginDataUpdate();
+
+			dt.AddRow("SimpleButton");
+			dt.AddRow("Control");
+			dt.AddRow("RibbonControl");
+			dt.AddRow("TabControl");
+			dt.AddRow("TextInput");
+			dt.AddRow("GridView");
+
+			dt.EndDataUpdate();
+
+			return dt;
 		}
 	}
 
@@ -203,7 +231,6 @@ namespace ExpressCraftDesign
 
 		}
 	}
-
 	public class FormDesignerTabControlPage : TabControlPage
 	{
 		public string ClassName { get; set; }

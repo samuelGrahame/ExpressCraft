@@ -30,7 +30,7 @@ namespace ExpressCraft
 				
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
-
+		
 		public static bool InExternalMouseEvent = false;
 		
 		public bool ShowMinimize
@@ -139,7 +139,7 @@ namespace ExpressCraft
 		public int MinWidth { get; set; } = 200;
 		public int MinHeight { get; set; } = 50;
 
-		public void Resizing()
+		public void Resizing(HTMLElement parent = null)
 		{
 			if(OnResize != null)
 				OnResize(this);
@@ -149,7 +149,13 @@ namespace ExpressCraft
 			{
 				if(Children[i] != null && Children[i].OnResize != null)
 				{
-					Children[i].OnResize(Children[i]);
+					if(parent == null)
+					{
+						Children[i].OnResize(Children[i]);
+					}else if (parent == Children[i].Content.ParentElement)
+					{
+						Children[i].OnResize(Children[i]);
+					}					
 				}
 			}
 		}
