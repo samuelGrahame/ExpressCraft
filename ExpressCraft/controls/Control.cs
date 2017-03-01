@@ -14,7 +14,7 @@ namespace ExpressCraft
 	}
 	
 	public class Control
-	{
+	{		
 		public HTMLElement Content;
 		public string Name { get; set; }
 		public bool HasRendered { get; set; } = false;

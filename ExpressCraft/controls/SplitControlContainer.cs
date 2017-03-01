@@ -62,23 +62,17 @@ namespace ExpressCraft
 			
 			RenderControls();
 		}
-		private ClientRect _prevClientRect = null;		
+		private ClientRect _prevClientRect = null;
+		private bool IsMouseDown = false;
 
 		private void ResizeChildren()
-		{
-			if(this.LinkedForm != null)
+		{			
+			if(this.LinkedForm != null && this.Content != null)
 			{
-				if(Panel1 != null && Panel1.Content != null)
-				{
-					this.LinkedForm.Resizing(Panel1.Content);
-				}
-				if(Panel2 != null && Panel2.Content != null)
-				{
-					this.LinkedForm.Resizing(Panel2.Content);
-				}
+				this.LinkedForm.ResizeChildren(this.Content);				
 			}
 		}
-
+		
 		public SplitControlContainer() : base("splitcontrol")
 		{
 			Panel1 = new Control() { Location = new Vector2(0, 0) };
@@ -89,12 +83,11 @@ namespace ExpressCraft
 			{
 				if(!SplitterResizable)
 					return;
-				_isMouseDown = true;
+				IsMouseDown = true;
 				_mouseDownVector = Helper.GetClientMouseLocation(ev);
 				var maxSize = GetMaxSplitterSize();
-				_startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;
-
-				ev.StopPropagation();
+				_startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;				
+				ev.StopImmediatePropagation();
 			};								
 
 			OnResize = (ev) =>
@@ -152,8 +145,8 @@ namespace ExpressCraft
 
 			Content.OnMouseMove = (ev) =>
 			{
-				if(_isMouseDown)
-				{
+				if(IsMouseDown)
+				{					
 					_currentMouseDownVector = Helper.GetClientMouseLocation(ev);
 					int x;
 					int m = horizontal ? (_mouseDownVector.Yi - _currentMouseDownVector.Yi) : (_mouseDownVector.Xi - _currentMouseDownVector.Xi);					
@@ -173,8 +166,7 @@ namespace ExpressCraft
 
 			Content.OnMouseUp = (ev) =>
 			{
-				_isMouseDown = false;
-
+				IsMouseDown = false;
 				RenderControls();
 			};
 
@@ -195,7 +187,7 @@ namespace ExpressCraft
 			var maxSize = GetMaxSplitterSize();
 
 			if(_prevClientRect != null)
-			{				
+			{
 				if(sp > maxSize)
 				{
 					sp = maxSize;

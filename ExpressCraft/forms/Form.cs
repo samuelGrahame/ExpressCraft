@@ -139,7 +139,30 @@ namespace ExpressCraft
 		public int MinWidth { get; set; } = 200;
 		public int MinHeight { get; set; } = 50;
 
-		public void Resizing(HTMLElement parent = null)
+		public void ResizeChildren(HTMLElement parent)
+		{
+			if(OnResize != null)
+				OnResize(this);
+			OnResizing();
+
+			for(int x = 0; x < parent.Children.Length; x++)
+			{
+				for(int i = 0; i < Children.Count; i++)
+				{
+					if(Children[i] != null && Children[i].OnResize != null)
+					{
+						if(Children[i].Content == parent.Children[x])
+						{
+							Children[i].OnResize(Children[i]);
+							break;						
+						}
+					}
+				}
+				ResizeChildren(parent.Children[x]);
+			}			
+		}
+
+		public void Resizing()
 		{
 			if(OnResize != null)
 				OnResize(this);
@@ -149,13 +172,7 @@ namespace ExpressCraft
 			{
 				if(Children[i] != null && Children[i].OnResize != null)
 				{
-					if(parent == null)
-					{
-						Children[i].OnResize(Children[i]);
-					}else if (parent == Children[i].Content.ParentElement)
-					{
-						Children[i].OnResize(Children[i]);
-					}					
+					Children[i].OnResize(Children[i]);
 				}
 			}
 		}

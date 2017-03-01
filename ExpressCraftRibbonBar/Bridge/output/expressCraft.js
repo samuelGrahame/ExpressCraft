@@ -4515,8 +4515,25 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 children[i].linkedForm = this;
             }
         },
-        resizing: function (parent) {
-            if (parent === void 0) { parent = null; }
+        resizeChildren: function (parent) {
+            if (!Bridge.staticEquals(this.onResize, null)) {
+                this.onResize(this);
+            }
+            this.onResizing();
+
+            for (var x = 0; x < parent.children.length; x = (x + 1) | 0) {
+                for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
+                    if (this.children.getItem(i) != null && !Bridge.staticEquals(this.children.getItem(i).onResize, null)) {
+                        if (Bridge.referenceEquals(this.children.getItem(i).content, parent.children[x])) {
+                            this.children.getItem(i).onResize(this.children.getItem(i));
+                            break;
+                        }
+                    }
+                }
+                this.resizeChildren(parent.children[x]);
+            }
+        },
+        resizing: function () {
             if (!Bridge.staticEquals(this.onResize, null)) {
                 this.onResize(this);
             }
@@ -4524,11 +4541,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
                 if (this.children.getItem(i) != null && !Bridge.staticEquals(this.children.getItem(i).onResize, null)) {
-                    if (parent == null) {
-                        this.children.getItem(i).onResize(this.children.getItem(i));
-                    } else if (Bridge.referenceEquals(parent, this.children.getItem(i).content.parentElement)) {
-                        this.children.getItem(i).onResize(this.children.getItem(i));
-                    }
+                    this.children.getItem(i).onResize(this.children.getItem(i));
                 }
             }
         },
@@ -7391,6 +7404,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         splitterResizable: true,
         horizontal: false,
         _prevClientRect: null,
+        isMouseDown: false,
         config: {
             init: function () {
                 this._mouseDownVector = new ExpressCraft.Vector2();
@@ -7448,13 +7462,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.renderControls();
         },
         resizeChildren: function () {
-            if (this.linkedForm != null) {
-                if (this.panel1 != null && this.panel1.content != null) {
-                    this.linkedForm.resizing(this.panel1.content);
-                }
-                if (this.panel2 != null && this.panel2.content != null) {
-                    this.linkedForm.resizing(this.panel2.content);
-                }
+            if (this.linkedForm != null && this.content != null) {
+                this.linkedForm.resizeChildren(this.content);
             }
         },
         getMaxSplitterSize: function () {
@@ -7533,12 +7542,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (!this.splitterResizable) {
                 return;
             }
-            this._isMouseDown = true;
+            this.isMouseDown = true;
             this._mouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
             var maxSize = this.getMaxSplitterSize();
             this._startingSplitterPos = this._splitterPosition > maxSize ? maxSize : this._splitterPosition;
-
-            ev.stopPropagation();
+            ev.stopImmediatePropagation();
         },
         f2: function (ev) {
             if (this.linkedForm != null) {
@@ -7582,7 +7590,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.resizeChildren();
         },
         f3: function (ev) {
-            if (this._isMouseDown) {
+            if (this.isMouseDown) {
                 this._currentMouseDownVector = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
                 var x;
                 var m = this.horizontal ? (((this._mouseDownVector.getYi() - this._currentMouseDownVector.getYi()) | 0)) : (((this._mouseDownVector.getXi() - this._currentMouseDownVector.getXi()) | 0));
@@ -7598,8 +7606,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f4: function (ev) {
-            this._isMouseDown = false;
-
+            this.isMouseDown = false;
             this.renderControls();
         }
     });
