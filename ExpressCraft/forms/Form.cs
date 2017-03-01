@@ -147,6 +147,8 @@ namespace ExpressCraft
 
 			for(int x = 0; x < parent.Children.Length; x++)
 			{
+				if(!parent.Children[x].ClassList.Contains("control"))
+					continue;
 				for(int i = 0; i < Children.Count; i++)
 				{
 					if(Children[i] != null && Children[i].OnResize != null)

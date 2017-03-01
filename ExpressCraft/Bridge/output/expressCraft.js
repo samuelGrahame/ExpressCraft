@@ -4522,6 +4522,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.onResizing();
 
             for (var x = 0; x < parent.children.length; x = (x + 1) | 0) {
+                if (!parent.children[x].classList.contains("control")) {
+                    continue;
+                }
                 for (var i = 0; i < this.children.getCount(); i = (i + 1) | 0) {
                     if (this.children.getItem(i) != null && !Bridge.staticEquals(this.children.getItem(i).onResize, null)) {
                         if (Bridge.referenceEquals(this.children.getItem(i).content, parent.children[x])) {
