@@ -2310,9 +2310,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             appendChildren: function (c, Nodes) {
                 if (Nodes === void 0) { Nodes = []; }
                 if (Nodes != null && Nodes.length > 0) {
+                    var docfrag = document.createDocumentFragment();
+
                     for (var i = 0; i < Nodes.length; i = (i + 1) | 0) {
-                        c.appendChild(Nodes[i]);
+                        docfrag.appendChild(Nodes[i]);
+
+                        //c.AppendChild(Nodes[i]);
                     }
+                    c.appendChild(docfrag);
+
                 }
             },
             appendChildren$2: function (c, Nodes) {

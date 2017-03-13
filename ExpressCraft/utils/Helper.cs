@@ -199,11 +199,17 @@ namespace ExpressCraft
         {
             if(Nodes != null && Nodes.Length > 0)
             {
+				var docfrag = Document.CreateDocumentFragment();
+
                 for (int i = 0; i < Nodes.Length; i++)
                 {
-                    c.AppendChild(Nodes[i]);
+					docfrag.AppendChild(Nodes[i]);
+
+					//c.AppendChild(Nodes[i]);
                 }
-            }
+				c.AppendChild(docfrag);
+
+			}
         }
 
 		public static void AppendChildrenTabIndex(this Node c, params Control[] Nodes)
