@@ -7693,6 +7693,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
     Bridge.define("ExpressCraft.TabControl", {
         inherits: [ExpressCraft.Control],
+        showClosedButton: false,
         selectedindex: 0,
         config: {
             properties: {
@@ -7706,6 +7707,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "tabcontrol");
             this.content.oncontextmenu = $asm.$.ExpressCraft.TabControl.f1;
+        },
+        getShowClosedButton: function () {
+            return this.showClosedButton;
+        },
+        setShowClosedButton: function (value) {
+            if (value !== this.showClosedButton) {
+                this.showClosedButton = value;
+                this.resizeTabHeaders();
+            }
         },
         getSelectedIndex: function () {
             return this.selectedindex;
@@ -7743,6 +7753,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 page.v.tabPageHeader = ExpressCraft.Control.div$1(System.String.concat("tabcontrolpageheader tabcontrolpageheader-", state));
                 page.v.tabPageHeader.setAttribute("i", i.toString());
             }
+            if (this.showClosedButton) {
+                if (page.v.tabPageHeaderClose == null) {
+                    page.v.tabPageHeaderClose = ExpressCraft.Control.div$1("tabcontrolpageheader-closebutton");
+                    page.v.tabPageHeader.appendChild(page.v.tabPageHeaderClose);
+                }
+            } else {
+                if (page.v.tabPageHeaderClose != null) {
+                    page.v.tabPageHeader.removeChild(page.v.tabPageHeaderClose);
+                }
+            }
+
+
             page.v.content.style.visibility = Isselected ? "inherit" : "collapse";
         },
         resizeTabHeaders: function () {
@@ -7772,6 +7794,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                     if (!System.String.isNullOrEmpty(page.v.getCaption())) {
                         inwidth = (inwidth + Bridge.Int.clip32(ExpressCraft.Control.getTextWidth(page.v.getCaption(), ExpressCraft.Settings.defaultFont))) | 0;
+                    }
+
+                    if (this.showClosedButton) {
+                        inwidth = (inwidth + 19) | 0;
                     }
 
                     page.v.tabPageHeader.style.left = width + "px";
@@ -7805,6 +7831,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         inherits: [ExpressCraft.Control],
         index: 0,
         tabPageHeader: null,
+        tabPageHeaderClose: null,
         config: {
             properties: {
                 Caption: null

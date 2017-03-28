@@ -27,6 +27,23 @@ namespace ExpressCraft
 				ResizeTabHeaders();
 		}
 
+		private bool showClosedButton;
+		public bool ShowClosedButton
+		{
+			get
+			{
+				return showClosedButton;
+			}
+			set
+			{
+				if(value != showClosedButton)
+				{
+					showClosedButton = value;
+					ResizeTabHeaders();
+				}
+			}
+		}
+
 		private int selectedindex = 0;
 		public int SelectedIndex
 		{
@@ -67,6 +84,21 @@ namespace ExpressCraft
 				page.TabPageHeader = Div("tabcontrolpageheader tabcontrolpageheader-" + state);
 				page.TabPageHeader.SetAttribute("i", i.ToString());
 			}
+			if(showClosedButton)
+			{
+				if(page.TabPageHeaderClose == null)
+				{
+					page.TabPageHeaderClose = Div("tabcontrolpageheader-closebutton");
+					page.TabPageHeader.AppendChild(page.TabPageHeaderClose);					
+				}
+			}else
+			{
+				if(page.TabPageHeaderClose != null)
+				{
+					page.TabPageHeader.RemoveChild(page.TabPageHeaderClose);
+				}
+			}
+			
 			page.Content.Style.Visibility = Isselected ? Visibility.Inherit : Visibility.Collapse;			
 		}
 
@@ -104,12 +136,22 @@ namespace ExpressCraft
 						Content.AppendChild(page.TabPageHeader);
 					}
 
-					page.TabPageHeader.InnerHTML = page.Caption;
+					
 					int inwidth = 24;
 
 					if(!string.IsNullOrEmpty(page.Caption))
 					{
 						inwidth += (int)GetTextWidth(page.Caption, Settings.DefaultFont);
+					}
+					
+					if(showClosedButton)
+					{
+						inwidth += 19;
+						page.TabPageHeader.InnerHTML = "<span>" + page.Caption + "</span>";
+					}
+					else
+					{
+						page.TabPageHeader.InnerHTML = page.Caption;
 					}
 
 					page.TabPageHeader.Style.Left = width + "px";

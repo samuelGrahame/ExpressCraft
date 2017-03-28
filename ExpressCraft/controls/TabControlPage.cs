@@ -17,6 +17,7 @@ namespace ExpressCraft
 		}
 
 		public HTMLDivElement TabPageHeader = null;
+		public HTMLDivElement TabPageHeaderClose = null;
 		public string Caption { get; set; }
 	}
 }

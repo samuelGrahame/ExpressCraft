@@ -56,7 +56,7 @@ namespace ExpressCraft
 			if(Visible)
 				return;
 			var x = this.Content.GetBoundingClientRect();
-			gridView.Location = new Vector2((int)x.Left, (int)(x.Top + x.Height - 2));
+			gridView.Location = new Vector2((int)x.Left, (int)(x.Top + x.Height));
 			
 			ContextMenu.TotalContextHandles++;
 			this.Content.ParentElement.AppendChild(gridView);
