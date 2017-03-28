@@ -15,7 +15,7 @@ namespace ExpressCraft
 		protected ContextMenu SubContextOpened = null;
 		public List<ContextItem> ContextItems = new List<ContextItem>();
 		protected bool Visible = false;
-		protected static int TotalContextHandles = 0;
+		public static int TotalContextHandles = 0;
 
 		public static ContextMenu MainContextMenu = null;
 

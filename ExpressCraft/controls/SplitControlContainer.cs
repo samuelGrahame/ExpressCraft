@@ -12,14 +12,15 @@ namespace ExpressCraft
 		public Control Panel1;
 		public Control Panel2;
 		public Control Splitter;
-		private bool _isMouseDown = false;
+
+		private ClientRect _prevClientRect = null;
+		private bool IsMouseDown = false;
 		private Vector2 _mouseDownVector;
 		private Vector2 _currentMouseDownVector;
 		private int _startingSplitterPos;		
 		private int _splitterPosition = -1;		
 
 		private FixedSplitterPosition fixedSplitterPostion = FixedSplitterPosition.Panel1;
-
 		public FixedSplitterPosition FixedSplitterPostion
 		{
 			get { return fixedSplitterPostion; }
@@ -40,10 +41,9 @@ namespace ExpressCraft
 				_splitterPosition = value;
 				RenderControls();
 			}
-		}
-		
-		private bool horizontal;
+		}		
 
+		private bool horizontal;
 		public bool Horizontal
 		{
 			get { return horizontal; }
@@ -62,8 +62,6 @@ namespace ExpressCraft
 			
 			RenderControls();
 		}
-		private ClientRect _prevClientRect = null;
-		private bool IsMouseDown = false;
 
 		private void ResizeChildren()
 		{			

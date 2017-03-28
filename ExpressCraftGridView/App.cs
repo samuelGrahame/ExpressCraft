@@ -8,7 +8,7 @@ namespace ExpressCraftGridView
     public class App
     {
         public static void Main()
-        {
+        {			
             Form.Setup();
             
             Application.Run(new GridForm());

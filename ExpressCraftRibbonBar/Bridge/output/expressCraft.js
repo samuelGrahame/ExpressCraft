@@ -2310,14 +2310,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             appendChildren: function (c, Nodes) {
                 if (Nodes === void 0) { Nodes = []; }
                 if (Nodes != null && Nodes.length > 0) {
-                    var docfrag = document.createDocumentFragment();
+                    //var docfrag = Document.CreateDocumentFragment();
 
                     for (var i = 0; i < Nodes.length; i = (i + 1) | 0) {
-                        docfrag.appendChild(Nodes[i]);
+                        //docfrag.AppendChild(Nodes[i]);
 
-                        //c.AppendChild(Nodes[i]);
+                        c.appendChild(Nodes[i]);
                     }
-                    c.appendChild(docfrag);
+                    //c.AppendChild(docfrag);
 
                 }
             },
@@ -5514,6 +5514,78 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.GridLookupEdit", {
+        inherits: [ExpressCraft.Control],
+        gridView: null,
+        fieldName: null,
+        displayName: null,
+        visible: false,
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.Control.$ctor4.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
+            this.gridView = Bridge.merge(new ExpressCraft.GridView(true, true), {
+                setSize: new ExpressCraft.Vector2.$ctor1(250, 400)
+            } );
+            this.gridView.contextMenu = null;
+            this.gridView.onFocusedRowChanged = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridLookupEdit.f1);
+
+            this.gridView.content.onmouseleave = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridLookupEdit.f2);
+            this.content.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.GridLookupEdit.f3);
+        },
+        showPopup: function () {
+            if (this.visible) {
+                return;
+            }
+            var x = this.content.getBoundingClientRect();
+            this.gridView.setLocation(new ExpressCraft.Vector2.$ctor1(x.left, x.top + x.height - 2));
+
+            ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
+            this.content.parentElement.appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
+
+            this.gridView.renderGrid();
+
+            this.gridView.content.style.zIndex = (((ExpressCraft.ContextMenu.totalContextHandles + ExpressCraft.Settings.contextMenuStartingZIndex) | 0)).toString();
+            this.visible = true;
+        },
+        closePopup: function () {
+            if (this.visible) {
+                this.gridView.content.parentElement.removeChild(ExpressCraft.Control.op_Implicit(this.gridView));
+                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles - 1) | 0;
+                this.visible = false;
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.GridLookupEdit", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.GridLookupEdit, {
+        f1: function (rowHandle, PrevRowhandle) {
+            ExpressCraft.Helper.empty(this.content);
+
+            if (rowHandle > -1) {
+                this.content.appendChild(Bridge.merge(document.createElement('option'), {
+                    innerHTML: (Bridge.as(this.gridView.getRowCellValue$3(rowHandle, this.displayName), String)),
+                    value: (Bridge.as(this.gridView.getRowCellValue$3(rowHandle, this.fieldName), String))
+                } ));
+            }
+            if (this.visible) {
+                this.closePopup();
+            }
+        },
+        f2: function (ev) {
+            this.closePopup();
+        },
+        f3: function (ev) {
+            ev.preventDefault();
+            ev.stopImmediatePropagation();
+            if (this.visible) {
+                this.closePopup();
+            } else {
+                this.showPopup();
+            }
+        }
+    });
+
     Bridge.define("ExpressCraft.GridView", {
         inherits: [ExpressCraft.Control],
         statics: {
@@ -7406,14 +7478,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         panel1: null,
         panel2: null,
         splitter: null,
-        _isMouseDown: false,
+        _prevClientRect: null,
+        isMouseDown: false,
         _startingSplitterPos: 0,
         _splitterPosition: -1,
         fixedSplitterPostion: 0,
         splitterResizable: true,
         horizontal: false,
-        _prevClientRect: null,
-        isMouseDown: false,
         config: {
             init: function () {
                 this._mouseDownVector = new ExpressCraft.Vector2();

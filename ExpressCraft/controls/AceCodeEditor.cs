@@ -22,7 +22,7 @@ namespace ExpressCraft
 			if(inLoad)
 				return ("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
 			return string.Empty;
-		}		
+		}
 
 		public void ClearSelection()
 		{
