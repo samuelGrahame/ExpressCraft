@@ -235,6 +235,7 @@
     height: calc(100% - 26px);
     top: 24px;
     left: 0;
+    overflow:auto;
 }
 .tabcontrolpageheader { 
     background-color:#F0F0F0;           
