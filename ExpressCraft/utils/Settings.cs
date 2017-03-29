@@ -133,25 +133,64 @@ namespace ExpressCraft
             }
 			
 			return null;
-		}		
+		}
+		private static HTMLStyleElement themeElement = null;
+		private static string _primaryThemeColor = "#0173C7";
+		public static string PrimaryThemeColor {
+			get { return _primaryThemeColor; }
+			set {
+				if(_primaryThemeColor != value)
+				{
+					if(themeElement != null)
+					{
+						themeElement.ParentElement.RemoveChild(themeElement);
+					}
+					_primaryThemeColor = value;
+					if(!string.IsNullOrWhiteSpace(value))
+					{											
+						themeElement = new HTMLStyleElement();
 
-		//function getStyleRuleValue(style, selector, sheet)
-		//{
-		//	var sheets = typeof sheet !== 'undefined'?[sheet] : document.styleSheets;
-		//	for(var i = 0, l = sheets.length; i < l; i++)
-		//	{
-		//		var sheet = sheets[i];
-		//		if(!sheet.cssRules) { continue; }
-		//		for(var j = 0, k = sheet.cssRules.length; j < k; j++)
-		//		{
-		//			var rule = sheet.cssRules[j];
-		//			if(rule.selectorText && rule.selectorText.split(',').indexOf(selector) !== -1)
-		//			{
-		//				return rule.style[style];
-		//			}
-		//		}
-		//	}
-		//	return null;
-		//}
+						themeElement.InnerHTML = string.Format(ThemeTemplate, _primaryThemeColor) ;
+
+						Document.Body.AppendChild(themeElement);
+					}
+				}
+			}
+		}
+
+		private static string ThemeTemplate = @"
+.form-base{
+	border-color:{0};
+}
+.form-heading
+{
+	background-color:{0};
+}
+.progressbarbody
+{
+	background-color:{0};
+}
+.control:focus:not(.grid)
+{
+	outline: dashed 1px {0};
+}
+.ribboncontrol
+{
+	background-color:{0};
+    border-left-color:{0};
+    border-right-color:{0};
+}
+.ribbonpageheader-hidden
+{
+	background-color:{0};
+}
+@keyframes ColorFlash
+{
+	from {background-color: white;}
+    to {background-color: {0};}
+}
+";
+
+
 	}
 }

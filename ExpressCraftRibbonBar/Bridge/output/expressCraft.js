@@ -3360,6 +3360,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             _WindowManagerVisible: false,
             isChrome: false,
             allowCloseWithoutQuestion: false,
+            themeElement: null,
+            _primaryThemeColor: "#0173C7",
+            themeTemplate: "\r\n.form-base{\r\n\tborder-color:{0};\r\n}\r\n.form-heading\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.progressbarbody\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.control:focus:not(.grid)\r\n{\r\n\toutline: dashed 1px {0};\r\n}\r\n.ribboncontrol\r\n{\r\n\tbackground-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n}\r\n.ribbonpageheader-hidden\r\n{\r\n\tbackground-color:{0};\r\n}\r\n@keyframes ColorFlash\r\n{\r\n\tfrom {background-color: white;}\r\n    to {background-color: {0};}\r\n}\r\n",
             config: {
                 init: function () {
                     this.isChrome = Bridge.Browser.isChrome;
@@ -3372,6 +3375,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (value !== ExpressCraft.Settings._WindowManagerVisible) {
                     ExpressCraft.Settings._WindowManagerVisible = value;
                     ExpressCraft.Form.setupWindowManager();
+                }
+            },
+            getPrimaryThemeColor: function () {
+                return ExpressCraft.Settings._primaryThemeColor;
+            },
+            setPrimaryThemeColor: function (value) {
+                if (!Bridge.referenceEquals(ExpressCraft.Settings._primaryThemeColor, value)) {
+                    if (ExpressCraft.Settings.themeElement != null) {
+                        ExpressCraft.Settings.themeElement.parentElement.removeChild(ExpressCraft.Settings.themeElement);
+                    }
+                    ExpressCraft.Settings._primaryThemeColor = value;
+                    if (!System.String.isNullOrWhiteSpace(value)) {
+                        ExpressCraft.Settings.themeElement = document.createElement('style');
+
+                        ExpressCraft.Settings.themeElement.innerHTML = System.String.format(ExpressCraft.Settings.themeTemplate, ExpressCraft.Settings._primaryThemeColor);
+
+                        document.body.appendChild(ExpressCraft.Settings.themeElement);
+                    }
                 }
             },
             setup: function () {
@@ -5537,7 +5558,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return;
             }
             var x = this.content.getBoundingClientRect();
-            this.gridView.setLocation(new ExpressCraft.Vector2.$ctor1(x.left, x.top + x.height - 2));
+            this.gridView.setLocation(new ExpressCraft.Vector2.$ctor1(x.left, x.top + x.height));
 
             ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
             this.content.parentElement.appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
@@ -7764,7 +7785,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             }
 
-
             page.v.content.style.visibility = Isselected ? "inherit" : "collapse";
         },
         resizeTabHeaders: function () {
@@ -7789,7 +7809,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         this.content.appendChild(page.v.tabPageHeader);
                     }
 
-                    page.v.tabPageHeader.innerHTML = page.v.getCaption();
+
                     var inwidth = 24;
 
                     if (!System.String.isNullOrEmpty(page.v.getCaption())) {
@@ -7798,6 +7818,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                     if (this.showClosedButton) {
                         inwidth = (inwidth + 19) | 0;
+                        page.v.tabPageHeader.innerHTML = System.String.concat("<span>", page.v.getCaption(), "</span>");
+                    } else {
+                        page.v.tabPageHeader.innerHTML = page.v.getCaption();
                     }
 
                     page.v.tabPageHeader.style.left = width + "px";

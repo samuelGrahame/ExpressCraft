@@ -45,6 +45,8 @@ Bridge.assembly("ExpressCraftRibbonBar", function ($asm, globals) {
             ribbonForm.ribbonControl.addRibbonPages([ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 01"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 02"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 03")]);
             ribbonForm.setWindowState(ExpressCraft.WindowState.Maximized);
 
+            ExpressCraft.Settings.setPrimaryThemeColor(ExpressCraft.Color.getRed().toHex());
+
             ExpressCraft.Application.run(ribbonForm);
         }
     });
