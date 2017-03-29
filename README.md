@@ -109,3 +109,31 @@ Document.Body.Style.BackgroundColor = color;
 // The color implicitly is casted to string using a Hex value. 
 
 ```
+
+# How to use the GridLookupEdit
+
+```csharp
+var gridLookupEdit = new GridLookupEdit() { DisplayName = "RowContent", FieldName = "RowId" };
+gridLookupEdit.Width = 150;
+gridLookupEdit.gridView.DataSource = GetTestData();
+
+public static DataTable GetTestData()
+{
+  var dt = new DataTable();
+
+  dt.AddColumn("RowId", DataType.Long);
+  dt.AddColumn("RowContent", DataType.String);
+
+  dt.BeginDataUpdate();
+
+  for(int i = 0; i < 1000; i++)
+  {				
+    dt.AddRow(i, "Content_Value" + i.ToString());
+  }
+
+  dt.EndDataUpdate();
+
+  return dt;
+}
+
+```
