@@ -190,7 +190,5 @@ namespace ExpressCraft
     to {background-color: {0};}
 }
 ";
-
-
 	}
 }
