@@ -134,7 +134,7 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             (new ExpressCraft.MessageBoxForm.ctor("Hello World!", ExpressCraft.MessageBoxLayout.Exclamation)).showDialog();
         },
         f4: function (ev) {
-            (new ExpressCraft.MessageBoxForm.ctor("Hello World!", ExpressCraft.MessageBoxLayout.Information)).showDialog();
+            (new ExpressCraft.MessageBoxForm.ctor("Dear Customer, Please call us regarding your AV RECEIVER. Plse quote your job number 262523.Rgds Camtec 0862580077.", ExpressCraft.MessageBoxLayout.Information)).showDialog();
         },
         f5: function (ev) {
             (new ExpressCraft.MessageBoxForm.ctor("Hello World!", ExpressCraft.MessageBoxLayout.Question)).showDialog();

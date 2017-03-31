@@ -12,8 +12,7 @@ namespace ExpressCraft {
 		public int MaxWidth;
 
 		public float ComputedHeight;
-		public int LinesComputed;
-		public string ComputedSource;
+		public int LinesComputed;		
 
 		public bool ElelemtsOverMax = false;
 		public float MaxCalculatedWidth = 0;
@@ -27,8 +26,7 @@ namespace ExpressCraft {
 		{
 			ElelemtsOverMax = false;
 			string[] Lines = OriginalSource.Split("\r\n");
-			var builder = new StringBuilder();
-
+		
 			double sizePerChar = Control.GetTextWidth("M", Settings.DefaultFont);
 
 			LinesComputed = 0;
@@ -43,44 +41,32 @@ namespace ExpressCraft {
 				{
 					ElelemtsOverMax = true;
 					MaxCalculatedWidth = MaxWidth;
-					int yy = 0;
-					var lineBuilder = new StringBuilder();
+					int yy = 0;					
 					for(int x = 0; x < line.Length; x++)
 					{
 						yy++;
 						
 						if(yy * sizePerChar > MaxWidth)
-						{
-							lineBuilder.Append(line[x]);
-
-							builder.AppendLine(lineBuilder.ToString());
-							lineBuilder = new StringBuilder();							
+						{							
 							LinesComputed++;
 							yy = 0;
-						}
-						else{
-							lineBuilder.Append(line[x]);							
-						}
+						}						
 					}
 
-					if(lineBuilder.Length > 0)
-					{
-						builder.AppendLine(lineBuilder.ToString());						
+					if(yy > 0)
+					{						
 						LinesComputed++;
 					}										
 				}
 				else
-				{
-					builder.AppendLine(line);
+				{					
 					LinesComputed++;
 					if(lineWidth > MaxCalculatedWidth)
 					{
 						MaxCalculatedWidth = (float)lineWidth;
 					}
 				}
-			}
-
-			ComputedSource = builder.ToString();			
+			}			
 			ComputedHeight = GetFontSize(Settings.DefaultFont) * LinesComputed;			
 		}
 

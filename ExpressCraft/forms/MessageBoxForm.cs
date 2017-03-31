@@ -56,9 +56,9 @@ namespace ExpressCraft
         public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons, string title) : base(title) {            		
             var section = Div();
 			var pic = Div("image32");
-			var textContent = Div();
-			            
-            _buttons = buttons;
+			var textContent = Div("messag-box-content");
+			
+			_buttons = buttons;
 			
 			switch( ui ) {
                 case MessageBoxLayout.Exclamation:
@@ -145,9 +145,7 @@ namespace ExpressCraft
                     width = 320;
             }
 
-            textContent.InnerHTML = tb.ComputedSource;            
-            textContent.Style.Left = "65px";
-			textContent.Style.Height = "auto";
+			textContent.InnerHTML = prompt;
 
 			section.Style.OverflowY = Overflow.Auto;		
             section.Style.Height = "100%";

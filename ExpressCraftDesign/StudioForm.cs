@@ -26,21 +26,13 @@ namespace ExpressCraftDesign
 			{
 				OnItemClick = (rb) =>
 				{
-					var msg = AceCodeEditor.Ready();
-					if(msg != string.Empty)
-					{
-						new MessageBoxForm(msg, MessageBoxLayout.Exclamation, MessageBoxButtons.Ok).ShowDialog();
-					}
-					else
-					{
-						var nfd = new NewFileDialog();
-						nfd.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
-							var stcp = new FormDesignerTabControlPage(nfd.Value.Text.HtmlEscape());
-							this.LinkchildToForm(stcp.splitControlContainer1);
-							tabControl1.AddPages(stcp);
-							tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
-						}));
-					}
+					var nfd = new NewFileDialog();
+					nfd.ShowDialog(new DialogResult(DialogResultEnum.OK, () => {
+						var stcp = new FormDesignerTabControlPage(nfd.Value.Text.HtmlEscape());
+						this.LinkchildToForm(stcp.splitControlContainer1);
+						tabControl1.AddPages(stcp);
+						tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
+					}));
 				}
 			}));
 

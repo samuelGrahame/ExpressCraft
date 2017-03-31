@@ -1704,6 +1704,65 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.ExternalPlugin", {
+        sourceUrl: null,
+        setupCompleted: false,
+        inLoad: false,
+        ctor: function (sourceUrl) {
+            this.$initialize();
+            this.sourceUrl = sourceUrl;
+        },
+        setup: function () {
+            if (!this.setupCompleted) {
+                if (this.inLoad) {
+                    return;
+                }
+                this.inLoad = true;
+
+                document.head.appendChild(Bridge.merge(document.createElement('script'), {
+                    onload: Bridge.fn.bind(this, $asm.$.ExpressCraft.ExternalPlugin.f1),
+                    src: this.sourceUrl
+                } ));
+            }
+        },
+        usageCheck: function () {
+            if (!this.setupCompleted) {
+                throw new System.Exception(System.String.concat("'", this.sourceUrl, "' requires to be setup!"));
+            }
+            if (this.inLoad) {
+                throw new System.Exception(System.String.concat("'", this.sourceUrl, "' is currently loading, Please try again in a few seconds!"));
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.ExternalPlugin", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.ExternalPlugin, {
+        f1: function (ele) {
+            this.setupCompleted = true;
+            this.inLoad = false;
+        }
+    });
+
+    Bridge.define("ExpressCraft.Firebase", {
+        statics: {
+            externalFireBase: null,
+            config: {
+                init: function () {
+                    this.externalFireBase = new ExpressCraft.ExternalPlugin("https://www.gstatic.com/firebasejs/3.6.8/firebase.js");
+                }
+            },
+            setup: function () {
+                ExpressCraft.Firebase.externalFireBase.setup();
+            },
+            initializeApp: function (apiKey, authDomain, databaseURL, storeageBucket, messagingSenderId) {
+                ExpressCraft.Firebase.externalFireBase.usageCheck();
+
+
+            }
+        }
+    });
+
     Bridge.define("ExpressCraft.FixedSplitterPosition", {
         $kind: "enum",
         statics: {
@@ -1749,20 +1808,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
     Bridge.define("ExpressCraft.GoogleCloudPrint", {
         statics: {
-            printerSetup: false,
-            inLoad: false,
-            setup: function () {
-                if (!ExpressCraft.GoogleCloudPrint.printerSetup) {
-                    if (ExpressCraft.GoogleCloudPrint.inLoad) {
-                        return;
-                    }
-                    ExpressCraft.GoogleCloudPrint.inLoad = true;
-
-                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
-                        onload: $asm.$.ExpressCraft.GoogleCloudPrint.f1,
-                        src: "https://www.google.com/cloudprint/client/cpgadget.js"
-                    } ));
+            externalGoogleCloudPrint: null,
+            config: {
+                init: function () {
+                    this.externalGoogleCloudPrint = new ExpressCraft.ExternalPlugin("https://www.google.com/cloudprint/client/cpgadget.js");
                 }
+            },
+            setup: function () {
+                ExpressCraft.GoogleCloudPrint.externalGoogleCloudPrint.setup();
             }
         },
         _source: null,
@@ -1783,12 +1836,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._mimetype = System.String.replaceAll(System.Enum.format(ExpressCraft.GoogleCloudPrintingMimeType, gcpmt, "G").toLowerCase(), "_", ".");
         },
         show: function () {
-            if (!ExpressCraft.GoogleCloudPrint.printerSetup) {
-                throw new System.Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.Setup();");
-            }
-            if (ExpressCraft.GoogleCloudPrint.inLoad) {
-                throw new System.Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
-            }
+            ExpressCraft.GoogleCloudPrint.externalGoogleCloudPrint.usageCheck();
 
             
 			this._gadget = new cloudprint.Gadget();			
@@ -1822,15 +1870,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 				this._gadget = null;
 				
             }
-        }
-    });
-
-    Bridge.ns("ExpressCraft.GoogleCloudPrint", $asm.$);
-
-    Bridge.apply($asm.$.ExpressCraft.GoogleCloudPrint, {
-        f1: function (ele) {
-            ExpressCraft.GoogleCloudPrint.printerSetup = true;
-            ExpressCraft.GoogleCloudPrint.inLoad = false;
         }
     });
 
@@ -3481,7 +3520,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         computeString: function () {
             this.elelemtsOverMax = false;
             var Lines = this.originalSource.split("\r\n");
-            var builder = new System.Text.StringBuilder();
+            //	var builder = new StringBuilder();
 
             var sizePerChar = ExpressCraft.Control.getTextWidth("M", ExpressCraft.Settings.defaultFont);
 
@@ -3496,28 +3535,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.elelemtsOverMax = true;
                     this.maxCalculatedWidth = this.maxWidth;
                     var yy = 0;
-                    var lineBuilder = new System.Text.StringBuilder();
+                    //var lineBuilder = new StringBuilder();
                     for (var x = 0; x < line.length; x = (x + 1) | 0) {
                         yy = (yy + 1) | 0;
 
                         if (yy * sizePerChar > this.maxWidth) {
-                            lineBuilder.append(String.fromCharCode(line.charCodeAt(x)));
+                            //lineBuilder.Append(line[x]);
 
-                            builder.appendLine(lineBuilder.toString());
-                            lineBuilder = new System.Text.StringBuilder();
+                            //builder.AppendLine(lineBuilder.ToString());
+                            //lineBuilder = new StringBuilder();							
                             this.linesComputed = (this.linesComputed + 1) | 0;
                             yy = 0;
-                        } else {
-                            lineBuilder.append(String.fromCharCode(line.charCodeAt(x)));
                         }
+                        //else{
+                        //	lineBuilder.Append(line[x]);							
+                        //}
                     }
 
-                    if (lineBuilder.getLength() > 0) {
-                        builder.appendLine(lineBuilder.toString());
+                    if (yy > 0) {
+                        //builder.AppendLine(lineBuilder.ToString());						
                         this.linesComputed = (this.linesComputed + 1) | 0;
                     }
                 } else {
-                    builder.appendLine(line);
+                    //builder.AppendLine(line);
                     this.linesComputed = (this.linesComputed + 1) | 0;
                     if (lineWidth > this.maxCalculatedWidth) {
                         this.maxCalculatedWidth = lineWidth;
@@ -3525,7 +3565,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             }
 
-            this.computedSource = builder.toString();
+            this.computedSource = this.originalSource;
             this.computedHeight = this.getFontSize(ExpressCraft.Settings.defaultFont) * this.linesComputed;
         },
         getFontSize: function (fontWithSize) {
@@ -3639,29 +3679,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.AceCodeEditor", {
         inherits: [ExpressCraft.Control],
         statics: {
-            aceCodeSetup: false,
-            inLoad: false,
-            ready: function () {
-                if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
-                    return ("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
+            externalAceCodeEditor: null,
+            config: {
+                init: function () {
+                    this.externalAceCodeEditor = new ExpressCraft.ExternalPlugin("https://ace.c9.io/build/src/ace.js");
                 }
-                if (ExpressCraft.AceCodeEditor.inLoad) {
-                    return ("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
-                }
-                return "";
             },
             setup: function () {
-                if (!ExpressCraft.AceCodeEditor.aceCodeSetup) {
-                    if (ExpressCraft.AceCodeEditor.inLoad) {
-                        return;
-                    }
-                    ExpressCraft.AceCodeEditor.inLoad = true;
-
-                    document.head.appendChild(Bridge.merge(document.createElement('script'), {
-                        onload: $asm.$.ExpressCraft.AceCodeEditor.f1,
-                        src: "https://ace.c9.io/build/src/ace.js"
-                    } ));
-                }
+                ExpressCraft.AceCodeEditor.externalAceCodeEditor.setup();
             }
         },
         editor: null,
@@ -3693,10 +3718,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         render: function () {
             var $t, $t1;
-            var msg = ExpressCraft.AceCodeEditor.ready();
-            if (!Bridge.referenceEquals(msg, "")) {
-                throw new System.Exception(msg);
-            }
+            ExpressCraft.AceCodeEditor.externalAceCodeEditor.usageCheck();
 
             var theme = ($t=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t, "G"));
             var mode = ($t1=this._modeType, System.Enum.format(ExpressCraft.AceModeTypes, $t1, "G"));
@@ -3706,11 +3728,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);	
 			
-            this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f2;
+            this.onResize = $asm.$.ExpressCraft.AceCodeEditor.f1;
 
-            this.content.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f3);
+            this.content.addEventListener("mousedown", $asm.$.ExpressCraft.AceCodeEditor.f2);
 
-            this.content.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f4);
+            this.content.addEventListener("mouseup", $asm.$.ExpressCraft.AceCodeEditor.f3);
 
             ExpressCraft.Control.prototype.render.call(this);
         }
@@ -3719,19 +3741,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.ns("ExpressCraft.AceCodeEditor", $asm.$);
 
     Bridge.apply($asm.$.ExpressCraft.AceCodeEditor, {
-        f1: function (ele) {
-            ExpressCraft.AceCodeEditor.aceCodeSetup = true;
-            ExpressCraft.AceCodeEditor.inLoad = false;
-        },
-        f2: function (cont) {
+        f1: function (cont) {
             
 				this.editor.resize(true);
 				
         },
-        f3: function (ev) {
+        f2: function (ev) {
             ExpressCraft.Form.inExternalMouseEvent = true;
         },
-        f4: function (ev) {
+        f3: function (ev) {
             ExpressCraft.Form.inExternalMouseEvent = false;
         }
     });
@@ -8448,7 +8466,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.DialogForm.ctor.call(this, title);
             var section = ExpressCraft.Control.div();
             var pic = ExpressCraft.Control.div$1("image32");
-            var textContent = ExpressCraft.Control.div();
+            var textContent = ExpressCraft.Control.div$1("messag-box-content");
 
             this._buttons = buttons;
 
@@ -8524,8 +8542,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             textContent.innerHTML = tb.computedSource;
-            textContent.style.left = "65px";
-            textContent.style.height = "auto";
 
             section.style.overflowY = "auto";
             section.style.height = "100%";

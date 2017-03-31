@@ -635,18 +635,13 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
     Bridge.apply($asm.$.ExpressCraftDesign.StudioForm, {
         f1: function (rb) {
-            var msg = ExpressCraft.AceCodeEditor.ready();
-            if (!Bridge.referenceEquals(msg, "")) {
-                new ExpressCraft.MessageBoxForm.$ctor1(msg, ExpressCraft.MessageBoxLayout.Exclamation, ExpressCraft.MessageBoxButtons.Ok).showDialog();
-            } else {
-                var nfd = new ExpressCraftDesign.NewFileDialog();
-                nfd.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
-                    var stcp = new ExpressCraftDesign.FormDesignerTabControlPage(ExpressCraft.Helper.htmlEscape$1(nfd.value.getText()));
-                    this.linkchildToForm(stcp.splitControlContainer1);
-                    this.tabControl1.addPages([stcp]);
-                    this.tabControl1.setSelectedIndex((this.tabControl1.getTabPages().getCount() - 1) | 0);
-                }))]);
-            }
+            var nfd = new ExpressCraftDesign.NewFileDialog();
+            nfd.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
+                var stcp = new ExpressCraftDesign.FormDesignerTabControlPage(ExpressCraft.Helper.htmlEscape$1(nfd.value.getText()));
+                this.linkchildToForm(stcp.splitControlContainer1);
+                this.tabControl1.addPages([stcp]);
+                this.tabControl1.setSelectedIndex((this.tabControl1.getTabPages().getCount() - 1) | 0);
+            }))]);
         }
     });
 });

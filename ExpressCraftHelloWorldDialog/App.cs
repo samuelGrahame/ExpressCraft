@@ -55,7 +55,7 @@ namespace ExpressCraftHelloWorldDialog
                 Text = MessageBoxLayout.Information.ToString("G"),
                 ItemClick = (ev) =>
                 {
-                    (new MessageBoxForm("Hello World!", MessageBoxLayout.Information)).ShowDialog();
+                    (new MessageBoxForm("Dear Customer, Please call us regarding your AV RECEIVER. Plse quote your job number 262523.Rgds Camtec 0862580077.", MessageBoxLayout.Information)).ShowDialog();
                 }
             };
             
