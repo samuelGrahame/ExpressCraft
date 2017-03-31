@@ -26,7 +26,7 @@ namespace ExpressCraft
 		public static HTMLElement Parent = null;
 		public static bool Mouse_Down { get; set; } = false;
 		public static int FadeLength { get; set; } = 100;
-        public static HTMLElement FormOverLay;
+        public static HTMLElement FormOverLay;		
 
 		private static HTMLStyleElement WindowCursorManager = null;
 				

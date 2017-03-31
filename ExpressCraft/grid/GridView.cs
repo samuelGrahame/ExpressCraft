@@ -895,6 +895,13 @@ namespace ExpressCraft
 				}
 			};
 
+			OnColumnMouseLeave = (ev) => {
+				if(ResizeIndex == -1)
+				{
+					Form.SetCursor(Cursor.Default);
+				}
+			};
+
 			OnRowDragStart = (ev) => {
 				Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
 			};
@@ -1036,6 +1043,7 @@ namespace ExpressCraft
 		private Action<Event<HTMLSpanElement>> OnColumnDrop;
 		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseDown;
 		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
+		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseLeave;
 
 		private Action<Event<HTMLDivElement>> OnRowDragStart;
 
@@ -1049,6 +1057,7 @@ namespace ExpressCraft
 			se.OnDrop = OnColumnDrop;		
 			se.OnMouseDown = OnColumnMouseDown;
 			se.OnMouseMove = OnColumnMouseMove;
+			se.OnMouseLeave = OnColumnMouseLeave;
 		}
 		int lastId = -1;
 
