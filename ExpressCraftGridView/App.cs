@@ -32,7 +32,7 @@ namespace ExpressCraftGridView
 				
 				Settings.ResourceURL = "";
 
-				GridView = new GridView(true, true);
+				GridView = new GridView(true, false);
 
                 var dataTable = new DataTable();
 				

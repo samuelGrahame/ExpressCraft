@@ -424,6 +424,71 @@ namespace ExpressCraft
 				control.ClassList.Remove(oldClass);
 			if(!control.ClassList.Contains(newClass))
 				control.ClassList.Add(newClass);
-		}		
+		}
+		//public static string CursorToCss(Cursor value)
+		//{
+		//	switch(value)
+		//	{
+		//		default:
+		//		case Cursor.Help:
+		//		case Cursor.Auto:					
+		//		case Cursor.Default:					
+		//		case Cursor.None:
+		//		case Cursor.Pointer:
+		//		case Cursor.Progress:
+		//		case Cursor.Wait:
+		//		case Cursor.Cell:
+		//		case Cursor.CrossHair:
+		//		case Cursor.Text:
+		//		case Cursor.Alias:
+		//		case Cursor.Copy:					
+		//		case Cursor.Move:
+		//		case Cursor.Grab:
+		//		case Cursor.Grabbing:
+		//			return value.ToString("G").ToLower();
+		//		case Cursor.ContextMenu:
+		//			return "context-menu";
+		//		case Cursor.VerticalText:
+		//			return "vertical-text";
+		//		case Cursor.NoDrop:
+		//			return "no-drop";
+		//		case Cursor.NotAllowed:
+		//			return "not-allowed";
+		//		case Cursor.AllScroll:
+		//			return "all-scroll";
+		//		case Cursor.ColResize:
+		//			return "col-resize";
+		//		case Cursor.RowResize:
+		//			return "row-resize";
+		//		case Cursor.NorthResize:
+		//			return "n-resize";
+		//		case Cursor.EastResize:
+		//			return "e-resize";
+		//		case Cursor.SouthResize:
+		//			return "s-resize";
+		//		case Cursor.WestResize:
+		//			return "w-resize";
+		//		case Cursor.NorthEastResize:
+		//			return "ne-resize";
+		//		case Cursor.NorthWestResize:
+		//			return "nw-resize";
+		//		case Cursor.SouthEastResize:
+		//			return "se-resize";
+		//		case Cursor.SouthWestResize:
+		//			return "sw-resize";
+		//		case Cursor.EastWestResize:
+		//			return "ew-resize";
+		//		case Cursor.NorthSouthResize:
+		//			return "ns-resize";
+		//		case Cursor.NorthEastSouthWestResize:
+		//			return "nesw-resize";
+		//		case Cursor.NorthWestSouthEastResize:
+		//			return "nwse-resize";
+		//		case Cursor.ZoomIn:
+		//			return "zoom-in";
+		//		case Cursor.ZoomOut:
+		//			return "zoom-out";										
+		//	}
+		//}															
 	}	
 }

@@ -26,7 +26,9 @@ namespace ExpressCraft
 		public static HTMLElement Parent = null;
 		public static bool Mouse_Down { get; set; } = false;
 		public static int FadeLength { get; set; } = 100;
-        public static HTMLElement FormOverLay;		
+        public static HTMLElement FormOverLay;
+
+		private static HTMLStyleElement WindowCursorManager = null;
 				
         public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
@@ -427,8 +429,10 @@ namespace ExpressCraft
             if (parent == null)
 				Parent = Document.Body;
 			else
-				Parent = parent;            
+				Parent = parent;
 
+			WindowCursorManager = new HTMLStyleElement();
+			
 			WindowHolder = Div("form-container");
 			WindowManager = Div("form-manager");
 			WindowManagerStart = Div("form-manager-start");
@@ -744,8 +748,8 @@ namespace ExpressCraft
             WindowHolder.AppendChild(FormOverLay);
 			WindowManager.AppendChildren(WindowManagerStart, WindowManagerSearch);
 
-			Parent.AppendChild(WindowHolder);
-
+			Parent.AppendChildren(WindowHolder, WindowCursorManager);
+			
 			SetupWindowManager();
 
 		//	Parent.AppendChild(TaskBar);
@@ -754,6 +758,21 @@ namespace ExpressCraft
 			//TaskBar.AppendChild(InputStartSearch);
 
 			//Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
+		}
+		private static Cursor prevCursor = Cursor.Default;
+		
+		public static void SetCursor(Cursor cursor)
+		{			
+			if(cursor != prevCursor)
+			{
+				prevCursor = cursor;
+				WindowCursorManager.InnerHTML = string.Format(@"
+				.control{    
+					cursor:{0} !important;    
+				}", cursor);
+			}
+
+
 		}
 				
 		public void SetWindowState(WindowState State)
@@ -936,14 +955,10 @@ namespace ExpressCraft
 			return butt;
 		}
         
-        public void SetCursor(Cursor cur)
-        {
-            Content.Style.Cursor = cur;
-            Heading.Style.Cursor = cur;
-        }		
-		
 		public Form() : base("form-base")
-		{		
+		{
+			
+
 			Heading = Div("form-heading");
 
             Heading.OnContextMenu = (ev) => {
@@ -1085,6 +1100,13 @@ namespace ExpressCraft
 				ev.StopPropagation();
 			});
 
+			Content.AddEventListener(EventType.MouseLeave, (ev) => {
+				if(MovingForm == null)
+				{
+					SetCursor(Cursor.Default);
+				}
+			});
+
 			Content.AddEventListener(EventType.MouseMove, (ev) => {
 				if(InExternalMouseEvent)
 					return;
@@ -1183,9 +1205,7 @@ namespace ExpressCraft
                     return;
 				
 				ActiveForm = this;
-				MovingForm = null;				
-
-				SetCursor(Cursor.Default);
+				MovingForm = null;								
 				ev.StopPropagation();
 			});
 
@@ -1196,9 +1216,7 @@ namespace ExpressCraft
 				if(MovingForm == null)
 				{
                     if (!IsActiveFormCollection())
-                        return;					
-
-					SetCursor(Cursor.Default);
+                        return;										
 					ev.StopPropagation();
 				}
 			});			
@@ -1281,31 +1299,7 @@ namespace ExpressCraft
 		public int ClientY()
 		{
 			return Body.ClientTop;
-		}
-
-		public string Height
-		{
-			get { return Content.Style.Height; }
-			set { Content.Style.Height = value; }
-		}
-
-		public string Width
-		{
-			get { return Content.Style.Width; }
-			set { Content.Style.Width = value; }
-		}
-
-		public string Left
-		{
-			get { return Content.Style.Left; }
-			set { Content.Style.Left = value; }
-		}
-
-		public string Top
-		{
-			get { return Content.Style.Top; }
-			set { Content.Style.Top = value; }
-		}
+		}		
 
 		public string Text
 		{
@@ -1416,8 +1410,8 @@ namespace ExpressCraft
                 return;
 		
 			Self
-            .Css("left", MinZero((Owner.ClientWidth / 2) - (Global.ParseInt(this.Width) / 2)))
-            .Css("top", MinZero((Owner.ClientHeight / 2) - (Global.ParseInt(this.Height) / 2)));
+            .Css("left", MinZero((Owner.ClientWidth / 2) - (Global.ParseInt(this.Width.ToHtmlValue()) / 2)))
+            .Css("top", MinZero((Owner.ClientHeight / 2) - (Global.ParseInt(this.Height.ToHtmlValue()) / 2)));
         }
 
         protected void AddFormToParentElement(HTMLElement owner = null)
@@ -1487,8 +1481,8 @@ namespace ExpressCraft
 					{
 						var obj = visbileForms[visbileForms.Count - 1];
 
-						int x = Global.ParseInt(obj.Left);
-						int y = Global.ParseInt(obj.Top);
+						int x = Global.ParseInt(obj.Left.ToHtmlValue());
+						int y = Global.ParseInt(obj.Top.ToHtmlValue());
 
 						double pw25 = Owner.ClientWidth * 0.15;
 						double ph25 = Owner.ClientHeight * 0.15;

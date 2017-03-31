@@ -28,7 +28,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
             ExpressCraft.Settings.resourceURL = "";
 
-            this.gridView = new ExpressCraft.GridView(true, true);
+            this.gridView = new ExpressCraft.GridView(true, false);
 
             var dataTable = new ExpressCraft.DataTable();
 

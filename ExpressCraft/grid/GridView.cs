@@ -631,7 +631,7 @@ namespace ExpressCraft
 					x = 24;
 				Columns[ResizeIndex].Width = x;
 
-				ResizeSpan.Style.Cursor = Cursor.Default;
+				Form.SetCursor(Cursor.Default);
 
 				ev.PreventDefault();
 				ev.StopImmediatePropagation();
@@ -869,7 +869,7 @@ namespace ExpressCraft
 				{
 					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
 					ResizeSpan = target;
-					ResizeSpan.Style.Cursor = Cursor.EastWestResize;
+					Form.SetCursor(Cursor.EastWestResize);
 
 					ev.PreventDefault();
 				}
@@ -888,10 +888,10 @@ namespace ExpressCraft
 
 					if(x >= target.ClientWidth - 2)
 					{
-						target.Style.Cursor = Cursor.EastWestResize;
+						Form.SetCursor(Cursor.EastWestResize);
 						return;
 					}
-					target.Style.Cursor = Cursor.Default;
+					Form.SetCursor(Cursor.Default);
 				}
 			};
 
