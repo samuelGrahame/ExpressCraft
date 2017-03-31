@@ -4210,7 +4210,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             windowHolderSelectionBoxY: 0,
             windowHolderSelectionBoxXOff: 0,
             windowHolderSelectionBoxYOff: 0,
-            prevCursor: "default",
             toClean: null,
             config: {
                 properties: {
@@ -4376,12 +4375,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 //Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
             },
             setCursor: function (cursor) {
-                if (cursor !== ExpressCraft.Form.prevCursor) {
-                    ExpressCraft.Form.prevCursor = cursor;
-                    ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
-                }
-
-
+                ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
             },
             calculateZOrder: function () {
                 ExpressCraft.Form.getActiveFormCollection();

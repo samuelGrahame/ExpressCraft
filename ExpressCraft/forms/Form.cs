@@ -758,21 +758,13 @@ namespace ExpressCraft
 			//TaskBar.AppendChild(InputStartSearch);
 
 			//Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
-		}
-		private static Cursor prevCursor = Cursor.Default;
-		
+		}		
 		public static void SetCursor(Cursor cursor)
-		{			
-			if(cursor != prevCursor)
-			{
-				prevCursor = cursor;
-				WindowCursorManager.InnerHTML = string.Format(@"
+		{
+			WindowCursorManager.InnerHTML = string.Format(@"
 				.control{    
 					cursor:{0} !important;    
-				}", cursor);
-			}
-
-
+				}", cursor);			
 		}
 				
 		public void SetWindowState(WindowState State)
