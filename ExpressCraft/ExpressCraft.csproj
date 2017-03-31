@@ -43,6 +43,8 @@
     <Compile Include="forms\InputDialog.cs" />
     <Compile Include="forms\PdfPreviewForm.cs" />
     <Compile Include="utils\Color.cs" />
+    <Compile Include="utils\ExternalPlugin.cs" />
+    <Compile Include="utils\Firebase.cs" />
     <Compile Include="utils\GoogleCloudPrint.cs" />
     <Compile Include="forms\DialogForm.cs" />
     <Compile Include="forms\EnumForms.cs" />
@@ -112,6 +114,7 @@
       <HintPath>..\packages\Bridge.jQuery.2.9.3\lib\net40\Bridge.jQuery2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />

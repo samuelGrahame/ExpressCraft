@@ -9,30 +9,18 @@ using Bridge.jQuery2;
 namespace ExpressCraft
 {
 	public class GoogleCloudPrint
-	{
-		private static bool printerSetup = false;
-		private static bool inLoad = false;
-
+	{	
 		private string _source;
 		private string _mimetype;
 		private string _encoding = "";
 		private string _title;
-		private object _gadget = null;				
+		private object _gadget = null;
+
+		private static ExternalPlugin ExternalGoogleCloudPrint = new ExternalPlugin("https://www.google.com/cloudprint/client/cpgadget.js");
 
 		public static void Setup()
 		{
-			if(!printerSetup)
-			{
-				if(inLoad) return;
-				inLoad = true;
-
-				Document.Head.AppendChild(new HTMLScriptElement() {
-					OnLoad = (ele) => {
-						printerSetup = true;
-						inLoad = false;
-					},
-					Src = "https://www.google.com/cloudprint/client/cpgadget.js" });
-			}
+			ExternalGoogleCloudPrint.Setup();
 		}
 
 		public GoogleCloudPrint(string source, string title = "",  GoogleCloudPrintingMimeType gcpmt = GoogleCloudPrintingMimeType.Url, string encoding = "") : base()
@@ -44,12 +32,9 @@ namespace ExpressCraft
 		}
 
 		public void Show()
-		{			
-			if(!printerSetup)
-				throw new Exception("Google Cloud Printer library has not been loaded, use CloudPrintForm.Setup();");
-			if(inLoad)
-				throw new Exception("Google Cloud Printer library is currently loading, please try again in a couple of seconds.");
-			
+		{
+			ExternalGoogleCloudPrint.UsageCheck();
+
 			/*@
 			this._gadget = new cloudprint.Gadget();			
 			*/

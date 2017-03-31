@@ -11,18 +11,8 @@ namespace ExpressCraft
 {
 	public class AceCodeEditor : Control
 	{
-		private static bool aceCodeSetup = false;
-		private static bool inLoad = false;
-		public object editor = null;
-
-		public static string Ready()
-		{
-			if(!aceCodeSetup)
-				return("Ace Code Editor library has not been loaded, use AceCodeEditor.Setup();");
-			if(inLoad)
-				return ("Ace Code Editor library is currently loading, please try again in a couple of seconds.");
-			return string.Empty;
-		}
+		private static ExternalPlugin ExternalAceCodeEditor = new ExternalPlugin("https://ace.c9.io/build/src/ace.js");
+		public object editor = null;		
 
 		public void ClearSelection()
 		{
@@ -50,20 +40,7 @@ namespace ExpressCraft
 
 		public static void Setup()
 		{
-			if(!aceCodeSetup)
-			{
-				if(inLoad) return;
-				inLoad = true;
-
-				Document.Head.AppendChild(new HTMLScriptElement()
-				{
-					OnLoad = (ele) => {
-						aceCodeSetup = true;
-						inLoad = false;
-					},
-					Src = "https://ace.c9.io/build/src/ace.js"
-				});
-			}
+			ExternalAceCodeEditor.Setup();
 		}
 		private AceModeTypes _modeType;
 		private AceThemeTypes _themeType;
@@ -77,11 +54,7 @@ namespace ExpressCraft
 
 		public override void Render()
 		{
-			string msg = Ready();
-			if(msg != string.Empty)
-			{
-				throw new Exception(msg);
-			}
+			ExternalAceCodeEditor.UsageCheck();
 
 			var theme = _modeType.ToString("G");
 			var mode = _modeType.ToString("G");
