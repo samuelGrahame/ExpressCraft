@@ -20,6 +20,11 @@ namespace ExpressCraftHelloWorldDialog
             Form.Setup();
 			GoogleCloudPrint.Setup();
 			AceCodeEditor.Setup();
+			Firebase.Setup(() => {
+				//Firebase.InitializeApp(
+				//	);
+			});
+
 			Settings.AllowCloseWithoutQuestion = true;
 
             var dialogTestButton = new SimpleButton()
@@ -125,7 +130,24 @@ namespace ExpressCraftHelloWorldDialog
 
 			gridLookupEdit.gridView.DataSource = GetTestData();
 
-			AddAndSetPos(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton, pdfPrintBtn, pdfPrintBase64Btn, gridLookupEdit);
+			var fireBaseSignIn = new SimpleButton()
+			{
+				Text = "Firebase Test",
+				ItemClick = (ev) =>
+				{
+					if(!Firebase.IsSignedInWithFirebase())
+					{						
+						Firebase.SignIn();						
+					}
+					else
+					{						
+						Firebase.SignOut();
+					}
+
+				}
+			};			
+
+			AddAndSetPos(errorBtn, exclamationBtn, informationBtn, questionBtn, informationBtn2, googlecloudPrintBtn, aceCodeBtn, dialogTestButton, pdfPrintBtn, pdfPrintBase64Btn, gridLookupEdit, fireBaseSignIn);
 
 			gridLookupEdit.Width = 150;
 

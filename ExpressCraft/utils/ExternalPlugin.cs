@@ -13,6 +13,8 @@ namespace ExpressCraft
 		public bool SetupCompleted = false;
 		public bool InLoad = false;
 
+		public Action OnReady = null;
+
 		public ExternalPlugin(string sourceUrl)
 		{
 			SourceUrl = sourceUrl;
@@ -30,6 +32,8 @@ namespace ExpressCraft
 					OnLoad = (ele) => {
 						SetupCompleted = true;
 						InLoad = false;
+						if(OnReady != null)
+							OnReady();
 					},
 					Src = SourceUrl
 				});

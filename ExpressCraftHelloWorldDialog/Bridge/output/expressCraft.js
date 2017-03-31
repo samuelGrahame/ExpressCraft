@@ -1708,6 +1708,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         sourceUrl: null,
         setupCompleted: false,
         inLoad: false,
+        onReady: null,
         ctor: function (sourceUrl) {
             this.$initialize();
             this.sourceUrl = sourceUrl;
@@ -1741,24 +1742,87 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         f1: function (ele) {
             this.setupCompleted = true;
             this.inLoad = false;
+            if (!Bridge.staticEquals(this.onReady, null)) {
+                this.onReady();
+            }
         }
     });
 
     Bridge.define("ExpressCraft.Firebase", {
         statics: {
             externalFireBase: null,
+            displayName: null,
+            photoURL: null,
+            userSignedIn: false,
             config: {
                 init: function () {
                     this.externalFireBase = new ExpressCraft.ExternalPlugin("https://www.gstatic.com/firebasejs/3.6.8/firebase.js");
                 }
             },
-            setup: function () {
+            setup: function (OnReady) {
+                if (OnReady === void 0) { OnReady = null; }
+                ExpressCraft.Firebase.externalFireBase.onReady = OnReady;
                 ExpressCraft.Firebase.externalFireBase.setup();
             },
-            initializeApp: function (apiKey, authDomain, databaseURL, storeageBucket, messagingSenderId) {
+            initializeApp: function (ApiKey, AuthDomain, DatabaseURL, ProjectId, StorageBucket, MessagingSenderId) {
                 ExpressCraft.Firebase.externalFireBase.usageCheck();
+                if (System.String.isNullOrWhiteSpace(ApiKey)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0} !", "ApiKey"));
+                }
+                if (System.String.isNullOrWhiteSpace(AuthDomain)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0}!", "AuthDomain"));
+                }
+                if (System.String.isNullOrWhiteSpace(DatabaseURL)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0}!", "DatabaseURL"));
+                }
+                if (System.String.isNullOrWhiteSpace(ProjectId)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0}!", "ProjectId"));
+                }
+                if (System.String.isNullOrWhiteSpace(StorageBucket)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0}!", "StorageBucket"));
+                }
+                if (System.String.isNullOrWhiteSpace(MessagingSenderId)) {
+                    throw new System.Exception(System.String.format("Invalid Firebase {0}!", "MessagingSenderId"));
+                }
 
-
+                
+			firebase.initializeApp({apiKey: ApiKey, authDomain: AuthDomain, databaseURL: DatabaseURL, projectId : ProjectId, storageBucket: StorageBucket, messagingSenderId: MessagingSenderId });
+			firebase.auth().onAuthStateChanged(function(user) {
+				if (user) {
+					this.UserSignedIn = true;
+					this.DisplayName = user.displayName;
+					this.PhotoURL = user.photoURL;
+				}else{
+					this.UserSignedIn = false;
+				}
+			
+			});
+			
+            },
+            signIn: function () {
+                			
+			firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+			
+            },
+            signOut: function () {
+                			
+			firebase.auth().signOut();
+			
+            },
+            databaseRef: function (name) {
+                var dataRef = firebase.database().ref(name);
+                dataRef.off();
+                return dataRef;
+            },
+            isSignedInWithFirebase: function () {
+                return 
+			if(firebase.auth().currentUser)
+			{
+				return true;
+			}else
+			{
+				return false;
+			};
             }
         }
     });
@@ -3509,7 +3573,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         maxWidth: 0,
         computedHeight: 0,
         linesComputed: 0,
-        computedSource: null,
         elelemtsOverMax: false,
         maxCalculatedWidth: 0,
         ctor: function (source, maxWidth) {
@@ -3520,7 +3583,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         computeString: function () {
             this.elelemtsOverMax = false;
             var Lines = this.originalSource.split("\r\n");
-            //	var builder = new StringBuilder();
 
             var sizePerChar = ExpressCraft.Control.getTextWidth("M", ExpressCraft.Settings.defaultFont);
 
@@ -3535,37 +3597,25 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.elelemtsOverMax = true;
                     this.maxCalculatedWidth = this.maxWidth;
                     var yy = 0;
-                    //var lineBuilder = new StringBuilder();
                     for (var x = 0; x < line.length; x = (x + 1) | 0) {
                         yy = (yy + 1) | 0;
 
                         if (yy * sizePerChar > this.maxWidth) {
-                            //lineBuilder.Append(line[x]);
-
-                            //builder.AppendLine(lineBuilder.ToString());
-                            //lineBuilder = new StringBuilder();							
                             this.linesComputed = (this.linesComputed + 1) | 0;
                             yy = 0;
                         }
-                        //else{
-                        //	lineBuilder.Append(line[x]);							
-                        //}
                     }
 
                     if (yy > 0) {
-                        //builder.AppendLine(lineBuilder.ToString());						
                         this.linesComputed = (this.linesComputed + 1) | 0;
                     }
                 } else {
-                    //builder.AppendLine(line);
                     this.linesComputed = (this.linesComputed + 1) | 0;
                     if (lineWidth > this.maxCalculatedWidth) {
                         this.maxCalculatedWidth = lineWidth;
                     }
                 }
             }
-
-            this.computedSource = this.originalSource;
             this.computedHeight = this.getFontSize(ExpressCraft.Settings.defaultFont) * this.linesComputed;
         },
         getFontSize: function (fontWithSize) {
@@ -8358,7 +8408,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 tb.computedHeight = ExpressCraft.Settings.messageFormTextMinimumHeightInPx;
             }
 
-            this.getQuestionDiv().innerHTML = tb.computedSource;
+            this.getQuestionDiv().innerHTML = question;
             this.setQuestionSize(System.Convert.toInt32(tb.computedHeight));
         },
         create: function (height) {
@@ -8541,7 +8591,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             }
 
-            textContent.innerHTML = tb.computedSource;
+            textContent.innerHTML = prompt;
 
             section.style.overflowY = "auto";
             section.style.height = "100%";

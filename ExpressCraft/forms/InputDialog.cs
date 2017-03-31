@@ -355,7 +355,7 @@ namespace ExpressCraft
             if (tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
 
-            QuestionDiv.InnerHTML = tb.ComputedSource;
+            QuestionDiv.InnerHTML = question;
             QuestionSize = Convert.ToInt32(tb.ComputedHeight);
         }
 

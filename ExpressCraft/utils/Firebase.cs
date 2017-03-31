@@ -15,13 +15,13 @@ namespace ExpressCraft
 		public static string PhotoURL;
 		public static bool UserSignedIn;
 
-		public static void Setup()
+		public static void Setup(Action OnReady = null)
 		{
+			ExternalFireBase.OnReady = OnReady;
 			ExternalFireBase.Setup();
-		}
-		public static Action<object> onAuthStateChanged = null;
+		}		
 
-		public static void InitializeApp(string ApiKey, string AuthDomain, string DatabaseURL, string StorageBucket, string MessagingSenderId)
+		public static void InitializeApp(string ApiKey, string AuthDomain, string DatabaseURL, string ProjectId, string StorageBucket, string MessagingSenderId)
 		{
 			ExternalFireBase.UsageCheck();
 			if(string.IsNullOrWhiteSpace(ApiKey))
@@ -30,13 +30,16 @@ namespace ExpressCraft
 				throw new Exception($"Invalid Firebase {nameof(AuthDomain)}!");
 			if(string.IsNullOrWhiteSpace(DatabaseURL))
 				throw new Exception($"Invalid Firebase {nameof(DatabaseURL)}!");
+			if(string.IsNullOrWhiteSpace(ProjectId))
+				throw new Exception($"Invalid Firebase {nameof(ProjectId)}!");
 			if(string.IsNullOrWhiteSpace(StorageBucket))
 				throw new Exception($"Invalid Firebase {nameof(StorageBucket)}!");
 			if(string.IsNullOrWhiteSpace(MessagingSenderId))
 				throw new Exception($"Invalid Firebase {nameof(MessagingSenderId)}!");
 
-			onAuthStateChanged = (user) => {
-				/*@				
+			/*@
+			firebase.initializeApp({apiKey: ApiKey, authDomain: AuthDomain, databaseURL: DatabaseURL, projectId : ProjectId, storageBucket: StorageBucket, messagingSenderId: MessagingSenderId });
+			firebase.auth().onAuthStateChanged(function(user) {
 				if (user) {
 					this.UserSignedIn = true;
 					this.DisplayName = user.displayName;
@@ -44,47 +47,42 @@ namespace ExpressCraft
 				}else{
 					this.UserSignedIn = false;
 				}
-				*/
-			};
-
-			/*@
-			firebase.initializeApp({apiKey: ApiKey, authDomain: AuthDomain, databaseURL: DatabaseURL, storageBucket: StorageBucket, messagingSenderId: MessagingSenderId });
-			firebase.auth.onAuthStateChanged(this.onAuthStateChanged);
+			
+			});
 			*/
 		}
 
 		public static void SignIn()
 		{
 			/*@			
-			firebase.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+			firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 			*/
 		}
 
 		public static void SignOut()
 		{
 			/*@			
-			firebase.auth.signOut();
+			firebase.auth().signOut();
 			*/
 		}
 
-		public object DatabaseRef(string name)
+		public static object DatabaseRef(string name)
 		{			
-			var dataRef = Script.Write<dynamic>("firebase.database.ref(name)");
+			var dataRef = Script.Write<dynamic>("firebase.database().ref(name)");
 			dataRef.off();
 			return dataRef;
 		}
 
-		public static void IsSignedInWithFirebase()
+		public static bool IsSignedInWithFirebase()
 		{
-			/*@			
-			if(firebase.auth.currentUser)
+			return Script.Write<bool>(@"
+			if(firebase.auth().currentUser)
 			{
 				return true;
 			}else
 			{
 				return false;
-			}
-			*/
+			}");
 		}
 	}
 }
