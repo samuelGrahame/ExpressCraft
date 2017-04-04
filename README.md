@@ -137,3 +137,22 @@ public static DataTable GetTestData()
 }
 
 ```
+
+# How to choose your Console
+
+```csharp
+	public enum ApplicationDefitnion
+	{
+		BrowserConsole,
+		BridgeConsole,
+		ExpressCraftConsole
+	}
+  
+  Application.Run(ApplicationDefitnion.BrowserConsole);
+  Application.Run(ApplicationDefitnion.BridgeConsole);
+  Application.Run(ApplicationDefitnion.ExpressCraftConsole);
+  
+  Application.Run(new Form()); // ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole
+  Application.Run(new Form(), ApplicationDefitnion.ExpressCraftConsole);
+  Application.Run(new Form(), ApplicationDefitnion.BridgeConsole);
+```
