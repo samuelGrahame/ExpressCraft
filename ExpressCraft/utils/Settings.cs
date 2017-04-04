@@ -54,7 +54,7 @@ namespace ExpressCraft
 
 		public static bool ShowExceptionDialog = true;
 
-		public static int FormFadeDuraction = 100;
+		public static int FormFadeDuration = 100;
 
 		public static void Setup()
 		{

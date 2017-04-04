@@ -1712,9 +1712,9 @@ namespace ExpressCraft
 			{				
 				if(!ForReuse)
 				{					
-					if(Settings.FormFadeDuraction > 0)
+					if(Settings.FormFadeDuration > 0)
 					{
-						Self.FadeOut(Settings.FormFadeDuraction, closeAction);
+						Self.FadeOut(Settings.FormFadeDuration, closeAction);
 					}else
 					{
 						closeAction();						
