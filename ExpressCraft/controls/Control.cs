@@ -41,6 +41,8 @@ namespace ExpressCraft
 			}
 		}
 
+
+
 		public Union<string, int, float> Height
 		{
 			get { return this.Content.Style.Height; }
@@ -140,8 +142,10 @@ namespace ExpressCraft
 
 		public Control(string cn, InputType it)
 		{
-			Content = Input(cn, it);
+			Content = Input(cn, it);			
 		}
+
+		public CSSStyleDeclaration Style => Content.Style;
 
 		public virtual void Render()
 		{

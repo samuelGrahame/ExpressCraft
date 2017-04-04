@@ -46,6 +46,8 @@ namespace ExpressCraft
 			}
 		}
 
+		public CSSStyleDeclaration BodyStyle => Body.Style;
+
 		public bool ShowClose
 		{
 			get { return ButtonClose != null; }

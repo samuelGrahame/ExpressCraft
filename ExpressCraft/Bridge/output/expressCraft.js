@@ -291,6 +291,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.setWidth(value.z);
             this.setHeight(value.m);
         },
+        getStyle: function () {
+            return this.content.style;
+        },
         render: function () {
             this.setHasRendered(true);
         },
@@ -4306,6 +4309,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         setShowMinimize: function (value) {
             this.changeHeadingButton(ExpressCraft.FormButtonType.Minimize, value);
+        },
+        getBodyStyle: function () {
+            return this.getBody().style;
         },
         getShowClose: function () {
             return this.getButtonClose() != null;
