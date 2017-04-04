@@ -132,8 +132,8 @@ namespace ExpressCraft
 		public HTMLDivElement BodyOverLay { get; set; }
 		public HTMLElement Owner { get; set; } = null;
 
-		public int prev_px;
-		public int prev_py;
+		public float prev_px;
+		public float prev_py;
 
 		private int prev_width;
 		private int prev_height;
@@ -519,8 +519,10 @@ namespace ExpressCraft
 						MovingForm.Heading.Focus();
 					}
 
-					var Y = (mev.PageY + MovingForm.prev_py);
-					var X = (mev.PageX + MovingForm.prev_px);
+					var mousePos = Helper.GetClientMouseLocation(ev);
+					
+					var Y = (mousePos.Yf + MovingForm.prev_py);
+					var X = (mousePos.Xf + MovingForm.prev_px);
 
 					if(MovingForm.windowState == WindowState.Maximized && MoveAction == MouseMoveAction.Move)
 					{
@@ -529,29 +531,43 @@ namespace ExpressCraft
 
 						MovingForm.prev_px = X - mev.PageX;
 					}
-
-					var obj = MovingForm.Self;
-
-					int X1;
-					int Y1;
-
-					int W;
-					int H;
-
-					if(Y < 0)
-						Y = 1;
-					if(X < 0)
-						X = 1;
 					
+					var clientRec = MovingForm.Content.GetBoundingClientRect();
+
+					var bounds = MovingForm.Bounds;
+
+					float X1 = (float)Global.ParseFloat((string)bounds.X);
+					float Y1 = (float)Global.ParseFloat((string)bounds.Y);
+					float W =(float)Global.ParseFloat((string)bounds.Z);
+					float H = (float)Global.ParseFloat((string)bounds.M);
+
+					float pX = X1;
+					float pY = Y1;
+					float pW = W;
+					float pH = H;
+
+					if(Y < 1)
+						Y = 1;
+					if(X < 1)
+						X = 1;
+
+					float mX = mousePos.Xf;
+					float mY = mousePos.Yf;
+
+					if(mX < 1)
+						mX = 1;
+					if(mY < 1)
+						mY = 1;
+
 					switch(MoveAction)
 					{
 						case MouseMoveAction.Move:
-							MovingForm.Content.SetLocation(X, Y);
-
-							break;
-						case MouseMoveAction.TopLeftResize:
-							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
-
+							if(pX != X || pY != Y)
+							{
+								MovingForm.Content.SetLocation(X, Y);
+							}
+							return;
+						case MouseMoveAction.TopLeftResize:							
 							W -= X - X1;
 							H -= Y - Y1;
 
@@ -566,16 +582,13 @@ namespace ExpressCraft
 								Y -= MovingForm.MinHeight - H;
 								H = MovingForm.MinHeight;
 							}
-
-							MovingForm.Content.SetBounds(X, Y, W, H);
-
-							MovingForm.Resizing();
-
+							if(pX != X || pY != Y || pW != W || pH != H)
+							{
+								MovingForm.Content.SetBounds(X, Y, W, H);
+							}
+							
 							break;
-						case MouseMoveAction.TopResize:
-							Y1 = Global.ParseInt(obj.Css("top"));
-							H = Global.ParseInt(obj.Css("height"));
-
+						case MouseMoveAction.TopResize:							
 							H -= Y - Y1;
 
 							if(H < MovingForm.MinHeight)
@@ -583,18 +596,16 @@ namespace ExpressCraft
 								Y -= MovingForm.MinHeight - H;
 								H = MovingForm.MinHeight;
 							}
-
-							obj.Css("top", Y).
-								Css("height", H);
-
-							MovingForm.Resizing();
-
+							if(pH != H || pY != Y)
+							{
+								MovingForm.Top = Y;
+								MovingForm.Height = H;
+							}							
+							
 							break;
-						case MouseMoveAction.TopRightResize:
-							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
-
+						case MouseMoveAction.TopRightResize:						
 							H -= Y - Y1;
-							W = mev.PageX - X1;
+							W = mX - X1;
 
 							if(H < MovingForm.MinHeight)
 							{
@@ -606,34 +617,32 @@ namespace ExpressCraft
 							{
 								W = MovingForm.MinWidth;
 							}
-
-							obj.Css("top", Y).Css("height", H).Css("width", W);
-
-							MovingForm.Resizing();
-
-							break;
-						case MouseMoveAction.LeftResize:
-							X1 = Global.ParseInt(obj.Css("left"));
-							W = Global.ParseInt(obj.Css("width"));
-
-							W -= mev.PageX - X1;
-
-							if(W < MovingForm.MinWidth)
+							if(pW != W || pH != H || pY != Y)
 							{
-								X -= MovingForm.MinWidth - W;
-								W = MovingForm.MinWidth;
+								MovingForm.Size = new Vector2(W, H);
+								MovingForm.Top = Y;
 							}
-
-							obj.Css("left", X).Css("width", W);
-
-							MovingForm.Resizing();
-
+							
+							
 							break;
-						case MouseMoveAction.BottomLeftResize:
-							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
-
+						case MouseMoveAction.LeftResize:							
 							W -= X - X1;
-							H = mev.PageY - Y1;
+							
+							if(W < MovingForm.MinWidth)
+							{
+								X -= MovingForm.MinWidth - W;
+								W = MovingForm.MinWidth;
+							}
+							if(pW != W || pX != X)
+							{
+								MovingForm.Left = X;
+								MovingForm.Width = W;
+							}
+							
+							break;
+						case MouseMoveAction.BottomLeftResize:							
+							W -= X - X1;
+							H = mY - Y1;
 
 							if(W < MovingForm.MinWidth)
 							{
@@ -645,50 +654,43 @@ namespace ExpressCraft
 							{
 								H = MovingForm.MinHeight;
 							}
-
-							obj.Css("left", X).Css("width", W).Css("height", H);
-
-							MovingForm.Resizing();
-
+							if(pW != W || pH != H || pX != X)
+							{
+								MovingForm.Size = new Vector2(W, H);
+								MovingForm.Left = X;
+							}							
+							
 							break;
-						case MouseMoveAction.BottomResize:
-							Y1 = Global.ParseInt(obj.Css("top"));
-							H = Global.ParseInt(obj.Css("height"));
-
-							H = mev.PageY - Y1;
+						case MouseMoveAction.BottomResize:							
+							H = mY - Y1;
 
 							if(H < MovingForm.MinHeight)
 							{
 								H = MovingForm.MinHeight;
 							}
-
-							obj.Css("height", H);
-
-							MovingForm.Resizing();
-
+							if(pH != H)
+							{
+								MovingForm.Height = H;
+							}								
+							
 							break;
-						case MouseMoveAction.RightResize:
-							X1 = Global.ParseInt(obj.Css("left"));
-							W = Global.ParseInt(obj.Css("width"));
-
-							W = mev.PageX - X1;
+						case MouseMoveAction.RightResize:							
+							W = mX - X1;
 
 							if(W < MovingForm.MinWidth)
 							{
 								W = MovingForm.MinWidth;
 							}
-
-							obj.Css("width", W);
-
-							MovingForm.Resizing();
-
+							if(pW != W)
+							{
+								MovingForm.Width = W;
+							}
+							
 							break;
-						case MouseMoveAction.BottomRightResize:
-							MovingForm.GetBoundInteger(out X1, out Y1, out W, out H);
+						case MouseMoveAction.BottomRightResize:							
+							W = mX - X1;
 
-							W = mev.PageX - X1;
-
-							H = mev.PageY - Y1;
+							H = mY - Y1;
 
 							if(H < MovingForm.MinHeight)
 							{
@@ -698,15 +700,16 @@ namespace ExpressCraft
 							{
 								W = MovingForm.MinWidth;
 							}
-
-							obj.Css("width", W).Css("height", H);
-
-							MovingForm.Resizing();
-
-							break;
-						default:
+							if(pW != W || pH != H)
+							{
+								MovingForm.Size = new Vector2(W, H);
+							}
+								
 							break;
 					}
+					
+					if(pX != X || pY != Y || pW != W || pH != H)
+						MovingForm.Resizing();
 				}
 			};
 
@@ -738,18 +741,18 @@ namespace ExpressCraft
                 {
 					InErrorDialog = true;
 					string errStr;
-					if(string.IsNullOrWhiteSpace(message))
+					if(string.IsNullOrWhiteSpace(message) || message == "Script error.")
 					{
 						errStr = "Script Error: See Browser Console for Detail's";
 					}
 					else
 					{
-						errStr = "Error: " + message + "\nurl: " + url + "\nline: " + lineNumber + "\ncol: " + columnNumber + "\nError: " + (error ?? "").ToString();
+						errStr = "Script Error: " + message;
 					}
 	
 					if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
 					{
-						ConsoleForm.Log(message, ConsoleLogType.Error);
+						ConsoleForm.Log(errStr, ConsoleLogType.Error);
 					}
 
 					if(Settings.ShowExceptionDialog)
@@ -790,7 +793,7 @@ namespace ExpressCraft
 					cursor:{0} !important;    
 				}", cursor);			
 		}
-				
+
 		public void SetWindowState(WindowState State)
 		{    
             if(!AllowSizeChange)
@@ -802,9 +805,17 @@ namespace ExpressCraft
 				Resizing();
 			}
 			else if(windowState == WindowState.Maximized)
-			{                				
-				this.GetBoundInteger(out prev_left, out prev_top, out prev_width, out prev_height);				
-				this.SetBounds("0", "0", "calc(100% - 2px)", "calc(100% - 2px)");				
+			{
+				var rec = this.Content.GetBoundingClientRect();
+
+				prev_left = (int)rec.Left;
+				prev_top = (int)rec.Top;
+				prev_width = (int)rec.Width;
+				prev_height = (int)rec.Height;
+
+				var calc_2px = "calc(100% - 2px)";
+
+				this.SetBounds(0, 0, calc_2px, calc_2px);				
 			}
 			Resizing();
 		}
@@ -1022,16 +1033,23 @@ namespace ExpressCraft
 				ActiveForm = this;
 				
 				SetBodyOverLay();
-				
-				prev_px = Global.ParseInt(Self.Css("left")) - mev.PageX;
-				prev_py = Global.ParseInt(Self.Css("top")) - mev.PageY;
 
-				var width = Content.ClientWidth;
-				var height = Content.ClientHeight;
+				var clientRec = this.Content.GetBoundingClientRect();
 
-				int X = mev.PageX - Content.OffsetLeft;
-				int Y = mev.PageY - Content.OffsetTop;
+				var mousePos = Helper.GetClientMouseLocation(ev);
+
+				prev_px = (float)clientRec.Left - mousePos.Xf;
+				prev_py = (float)clientRec.Top - mousePos.Yf;
 				
+				var width = (float)clientRec.Width;
+				var height = (float)clientRec.Height;
+				
+				//int X = mev.PageX - Content.OffsetLeft;
+				//int Y = mev.PageY - Content.OffsetTop;
+
+				float X = mousePos.Xf - (float)clientRec.Left;
+				float Y = mousePos.Yf - (float)clientRec.Top;
+
 				if(windowState == WindowState.Maximized)
 				{
 					SetCursor(Cursor.Default);

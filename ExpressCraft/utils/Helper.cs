@@ -397,22 +397,6 @@ namespace ExpressCraft
 				string.Empty;
         }
 
-		public static void GetBoundInteger(this Control control, out int x, out int y, out int w, out int h)
-		{
-			if(control == null || control.Content == null)
-			{
-				x = 0;
-				y = 0;
-				w = 0;
-				h = 0;
-				return;
-			}
-			x = Global.ParseInt(control.Content.Style.Left);
-			y = Global.ParseInt(control.Content.Style.Top);
-			w = Global.ParseInt(control.Content.Style.Width);
-			h = Global.ParseInt(control.Content.Style.Height);
-		}
-
 		public static void ExchangeClass(this Control control, string oldClass, string newClass)
 		{
 			ExchangeClass(control.Content, oldClass, newClass);

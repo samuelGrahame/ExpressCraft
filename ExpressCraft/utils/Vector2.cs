@@ -24,6 +24,18 @@ namespace ExpressCraft
 			set { Y = value; }
 		}
 
+		public float Xf
+		{
+			get { return (float)X; }
+			set { X = value; }
+		}
+
+		public float Yf
+		{
+			get { return (float)Y; }
+			set { Y = value; }
+		}
+
 		public Vector2(Union<string, int, float> x, Union<string, int, float> y)
 		{
 			X = x;

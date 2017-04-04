@@ -485,13 +485,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
-            ExpressCraft.Form.setup();
-            ExpressCraft.Settings.showExceptionDialog = false;
+            //Form.Setup();
+            //Settings.ShowExceptionDialog = false;
 
-            ExpressCraft.Application.run(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
+            //Application.Run(ApplicationDefitnion.ExpressCraftConsole);
 
-            var m = 10;
-            var x = (Bridge.Int.div(m, 0)) | 0;
+            //Console.WriteLine("Hello World!");
         }
     });
 
@@ -2628,19 +2627,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             htmlUnescape: function (input) {
                 return !System.String.isNullOrEmpty(input) ? System.String.replaceAll(System.String.replaceAll(ExpressCraft.Helper.htmlUrlUnescape(input), "&#x2F", "\\/"), "&quot", "\"") : "";
             },
-            getBoundInteger: function (control, x, y, w, h) {
-                if (control == null || control.content == null) {
-                    x.v = 0;
-                    y.v = 0;
-                    w.v = 0;
-                    h.v = 0;
-                    return;
-                }
-                x.v = parseInt(control.content.style.left);
-                y.v = parseInt(control.content.style.top);
-                w.v = parseInt(control.content.style.width);
-                h.v = parseInt(control.content.style.height);
-            },
             exchangeClass$1: function (control, oldClass, newClass) {
                 ExpressCraft.Helper.exchangeClass(control.content, oldClass, newClass);
 
@@ -3710,6 +3696,18 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         setYi: function (value) {
             this.y = value;
         },
+        getXf: function () {
+            return this.x;
+        },
+        setXf: function (value) {
+            this.x = value;
+        },
+        getYf: function () {
+            return this.y;
+        },
+        setYf: function (value) {
+            this.y = value;
+        },
         getHashCode: function () {
             var h = Bridge.addHash([1955977157, this.x, this.y]);
             return h;
@@ -4466,8 +4464,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.setBounds$1(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
             } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
-                ExpressCraft.Helper.getBoundInteger(this, Bridge.ref(this, "prev_left"), Bridge.ref(this, "prev_top"), Bridge.ref(this, "prev_width"), Bridge.ref(this, "prev_height"));
-                ExpressCraft.Helper.setBounds$1(this, "0", "0", "calc(100% - 2px)", "calc(100% - 2px)");
+                var rec = this.content.getBoundingClientRect();
+
+                this.prev_left = Bridge.Int.clip32(rec.left);
+                this.prev_top = Bridge.Int.clip32(rec.top);
+                this.prev_width = Bridge.Int.clip32(rec.width);
+                this.prev_height = Bridge.Int.clip32(rec.height);
+
+                var calc_2px = "calc(100% - 2px)";
+
+                ExpressCraft.Helper.setBounds$1(this, 0, 0, calc_2px, calc_2px);
             }
             this.resizing();
         },
@@ -4877,135 +4883,157 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     ExpressCraft.Form.movingForm.getHeading().focus();
                 }
 
-                var Y = (((mev.pageY + ExpressCraft.Form.movingForm.prev_py) | 0));
-                var X = (((mev.pageX + ExpressCraft.Form.movingForm.prev_px) | 0));
+                var mousePos = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
+
+                var Y = (mousePos.getYf() + ExpressCraft.Form.movingForm.prev_py);
+                var X = (mousePos.getXf() + ExpressCraft.Form.movingForm.prev_px);
 
                 if (ExpressCraft.Form.movingForm.getwindowState() === ExpressCraft.WindowState.Maximized && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
                     ExpressCraft.Form.movingForm.changeWindowState();
                     X = (mev.pageX - (((Bridge.Int.div(ExpressCraft.Form.movingForm.prev_width, 2)) | 0))) | 0;
 
-                    ExpressCraft.Form.movingForm.prev_px = (X - mev.pageX) | 0;
+                    ExpressCraft.Form.movingForm.prev_px = X - mev.pageX;
                 }
 
-                var obj = ExpressCraft.Form.movingForm.self;
+                var clientRec = ExpressCraft.Form.movingForm.content.getBoundingClientRect();
 
-                var X1 = { };
-                var Y1 = { };
+                var bounds = ExpressCraft.Form.movingForm.getBounds().$clone();
 
-                var W = { };
-                var H = { };
+                var X1 = parseFloat(bounds.x);
+                var Y1 = parseFloat(bounds.y);
+                var W = parseFloat(bounds.z);
+                var H = parseFloat(bounds.m);
 
-                if (Y < 0) {
+                var pX = X1;
+                var pY = Y1;
+                var pW = W;
+                var pH = H;
+
+                if (Y < 1) {
                     Y = 1;
                 }
-                if (X < 0) {
+                if (X < 1) {
                     X = 1;
+                }
+
+                var mX = mousePos.getXf();
+                var mY = mousePos.getYf();
+
+                if (mX < 1) {
+                    mX = 1;
+                }
+                if (mY < 1) {
+                    mY = 1;
                 }
 
                 switch (ExpressCraft.Form.moveAction) {
                     case ExpressCraft.MouseMoveAction.Move: 
-                        ExpressCraft.Helper.setLocation(ExpressCraft.Form.movingForm.content, X, Y);
-                        break;
+                        if (pX !== X || pY !== Y) {
+                            ExpressCraft.Helper.setLocation(ExpressCraft.Form.movingForm.content, X, Y);
+                        }
+                        return;
                     case ExpressCraft.MouseMoveAction.TopLeftResize: 
-                        ExpressCraft.Helper.getBoundInteger(ExpressCraft.Form.movingForm, X1, Y1, W, H);
-                        W.v = (W.v - (((X - X1.v) | 0))) | 0;
-                        H.v = (H.v - (((Y - Y1.v) | 0))) | 0;
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            X = (X - (((ExpressCraft.Form.movingForm.getMinWidth() - W.v) | 0))) | 0;
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        W -= X - X1;
+                        H -= Y - Y1;
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            X -= ExpressCraft.Form.movingForm.getMinWidth() - W;
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            Y = (Y - (((ExpressCraft.Form.movingForm.getMinHeight() - H.v) | 0))) | 0;
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            Y -= ExpressCraft.Form.movingForm.getMinHeight() - H;
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        ExpressCraft.Helper.setBounds(ExpressCraft.Form.movingForm.content, X, Y, W.v, H.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pX !== X || pY !== Y || pW !== W || pH !== H) {
+                            ExpressCraft.Helper.setBounds(ExpressCraft.Form.movingForm.content, X, Y, W, H);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.TopResize: 
-                        Y1.v = parseInt(obj.css("top"));
-                        H.v = parseInt(obj.css("height"));
-                        H.v = (H.v - (((Y - Y1.v) | 0))) | 0;
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            Y = (Y - (((ExpressCraft.Form.movingForm.getMinHeight() - H.v) | 0))) | 0;
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        H -= Y - Y1;
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            Y -= ExpressCraft.Form.movingForm.getMinHeight() - H;
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        obj.css("top", Y).css("height", H.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pH !== H || pY !== Y) {
+                            ExpressCraft.Form.movingForm.setTop(Y);
+                            ExpressCraft.Form.movingForm.setHeight(H);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.TopRightResize: 
-                        ExpressCraft.Helper.getBoundInteger(ExpressCraft.Form.movingForm, X1, Y1, W, H);
-                        H.v = (H.v - (((Y - Y1.v) | 0))) | 0;
-                        W.v = (mev.pageX - X1.v) | 0;
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            Y = (Y - (((ExpressCraft.Form.movingForm.getMinHeight() - H.v) | 0))) | 0;
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        H -= Y - Y1;
+                        W = mX - X1;
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            Y -= ExpressCraft.Form.movingForm.getMinHeight() - H;
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        obj.css("top", Y).css("height", H.v).css("width", W.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pW !== W || pH !== H || pY !== Y) {
+                            ExpressCraft.Form.movingForm.setSize(new ExpressCraft.Vector2.$ctor1(W, H));
+                            ExpressCraft.Form.movingForm.setTop(Y);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.LeftResize: 
-                        X1.v = parseInt(obj.css("left"));
-                        W.v = parseInt(obj.css("width"));
-                        W.v = (W.v - (((mev.pageX - X1.v) | 0))) | 0;
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            X = (X - (((ExpressCraft.Form.movingForm.getMinWidth() - W.v) | 0))) | 0;
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        W -= X - X1;
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            X -= ExpressCraft.Form.movingForm.getMinWidth() - W;
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        obj.css("left", X).css("width", W.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pW !== W || pX !== X) {
+                            ExpressCraft.Form.movingForm.setLeft(X);
+                            ExpressCraft.Form.movingForm.setWidth(W);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.BottomLeftResize: 
-                        ExpressCraft.Helper.getBoundInteger(ExpressCraft.Form.movingForm, X1, Y1, W, H);
-                        W.v = (W.v - (((X - X1.v) | 0))) | 0;
-                        H.v = (mev.pageY - Y1.v) | 0;
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            X = (X - (((ExpressCraft.Form.movingForm.getMinWidth() - W.v) | 0))) | 0;
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        W -= X - X1;
+                        H = mY - Y1;
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            X -= ExpressCraft.Form.movingForm.getMinWidth() - W;
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        obj.css("left", X).css("width", W.v).css("height", H.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pW !== W || pH !== H || pX !== X) {
+                            ExpressCraft.Form.movingForm.setSize(new ExpressCraft.Vector2.$ctor1(W, H));
+                            ExpressCraft.Form.movingForm.setLeft(X);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.BottomResize: 
-                        Y1.v = parseInt(obj.css("top"));
-                        H.v = parseInt(obj.css("height"));
-                        H.v = (mev.pageY - Y1.v) | 0;
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        H = mY - Y1;
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        obj.css("height", H.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pH !== H) {
+                            ExpressCraft.Form.movingForm.setHeight(H);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.RightResize: 
-                        X1.v = parseInt(obj.css("left"));
-                        W.v = parseInt(obj.css("width"));
-                        W.v = (mev.pageX - X1.v) | 0;
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        W = mX - X1;
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        obj.css("width", W.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pW !== W) {
+                            ExpressCraft.Form.movingForm.setWidth(W);
+                        }
                         break;
                     case ExpressCraft.MouseMoveAction.BottomRightResize: 
-                        ExpressCraft.Helper.getBoundInteger(ExpressCraft.Form.movingForm, X1, Y1, W, H);
-                        W.v = (mev.pageX - X1.v) | 0;
-                        H.v = (mev.pageY - Y1.v) | 0;
-                        if (H.v < ExpressCraft.Form.movingForm.getMinHeight()) {
-                            H.v = ExpressCraft.Form.movingForm.getMinHeight();
+                        W = mX - X1;
+                        H = mY - Y1;
+                        if (H < ExpressCraft.Form.movingForm.getMinHeight()) {
+                            H = ExpressCraft.Form.movingForm.getMinHeight();
                         }
-                        if (W.v < ExpressCraft.Form.movingForm.getMinWidth()) {
-                            W.v = ExpressCraft.Form.movingForm.getMinWidth();
+                        if (W < ExpressCraft.Form.movingForm.getMinWidth()) {
+                            W = ExpressCraft.Form.movingForm.getMinWidth();
                         }
-                        obj.css("width", W.v).css("height", H.v);
-                        ExpressCraft.Form.movingForm.resizing();
+                        if (pW !== W || pH !== H) {
+                            ExpressCraft.Form.movingForm.setSize(new ExpressCraft.Vector2.$ctor1(W, H));
+                        }
                         break;
-                    default: 
-                        break;
+                }
+
+                if (pX !== X || pY !== Y || pW !== W || pH !== H) {
+                    ExpressCraft.Form.movingForm.resizing();
                 }
             }
         },
@@ -5025,15 +5053,20 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f11: function (message, url, lineNumber, columnNumber, error) {
-            var $t;
             if (ExpressCraft.Form.inErrorDialog) {
                 return false;
             }
             try {
                 ExpressCraft.Form.inErrorDialog = true;
-                var errStr = System.String.concat("Error: ", message, "\nurl: ", url, "\nline: ", lineNumber, "\ncol: ", columnNumber, "\nError: ", (($t = error, $t != null ? $t : "")).toString());
+                var errStr;
+                if (System.String.isNullOrWhiteSpace(message) || Bridge.referenceEquals(message, "Script error.")) {
+                    errStr = "Script Error: See Browser Console for Detail's";
+                } else {
+                    errStr = System.String.concat("Script Error: ", message);
+                }
+
                 if (ExpressCraft.Application.getAplicationDefition() === ExpressCraft.ApplicationDefitnion.ExpressCraftConsole) {
-                    ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Error);
+                    ExpressCraft.ConsoleForm.log(errStr, ExpressCraft.ConsoleLogType.Error);
                 }
 
                 if (ExpressCraft.Settings.showExceptionDialog) {
@@ -5076,14 +5109,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setBodyOverLay();
 
-            this.prev_px = (parseInt(this.self.css("left")) - mev.pageX) | 0;
-            this.prev_py = (parseInt(this.self.css("top")) - mev.pageY) | 0;
+            var clientRec = this.content.getBoundingClientRect();
 
-            var width = this.content.clientWidth;
-            var height = this.content.clientHeight;
+            var mousePos = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
 
-            var X = (mev.pageX - this.content.offsetLeft) | 0;
-            var Y = (mev.pageY - this.content.offsetTop) | 0;
+            this.prev_px = clientRec.left - mousePos.getXf();
+            this.prev_py = clientRec.top - mousePos.getYf();
+
+            var width = clientRec.width;
+            var height = clientRec.height;
+
+            //int X = mev.PageX - Content.OffsetLeft;
+            //int Y = mev.PageY - Content.OffsetTop;
+
+            var X = mousePos.getXf() - clientRec.left;
+            var Y = mousePos.getYf() - clientRec.top;
 
             if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
                 ExpressCraft.Form.setCursor("default");
@@ -5101,26 +5141,26 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         if (X <= ExpressCraft.Form.getResizeCorners() && Y <= ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("nwse-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.TopLeftResize;
-                        } else if (Y <= ExpressCraft.Form.getResizeCorners() && X >= ((width - ExpressCraft.Form.getResizeCorners()) | 0)) {
+                        } else if (Y <= ExpressCraft.Form.getResizeCorners() && X >= width - ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("nesw-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.TopRightResize;
                         } else if (Y <= ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("n-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.TopResize;
-                        } else if (X <= ExpressCraft.Form.getResizeCorners() && Y >= ((height - ExpressCraft.Form.getResizeCorners()) | 0)) {
+                        } else if (X <= ExpressCraft.Form.getResizeCorners() && Y >= height - ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("nesw-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.BottomLeftResize;
-                        } else if (Y >= ((height - ExpressCraft.Form.getResizeCorners()) | 0) && X >= ((width - ExpressCraft.Form.getResizeCorners()) | 0)) {
+                        } else if (Y >= height - ExpressCraft.Form.getResizeCorners() && X >= width - ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("nwse-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.BottomRightResize;
-                        } else if (Y >= ((height - ExpressCraft.Form.getResizeCorners()) | 0)) {
+                        } else if (Y >= height - ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("s-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.BottomResize;
                         } else if (X <= ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("w-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.LeftResize;
 
-                        } else if (X >= ((width - ExpressCraft.Form.getResizeCorners()) | 0)) {
+                        } else if (X >= width - ExpressCraft.Form.getResizeCorners()) {
                             ExpressCraft.Form.setCursor("e-resize");
                             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.RightResize;
                         } else {
