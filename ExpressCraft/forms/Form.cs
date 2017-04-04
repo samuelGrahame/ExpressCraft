@@ -24,8 +24,7 @@ namespace ExpressCraft
 		public static int ResizeCorners { get; set; } = 2;
 		public static Form MovingForm = null;
 		public static HTMLElement Parent = null;
-		public static bool Mouse_Down { get; set; } = false;
-		public static int FadeLength { get; set; } = 100;
+		public static bool Mouse_Down { get; set; } = false;		
         public static HTMLElement FormOverLay;		
 
 		private static HTMLStyleElement WindowCursorManager = null;
@@ -1321,6 +1320,14 @@ namespace ExpressCraft
 			Heading.AppendChild(ButtonExpand);
 			Heading.AppendChild(ButtonMinimize);
 
+			 closeAction = () => {
+				 Content.Empty();
+				 if(Content != null)
+				 {
+					 Content.Delete(); Content = null;
+				 }
+			 };
+
 			Initialise();
 		}
 
@@ -1668,7 +1675,7 @@ namespace ExpressCraft
 		}
 
 		public static List<Form> ToClean = new List<Form>();
-
+		private Action closeAction;
 		public void Close()
 		{
 			if(_IsDialog && InDialogResult)
@@ -1704,12 +1711,14 @@ namespace ExpressCraft
 			if(Content != null)
 			{				
 				if(!ForReuse)
-				{
-					Content.Empty();					
-					if(Content != null)
+				{					
+					if(Settings.FormFadeDuraction > 0)
 					{
-						Content.Delete(); Content = null;
-					}
+						Self.FadeOut(Settings.FormFadeDuraction, closeAction);
+					}else
+					{
+						closeAction();						
+					}					
 				}
 				else
 				{

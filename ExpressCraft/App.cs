@@ -10,12 +10,12 @@ namespace ExpressCraft
 		public static void Main()
 		{			
 			Settings.Setup();
-			//Form.Setup();
-			//Settings.ShowExceptionDialog = false;
+			Form.Setup();
+			Settings.ShowExceptionDialog = false;
 
-			//Application.Run(ApplicationDefitnion.ExpressCraftConsole);
+			Application.Run(ApplicationDefitnion.ExpressCraftConsole);
 
-			//Console.WriteLine("Hello World!");
+			Console.WriteLine("Hello World!");
 		}
 	}
 }

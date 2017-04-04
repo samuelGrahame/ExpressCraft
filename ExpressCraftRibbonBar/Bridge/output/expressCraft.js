@@ -488,12 +488,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
-            //Form.Setup();
-            //Settings.ShowExceptionDialog = false;
+            ExpressCraft.Form.setup();
+            ExpressCraft.Settings.showExceptionDialog = false;
 
-            //Application.Run(ApplicationDefitnion.ExpressCraftConsole);
+            ExpressCraft.Application.run(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
 
-            //Console.WriteLine("Hello World!");
+            Bridge.Console.log("Hello World!");
         }
     });
 
@@ -3502,6 +3502,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             isChrome: false,
             allowCloseWithoutQuestion: false,
             showExceptionDialog: true,
+            formFadeDuraction: 100,
             themeElement: null,
             _primaryThemeColor: "#0173C7",
             themeTemplate: "\r\n.form-base{\r\n\tborder-color:{0};\r\n}\r\n.form-heading\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.progressbarbody\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.control:focus:not(.grid)\r\n{\r\n\toutline: dashed 1px {0};\r\n}\r\n.ribboncontrol\r\n{\r\n\tbackground-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n}\r\n.ribbonpageheader-hidden\r\n{\r\n\tbackground-color:{0};\r\n}\r\n@keyframes ColorFlash\r\n{\r\n\tfrom {background-color: white;}\r\n    to {background-color: {0};}\r\n}\r\n",
@@ -3976,7 +3977,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     WindowManagerSearch: null,
                     ResizeCorners: 2,
                     Mouse_Down: false,
-                    FadeLength: 100,
                     ShowBodyOverLay: false,
                     Window_DefaultHeight: 480,
                     Window_DefaultWidth: 640
@@ -4219,6 +4219,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         prev_top: 0,
         prev_left: 0,
         dialogResults: null,
+        closeAction: null,
         inDialogResult: false,
         config: {
             properties: {
@@ -4298,6 +4299,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.getHeading().appendChild(this.getButtonClose());
             this.getHeading().appendChild(this.getButtonExpand());
             this.getHeading().appendChild(this.getButtonMinimize());
+
+            this.closeAction = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f24);
 
             this.initialise();
         },
@@ -4500,10 +4503,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 case ExpressCraft.FormButtonType.Close: 
                     butt.classList.add("form-heading-button-close");
                     butt.innerHTML = "X";
-                    butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f24);
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f25);
-                    butt.onmouseenter = $asm.$.ExpressCraft.Form.f26;
-                    butt.onmouseleave = $asm.$.ExpressCraft.Form.f27;
+                    butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f25);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f26);
+                    butt.onmouseenter = $asm.$.ExpressCraft.Form.f27;
+                    butt.onmouseleave = $asm.$.ExpressCraft.Form.f28;
                     break;
                 case ExpressCraft.FormButtonType.Maximize: 
                     if (this.getShowMinimize()) {
@@ -4511,7 +4514,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                     butt.style.left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
                     butt.innerHTML = "&#9633;";
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f28);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f29);
                     break;
                 case ExpressCraft.FormButtonType.Minimize: 
                     if (this.getShowMaximize()) {
@@ -4520,23 +4523,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         butt.style.left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
                     }
                     butt.innerHTML = "-";
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f29);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f30);
                     break;
                 case ExpressCraft.FormButtonType.Restore: 
                     break;
                 case ExpressCraft.FormButtonType.Help: 
                     break;
                 default: 
-                    butt.onmouseup = $asm.$.ExpressCraft.Form.f30;
+                    butt.onmouseup = $asm.$.ExpressCraft.Form.f31;
                     break;
             }
 
-            butt.ondblclick = $asm.$.ExpressCraft.Form.f31;
+            butt.ondblclick = $asm.$.ExpressCraft.Form.f32;
 
-            butt.onmousemove = $asm.$.ExpressCraft.Form.f32;
+            butt.onmousemove = $asm.$.ExpressCraft.Form.f33;
 
             if (Type !== ExpressCraft.FormButtonType.Close) {
-                butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f33);
+                butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f34);
             }
 
             return butt;
@@ -4788,10 +4791,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             if (this.content != null) {
                 if (!this.forReuse) {
-                    ExpressCraft.Helper.empty(this.content);
-                    if (this.content != null) {
-                        ExpressCraft.Helper.delete(this.content);
-                        this.content = null;
+                    if (ExpressCraft.Settings.formFadeDuraction > 0) {
+                        this.self.fadeOut(ExpressCraft.Settings.formFadeDuraction, this.closeAction);
+                    } else {
+                        this.closeAction();
                     }
                 } else {
                     this.content.style.visibility = "collapse";
@@ -5327,7 +5330,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.getBodyOverLay().style.visibility = "visible";
             }
         },
-        f24: function (ev) {
+        f24: function () {
+            ExpressCraft.Helper.empty(this.content);
+            if (this.content != null) {
+                ExpressCraft.Helper.delete(this.content);
+                this.content = null;
+            }
+        },
+        f25: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5338,7 +5348,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setActiveForm(this);
         },
-        f25: function (ev) {
+        f26: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5352,29 +5362,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.close();
         },
-        f26: function (ev) {
+        f27: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
 
             ExpressCraft.Form.setCursor("default");
         },
-        f27: function (ev) {
-            if (ExpressCraft.Form.movingForm != null) {
-                return;
-            }
-        },
         f28: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
-
-            ev.stopPropagation();
-            ev.preventDefault();
-
-            ExpressCraft.Form.setMouse_Down(false);
-
-            this.changeWindowState();
         },
         f29: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
@@ -5386,7 +5384,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setMouse_Down(false);
 
-            this.setwindowState(ExpressCraft.WindowState.Minimized);
+            this.changeWindowState();
         },
         f30: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
@@ -5397,11 +5395,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.preventDefault();
 
             ExpressCraft.Form.setMouse_Down(false);
+
+            this.setwindowState(ExpressCraft.WindowState.Minimized);
         },
         f31: function (ev) {
+            if (ExpressCraft.Form.movingForm != null) {
+                return;
+            }
+
             ev.stopPropagation();
+            ev.preventDefault();
+
+            ExpressCraft.Form.setMouse_Down(false);
         },
         f32: function (ev) {
+            ev.stopPropagation();
+        },
+        f33: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5409,7 +5419,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopImmediatePropagation();
             ev.preventDefault();
         },
-        f33: function (ev) {
+        f34: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
