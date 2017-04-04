@@ -729,17 +729,34 @@ namespace ExpressCraft
 					Script.Write("return 'Would you like to close this application?'");
 				}
             };
-            Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {
+            Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {				
                 if(InErrorDialog)
                 {
                     return false;
                 }
                 try
                 {
-                    InErrorDialog = true;
-                    
-                    var msgBox = new MessageBoxForm("Error: " + message + "\nurl: " + url + "\nline: " + lineNumber + "\ncol: " + columnNumber + "\nError: " + (error ?? "").ToString(), MessageBoxLayout.Error);
-                    msgBox.ShowDialog();
+					InErrorDialog = true;
+					string errStr;
+					if(string.IsNullOrWhiteSpace(message))
+					{
+						errStr = "Script Error: See Browser Console for Detail's";
+					}
+					else
+					{
+						errStr = "Error: " + message + "\nurl: " + url + "\nline: " + lineNumber + "\ncol: " + columnNumber + "\nError: " + (error ?? "").ToString();
+					}
+	
+					if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+					{
+						ConsoleForm.Log(message, ConsoleLogType.Error);
+					}
+
+					if(Settings.ShowExceptionDialog)
+					{						
+						var msgBox = new MessageBoxForm(errStr, MessageBoxLayout.Error);
+						msgBox.ShowDialog();
+					}					
                 }
                 catch (Exception)
                 {

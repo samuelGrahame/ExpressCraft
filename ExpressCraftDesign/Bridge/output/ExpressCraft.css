@@ -648,11 +648,24 @@
     word-wrap: break-word;    
     color:white;
     height:auto;
-    width:100%;
+    width:100%;   
 }
 .console-para{
     margin-top:4px;
     margin-bottom:3px;
     margin-left:5px;
     margin-right:5px;
+    -ms-user-select:text;
+    -moz-user-select:text;
+    -webkit-user-select:text;
+    user-select:text;        
+}
+
+.console-para::selection{
+    background-color:rgba(255, 255, 255, 0.996)  !important;
+    color:black  !important;
+}
+.console-para::-moz-selection{
+    background-color:rgba(255, 255, 255, 0.996) !important;
+    color:black  !important;
 }

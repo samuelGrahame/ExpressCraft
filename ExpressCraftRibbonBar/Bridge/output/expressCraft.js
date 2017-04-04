@@ -485,16 +485,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
+            ExpressCraft.Form.setup();
+            ExpressCraft.Settings.showExceptionDialog = false;
+
             ExpressCraft.Application.run(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
 
-            Bridge.Console.log("Hello World");
-            console.clear();
+            var m = 10;
+            var x = (Bridge.Int.div(m, 0)) | 0;
         }
     });
 
     Bridge.define("ExpressCraft.Application", {
         statics: {
             mainForm: null,
+            _applicationDefition: 0,
+            getAplicationDefition: function () {
+                return ExpressCraft.Application._applicationDefition;
+            },
             close: function () {
                 if (ExpressCraft.Application.mainForm != null) {
                     ExpressCraft.Application.mainForm.close();
@@ -504,6 +511,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             },
             run: function (applicationDefition) {
                 if (applicationDefition === void 0) { applicationDefition = 0; }
+                ExpressCraft.Application._applicationDefition = applicationDefition;
                 switch (applicationDefition) {
                     case ExpressCraft.ApplicationDefitnion.BrowserConsole: 
                         			
@@ -3504,6 +3512,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             _WindowManagerVisible: false,
             isChrome: false,
             allowCloseWithoutQuestion: false,
+            showExceptionDialog: true,
             themeElement: null,
             _primaryThemeColor: "#0173C7",
             themeTemplate: "\r\n.form-base{\r\n\tborder-color:{0};\r\n}\r\n.form-heading\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.progressbarbody\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.control:focus:not(.grid)\r\n{\r\n\toutline: dashed 1px {0};\r\n}\r\n.ribboncontrol\r\n{\r\n\tbackground-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n}\r\n.ribbonpageheader-hidden\r\n{\r\n\tbackground-color:{0};\r\n}\r\n@keyframes ColorFlash\r\n{\r\n\tfrom {background-color: white;}\r\n    to {background-color: {0};}\r\n}\r\n",
@@ -5022,9 +5031,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
             try {
                 ExpressCraft.Form.inErrorDialog = true;
+                var errStr = System.String.concat("Error: ", message, "\nurl: ", url, "\nline: ", lineNumber, "\ncol: ", columnNumber, "\nError: ", (($t = error, $t != null ? $t : "")).toString());
+                if (ExpressCraft.Application.getAplicationDefition() === ExpressCraft.ApplicationDefitnion.ExpressCraftConsole) {
+                    ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Error);
+                }
 
-                var msgBox = new ExpressCraft.MessageBoxForm.ctor(System.String.concat("Error: ", message, "\nurl: ", url, "\nline: ", lineNumber, "\ncol: ", columnNumber, "\nError: ", (($t = error, $t != null ? $t : "")).toString()), ExpressCraft.MessageBoxLayout.Error);
-                msgBox.showDialog();
+                if (ExpressCraft.Settings.showExceptionDialog) {
+                    var msgBox = new ExpressCraft.MessageBoxForm.ctor(errStr, ExpressCraft.MessageBoxLayout.Error);
+                    msgBox.showDialog();
+                }
             }
             catch ($e1) {
                 $e1 = System.Exception.create($e1);

@@ -28,9 +28,11 @@ namespace ExpressCraft
             Window.Close();
             Window.Location.Reload();
         }
-
+		private static ApplicationDefitnion _applicationDefition;
+		public static ApplicationDefitnion AplicationDefition { get { return _applicationDefition; } }
 		public static void Run(ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
-		{			
+		{
+			_applicationDefition = applicationDefition;
 			switch(applicationDefition)
 			{
 				case ApplicationDefitnion.BrowserConsole:
