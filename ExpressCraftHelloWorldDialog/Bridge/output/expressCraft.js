@@ -4304,6 +4304,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         getHasSetup: function () {
             return ExpressCraft.Form._hasSetup;
         },
+        getControls: function () {
+            return this.getBody().children;
+        },
         getShowMinimize: function () {
             return this.getButtonMinimize() != null;
         },

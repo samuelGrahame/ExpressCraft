@@ -35,14 +35,16 @@ namespace ExpressCraft
 
 		public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
-		
+
+		public HTMLCollection Controls => Body.Children;
+
 		public static bool InExternalMouseEvent = false;
 		
 		public bool ShowMinimize
 		{
 			get { return ButtonMinimize != null; }
 			set {
-				ChangeHeadingButton(FormButtonType.Minimize, value);				
+				ChangeHeadingButton(FormButtonType.Minimize, value);								
 			}
 		}
 
@@ -65,8 +67,7 @@ namespace ExpressCraft
 				ChangeHeadingButton(FormButtonType.Maximize, value);
 			}
 		}
-
-
+		
 		public bool ForReuse = false;
 
         protected static bool InErrorDialog = false;
