@@ -18,7 +18,7 @@ namespace ExpressCraft
 		public static HTMLDivElement WindowManager { get; set; }
 		public static HTMLDivElement WindowManagerStart { get; set; }
 		public static TextInput WindowManagerSearch { get; set; }
-
+		
 		public bool InDesign = false;
 
 		public static int ResizeCorners { get; set; } = 2;
@@ -29,8 +29,11 @@ namespace ExpressCraft
         public static HTMLElement FormOverLay;		
 
 		private static HTMLStyleElement WindowCursorManager = null;
-				
-        public bool AllowSizeChange = true;
+		private static bool _hasSetup = false;
+
+		public bool HasSetup { get { return _hasSetup; } }
+
+		public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
 		
 		public static bool InExternalMouseEvent = false;
@@ -422,11 +425,15 @@ namespace ExpressCraft
 			}			
 		}
 
-		public static void Setup(HTMLElement parent = null)
-		{			
-            //Settings.Setup();
 
-            if (parent == null)
+		public static void Setup(HTMLElement parent = null)
+		{
+			//Settings.Setup();
+			if(_hasSetup)
+				return;
+			_hasSetup = true;
+			
+			if (parent == null)
 				Parent = Document.Body;
 			else
 				Parent = parent;
@@ -948,9 +955,7 @@ namespace ExpressCraft
 		}
         
 		public Form() : base("form-base")
-		{
-			
-
+		{			
 			Heading = Div("form-heading");
 
             Heading.OnContextMenu = (ev) => {
@@ -1079,6 +1084,7 @@ namespace ExpressCraft
 
 				if(!AllowMoveChange && MoveAction == MouseMoveAction.Move)
 				{
+					SetCursor(Cursor.Default);
 					MoveAction = MouseMoveAction.None;
 				}
 			});
@@ -1099,7 +1105,13 @@ namespace ExpressCraft
 				}
 			});
 
+			Body.AddEventListener(EventType.MouseEnter, (ev) => {
+				SetCursor(Cursor.Default);
+			});
+
 			Content.AddEventListener(EventType.MouseMove, (ev) => {
+
+
 				if(InExternalMouseEvent)
 					return;
 				
@@ -1110,7 +1122,7 @@ namespace ExpressCraft
 				var width = Content.ClientWidth;
 				var height = Content.ClientHeight;
 				int X = mev.PageX - Content.OffsetLeft;
-				int Y = mev.PageY - Content.OffsetTop;
+				int Y = mev.PageY - Content.OffsetTop;							
 
 				if(MovingForm != null && MoveAction == MouseMoveAction.Move)
 				{
@@ -1249,6 +1261,7 @@ namespace ExpressCraft
 				}
 				if(MovingForm == null && IsActiveFormCollection()) // WindowHolderSelectionBox == null && 
 				{
+					SetCursor(Cursor.Default);
 					BodyOverLay.Style.Visibility = Visibility.Collapse;
 				}
 				else
@@ -1341,7 +1354,10 @@ namespace ExpressCraft
 
         public void ShowStartNewLevel(HTMLElement owner = null)
         {
-            if (IsVisible())
+			if(!HasSetup)
+				Setup();
+
+			if (IsVisible())
             {
                 // Already Open???
                 throw new Exception("Invalid request to open form as a dialog that is already visible!");
@@ -1361,6 +1377,9 @@ namespace ExpressCraft
 
 		public void ShowDialog(params DialogResult[] dialogResults)
 		{
+			if(!HasSetup)
+				Setup();
+
 			InDialogResult = false;
 
 			if (ButtonMinimize != null)
@@ -1445,6 +1464,9 @@ namespace ExpressCraft
 
 		public void Show(HTMLElement owner = null)
 		{
+			if(!HasSetup)
+				Setup();
+
             if (_IsDialog)
                 return;
 

@@ -10,7 +10,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         $main: function () {
             ExpressCraft.Form.setup();
 
-            ExpressCraft.Application.run(new ExpressCraftGridView.App.GridForm());
+            ExpressCraft.Application.run$1(new ExpressCraftGridView.App.GridForm());
         }
     });
 

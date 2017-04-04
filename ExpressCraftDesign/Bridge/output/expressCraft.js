@@ -1,9 +1,3 @@
-
-			Bridge.Console.log = function(message) { console.log(message); };
-			Bridge.Console.error = function(message) { console.error(message); };
-			Bridge.Console.debug = function(message) { console.debug(message); };
-			
-
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
@@ -491,6 +485,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
+            ExpressCraft.Application.run(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
+
+            Bridge.Console.log("Hello World");
+            console.clear();
         }
     });
 
@@ -504,10 +502,44 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 window.close();
                 window.location.reload();
             },
-            run: function (_Mainform) {
+            run: function (applicationDefition) {
+                if (applicationDefition === void 0) { applicationDefition = 0; }
+                switch (applicationDefition) {
+                    case ExpressCraft.ApplicationDefitnion.BrowserConsole: 
+                        			
+					Bridge.Console.log = function(message) { console.log(message); };
+					Bridge.Console.error = function(message) { console.error(message); };
+					Bridge.Console.debug = function(message) { console.debug(message); };
+					Bridge.Console.clear = function() { console.clear(); };
+					
+                        break;
+                    case ExpressCraft.ApplicationDefitnion.ExpressCraftConsole: 
+                        
+					Bridge.Console.log = function(message) { ExpressCraft.ConsoleForm.log(message) };
+					Bridge.Console.error = function(message) { ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Error); };
+					Bridge.Console.debug = function(message) { ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Debug); };
+					console.clear = function() { ExpressCraft.ConsoleForm.clear(); };
+					
+                        break;
+                    default: 
+                        break;
+                }
+            },
+            run$1: function (_Mainform, applicationDefition) {
+                if (applicationDefition === void 0) { applicationDefition = 0; }
                 ExpressCraft.Application.mainForm = _Mainform;
                 ExpressCraft.Application.mainForm.showStartNewLevel();
+                ExpressCraft.Application.run(applicationDefition);
             }
+        }
+    });
+
+    Bridge.define("ExpressCraft.ApplicationDefitnion", {
+        $kind: "enum",
+        statics: {
+            BrowserConsole: 0,
+            BridgeConsole: 1,
+            ExpressCraftConsole: 2
         }
     });
 
@@ -1245,6 +1277,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         $kind: "enum",
         statics: {
             Default: 0
+        }
+    });
+
+    Bridge.define("ExpressCraft.ConsoleLogType", {
+        $kind: "enum",
+        statics: {
+            Log: 0,
+            Debug: 1,
+            Error: 2
         }
     });
 
@@ -3898,301 +3939,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
-    Bridge.define("ExpressCraft.ContextMenu", {
-        inherits: [ExpressCraft.Control],
-        statics: {
-            totalContextHandles: 0,
-            mainContextMenu: null
-        },
-        /**
-         * For internal use only - so if we click on document - we can close all context menus ---
-         *
-         * @instance
-         */
-        subContextOpened: null,
-        contextItems: null,
-        visible: false,
-        config: {
-            init: function () {
-                this.contextItems = new (System.Collections.Generic.List$1(ExpressCraft.ContextItem))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "contextmenu");
-            this.content.onmouseleave = Bridge.fn.bind(this, $asm.$.ExpressCraft.ContextMenu.f1);
-        },
-        renderContextMenu: function () {
-            // What we need to do first is get the maxed size text...
-            var x = 0;
-            var ii = -1;
-
-            ExpressCraft.Helper.empty(this.content);
-
-            for (var i = 0; i < this.contextItems.getCount(); i = (i + 1) | 0) {
-                var y = this.contextItems.getItem(i).caption.length;
-                if (y > x) {
-                    x = y;
-                    ii = i;
-                }
-            }
-
-            if (ii === -1) {
-                return;
-            }
-            var calwidth = Bridge.Int.clip32(ExpressCraft.Control.getTextWidth(this.contextItems.getItem(ii).caption, ExpressCraft.Settings.defaultFont));
-            if (calwidth < ExpressCraft.Settings.contextMenuMinWidth) {
-                calwidth = ExpressCraft.Settings.contextMenuMinWidth;
-            }
-            var width = (((((((calwidth + 34) | 0) + 8) | 0) + 2) | 0));
-
-            var top = 1;
-
-            for (var i1 = 0; i1 < this.contextItems.getCount(); i1 = (i1 + 1) | 0) {
-                (function () {
-                    var contextItem = this.contextItems.getItem(i1);
-                    var y1 = contextItem.caption.length;
-                    var item = ExpressCraft.Control.label$1(contextItem.caption, 1, top, ((width - 2) | 0), false, false, "contextitem");
-
-                    item.onclick = Bridge.fn.bind(this, function (ev) {
-                        if (contextItem.enabled) {
-                            if (!Bridge.staticEquals(contextItem.onItemClick, null)) {
-                                contextItem.onItemClick(contextItem);
-                            }
-                            this.close();
-                        }
-
-                    });
-
-                    this.content.appendChild(item);
-
-                    top = (top + 24) | 0;
-
-                    if (this.contextItems.getItem(i1).beginGroup && i1 !== this.contextItems.getCount()) {
-                        top = (top + 1) | 0;
-                        var sep = ExpressCraft.Control.div$1("contextitemseperator");
-
-                        sep.style.top = ExpressCraft.Helper.toPx$1(top);
-                        sep.style.width = ExpressCraft.Helper.toPx$1(calwidth);
-
-                        this.content.appendChild(sep);
-
-                        top = (top + 2) | 0;
-                    }
-                }).call(this);
-            }
-
-            top = (top + 1) | 0;
-
-            ExpressCraft.Helper.setSize(this.content, width, top);
-        },
-        show: function (Location) {
-            if (ExpressCraft.ContextMenu.mainContextMenu != null) {
-                ExpressCraft.ContextMenu.mainContextMenu.close();
-                ExpressCraft.ContextMenu.mainContextMenu = null;
-            }
-            ExpressCraft.ContextMenu.mainContextMenu = this;
-
-            if (this.visible) {
-                this.close();
-            }
-            if (!this.visible) {
-                ExpressCraft.Helper.setLocation(this.content, ((Location.getXi() - 5) | 0), ((Location.getYi() - 5) | 0));
-                this.renderContextMenu();
-
-                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
-                this.content.style.zIndex = (((ExpressCraft.ContextMenu.totalContextHandles + ExpressCraft.Settings.contextMenuStartingZIndex) | 0)).toString();
-                document.body.appendChild(ExpressCraft.Control.op_Implicit(this));
-                this.visible = true;
-            }
-        },
-        close: function () {
-            if (this.visible) {
-                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles - 1) | 0;
-                document.body.removeChild(ExpressCraft.Control.op_Implicit(this));
-                this.visible = false;
-            }
-
-            if (this.subContextOpened != null) {
-                this.subContextOpened.close();
-                this.subContextOpened = null;
-            }
-        }
-    });
-
-    Bridge.ns("ExpressCraft.ContextMenu", $asm.$);
-
-    Bridge.apply($asm.$.ExpressCraft.ContextMenu, {
-        f1: function (ev) {
-            this.close();
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnBool", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(Boolean)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Bool;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnByte", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Byte)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Byte;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnDateTime", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(Date)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.DateTime;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnDecimal", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Decimal)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Decimal;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnDouble", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Double)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Double;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnFloat", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Single)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Float;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnInteger", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int32)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Integer;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnLong", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int64)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Long;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnObject", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(Object))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Object;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnShort", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int16)))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.Short;
-        }
-    });
-
-    Bridge.define("ExpressCraft.DataColumnString", {
-        inherits: [ExpressCraft.DataColumn],
-        cells: null,
-        config: {
-            init: function () {
-                this.cells = new (System.Collections.Generic.List$1(String))();
-            }
-        },
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.DataColumn.ctor.call(this);
-            this.dataType = ExpressCraft.DataType.String;
-        }
-    });
-
     Bridge.define("ExpressCraft.Form", {
         inherits: [ExpressCraft.Control],
         statics: {
@@ -4200,6 +3946,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             parent: null,
             formOverLay: null,
             windowCursorManager: null,
+            _hasSetup: false,
             inExternalMouseEvent: false,
             inErrorDialog: false,
             formCollections: null,
@@ -4331,6 +4078,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             setup: function (parent) {
                 if (parent === void 0) { parent = null; }
                 //Settings.Setup();
+                if (ExpressCraft.Form._hasSetup) {
+                    return;
+                }
+                ExpressCraft.Form._hasSetup = true;
 
                 if (parent == null) {
                     ExpressCraft.Form.parent = document.body;
@@ -4481,8 +4232,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         ctor: function () {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "form-base");
-
-
             this.setHeading(ExpressCraft.Control.div$1("form-heading"));
 
             this.getHeading().oncontextmenu = $asm.$.ExpressCraft.Form.f6;
@@ -4513,19 +4262,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.content.addEventListener("mouseleave", $asm.$.ExpressCraft.Form.f15);
 
-            this.content.addEventListener("mousemove", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f16));
+            this.getBody().addEventListener("mouseenter", $asm.$.ExpressCraft.Form.f16);
 
-            this.getHeading().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f17));
+            this.content.addEventListener("mousemove", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f17));
 
-            this.getBody().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f18));
+            this.getHeading().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f18));
 
-            this.getBody().addEventListener("mousemove", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f19));
+            this.getBody().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f19));
 
-            this.getBodyOverLay().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f20));
+            this.getBody().addEventListener("mousemove", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f20));
 
-            this.getBody().addEventListener("mouseleave", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f21));
+            this.getBodyOverLay().addEventListener("mousedown", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f21));
 
-            this.getBodyOverLay().addEventListener("mouseenter", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f22));
+            this.getBody().addEventListener("mouseleave", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f22));
+
+            this.getBodyOverLay().addEventListener("mouseenter", Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f23));
 
             $(this.content).css("width", ExpressCraft.Form.getWindow_DefaultWidth()).css("height", ExpressCraft.Form.getWindow_DefaultHeight());
 
@@ -4539,6 +4290,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.getHeading().appendChild(this.getButtonMinimize());
 
             this.initialise();
+        },
+        getHasSetup: function () {
+            return ExpressCraft.Form._hasSetup;
         },
         getShowMinimize: function () {
             return this.getButtonMinimize() != null;
@@ -4722,10 +4476,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 case ExpressCraft.FormButtonType.Close: 
                     butt.classList.add("form-heading-button-close");
                     butt.innerHTML = "X";
-                    butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f23);
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f24);
-                    butt.onmouseenter = $asm.$.ExpressCraft.Form.f25;
-                    butt.onmouseleave = $asm.$.ExpressCraft.Form.f26;
+                    butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f24);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f25);
+                    butt.onmouseenter = $asm.$.ExpressCraft.Form.f26;
+                    butt.onmouseleave = $asm.$.ExpressCraft.Form.f27;
                     break;
                 case ExpressCraft.FormButtonType.Maximize: 
                     if (this.getShowMinimize()) {
@@ -4733,7 +4487,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                     butt.style.left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
                     butt.innerHTML = "&#9633;";
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f27);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f28);
                     break;
                 case ExpressCraft.FormButtonType.Minimize: 
                     if (this.getShowMaximize()) {
@@ -4742,23 +4496,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         butt.style.left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
                     }
                     butt.innerHTML = "-";
-                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f28);
+                    butt.onmouseup = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f29);
                     break;
                 case ExpressCraft.FormButtonType.Restore: 
                     break;
                 case ExpressCraft.FormButtonType.Help: 
                     break;
                 default: 
-                    butt.onmouseup = $asm.$.ExpressCraft.Form.f29;
+                    butt.onmouseup = $asm.$.ExpressCraft.Form.f30;
                     break;
             }
 
-            butt.ondblclick = $asm.$.ExpressCraft.Form.f30;
+            butt.ondblclick = $asm.$.ExpressCraft.Form.f31;
 
-            butt.onmousemove = $asm.$.ExpressCraft.Form.f31;
+            butt.onmousemove = $asm.$.ExpressCraft.Form.f32;
 
             if (Type !== ExpressCraft.FormButtonType.Close) {
-                butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f32);
+                butt.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.Form.f33);
             }
 
             return butt;
@@ -4797,6 +4551,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         showStartNewLevel: function (owner) {
             if (owner === void 0) { owner = null; }
+            if (!this.getHasSetup()) {
+                ExpressCraft.Form.setup();
+            }
+
             if (this.isVisible()) {
                 // Already Open???
                 throw new System.Exception("Invalid request to open form as a dialog that is already visible!");
@@ -4815,6 +4573,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         showDialog: function (dialogResults) {
             if (dialogResults === void 0) { dialogResults = []; }
+            if (!this.getHasSetup()) {
+                ExpressCraft.Form.setup();
+            }
+
             this.inDialogResult = false;
 
             if (this.getButtonMinimize() != null) {
@@ -4886,6 +4648,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         show: function (owner) {
             if (owner === void 0) { owner = null; }
+            if (!this.getHasSetup()) {
+                ExpressCraft.Form.setup();
+            }
+
             if (this._IsDialog) {
                 return;
             }
@@ -5351,6 +5117,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             if (!this.allowMoveChange && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
+                ExpressCraft.Form.setCursor("default");
                 ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.None;
             }
         },
@@ -5367,6 +5134,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         f16: function (ev) {
+            ExpressCraft.Form.setCursor("default");
+        },
+        f17: function (ev) {
+
+
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }
@@ -5417,7 +5189,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
         },
-        f17: function (ev) {
+        f18: function (ev) {
             ExpressCraft.Form.setBodyOverLay();
             if (!this.isActiveFormCollection()) {
                 return;
@@ -5434,7 +5206,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setActiveForm(this);
         },
-        f18: function (ev) {
+        f19: function (ev) {
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }
@@ -5446,7 +5218,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.movingForm = null;
             ev.stopPropagation();
         },
-        f19: function (ev) {
+        f20: function (ev) {
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }
@@ -5458,7 +5230,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ev.stopPropagation();
             }
         },
-        f20: function (ev) {
+        f21: function (ev) {
             if (this.inDesign) {
                 this.getBodyOverLay().style.visibility = "collapse";
                 return;
@@ -5469,7 +5241,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.getBodyOverLay().style.visibility = "collapse";
             ExpressCraft.Form.setActiveForm(this);
         },
-        f21: function (ev) {
+        f22: function (ev) {
             if (this.inDesign) {
                 this.getBodyOverLay().style.visibility = "collapse";
                 return;
@@ -5479,18 +5251,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Form.setBodyOverLay();
             }
         },
-        f22: function (ev) {
+        f23: function (ev) {
             if (this.inDesign) {
                 this.getBodyOverLay().style.visibility = "collapse";
                 return;
             }
             if (ExpressCraft.Form.movingForm == null && this.isActiveFormCollection()) {
+                ExpressCraft.Form.setCursor("default");
                 this.getBodyOverLay().style.visibility = "collapse";
             } else {
                 this.getBodyOverLay().style.visibility = "visible";
             }
         },
-        f23: function (ev) {
+        f24: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5501,7 +5274,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setActiveForm(this);
         },
-        f24: function (ev) {
+        f25: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5515,29 +5288,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             this.close();
         },
-        f25: function (ev) {
+        f26: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
 
             ExpressCraft.Form.setCursor("default");
         },
-        f26: function (ev) {
-            if (ExpressCraft.Form.movingForm != null) {
-                return;
-            }
-        },
         f27: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
-
-            ev.stopPropagation();
-            ev.preventDefault();
-
-            ExpressCraft.Form.setMouse_Down(false);
-
-            this.changeWindowState();
         },
         f28: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
@@ -5549,7 +5310,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setMouse_Down(false);
 
-            this.setwindowState(ExpressCraft.WindowState.Minimized);
+            this.changeWindowState();
         },
         f29: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
@@ -5560,11 +5321,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.preventDefault();
 
             ExpressCraft.Form.setMouse_Down(false);
+
+            this.setwindowState(ExpressCraft.WindowState.Minimized);
         },
         f30: function (ev) {
+            if (ExpressCraft.Form.movingForm != null) {
+                return;
+            }
+
             ev.stopPropagation();
+            ev.preventDefault();
+
+            ExpressCraft.Form.setMouse_Down(false);
         },
         f31: function (ev) {
+            ev.stopPropagation();
+        },
+        f32: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5572,7 +5345,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.stopImmediatePropagation();
             ev.preventDefault();
         },
-        f32: function (ev) {
+        f33: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
                 return;
             }
@@ -5583,6 +5356,301 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.preventDefault();
 
             ExpressCraft.Form.setActiveForm(this);
+        }
+    });
+
+    Bridge.define("ExpressCraft.ContextMenu", {
+        inherits: [ExpressCraft.Control],
+        statics: {
+            totalContextHandles: 0,
+            mainContextMenu: null
+        },
+        /**
+         * For internal use only - so if we click on document - we can close all context menus ---
+         *
+         * @instance
+         */
+        subContextOpened: null,
+        contextItems: null,
+        visible: false,
+        config: {
+            init: function () {
+                this.contextItems = new (System.Collections.Generic.List$1(ExpressCraft.ContextItem))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.Control.$ctor1.call(this, "contextmenu");
+            this.content.onmouseleave = Bridge.fn.bind(this, $asm.$.ExpressCraft.ContextMenu.f1);
+        },
+        renderContextMenu: function () {
+            // What we need to do first is get the maxed size text...
+            var x = 0;
+            var ii = -1;
+
+            ExpressCraft.Helper.empty(this.content);
+
+            for (var i = 0; i < this.contextItems.getCount(); i = (i + 1) | 0) {
+                var y = this.contextItems.getItem(i).caption.length;
+                if (y > x) {
+                    x = y;
+                    ii = i;
+                }
+            }
+
+            if (ii === -1) {
+                return;
+            }
+            var calwidth = Bridge.Int.clip32(ExpressCraft.Control.getTextWidth(this.contextItems.getItem(ii).caption, ExpressCraft.Settings.defaultFont));
+            if (calwidth < ExpressCraft.Settings.contextMenuMinWidth) {
+                calwidth = ExpressCraft.Settings.contextMenuMinWidth;
+            }
+            var width = (((((((calwidth + 34) | 0) + 8) | 0) + 2) | 0));
+
+            var top = 1;
+
+            for (var i1 = 0; i1 < this.contextItems.getCount(); i1 = (i1 + 1) | 0) {
+                (function () {
+                    var contextItem = this.contextItems.getItem(i1);
+                    var y1 = contextItem.caption.length;
+                    var item = ExpressCraft.Control.label$1(contextItem.caption, 1, top, ((width - 2) | 0), false, false, "contextitem");
+
+                    item.onclick = Bridge.fn.bind(this, function (ev) {
+                        if (contextItem.enabled) {
+                            if (!Bridge.staticEquals(contextItem.onItemClick, null)) {
+                                contextItem.onItemClick(contextItem);
+                            }
+                            this.close();
+                        }
+
+                    });
+
+                    this.content.appendChild(item);
+
+                    top = (top + 24) | 0;
+
+                    if (this.contextItems.getItem(i1).beginGroup && i1 !== this.contextItems.getCount()) {
+                        top = (top + 1) | 0;
+                        var sep = ExpressCraft.Control.div$1("contextitemseperator");
+
+                        sep.style.top = ExpressCraft.Helper.toPx$1(top);
+                        sep.style.width = ExpressCraft.Helper.toPx$1(calwidth);
+
+                        this.content.appendChild(sep);
+
+                        top = (top + 2) | 0;
+                    }
+                }).call(this);
+            }
+
+            top = (top + 1) | 0;
+
+            ExpressCraft.Helper.setSize(this.content, width, top);
+        },
+        show: function (Location) {
+            if (ExpressCraft.ContextMenu.mainContextMenu != null) {
+                ExpressCraft.ContextMenu.mainContextMenu.close();
+                ExpressCraft.ContextMenu.mainContextMenu = null;
+            }
+            ExpressCraft.ContextMenu.mainContextMenu = this;
+
+            if (this.visible) {
+                this.close();
+            }
+            if (!this.visible) {
+                ExpressCraft.Helper.setLocation(this.content, ((Location.getXi() - 5) | 0), ((Location.getYi() - 5) | 0));
+                this.renderContextMenu();
+
+                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
+                this.content.style.zIndex = (((ExpressCraft.ContextMenu.totalContextHandles + ExpressCraft.Settings.contextMenuStartingZIndex) | 0)).toString();
+                document.body.appendChild(ExpressCraft.Control.op_Implicit(this));
+                this.visible = true;
+            }
+        },
+        close: function () {
+            if (this.visible) {
+                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles - 1) | 0;
+                document.body.removeChild(ExpressCraft.Control.op_Implicit(this));
+                this.visible = false;
+            }
+
+            if (this.subContextOpened != null) {
+                this.subContextOpened.close();
+                this.subContextOpened = null;
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.ContextMenu", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.ContextMenu, {
+        f1: function (ev) {
+            this.close();
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnBool", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(Boolean)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Bool;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnByte", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Byte)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Byte;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnDateTime", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(Date)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.DateTime;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnDecimal", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Decimal)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Decimal;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnDouble", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Double)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Double;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnFloat", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Single)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Float;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnInteger", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int32)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Integer;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnLong", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int64)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Long;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnObject", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(Object))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Object;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnShort", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(System.Nullable$1(System.Int16)))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.Short;
+        }
+    });
+
+    Bridge.define("ExpressCraft.DataColumnString", {
+        inherits: [ExpressCraft.DataColumn],
+        cells: null,
+        config: {
+            init: function () {
+                this.cells = new (System.Collections.Generic.List$1(String))();
+            }
+        },
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.DataColumn.ctor.call(this);
+            this.dataType = ExpressCraft.DataType.String;
         }
     });
 
@@ -8056,6 +8124,74 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         f6: function () {
             this.checkTextChanged();
+        }
+    });
+
+    Bridge.define("ExpressCraft.ConsoleForm", {
+        inherits: [ExpressCraft.Form],
+        statics: {
+            consoleVisible: false,
+            _consoleForm: null,
+            log: function (source, logType) {
+                if (logType === void 0) { logType = 0; }
+                if (!ExpressCraft.ConsoleForm.consoleVisible) {
+                    ExpressCraft.ConsoleForm._consoleForm = new ExpressCraft.ConsoleForm();
+                    ExpressCraft.ConsoleForm._consoleForm.show();
+                }
+                ExpressCraft.ConsoleForm._consoleForm.internalLog(source, logType);
+            },
+            clear: function () {
+                if (!ExpressCraft.ConsoleForm.consoleVisible) {
+                    ExpressCraft.ConsoleForm._consoleForm = new ExpressCraft.ConsoleForm();
+                    ExpressCraft.ConsoleForm._consoleForm.show();
+                }
+                ExpressCraft.ConsoleForm._consoleForm.internalClear();
+            }
+        },
+        logContent: null,
+        ctor: function () {
+            this.$initialize();
+            ExpressCraft.Form.ctor.call(this);
+            this.logContent = ExpressCraft.Control.div$1("console-body");
+            this.getBody().appendChild(this.logContent);
+            this.getBody().style.background = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getBlack().$clone());
+            this.getBody().style.overflowY = "scroll";
+
+            this.setText(System.String.concat(document.title, " - Console"));
+
+            this.startPosition = ExpressCraft.FormStartPosition.Center;
+            this.setSize(new ExpressCraft.Vector2.$ctor1(979, 512));
+        },
+        internalClear: function () {
+            ExpressCraft.Helper.empty(this.logContent);
+        },
+        internalLog: function (source, logType) {
+            if (logType === void 0) { logType = 0; }
+            var para = Bridge.merge(document.createElement('p'), {
+                className: "console-para"
+            } );
+            switch (logType) {
+                case ExpressCraft.ConsoleLogType.Debug: 
+                    para.style.color = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getForestGreen().$clone());
+                    break;
+                case ExpressCraft.ConsoleLogType.Error: 
+                    para.style.color = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getRed().$clone());
+                    break;
+            }
+
+            para.innerHTML = source;
+            this.logContent.appendChild(para);
+            if (this.logContent.children.length > 1000) {
+                this.logContent.removeChild(this.logContent.children[0]);
+            }
+        },
+        onShowed: function () {
+            ExpressCraft.Form.prototype.onShowed.call(this);
+            ExpressCraft.ConsoleForm.consoleVisible = true;
+        },
+        onClosed: function () {
+            ExpressCraft.Form.prototype.onClosed.call(this);
+            ExpressCraft.ConsoleForm.consoleVisible = false;
         }
     });
 

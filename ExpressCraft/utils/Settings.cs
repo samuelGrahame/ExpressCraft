@@ -51,22 +51,12 @@ namespace ExpressCraft
 		public static bool IsChrome = Browser.IsChrome;
 
 		public static bool AllowCloseWithoutQuestion = false;
-
+		
 		public static void Setup()
 		{
 			SetupStyleDefaults();			
 		}
-
-		[Init(InitPosition.Top)]
-		private static void DisableConsole()
-		{
-			/*@
-			Bridge.Console.log = function(message) { console.log(message); };
-			Bridge.Console.error = function(message) { console.error(message); };
-			Bridge.Console.debug = function(message) { console.debug(message); };
-			*/
-		}
-
+		
 		public static void SetupStyleDefaults()
 		{
 			StyleSheetList sheets = Document.StyleSheets;
