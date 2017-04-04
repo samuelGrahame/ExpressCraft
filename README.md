@@ -141,12 +141,12 @@ public static DataTable GetTestData()
 # How to choose your Console
 
 ```csharp
-	public enum ApplicationDefitnion
-	{
-		BrowserConsole,
-		BridgeConsole,
-		ExpressCraftConsole
-	}
+public enum ApplicationDefitnion
+{
+	BrowserConsole,
+	BridgeConsole,
+	ExpressCraftConsole
+}
   
   Application.Run(ApplicationDefitnion.BrowserConsole);
   Application.Run(ApplicationDefitnion.BridgeConsole);
@@ -155,4 +155,33 @@ public static DataTable GetTestData()
   Application.Run(new Form()); // ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole
   Application.Run(new Form(), ApplicationDefitnion.ExpressCraftConsole);
   Application.Run(new Form(), ApplicationDefitnion.BridgeConsole);
+```
+
+# Application Settings
+
+```csharp
+Settings.NetworkURL = "Host.ashx"; // Default Network asp.net ashx page
+Settings.ResourceURL = "./images/"; // Resource Directory
+Settings.AutoRender = true; // Auto render when added to parent. appendChild(x);
+Settings.DefaultFont = "8.25pt Tahoma";
+
+Settings.GridViewAutoColumnGenerateFormatAsDate = false;
+Settings.GridViewBlurOnScroll = false;
+Settings.GridViewRowScrollPadding = 0;
+Settings.GridViewScrollDelayed = false;
+Settings.GridViewScrollDelayMS = 25;
+
+Settings.ContextMenuStartingZIndex = 500;
+Settings.ContextMenuMinWidth = 200;
+
+Settings.MessageFormTextMaximumHeightInPx = 500;
+Settings.MessageFormTextMinimumHeightInPx = 32;
+Settings.MessageFormMinimumWidthInPx = 195;
+Settings.MessageFormBeep = false; // Beep when a message box shows
+
+Settings.MaximumPixelScrollingRows = 500000;
+Settings.WindowManagerVisible = false; // Show Window Manager
+Settings.AllowCloseWithoutQuestion = false; // Disable Question to close browser tab/page
+Settings.ShowExceptionDialog = true; // Show the Exception Dialog
+Settings.FormFadeDuration = 100; // Fade Duration when closing a Form
 ```
