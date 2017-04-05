@@ -13,7 +13,7 @@ GUI Form Designer (Not Finished): https://rawgit.com/samuelGrahame/ExpressCraft/
 # How to create a Form
 
 ```csharp
-Form.Setup(); This is no longer needed with version 0.0.2 - nuget package
+Form.Setup(); // This is no longer needed with version 0.0.2 - nuget package
 var x = new Form();
 x.Text = "Hello World";
 x.Show();
