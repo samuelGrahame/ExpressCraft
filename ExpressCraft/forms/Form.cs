@@ -331,7 +331,17 @@ namespace ExpressCraft
                 
         }
 
-        public static Form ActiveForm
+		protected virtual void OnGotFocus()
+		{
+
+		}
+
+		protected virtual void OnLostFocus()
+		{
+
+		}
+
+		public static Form ActiveForm
 		{
 			get { return _ActiveForm; }
 			set
@@ -342,8 +352,9 @@ namespace ExpressCraft
 
 					if(_ActiveForm != null)
 					{
+						_ActiveForm.OnLostFocus();
 						if(_ActiveForm.Content != null)
-						{
+						{							
 							if(_ActiveForm.InDesign)
 							{
 								_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
@@ -355,6 +366,7 @@ namespace ExpressCraft
 					_ActiveForm = value;
 					if(_ActiveForm != null)
 					{
+						_ActiveForm.OnGotFocus();
 						if(_ActiveForm.Content != null)
 						{
 							_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;							

@@ -4064,6 +4064,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     ExpressCraft.Form._PrevActiveForm = ExpressCraft.Form._ActiveForm;
 
                     if (ExpressCraft.Form._ActiveForm != null) {
+                        ExpressCraft.Form._ActiveForm.onLostFocus();
                         if (ExpressCraft.Form._ActiveForm.content != null) {
                             if (ExpressCraft.Form._ActiveForm.inDesign) {
                                 ExpressCraft.Form._ActiveForm.getBodyOverLay().style.visibility = "collapse";
@@ -4074,6 +4075,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                     ExpressCraft.Form._ActiveForm = value;
                     if (ExpressCraft.Form._ActiveForm != null) {
+                        ExpressCraft.Form._ActiveForm.onGotFocus();
                         if (ExpressCraft.Form._ActiveForm.content != null) {
                             ExpressCraft.Form._ActiveForm.getBodyOverLay().style.visibility = "collapse";
                             ExpressCraft.Form._ActiveForm.bringToFront();
@@ -4197,13 +4199,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.appendChildren(ExpressCraft.Form.parent, [ExpressCraft.Form.getWindowHolder(), ExpressCraft.Form.windowCursorManager]);
 
                 ExpressCraft.Form.setupWindowManager();
-
-                //	Parent.AppendChild(TaskBar);
-
-                //TaskBar.AppendChild(ButtonStart);
-                //TaskBar.AppendChild(InputStartSearch);
-
-                //Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
             },
             setCursor: function (cursor) {
                 ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
@@ -4541,6 +4536,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
                 this.getBodyOverLay().style.visibility = "visible";
             }
+
+        },
+        onGotFocus: function () {
+
+        },
+        onLostFocus: function () {
 
         },
         setWindowState: function (State) {
@@ -8359,6 +8360,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this.logContent.children.length > 1000) {
                 this.logContent.removeChild(this.logContent.children[0]);
             }
+            para.scrollIntoView(false);
+        },
+        onGotFocus: function () {
+            if (this.content != null) {
+                this.getStyle().opacity = "1";
+            }
+            ExpressCraft.Form.prototype.onGotFocus.call(this);
+        },
+        onLostFocus: function () {
+            if (this.content != null) {
+                this.getStyle().opacity = "0.5";
+            }
+            ExpressCraft.Form.prototype.onLostFocus.call(this);
         },
         onShowed: function () {
             ExpressCraft.Form.prototype.onShowed.call(this);

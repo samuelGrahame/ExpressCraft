@@ -37,6 +37,25 @@ namespace ExpressCraft
 			{
 				logContent.RemoveChild(logContent.Children[0]);
 			}
+			para.ScrollIntoView(false);
+		}
+
+		protected override void OnGotFocus()
+		{
+			if(Content != null)
+			{
+				Style.Opacity = "1";
+			}
+			base.OnGotFocus();
+		}
+
+		protected override void OnLostFocus()
+		{
+			if(Content != null)
+			{
+				Style.Opacity = "0.5";
+			}
+			base.OnLostFocus();
 		}
 
 		public ConsoleForm()
