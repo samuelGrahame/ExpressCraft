@@ -13,7 +13,7 @@ GUI Form Designer (Not Finished): https://rawgit.com/samuelGrahame/ExpressCraft/
 # How to create a Form
 
 ```csharp
-Form.Setup();
+Form.Setup(); // This is no longer needed with version 0.0.2 - nuget package
 var x = new Form();
 x.Text = "Hello World";
 x.Show();
@@ -146,15 +146,12 @@ public enum ApplicationDefitnion
 	BrowserConsole,
 	BridgeConsole,
 	ExpressCraftConsole
-}
-  
-  Application.Run(ApplicationDefitnion.BrowserConsole);
-  Application.Run(ApplicationDefitnion.BridgeConsole);
-  Application.Run(ApplicationDefitnion.ExpressCraftConsole);
-  
-  Application.Run(new Form()); // ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole
-  Application.Run(new Form(), ApplicationDefitnion.ExpressCraftConsole);
-  Application.Run(new Form(), ApplicationDefitnion.BridgeConsole);
+}  
+Application.SetApplicationDefinition(ApplicationDefitnion.BrowserConsole);
+Application.SetApplicationDefinition(ApplicationDefitnion.BridgeConsole);
+Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
+if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+	// Do Something
 ```
 
 # Application Settings
@@ -184,4 +181,35 @@ Settings.WindowManagerVisible = false; // Show Window Manager
 Settings.AllowCloseWithoutQuestion = false; // Disable Question to close browser tab/page
 Settings.ShowExceptionDialog = true; // Show the Exception Dialog
 Settings.FormFadeDuration = 100; // Fade Duration when closing a Form
+```
+
+# Stand Alone Form Instance's
+
+```csharp
+new Form().Show(null, true);
+
+// The form does not follow the modal system.
+// in a seperate List<Form>
+```
+
+# Added Custom Themes
+
+```csharp
+var Theme Theme2 = new Theme(
+"#0173C7", "#C5C5C5", "#CCCCCC",
+"#F0F0F0", "#C3C3C3", "#ADADAD",
+"#2A8AD0", "#D3D3D3", "#2A8AD4",
+"#015C9F", "#E81123", "#F1707A",
+"#AEAEAE", "#FAFAFA", "white",
+"#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
+"rgba(1, 115, 199, 0.5)", "#A6A6A6",
+"#777777", "#80868A", "#404040",
+"white", "black");
+
+// Example of how to create a theme.
+// How to set the theme in the project
+
+Settings.ActiveTheme = Theme2;
+
+// Will  Add Notes later for what the colors are used for each variable
 ```
