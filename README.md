@@ -146,15 +146,12 @@ public enum ApplicationDefitnion
 	BrowserConsole,
 	BridgeConsole,
 	ExpressCraftConsole
-}
-  
-  Application.Run(ApplicationDefitnion.BrowserConsole);
-  Application.Run(ApplicationDefitnion.BridgeConsole);
-  Application.Run(ApplicationDefitnion.ExpressCraftConsole);
-  
-  Application.Run(new Form()); // ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole
-  Application.Run(new Form(), ApplicationDefitnion.ExpressCraftConsole);
-  Application.Run(new Form(), ApplicationDefitnion.BridgeConsole);
+}  
+Application.SetApplicationDefinition(ApplicationDefitnion.BrowserConsole);
+Application.SetApplicationDefinition(ApplicationDefitnion.BridgeConsole);
+Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
+if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+	// Do Something
 ```
 
 # Application Settings
