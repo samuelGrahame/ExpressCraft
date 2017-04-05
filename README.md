@@ -191,3 +191,25 @@ new Form().Show(null, true);
 // The form does not follow the modal system.
 // in a seperate List<Form>
 ```
+
+# Added Custom Themes
+
+```csharp
+var Theme Theme2 = new Theme(
+"#0173C7", "#C5C5C5", "#CCCCCC",
+"#F0F0F0", "#C3C3C3", "#ADADAD",
+"#2A8AD0", "#D3D3D3", "#2A8AD4",
+"#015C9F", "#E81123", "#F1707A",
+"#AEAEAE", "#FAFAFA", "white",
+"#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
+"rgba(1, 115, 199, 0.5)", "#A6A6A6",
+"#777777", "#80868A", "#404040",
+"white", "black");
+
+// Example of how to create a theme.
+// How to set the theme in the project
+
+Settings.ActiveTheme = Theme2;
+
+// Will  Add Notes later for what the colors are used for each variable
+```
