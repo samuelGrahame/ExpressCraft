@@ -49,7 +49,7 @@ namespace ExpressCraft
 			this.Text = Document.Title + " - Console";
 
 			this.StartPosition = FormStartPosition.Center;
-			this.Size = new Vector2(979, 512);
+			this.Size = new Vector2(979, 512);			
 		}
 
 		protected override void OnShowed()
@@ -63,24 +63,23 @@ namespace ExpressCraft
 			base.OnClosed();
 			ConsoleVisible = false;
 		}
-
-		public static void Log(string source, ConsoleLogType logType = ConsoleLogType.Log)
+		private static void CheckConsoleState()
 		{
 			if(!ConsoleVisible)
 			{
 				_consoleForm = new ConsoleForm();
-				_consoleForm.Show();
+				_consoleForm.Show(null, true);
 			}
+		}
+		public static void Log(string source, ConsoleLogType logType = ConsoleLogType.Log)
+		{
+			CheckConsoleState();
 			_consoleForm.InternalLog(source, logType);		
 		}
 
 		public static void Clear()
 		{
-			if(!ConsoleVisible)
-			{
-				_consoleForm = new ConsoleForm();
-				_consoleForm.Show();
-			}
+			CheckConsoleState();
 			_consoleForm.InternalClear();
 		}
 	}

@@ -4028,6 +4028,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             _hasSetup: false,
             inExternalMouseEvent: false,
             inErrorDialog: false,
+            standAloneForms: null,
             formCollections: null,
             _ActiveForm: null,
             _PrevActiveForm: null,
@@ -4050,6 +4051,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     Window_DefaultWidth: 640
                 },
                 init: function () {
+                    this.standAloneForms = new ExpressCraft.FormCollection(null);
                     this.formCollections = new (System.Collections.Generic.List$1(ExpressCraft.FormCollection))();
                     this.toClean = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
                 }
@@ -4206,15 +4208,56 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             setCursor: function (cursor) {
                 ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
             },
+            calculateZOrder$1: function (formCollection, zIndex) {
+                zIndex = {v:zIndex};
+                var TopMostForms = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
+
+                var VisibleForms = formCollection.visibleForms;
+
+                if (formCollection.formOwner != null) {
+                    formCollection.formOwner.setZIndex(zIndex);
+                }
+
+                for (var i = 0; i < VisibleForms.getCount(); i = (i + 1) | 0) {
+                    if (VisibleForms.getItem(i).content == null) {
+                        ExpressCraft.Form.toClean.add(VisibleForms.getItem(i));
+                    } else {
+                        if (VisibleForms.getItem(i).topMost) {
+                            TopMostForms.add(VisibleForms.getItem(i));
+                        }
+                    }
+                }
+                for (var i1 = 0; i1 < ExpressCraft.Form.toClean.getCount(); i1 = (i1 + 1) | 0) {
+                    if (VisibleForms.contains(ExpressCraft.Form.toClean.getItem(i1))) {
+                        VisibleForms.remove(ExpressCraft.Form.toClean.getItem(i1));
+                        ExpressCraft.Form.toClean.setItem(i1, null);
+                    }
+
+                }
+                ExpressCraft.Form.toClean.remove(null); // Removes all nulls..
+
+                for (var i2 = 0; i2 < TopMostForms.getCount(); i2 = (i2 + 1) | 0) {
+                    var form = TopMostForms.getItem(i2);
+                    VisibleForms.remove(form);
+                    VisibleForms.add(form);
+                }
+                for (var i3 = 0; i3 < VisibleForms.getCount(); i3 = (i3 + 1) | 0) {
+                    if (VisibleForms.getItem(i3) != null && VisibleForms.getItem(i3).content != null) {
+                        VisibleForms.getItem(i3).setZIndex(zIndex);
+                    }
+                }
+
+                return zIndex.v;
+            },
             calculateZOrder: function () {
                 ExpressCraft.Form.getActiveFormCollection();
 
-                if (ExpressCraft.Form.formCollections == null) {
+                if (ExpressCraft.Form.formCollections == null && ExpressCraft.Form.standAloneForms.visibleForms.getCount() === 0) {
                     return;
                 }
                 ExpressCraft.Form.formCollections.remove(null);
 
-                var zIndex = { v : 1 };
+                var zIndex = 1;
                 if (ExpressCraft.Form.formCollections.getCount() === 0) {
                     ExpressCraft.Form.formOverLay.style.zIndex = "";
                 } else {
@@ -4227,47 +4270,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 for (var x = 0; x < ExpressCraft.Form.formCollections.getCount(); x = (x + 1) | 0) {
                     if (x === ((ExpressCraft.Form.formCollections.getCount() - 1) | 0)) {
-                        ExpressCraft.Form.formOverLay.style.zIndex = (Bridge.identity(zIndex.v, (zIndex.v = (zIndex.v + 1) | 0))).toString();
-                        //jQuery.Select(FormOverLay).Css("zIndex", zIndex++);
+                        ExpressCraft.Form.formOverLay.style.zIndex = (Bridge.identity(zIndex, (zIndex = (zIndex + 1) | 0))).toString();
                     }
-
-                    var TopMostForms = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
-
-                    var VisibleForms = ExpressCraft.Form.formCollections.getItem(x).visibleForms;
-
-                    if (ExpressCraft.Form.formCollections.getItem(x).formOwner != null) {
-                        ExpressCraft.Form.formCollections.getItem(x).formOwner.setZIndex(zIndex);
-                    }
-
-                    for (var i = 0; i < VisibleForms.getCount(); i = (i + 1) | 0) {
-                        if (VisibleForms.getItem(i).content == null) {
-                            ExpressCraft.Form.toClean.add(VisibleForms.getItem(i));
-                        } else {
-                            if (VisibleForms.getItem(i).topMost) {
-                                TopMostForms.add(VisibleForms.getItem(i));
-                            }
-                        }
-                    }
-                    for (var i1 = 0; i1 < ExpressCraft.Form.toClean.getCount(); i1 = (i1 + 1) | 0) {
-                        if (VisibleForms.contains(ExpressCraft.Form.toClean.getItem(i1))) {
-                            VisibleForms.remove(ExpressCraft.Form.toClean.getItem(i1));
-                            ExpressCraft.Form.toClean.setItem(i1, null);
-                        }
-
-                    }
-                    ExpressCraft.Form.toClean.remove(null); // Removes all nulls..
-
-                    for (var i2 = 0; i2 < TopMostForms.getCount(); i2 = (i2 + 1) | 0) {
-                        var form = TopMostForms.getItem(i2);
-                        VisibleForms.remove(form);
-                        VisibleForms.add(form);
-                    }
-                    for (var i3 = 0; i3 < VisibleForms.getCount(); i3 = (i3 + 1) | 0) {
-                        if (VisibleForms.getItem(i3) != null && VisibleForms.getItem(i3).content != null) {
-                            VisibleForms.getItem(i3).setZIndex(zIndex);
-                        }
-                    }
+                    zIndex = ExpressCraft.Form.calculateZOrder$1(ExpressCraft.Form.formCollections.getItem(x), zIndex);
                 }
+                zIndex = ExpressCraft.Form.calculateZOrder$1(ExpressCraft.Form.standAloneForms, zIndex);
             }
         },
         inDesign: false,
@@ -4287,6 +4294,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         prev_top: 0,
         prev_left: 0,
         dialogResults: null,
+        _seperateInstance: false,
         closeAction: null,
         inDialogResult: false,
         config: {
@@ -4623,21 +4631,35 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             return this.getBody().clientTop;
         },
         getFormCollectionFromForm: function (form) {
-            for (var i = 0; i < ExpressCraft.Form.formCollections.getCount(); i = (i + 1) | 0) {
-                if (Bridge.referenceEquals(this, ExpressCraft.Form.formCollections.getItem(i).formOwner)) {
-                    return ExpressCraft.Form.formCollections.getItem(i);
-                }
-                var visibleForms = ExpressCraft.Form.formCollections.getItem(i).visibleForms;
+            if (form._seperateInstance) {
+                var visibleForms = ExpressCraft.Form.standAloneForms.visibleForms;
                 for (var x = 0; x < visibleForms.getCount(); x = (x + 1) | 0) {
                     if (Bridge.referenceEquals(visibleForms.getItem(x), this)) {
+                        return ExpressCraft.Form.standAloneForms;
+                    }
+                }
+            } else {
+                for (var i = 0; i < ExpressCraft.Form.formCollections.getCount(); i = (i + 1) | 0) {
+                    if (Bridge.referenceEquals(this, ExpressCraft.Form.formCollections.getItem(i).formOwner)) {
                         return ExpressCraft.Form.formCollections.getItem(i);
+                    }
+                    var visibleForms1 = ExpressCraft.Form.formCollections.getItem(i).visibleForms;
+                    for (var x1 = 0; x1 < visibleForms1.getCount(); x1 = (x1 + 1) | 0) {
+                        if (Bridge.referenceEquals(visibleForms1.getItem(x1), this)) {
+                            return ExpressCraft.Form.formCollections.getItem(i);
+                        }
                     }
                 }
             }
+
             return null;
         },
         isActiveFormCollection: function () {
-            return Bridge.referenceEquals(this.getFormCollectionFromForm(this), ExpressCraft.Form.getActiveFormCollection());
+            if (this._seperateInstance) {
+                return Bridge.referenceEquals(this.getFormCollectionFromForm(this), ExpressCraft.Form.standAloneForms);
+            } else {
+                return Bridge.referenceEquals(this.getFormCollectionFromForm(this), ExpressCraft.Form.getActiveFormCollection());
+            }
         },
         isVisible: function () {
             return this.getFormCollectionFromForm(this) != null;
@@ -4739,8 +4761,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
             this.children.remove(null);
         },
-        show: function (owner) {
+        show: function (owner, seperateInstance) {
             if (owner === void 0) { owner = null; }
+            if (seperateInstance === void 0) { seperateInstance = false; }
             if (!this.getHasSetup()) {
                 ExpressCraft.Form.setup();
             }
@@ -4748,13 +4771,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (this._IsDialog) {
                 return;
             }
-
-            if (ExpressCraft.Form.formCollections == null || ExpressCraft.Form.formCollections.getCount() === 0) {
+            this._seperateInstance = seperateInstance;
+            if (!seperateInstance && (ExpressCraft.Form.formCollections == null || ExpressCraft.Form.formCollections.getCount() === 0)) {
                 this.showStartNewLevel(owner);
                 return;
             }
 
-            var activeCollect = ExpressCraft.Form.getActiveFormCollection();
+            var activeCollect = !seperateInstance ? ExpressCraft.Form.getActiveFormCollection() : ExpressCraft.Form.standAloneForms;
             var visbileForms = activeCollect.visibleForms;
 
             if (!visbileForms.contains(this)) {
@@ -8284,19 +8307,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         statics: {
             consoleVisible: false,
             _consoleForm: null,
-            log: function (source, logType) {
-                if (logType === void 0) { logType = 0; }
+            checkConsoleState: function () {
                 if (!ExpressCraft.ConsoleForm.consoleVisible) {
                     ExpressCraft.ConsoleForm._consoleForm = new ExpressCraft.ConsoleForm();
-                    ExpressCraft.ConsoleForm._consoleForm.show();
+                    ExpressCraft.ConsoleForm._consoleForm.show(null, true);
                 }
+            },
+            log: function (source, logType) {
+                if (logType === void 0) { logType = 0; }
+                ExpressCraft.ConsoleForm.checkConsoleState();
                 ExpressCraft.ConsoleForm._consoleForm.internalLog(source, logType);
             },
             clear: function () {
-                if (!ExpressCraft.ConsoleForm.consoleVisible) {
-                    ExpressCraft.ConsoleForm._consoleForm = new ExpressCraft.ConsoleForm();
-                    ExpressCraft.ConsoleForm._consoleForm.show();
-                }
+                ExpressCraft.ConsoleForm.checkConsoleState();
                 ExpressCraft.ConsoleForm._consoleForm.internalClear();
             }
         },

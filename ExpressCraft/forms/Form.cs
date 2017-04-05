@@ -17,7 +17,7 @@ namespace ExpressCraft
 		public static HTMLDivElement WindowHolder { get; set; }
 		public static HTMLDivElement WindowManager { get; set; }
 		public static HTMLDivElement WindowManagerStart { get; set; }
-		public static TextInput WindowManagerSearch { get; set; }
+		public static TextInput WindowManagerSearch { get; set; }		
 		
 		public bool InDesign = false;
 
@@ -100,7 +100,7 @@ namespace ExpressCraft
 				children[i].LinkedForm = this;
 			}
 		}
-
+		protected static FormCollection standAloneForms = new FormCollection(null);
 		public static List<FormCollection> FormCollections = new List<FormCollection>();        
 
 		public FormStartPosition StartPosition = FormStartPosition.WindowsDefaultLocation;
@@ -1371,23 +1371,43 @@ namespace ExpressCraft
 
         public FormCollection GetFormCollectionFromForm(Form form)
         {
-            for (int i = 0; i < FormCollections.Count; i++)
-            {
-                if (this == FormCollections[i].FormOwner)
-                    return FormCollections[i];
-                var visibleForms = FormCollections[i].VisibleForms;
-                for (int x = 0; x < visibleForms.Count; x++)
-                {
-                    if (visibleForms[x] == this)
-                        return FormCollections[i];
-                }
-            }
+			if(form._seperateInstance)
+			{
+				var visibleForms = standAloneForms.VisibleForms;
+				for(int x = 0; x < visibleForms.Count; x++)
+				{
+					if(visibleForms[x] == this)
+						return standAloneForms;
+				}
+			}
+			else
+			{
+				for(int i = 0; i < FormCollections.Count; i++)
+				{
+					if(this == FormCollections[i].FormOwner)
+						return FormCollections[i];
+					var visibleForms = FormCollections[i].VisibleForms;
+					for(int x = 0; x < visibleForms.Count; x++)
+					{
+						if(visibleForms[x] == this)
+							return FormCollections[i];
+					}
+				}
+			}
+
             return null;
         }
 
         public bool IsActiveFormCollection()
         {
-            return GetFormCollectionFromForm(this) == GetActiveFormCollection();        
+			if(this._seperateInstance)
+			{
+				return GetFormCollectionFromForm(this) == standAloneForms;
+			}
+			else
+			{
+				return GetFormCollectionFromForm(this) == GetActiveFormCollection();
+			}
         }
 
         public bool IsVisible()
@@ -1504,22 +1524,22 @@ namespace ExpressCraft
 			}
 			Children.Remove(null);
 		}
-
-		public void Show(HTMLElement owner = null)
+		protected bool _seperateInstance = false;
+		public void Show(HTMLElement owner = null, bool seperateInstance = false)
 		{
 			if(!HasSetup)
 				Setup();
 
             if (_IsDialog)
                 return;
-
-			if(FormCollections == null || FormCollections.Count == 0)
+			_seperateInstance = seperateInstance;
+			if(!seperateInstance && (FormCollections == null || FormCollections.Count == 0))
 			{
 				ShowStartNewLevel(owner);
 				return;
 			}
 
-            var activeCollect = GetActiveFormCollection();
+            var activeCollect = !seperateInstance ? GetActiveFormCollection() : standAloneForms;
             var visbileForms = activeCollect.VisibleForms;
             
 			if(!visbileForms.Contains(this))
@@ -1601,18 +1621,68 @@ namespace ExpressCraft
 			//Self.Css("zIndex", zIndex++);
         }
 
+		private static int CalculateZOrder(FormCollection formCollection, int zIndex)
+		{
+			List<Form> TopMostForms = new List<Form>();
+
+			var VisibleForms = formCollection.VisibleForms;
+
+			if(formCollection.FormOwner != null)
+				formCollection.FormOwner.SetZIndex(ref zIndex);
+
+			for(int i = 0; i < VisibleForms.Count; i++)
+			{
+				if(VisibleForms[i].Content == null)
+				{
+					ToClean.Add(VisibleForms[i]);
+				}
+				else
+				{
+					if(VisibleForms[i].TopMost)
+						TopMostForms.Add(VisibleForms[i]);
+				}
+			}
+			for(int i = 0; i < ToClean.Count; i++)
+			{
+				if(VisibleForms.Contains(ToClean[i]))
+				{
+					VisibleForms.Remove(ToClean[i]);
+					ToClean[i] = null;
+				}
+
+			}
+			ToClean.Remove(null); // Removes all nulls..
+
+			for(int i = 0; i < TopMostForms.Count; i++)
+			{
+				var form = TopMostForms[i];
+				VisibleForms.Remove(form);
+				VisibleForms.Add(form);
+			}
+			for(int i = 0; i < VisibleForms.Count; i++)
+			{
+				if(VisibleForms[i] != null &&
+					VisibleForms[i].Content != null)
+				{
+					VisibleForms[i].SetZIndex(ref zIndex);
+				}
+			}
+
+			return zIndex;
+		}
+
 		public static void CalculateZOrder()
 		{
             GetActiveFormCollection();
 
-			if(FormCollections == null)
+			if(FormCollections == null && standAloneForms.VisibleForms.Count == 0)
 				return;
 			FormCollections.Remove(null);
 
             int zIndex = 1;
 			if (FormCollections.Count == 0)
                 FormOverLay.Style.ZIndex = "";
-            else if(FormCollections.Count == 1)            
+            else if(FormCollections.Count == 1)
                 FormOverLay.Style.Opacity = "0";            
             else
                 FormOverLay.Style.Opacity = "0.4";                                
@@ -1621,55 +1691,11 @@ namespace ExpressCraft
             {                
                 if(x == FormCollections.Count - 1)
                 {
-					FormOverLay.Style.ZIndex = (zIndex++).ToString();
-					//jQuery.Select(FormOverLay).Css("zIndex", zIndex++);
+					FormOverLay.Style.ZIndex = (zIndex++).ToString();					
                 }
-
-                List<Form> TopMostForms = new List<Form>();                
-
-                var VisibleForms = FormCollections[x].VisibleForms;
-
-				if(FormCollections[x].FormOwner != null)
-					FormCollections[x].FormOwner.SetZIndex(ref zIndex);
-
-				for (int i = 0; i < VisibleForms.Count; i++)
-                {
-                    if (VisibleForms[i].Content == null)
-                    {
-                        ToClean.Add(VisibleForms[i]);
-                    }
-                    else
-                    {
-                        if (VisibleForms[i].TopMost)
-                            TopMostForms.Add(VisibleForms[i]);
-                    }
-                }
-                for (int i = 0; i < ToClean.Count; i++)
-                {
-                    if(VisibleForms.Contains(ToClean[i]))
-                    {
-                        VisibleForms.Remove(ToClean[i]);
-                        ToClean[i] = null;
-                    }
-                    
-                }
-                ToClean.Remove(null); // Removes all nulls..
-
-                for (int i = 0; i < TopMostForms.Count; i++)
-                {
-                    var form = TopMostForms[i];
-                    VisibleForms.Remove(form);
-                    VisibleForms.Add(form);
-                }
-                for (int i = 0; i < VisibleForms.Count; i++)
-                {
-                    if (VisibleForms[i] != null &&
-                        VisibleForms[i].Content != null)
-                    {
-                        VisibleForms[i].SetZIndex(ref zIndex);
-                    }
-                }
-            }            
+				zIndex = CalculateZOrder(FormCollections[x], zIndex);
+			}
+			zIndex = CalculateZOrder(standAloneForms, zIndex);
 		}
 
 		public static List<Form> ToClean = new List<Form>();
