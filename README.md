@@ -182,3 +182,12 @@ Settings.AllowCloseWithoutQuestion = false; // Disable Question to close browser
 Settings.ShowExceptionDialog = true; // Show the Exception Dialog
 Settings.FormFadeDuration = 100; // Fade Duration when closing a Form
 ```
+
+# Stand Alone Form Instance's
+
+```csharp
+new Form().Show(null, true);
+
+// The form does not follow the modal system.
+// in a seperate List<Form>
+```
