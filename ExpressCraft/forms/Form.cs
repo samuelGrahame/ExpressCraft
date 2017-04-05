@@ -779,17 +779,10 @@ namespace ExpressCraft
 
 			Parent.AppendChildren(WindowHolder, WindowCursorManager);
 			
-			SetupWindowManager();
-
-		//	Parent.AppendChild(TaskBar);
-
-			//TaskBar.AppendChild(ButtonStart);
-			//TaskBar.AppendChild(InputStartSearch);
-
-			//Window_Desktop = new FileExplorer(WindowHolder) { NodeViewType = NodeViewType.Medium_Icons, Path = FileExplorer.DesktopPath };
+			SetupWindowManager();			
 		}		
 		public static void SetCursor(Cursor cursor)
-		{
+		{			
 			WindowCursorManager.InnerHTML = string.Format(@"
 				.control{    
 					cursor:{0} !important;    
