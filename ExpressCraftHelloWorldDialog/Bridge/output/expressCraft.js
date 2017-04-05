@@ -488,12 +488,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.App", {
         $main: function () {
             ExpressCraft.Settings.setup();
-            ExpressCraft.Form.setup();
-            ExpressCraft.Settings.showExceptionDialog = false;
-
-            ExpressCraft.Application.run(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
-
-            Bridge.Console.log("Hello World!");
         }
     });
 
@@ -511,7 +505,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 window.close();
                 window.location.reload();
             },
-            run: function (applicationDefition) {
+            setApplicationDefinition: function (applicationDefition) {
                 if (applicationDefition === void 0) { applicationDefition = 0; }
                 ExpressCraft.Application._applicationDefition = applicationDefition;
                 switch (applicationDefition) {
@@ -535,11 +529,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         break;
                 }
             },
-            run$1: function (_Mainform, applicationDefition) {
-                if (applicationDefition === void 0) { applicationDefition = 0; }
+            run: function (_Mainform) {
                 ExpressCraft.Application.mainForm = _Mainform;
                 ExpressCraft.Application.mainForm.showStartNewLevel();
-                ExpressCraft.Application.run(applicationDefition);
             }
         }
     });
@@ -2387,6 +2379,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             isTrue: function (value) {
                 return (Bridge.referenceEquals(((value = value.toLowerCase())), "true") || Bridge.referenceEquals(value, "1") || Bridge.referenceEquals(value, "on")) ? 1 : 0;
             },
+            toInt: function (value) {
+                return parseInt(value);
+            },
+            toFloat: function (value) {
+                return parseFloat(value);
+            },
+            toStr: function (value) {
+                return value;
+            },
             isNumber: function (value) {
                 return Bridge.is(value, System.SByte) || Bridge.is(value, System.Byte) || Bridge.is(value, System.Int16) || Bridge.is(value, System.UInt16) || Bridge.is(value, System.Int32) || Bridge.is(value, System.UInt32) || Bridge.is(value, System.Int64) || Bridge.is(value, System.UInt64) || Bridge.is(value, System.Single) || Bridge.is(value, System.Double) || Bridge.is(value, System.Decimal);
             },
@@ -3502,10 +3503,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             isChrome: false,
             allowCloseWithoutQuestion: false,
             showExceptionDialog: true,
-            formFadeDuraction: 100,
+            formFadeDuration: 100,
             themeElement: null,
-            _primaryThemeColor: "#0173C7",
-            themeTemplate: "\r\n.form-base{\r\n\tborder-color:{0};\r\n}\r\n.form-heading\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.progressbarbody\r\n{\r\n\tbackground-color:{0};\r\n}\r\n.control:focus:not(.grid)\r\n{\r\n\toutline: dashed 1px {0};\r\n}\r\n.ribboncontrol\r\n{\r\n\tbackground-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n}\r\n.ribbonpageheader-hidden\r\n{\r\n\tbackground-color:{0};\r\n}\r\n@keyframes ColorFlash\r\n{\r\n\tfrom {background-color: white;}\r\n    to {background-color: {0};}\r\n}\r\n",
+            _activeTheme: null,
+            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{23};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{23};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{23};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n",
             config: {
                 init: function () {
                     this.isChrome = Bridge.Browser.isChrome;
@@ -3520,26 +3521,29 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     ExpressCraft.Form.setupWindowManager();
                 }
             },
-            getPrimaryThemeColor: function () {
-                return ExpressCraft.Settings._primaryThemeColor;
+            getActiveTheme: function () {
+                return ExpressCraft.Settings._activeTheme;
             },
-            setPrimaryThemeColor: function (value) {
-                if (!Bridge.referenceEquals(ExpressCraft.Settings._primaryThemeColor, value)) {
+            setActiveTheme: function (value) {
+                if (!Bridge.referenceEquals(ExpressCraft.Settings._activeTheme, value)) {
                     if (ExpressCraft.Settings.themeElement != null) {
                         ExpressCraft.Settings.themeElement.parentElement.removeChild(ExpressCraft.Settings.themeElement);
                     }
-                    ExpressCraft.Settings._primaryThemeColor = value;
-                    if (!System.String.isNullOrWhiteSpace(value)) {
-                        ExpressCraft.Settings.themeElement = document.createElement('style');
-
-                        ExpressCraft.Settings.themeElement.innerHTML = System.String.format(ExpressCraft.Settings.themeTemplate, ExpressCraft.Settings._primaryThemeColor);
-
-                        document.body.appendChild(ExpressCraft.Settings.themeElement);
+                    if (value == null) {
+                        value = ExpressCraft.Theme.theme1;
                     }
+                    ExpressCraft.Settings._activeTheme = value;
+
+                    ExpressCraft.Settings.themeElement = Bridge.merge(document.createElement('style'), {
+                        innerHTML: System.String.format(ExpressCraft.Settings.themeTemplate, ExpressCraft.Settings._activeTheme.backgroundColor1, ExpressCraft.Settings._activeTheme.backgroundColor2, ExpressCraft.Settings._activeTheme.backgroundColor3, ExpressCraft.Settings._activeTheme.backgroundColor4, ExpressCraft.Settings._activeTheme.backgroundColor5, ExpressCraft.Settings._activeTheme.backgroundColor6, ExpressCraft.Settings._activeTheme.backgroundColor7, ExpressCraft.Settings._activeTheme.backgroundColor8, ExpressCraft.Settings._activeTheme.backgroundColor9, ExpressCraft.Settings._activeTheme.backgroundColor10, ExpressCraft.Settings._activeTheme.backgroundColor11, ExpressCraft.Settings._activeTheme.backgroundColor12, ExpressCraft.Settings._activeTheme.backgroundColor13, ExpressCraft.Settings._activeTheme.backgroundColor14, ExpressCraft.Settings._activeTheme.backgroundColor15, ExpressCraft.Settings._activeTheme.backgroundColor16, ExpressCraft.Settings._activeTheme.backgroundColor17, ExpressCraft.Settings._activeTheme.backgroundColor18, ExpressCraft.Settings._activeTheme.backgroundColor19, ExpressCraft.Settings._activeTheme.borderColor1, ExpressCraft.Settings._activeTheme.borderColor2, ExpressCraft.Settings._activeTheme.borderColor3, ExpressCraft.Settings._activeTheme.foreColor1, ExpressCraft.Settings._activeTheme.foreColor2, ExpressCraft.Settings._activeTheme.foreColor3)
+                    } );
+
+                    document.body.appendChild(ExpressCraft.Settings.themeElement);
                 }
             },
             setup: function () {
                 ExpressCraft.Settings.setupStyleDefaults();
+                ExpressCraft.Settings.setActiveTheme(ExpressCraft.Theme.theme1);
             },
             setupStyleDefaults: function () {
                 var sheets = document.styleSheets;
@@ -3670,6 +3674,70 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             return 10.9999971;
+        }
+    });
+
+    Bridge.define("ExpressCraft.Theme", {
+        statics: {
+            theme1: null,
+            config: {
+                init: function () {
+                    this.theme1 = new ExpressCraft.Theme("#0173C7", "#C5C5C5", "#CCCCCC", "#F0F0F0", "#C3C3C3", "#ADADAD", "#2A8AD0", "#D3D3D3", "#2A8AD4", "#015C9F", "#E81123", "#F1707A", "#AEAEAE", "#FAFAFA", "white", "#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)", "rgba(1, 115, 199, 0.5)", "#A6A6A6", "#777777", "#80868A", "#404040", "white", "black");
+                }
+            }
+        },
+        backgroundColor1: null,
+        backgroundColor2: null,
+        backgroundColor3: null,
+        backgroundColor4: null,
+        backgroundColor5: null,
+        backgroundColor6: null,
+        backgroundColor7: null,
+        backgroundColor8: null,
+        backgroundColor9: null,
+        backgroundColor10: null,
+        backgroundColor11: null,
+        backgroundColor12: null,
+        backgroundColor13: null,
+        backgroundColor14: null,
+        backgroundColor15: null,
+        backgroundColor16: null,
+        backgroundColor17: null,
+        backgroundColor18: null,
+        backgroundColor19: null,
+        borderColor1: null,
+        borderColor2: null,
+        borderColor3: null,
+        foreColor1: null,
+        foreColor2: null,
+        foreColor3: null,
+        ctor: function (bgc1, bgc2, bgc3, bgc4, bgc5, bgc6, bgc7, bgc8, bgc9, bgc10, bgc11, bgc12, bgc13, bgc14, bgc15, bgc16, bgc17, bgc18, bgc19, bc1, bc2, bc3, fc1, fc2, fc3) {
+            this.$initialize();
+            this.backgroundColor1 = bgc1;
+            this.backgroundColor2 = bgc2;
+            this.backgroundColor3 = bgc3;
+            this.backgroundColor4 = bgc4;
+            this.backgroundColor5 = bgc5;
+            this.backgroundColor6 = bgc6;
+            this.backgroundColor7 = bgc7;
+            this.backgroundColor8 = bgc8;
+            this.backgroundColor9 = bgc9;
+            this.backgroundColor10 = bgc10;
+            this.backgroundColor11 = bgc11;
+            this.backgroundColor12 = bgc12;
+            this.backgroundColor13 = bgc13;
+            this.backgroundColor14 = bgc14;
+            this.backgroundColor15 = bgc15;
+            this.backgroundColor16 = bgc16;
+            this.backgroundColor17 = bgc17;
+            this.backgroundColor18 = bgc18;
+            this.backgroundColor19 = bgc19;
+            this.borderColor1 = bc1;
+            this.borderColor2 = bc2;
+            this.borderColor3 = bc3;
+            this.foreColor1 = fc1;
+            this.foreColor2 = fc2;
+            this.foreColor3 = fc3;
         }
     });
 
@@ -4476,12 +4544,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.setBounds$1(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
             } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
-                var rec = this.content.getBoundingClientRect();
-
-                this.prev_left = Bridge.Int.clip32(rec.left);
-                this.prev_top = Bridge.Int.clip32(rec.top);
-                this.prev_width = Bridge.Int.clip32(rec.width);
-                this.prev_height = Bridge.Int.clip32(rec.height);
+                this.prev_left = ExpressCraft.Helper.toInt(this.getLeft());
+                this.prev_top = ExpressCraft.Helper.toInt(this.getTop());
+                this.prev_width = ExpressCraft.Helper.toInt(this.getWidth());
+                this.prev_height = ExpressCraft.Helper.toInt(this.getHeight());
 
                 var calc_2px = "calc(100% - 2px)";
 
@@ -4791,8 +4857,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             if (this.content != null) {
                 if (!this.forReuse) {
-                    if (ExpressCraft.Settings.formFadeDuraction > 0) {
-                        this.self.fadeOut(ExpressCraft.Settings.formFadeDuraction, this.closeAction);
+                    if (ExpressCraft.Settings.formFadeDuration > 0) {
+                        this.self.fadeOut(ExpressCraft.Settings.formFadeDuration, this.closeAction);
                     } else {
                         this.closeAction();
                     }
@@ -4902,9 +4968,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 if (ExpressCraft.Form.movingForm.getwindowState() === ExpressCraft.WindowState.Maximized && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
                     ExpressCraft.Form.movingForm.changeWindowState();
-                    X = (mev.pageX - (((Bridge.Int.div(ExpressCraft.Form.movingForm.prev_width, 2)) | 0))) | 0;
+                    X = mousePos.getXf() - (((Bridge.Int.div(ExpressCraft.Form.movingForm.prev_width, 2)) | 0));
 
-                    ExpressCraft.Form.movingForm.prev_px = X - mev.pageX;
+                    ExpressCraft.Form.movingForm.prev_px = X - mousePos.getXf();
                 }
 
                 var clientRec = ExpressCraft.Form.movingForm.content.getBoundingClientRect();
@@ -6569,50 +6635,54 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
 
             // #TODO - CLEAN...
+            if (start < 0) {
+                start = 0;
+            }
+            if (Length > this.getDataSource().getRowCount()) {
+                Length = this.getDataSource().getRowCount();
+            }
 
             for (var i1 = start; i1 < Length; i1 = (i1 + 1) | 0) {
-                if (i1 < this.getDataSource().getRowCount() && i1 >= 0) {
-                    var DataRowhandle1 = this.getDataSourceRow(i1);
-                    var dr = ExpressCraft.Control.div$1(System.String.concat((i1 % 2 === 0 ? "cellrow even" : "cellrow"), (this.selectedRows.getValue(DataRowhandle1, true) ? " cellrow-selected" : ""), (DataRowhandle1 === this.getFocusedDataHandle() ? " focusedrow" : "")));
+                var DataRowhandle1 = this.getDataSourceRow(i1);
+                var dr = ExpressCraft.Control.div$1(System.String.concat((i1 % 2 === 0 ? "cellrow even" : "cellrow"), (this.selectedRows.getValue(DataRowhandle1, true) ? " cellrow-selected" : ""), (DataRowhandle1 === this.getFocusedDataHandle() ? " focusedrow" : "")));
 
-                    ExpressCraft.Helper.setBounds(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
-                    dr.setAttribute("i", System.Convert.toString(DataRowhandle1));
+                ExpressCraft.Helper.setBounds(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
+                dr.setAttribute("i", System.Convert.toString(DataRowhandle1));
 
-                    dr.onclick = this.onRowClick;
-                    if (ExpressCraft.Settings.isChrome) {
-                        dr.ondblclick = this.onDoubleClick;
-                    }
-
-                    for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
-                        var col1 = this.columns.getItem(x3);
-                        var apparence1 = col1.bodyApparence;
-                        var useDefault = false;
-                        var cell;
-                        if (col1.cellDisplay == null || ((useDefault = col1.cellDisplay.useDefaultElement))) {
-                            cell = ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor);
-
-                            dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
-                        } else {
-                            cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
-                            ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
-                            cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
-
-                            dr.appendChild(cell);
-                        }
-                        cell.setAttribute("i", x3.toString());
-                        cell.onmousedown = this.onCellRowMouseDown;
-                    }
-
-                    if (this.getAllowRowDrag()) {
-                        dr.setAttribute("draggable", "true");
-
-                        dr.ondragstart = this.onRowDragStart;
-                    }
-
-                    Rows.add(dr);
-
-                    Y += ExpressCraft.GridView.UnitHeight;
+                dr.onclick = this.onRowClick;
+                if (ExpressCraft.Settings.isChrome) {
+                    dr.ondblclick = this.onDoubleClick;
                 }
+
+                for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
+                    var col1 = this.columns.getItem(x3);
+                    var apparence1 = col1.bodyApparence;
+                    var useDefault = false;
+                    var cell;
+                    if (col1.cellDisplay == null || ((useDefault = col1.cellDisplay.useDefaultElement))) {
+                        cell = ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor);
+
+                        dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
+                    } else {
+                        cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
+                        ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
+                        cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
+
+                        dr.appendChild(cell);
+                    }
+                    cell.setAttribute("i", x3.toString());
+                    cell.onmousedown = this.onCellRowMouseDown;
+                }
+
+                if (this.getAllowRowDrag()) {
+                    dr.setAttribute("draggable", "true");
+
+                    dr.ondragstart = this.onRowDragStart;
+                }
+
+                Rows.add(dr);
+
+                Y += ExpressCraft.GridView.UnitHeight;
             }
 
             if (this.getShowAutoFilterRow()) {
@@ -6671,8 +6741,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 ExpressCraft.Helper.appendChildren(this.gridBody, rows);
                 for (var i2 = 0; i2 < rows.length; i2 = (i2 + 1) | 0) {
-                    if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
-                        this.onCustomRowStyle(rows[i2], parseInt(rows[i2].getAttribute("i")));
+                    try {
+                        if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
+                            this.onCustomRowStyle(rows[i2], parseInt(rows[i2].getAttribute("i")));
+                        }
+                    }
+                    catch (ex) {
+                        ex = System.Exception.create(ex);
+                        if (ExpressCraft.Application.getAplicationDefition() === ExpressCraft.ApplicationDefitnion.ExpressCraftConsole) {
+                            ExpressCraft.ConsoleForm.log(ex.toString(), ExpressCraft.ConsoleLogType.Error);
+                        }
                     }
                 }
 

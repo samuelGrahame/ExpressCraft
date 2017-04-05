@@ -40,9 +40,7 @@ namespace ExpressCraft
 				this.Content.Style.Width = value.ToHtmlValue();				
 			}
 		}
-
-
-
+		
 		public Union<string, int, float> Height
 		{
 			get { return this.Content.Style.Height; }

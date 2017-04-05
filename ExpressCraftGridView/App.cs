@@ -8,10 +8,11 @@ namespace ExpressCraftGridView
     public class App
     {
         public static void Main()
-        {			
-            Form.Setup();
-            
-            Application.Run(new GridForm());
+        {			            			
+			Settings.ShowExceptionDialog = false;
+			Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
+
+			Application.Run(new GridForm());
         }
         
         public class GridForm : Form

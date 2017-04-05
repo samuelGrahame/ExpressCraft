@@ -90,7 +90,22 @@ namespace ExpressCraft
             return ((value = value.ToLower()) == "true" || value == "1" || value == "on") ? 1 : 0;
         }
 
-        public static bool IsNumber(this object value)
+		public static int ToInt(this Union<string, int, float> value)
+		{
+			return Global.ParseInt(value.As<string>());
+		}
+
+		public static float ToFloat(this Union<string, int, float> value)
+		{
+			return (float)Global.ParseFloat(value.As<string>());
+		}
+
+		public static string ToStr(this Union<string, int, float> value)
+		{
+			return value.As<string>();
+		}
+
+		public static bool IsNumber(this object value)
 		{
 			return value is sbyte
 					|| value is byte

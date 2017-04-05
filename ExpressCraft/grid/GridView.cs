@@ -1224,63 +1224,64 @@ namespace ExpressCraft
 				Length -= 1;
 				Y += UnitHeight;
 			}
-			
-			// #TODO - CLEAN...
 
+			// #TODO - CLEAN...
+			if(start < 0)
+				start = 0;
+			if(Length > DataSource.RowCount)			
+				Length = DataSource.RowCount;		
+				
 			for(int i = start; i < Length; i++)
 			{
-				if(i < DataSource.RowCount && i >= 0)
+				var DataRowhandle = GetDataSourceRow(i);
+				var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
+
+				dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+				dr.SetAttribute("i", Convert.ToString(DataRowhandle));
+
+				dr.OnClick = OnRowClick;
+				if(Settings.IsChrome)
 				{
-					var DataRowhandle = GetDataSourceRow(i);
-					var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
-
-					dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
-					dr.SetAttribute("i", Convert.ToString(DataRowhandle));
-
-					dr.OnClick = OnRowClick;
-					if(Settings.IsChrome)
-					{
-						dr.OnDblClick = OnDoubleClick;
-					}
-
-					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-					{
-						var col = Columns[x];                        
-						var apparence = col.BodyApparence;
-						bool useDefault = false;
-						HTMLElement cell;
-						if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
-						{
-							cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
-							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);						
-							
-							dr.AppendChild(useDefault ?
-								col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
-								cell);
-						}
-						else
-						{
-							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);							
-							cell.SetLocation(col.CachedX, 0);
-							cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-
-							dr.AppendChild(cell);
-						}
-						cell.SetAttribute("i", x.ToString());
-						cell.OnMouseDown = OnCellRowMouseDown;
-					}
-	
-					if(AllowRowDrag)
-					{
-						dr.SetAttribute("draggable", "true");
-						
-						dr.OnDragStart = OnRowDragStart;
-					}
-
-					Rows.Add(dr);
-
-					Y += UnitHeight;
+					dr.OnDblClick = OnDoubleClick;
 				}
+
+				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+				{
+					var col = Columns[x];
+					var apparence = col.BodyApparence;
+					bool useDefault = false;
+					HTMLElement cell;
+					if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
+					{
+						cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
+						col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
+
+						dr.AppendChild(useDefault ?
+							col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
+							cell);
+					}
+					else
+					{
+						cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
+						cell.SetLocation(col.CachedX, 0);
+						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+
+						dr.AppendChild(cell);
+					}
+					cell.SetAttribute("i", x.ToString());
+					cell.OnMouseDown = OnCellRowMouseDown;
+				}
+
+				if(AllowRowDrag)
+				{
+					dr.SetAttribute("draggable", "true");
+
+					dr.OnDragStart = OnRowDragStart;
+				}
+
+				Rows.Add(dr);
+
+				Y += UnitHeight;
 			}
 
 			if(ShowAutoFilterRow)
@@ -1345,8 +1346,16 @@ namespace ExpressCraft
 				GridBody.AppendChildren(rows);
 				for(int i = 0; i < rows.Length; i++)
 				{
-					if(OnCustomRowStyle != null)
-						OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
+					try
+					{						
+						if(OnCustomRowStyle != null)
+							OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
+					}
+					catch(Exception ex)
+					{
+						if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+							ConsoleForm.Log(ex.ToString(), ConsoleLogType.Error);
+					}
 				}
 
 				GridBodyContainer.AppendChild(GridBody);

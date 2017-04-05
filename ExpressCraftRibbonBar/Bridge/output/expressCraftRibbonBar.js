@@ -45,7 +45,7 @@ Bridge.assembly("ExpressCraftRibbonBar", function ($asm, globals) {
             ribbonForm.ribbonControl.addRibbonPages([ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 01"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 02"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 03")]);
             ribbonForm.setWindowState(ExpressCraft.WindowState.Maximized);
 
-            ExpressCraft.Application.run$1(ribbonForm);
+            ExpressCraft.Application.run(ribbonForm);
         }
     });
 

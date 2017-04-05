@@ -30,7 +30,7 @@ namespace ExpressCraft
         }
 		private static ApplicationDefitnion _applicationDefition;
 		public static ApplicationDefitnion AplicationDefition { get { return _applicationDefition; } }
-		public static void Run(ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
+		public static void SetApplicationDefinition(ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
 		{
 			_applicationDefition = applicationDefition;
 			switch(applicationDefition)
@@ -56,11 +56,10 @@ namespace ExpressCraft
 			}
 		}
 
-		public static void Run(Form _Mainform, ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
+		public static void Run(Form _Mainform)
 		{
 			MainForm = _Mainform;
 			MainForm.ShowStartNewLevel();
-			Run(applicationDefition);
 		}
     }
 }

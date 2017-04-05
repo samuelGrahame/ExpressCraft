@@ -8,9 +8,10 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
 
     Bridge.define("ExpressCraftGridView.App", {
         $main: function () {
-            ExpressCraft.Form.setup();
+            ExpressCraft.Settings.showExceptionDialog = false;
+            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
 
-            ExpressCraft.Application.run$1(new ExpressCraftGridView.App.GridForm());
+            ExpressCraft.Application.run(new ExpressCraftGridView.App.GridForm());
         }
     });
 

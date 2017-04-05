@@ -433,7 +433,7 @@ namespace ExpressCraft
 			//Settings.Setup();
 			if(_hasSetup)
 				return;
-			_hasSetup = true;
+			_hasSetup = true;			
 			
 			if (parent == null)
 				Parent = Document.Body;
@@ -522,18 +522,18 @@ namespace ExpressCraft
 					}
 
 					var mousePos = Helper.GetClientMouseLocation(ev);
-					
+
 					var Y = (mousePos.Yf + MovingForm.prev_py);
 					var X = (mousePos.Xf + MovingForm.prev_px);
 
 					if(MovingForm.windowState == WindowState.Maximized && MoveAction == MouseMoveAction.Move)
 					{
 						MovingForm.changeWindowState();
-						X = mev.PageX - (MovingForm.prev_width / 2);
+						X = mousePos.Xf - (MovingForm.prev_width / 2);
 
-						MovingForm.prev_px = X - mev.PageX;
-					}
-					
+						MovingForm.prev_px = X - mousePos.Xf;
+					}					
+
 					var clientRec = MovingForm.Content.GetBoundingClientRect();
 
 					var bounds = MovingForm.Bounds;
@@ -802,18 +802,16 @@ namespace ExpressCraft
 				return;
             
 			if((windowState = State) == WindowState.Normal)
-			{
+			{				
 				this.SetBounds(prev_left, prev_top, prev_width, prev_height);				
 				Resizing();
 			}
 			else if(windowState == WindowState.Maximized)
 			{
-				var rec = this.Content.GetBoundingClientRect();
-
-				prev_left = (int)rec.Left;
-				prev_top = (int)rec.Top;
-				prev_width = (int)rec.Width;
-				prev_height = (int)rec.Height;
+				prev_left = Left.ToInt();
+				prev_top = Top.ToInt();
+				prev_width = Width.ToInt();
+				prev_height = Height.ToInt();
 
 				var calc_2px = "calc(100% - 2px)";
 
