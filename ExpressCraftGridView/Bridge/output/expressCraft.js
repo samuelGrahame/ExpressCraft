@@ -3725,7 +3725,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             formFadeDuration: 100,
             themeElement: null,
             _activeTheme: null,
-            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n",
+            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\t\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n\tbackground-color:{2};\r\n\tborder:1px solid {19};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n",
             onF2ShowThemeForm: true,
             config: {
                 init: function () {
@@ -8426,11 +8426,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 page.v.tabPageHeader.classList.add(System.String.concat("tabcontrolpageheader-", state));
             } else {
                 page.v.tabPageHeader = ExpressCraft.Control.div$1(System.String.concat("tabcontrolpageheader tabcontrolpageheader-", state));
-                page.v.tabPageHeader.setAttribute("i", i.toString());
             }
+            page.v.tabPageHeader.setAttribute("i", i.toString());
             if (this.showClosedButton) {
                 if (page.v.tabPageHeaderClose == null) {
                     page.v.tabPageHeaderClose = ExpressCraft.Control.div$1("tabcontrolpageheader-closebutton");
+                    page.v.tabPageHeaderClose.onclick = Bridge.fn.bind(this, $asm.$.ExpressCraft.TabControl.f2);
                     page.v.tabPageHeader.appendChild(page.v.tabPageHeaderClose);
                 }
             } else {
@@ -8442,6 +8443,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             page.v.content.style.visibility = Isselected ? "inherit" : "collapse";
         },
         resizeTabHeaders: function () {
+            var $t;
             if (this.getTabPages() != null && this.getTabPages().getCount() > 0) {
                 var width = 2;
 
@@ -8452,17 +8454,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                     if (page.v.tabPageHeader == null) {
                         this.tabControlActiveStyleChange(i, page);
-
                         if (Bridge.Browser.isAndroid || Bridge.Browser.iOS) {
-                            page.v.tabPageHeader.ontouchstart = Bridge.fn.bind(this, $asm.$.ExpressCraft.TabControl.f2);
+                            page.v.tabPageHeader.ontouchstart = Bridge.fn.bind(this, $asm.$.ExpressCraft.TabControl.f3);
                         } else {
-                            page.v.tabPageHeader.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.TabControl.f2);
+                            page.v.tabPageHeader.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.TabControl.f3);
                         }
 
-                        this.content.appendChild(page.v.content);
-                        this.content.appendChild(page.v.tabPageHeader);
+                        ExpressCraft.Helper.appendChildren$1(this.content, [page.v.content, page.v.tabPageHeader]);
                     }
-
+                    page.v.tabPageHeader.setAttribute("i", i.toString());
 
                     var inwidth = 24;
 
@@ -8472,13 +8472,24 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                     if (this.showClosedButton) {
                         inwidth = (inwidth + 19) | 0;
-                        page.v.tabPageHeader.innerHTML = System.String.concat("<span>", page.v.getCaption(), "</span>");
-                    } else {
-                        page.v.tabPageHeader.innerHTML = page.v.getCaption();
+                    }
+                    var span = null;
+                    $t = Bridge.getEnumerator(page.v.tabPageHeader.children);
+                    while ($t.moveNext()) {
+                        var item = $t.getCurrent();
+                        if (Bridge.is(item, HTMLSpanElement)) {
+                            ((span = item)).innerHTML = page.v.getCaption();
+                            break;
+                        }
+                    }
+                    if (span == null) {
+                        page.v.tabPageHeader.appendChild(Bridge.merge(document.createElement('span'), {
+                            innerHTML: page.v.getCaption()
+                        } ));
                     }
 
-                    page.v.tabPageHeader.style.left = width + "px";
-                    page.v.tabPageHeader.style.width = inwidth + "px";
+                    page.v.tabPageHeader.style.left = ExpressCraft.Helper.toPx$1(width);
+                    page.v.tabPageHeader.style.width = ExpressCraft.Helper.toPx$1(inwidth);
 
                     width = (width + (((inwidth + 2) | 0))) | 0;
 
@@ -8500,7 +8511,30 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ev.preventDefault();
         },
         f2: function (ev) {
-            this.setSelectedIndex(parseInt(ev.target.getAttribute("i")));
+            var index = parseInt(ev.currentTarget.parentElement.getAttribute("i"));
+            var cpage = this.getTabPages().getItem(index);
+            if (cpage.content != null) {
+                ExpressCraft.Helper.empty(cpage.content);
+                ExpressCraft.Helper.delete(cpage.content);
+            }
+            if (cpage.tabPageHeader != null) {
+                ExpressCraft.Helper.empty(cpage.tabPageHeader);
+                ExpressCraft.Helper.delete(cpage.tabPageHeader);
+            }
+            this.getTabPages().remove(cpage);
+            if (index > ((this.getTabPages().getCount() - 1) | 0)) {
+                index = (this.getTabPages().getCount() - 1) | 0;
+            }
+
+            ev.stopPropagation();
+
+            this.setSelectedIndex(index);
+
+            this.resizeTabHeaders();
+        },
+        f3: function (ev) {
+            this.setSelectedIndex(parseInt(ev.currentTarget.getAttribute("i")));
+            ev.stopPropagation();
         }
     });
 

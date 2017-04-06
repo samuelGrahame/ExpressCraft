@@ -283,10 +283,12 @@ namespace ExpressCraft
     border-bottom-color:{3};
 }}
 .tabcontrolpageheader-closebutton{{
-    color:{1};
+    color:{1};	
 }}
 .tabcontrolpageheader-closebutton:hover{{
     color:{24};
+	background-color:{2};
+	border:1px solid {19};
 }}
 .inputcontrol {{
     border:1px solid {1};   

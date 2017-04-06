@@ -81,14 +81,38 @@ namespace ExpressCraft
 				page.TabPageHeader.ClassList.Add("tabcontrolpageheader-" + state);
 			}else
 			{
-				page.TabPageHeader = Div("tabcontrolpageheader tabcontrolpageheader-" + state);
-				page.TabPageHeader.SetAttribute("i", i.ToString());
+				page.TabPageHeader = Div("tabcontrolpageheader tabcontrolpageheader-" + state);				
 			}
+			page.TabPageHeader.SetAttribute("i", i.ToString());
 			if(showClosedButton)
 			{
 				if(page.TabPageHeaderClose == null)
 				{
 					page.TabPageHeaderClose = Div("tabcontrolpageheader-closebutton");
+					page.TabPageHeaderClose.OnClick = (ev) =>
+					{
+						var index = Global.ParseInt(ev.CurrentTarget.ParentElement.GetAttribute("i"));
+						var cpage = TabPages[index];						
+						if(cpage.Content != null)
+						{
+							cpage.Content.Empty();
+							cpage.Content.Delete();
+						}
+						if(cpage.TabPageHeader != null)
+						{
+							cpage.TabPageHeader.Empty();
+							cpage.TabPageHeader.Delete();
+						}
+						TabPages.Remove(cpage);
+						if(index > TabPages.Count - 1)
+							index = TabPages.Count - 1;
+
+						ev.StopPropagation();
+
+						SelectedIndex = index;
+
+						ResizeTabHeaders();						
+					};
 					page.TabPageHeader.AppendChild(page.TabPageHeaderClose);					
 				}
 			}else
@@ -116,27 +140,27 @@ namespace ExpressCraft
 
 					if(page.TabPageHeader == null)
 					{						
-						TabControlActiveStyleChange(i, ref page);
-						
+						TabControlActiveStyleChange(i, ref page);						
 						if(Browser.IsAndroid || Browser.iOS)
 						{
 							page.TabPageHeader.OnTouchStart = (ev) =>
 							{
-								SelectedIndex = Global.ParseInt(ev.Target.As<HTMLDivElement>().GetAttribute("i"));
+								SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
+								ev.StopPropagation();
 							};
 						}else
 						{
 							page.TabPageHeader.OnMouseDown = (ev) =>
 							{
-								SelectedIndex = Global.ParseInt(ev.Target.As<HTMLDivElement>().GetAttribute("i"));
+								SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
+								ev.StopPropagation();
 							};
 						}
-												
-						Content.AppendChild(page.Content);
-						Content.AppendChild(page.TabPageHeader);
-					}
 
-					
+						Content.AppendChildren(page.Content, page.TabPageHeader);
+					}
+					page.TabPageHeader.SetAttribute("i", i.ToString());
+
 					int inwidth = 24;
 
 					if(!string.IsNullOrEmpty(page.Caption))
@@ -146,16 +170,24 @@ namespace ExpressCraft
 					
 					if(showClosedButton)
 					{
-						inwidth += 19;
-						page.TabPageHeader.InnerHTML = "<span>" + page.Caption + "</span>";
+						inwidth += 19;													
 					}
-					else
+					HTMLSpanElement span = null;
+					foreach(var item in page.TabPageHeader.Children)
 					{
-						page.TabPageHeader.InnerHTML = page.Caption;
+						if(item is HTMLSpanElement)
+						{
+							(span = item.As<HTMLSpanElement>()).InnerHTML = page.Caption;
+							break;
+						}
+					}
+					if(span == null)
+					{
+						page.TabPageHeader.AppendChild(new HTMLSpanElement() { InnerHTML = page.Caption });
 					}
 
-					page.TabPageHeader.Style.Left = width + "px";
-					page.TabPageHeader.Style.Width = inwidth + "px";
+					page.TabPageHeader.Style.Left = width.ToPx();
+					page.TabPageHeader.Style.Width = inwidth.ToPx();
 
 					width += inwidth + 2;
 

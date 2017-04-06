@@ -46,9 +46,6 @@ namespace ExpressCraftDesign
 			tabControl1 = new TabControl();
 			tabControl1.ShowClosedButton = true;
 			tabControl1.SetBoundsFull();
-			tabControl1.Content.Style.BorderTopStyle = Bridge.Html5.BorderStyle.Solid;
-			tabControl1.Content.Style.BorderTopColor = "#C3C3C3";
-			tabControl1.Content.Style.BorderTopWidth = Bridge.Html5.BorderWidth.Thin;
 
 			splitControlContainer1.Panel2.AppendChild(tabControl1);
 

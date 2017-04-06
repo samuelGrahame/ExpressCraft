@@ -39,7 +39,7 @@ Bridge.assembly("ExpressCraftRibbonBar", function ($asm, globals) {
         },
         $main: function () {
             ExpressCraft.Form.setup();
-
+            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
             var ribbonForm = new ExpressCraftRibbonBar.App.RibbonForm();
             ribbonForm.setText("ExpressCraft RibbonBar Test");
             ribbonForm.ribbonControl.addRibbonPages([ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 01"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 02"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 03")]);

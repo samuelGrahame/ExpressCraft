@@ -579,9 +579,9 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             this.tabControl1 = new ExpressCraft.TabControl();
             this.tabControl1.setShowClosedButton(true);
             ExpressCraft.Helper.setBoundsFull(this.tabControl1);
-            this.tabControl1.content.style.borderTopStyle = "solid";
-            this.tabControl1.content.style.borderTopColor = "#C3C3C3";
-            this.tabControl1.content.style.borderTopWidth = "thin";
+            //tabControl1.Content.Style.BorderTopStyle = Bridge.Html5.BorderStyle.Solid;
+            //tabControl1.Content.Style.BorderTopColor = "#C3C3C3";
+            //tabControl1.Content.Style.BorderTopWidth = Bridge.Html5.BorderWidth.Thin;		
 
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel2, this.tabControl1);
 

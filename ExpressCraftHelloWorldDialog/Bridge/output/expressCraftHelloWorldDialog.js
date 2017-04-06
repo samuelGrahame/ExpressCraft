@@ -52,6 +52,8 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
             var $t, $t1, $t2, $t3;
             // Setup the form events and containers*
             ExpressCraft.Form.setup();
+            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
+
             ExpressCraft.GoogleCloudPrint.setup();
             ExpressCraft.AceCodeEditor.setup();
             ExpressCraft.Firebase.setup($asm.$.ExpressCraftHelloWorldDialog.App.f1);
