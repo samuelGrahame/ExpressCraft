@@ -181,6 +181,10 @@ Settings.WindowManagerVisible = false; // Show Window Manager
 Settings.AllowCloseWithoutQuestion = false; // Disable Question to close browser tab/page
 Settings.ShowExceptionDialog = true; // Show the Exception Dialog
 Settings.FormFadeDuration = 100; // Fade Duration when closing a Form
+
+Settings.ConsoleDefaultSize = new Vector2(540, 240); // Size of the Console Form
+
+Settings.OnF2ShowThemeForm = true; // Show the Theme Form on F2
 ```
 
 # Stand Alone Form Instance's
@@ -212,4 +216,8 @@ var Theme Theme2 = new Theme(
 Settings.ActiveTheme = Theme2;
 
 // Will  Add Notes later for what the colors are used for each variable
+```
+# Open the Theme Form || Press F2 when (Settings.OnF2ShowThemeForm == true)
+```csharp
+ThemeForm.ShowThemeForm();
 ```
