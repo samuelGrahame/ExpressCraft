@@ -11,13 +11,14 @@ namespace ExpressCraftDesign
         public static void Main()
         {
 			Settings.AllowCloseWithoutQuestion = true;
-
-			Form.Setup();
+			
 			AceCodeEditor.Setup();
 
-			studio = new StudioForm();
-			studio.Show();
+			Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
 
+			studio = new StudioForm();
+
+			Application.Run(studio);
 		}
     }
 }

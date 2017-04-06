@@ -508,7 +508,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.Application", {
         statics: {
             mainForm: null,
-            _applicationDefition: 1,
+            _applicationDefition: 2,
             getAplicationDefition: function () {
                 return ExpressCraft.Application._applicationDefition;
             },
@@ -520,7 +520,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 window.location.reload();
             },
             setApplicationDefinition: function (applicationDefition) {
-                if (applicationDefition === void 0) { applicationDefition = 0; }
+                if (applicationDefition === void 0) { applicationDefition = 1; }
                 ExpressCraft.Application._applicationDefition = applicationDefition;
                 switch (applicationDefition) {
                     case ExpressCraft.ApplicationDefitnion.BrowserConsole: 
@@ -544,10 +544,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             },
             run: function (_Mainform) {
-                if (ExpressCraft.Application._applicationDefition === ExpressCraft.ApplicationDefitnion.BridgeConsole) {
-                    ExpressCraft.Application.setApplicationDefinition();
-                }
-
                 ExpressCraft.Application.mainForm = _Mainform;
                 ExpressCraft.Application.mainForm.showStartNewLevel();
             }
@@ -557,9 +553,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.ApplicationDefitnion", {
         $kind: "enum",
         statics: {
-            BrowserConsole: 0,
-            BridgeConsole: 1,
-            ExpressCraftConsole: 2
+            None: 0,
+            BrowserConsole: 1,
+            BridgeConsole: 2,
+            ExpressCraftConsole: 3
         }
     });
 

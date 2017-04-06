@@ -18,6 +18,8 @@ namespace ExpressCraftHelloWorldDialog
         {
             // Setup the form events and containers*
             Form.Setup();
+			Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
+
 			GoogleCloudPrint.Setup();
 			AceCodeEditor.Setup();
 			Firebase.Setup(() => {

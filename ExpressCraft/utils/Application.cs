@@ -10,6 +10,7 @@ namespace ExpressCraft
 {
 	public enum ApplicationDefitnion
 	{
+		None,
 		BrowserConsole,
 		BridgeConsole,
 		ExpressCraftConsole
@@ -58,9 +59,6 @@ namespace ExpressCraft
 
 		public static void Run(Form _Mainform)
 		{
-			if(_applicationDefition == ApplicationDefitnion.BridgeConsole) // So that Bridge is not the default... 
-				SetApplicationDefinition();
-
 			MainForm = _Mainform;
 			MainForm.ShowStartNewLevel();
 		}

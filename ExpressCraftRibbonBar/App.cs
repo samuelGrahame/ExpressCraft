@@ -12,7 +12,7 @@ namespace ExpressCraftRibbonBar
         public static void Main()
         {
             Form.Setup();
-
+			Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
             var ribbonForm = new RibbonForm();
             ribbonForm.Text = "ExpressCraft RibbonBar Test";
             ribbonForm.RibbonControl.AddRibbonPages(CreateRandomRibbonPage("Page 01"), CreateRandomRibbonPage("Page 02"), CreateRandomRibbonPage("Page 03"));

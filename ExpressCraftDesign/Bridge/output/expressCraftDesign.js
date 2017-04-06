@@ -13,12 +13,13 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
         $main: function () {
             ExpressCraft.Settings.allowCloseWithoutQuestion = true;
 
-            ExpressCraft.Form.setup();
             ExpressCraft.AceCodeEditor.setup();
 
-            ExpressCraftDesign.App.studio = new ExpressCraftDesign.StudioForm();
-            ExpressCraftDesign.App.studio.show();
+            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
 
+            ExpressCraftDesign.App.studio = new ExpressCraftDesign.StudioForm();
+
+            ExpressCraft.Application.run(ExpressCraftDesign.App.studio);
         }
     });
 
