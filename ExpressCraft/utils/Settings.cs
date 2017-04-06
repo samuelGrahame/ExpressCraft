@@ -337,7 +337,7 @@ namespace ExpressCraft
     border: 1px solid {3};       
 }}
 .cellrow{{
-    background-color:{23};
+    background-color:{14};
 }}
 .cellrow:hover{{
     background-color:{3} !important;    
@@ -369,12 +369,12 @@ namespace ExpressCraft
     border-bottom:1px solid {19} !important;	
 }}
 .grid{{
-    background-color:{23};
+    background-color:{14};
     border:1px solid {19}; 
 }}
 .progressbar{{
     border:1px solid {19};
-    background-color:{23};
+    background-color:{14};
 }}
 .progressbarbody{{
     background-color:{0};
@@ -486,10 +486,10 @@ namespace ExpressCraft
 			"#F0F0F0", "#C3C3C3", "#ADADAD",
 			"#2A8AD0", "#D3D3D3", "#2A8AD4",
 			"#015C9F", "#E81123", "#F1707A",
-			"#AEAEAE", "#FAFAFA", "white",
+			"#AEAEAE", "#FAFAFA", "#ffffff",
 			"#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
 			"rgba(1, 115, 199, 0.5)", "#A6A6A6",
 			"#777777", "#80868A", "#404040",
-			"white", "black");		
+			"#ffffff", "#000000");		
 	}
 }

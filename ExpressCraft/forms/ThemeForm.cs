@@ -26,6 +26,12 @@ namespace ExpressCraft
 			}
 		}
 
+		protected override void OnClosed()
+		{
+			base.OnClosed();
+			_themeVisible = false;
+		}
+
 		protected override void OnGotFocus()
 		{
 			if(Content != null)

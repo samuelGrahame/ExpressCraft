@@ -305,7 +305,7 @@ namespace ExpressCraft
 			var input = new HTMLInputElement();
 			input.ClassName = cn + BaseClass(!string.IsNullOrWhiteSpace(cn));
 			dynamic ty = it;
-			if((ty == "text" || ty == "date" || ty == 19 || ty == 3) && Browser.IsIE)
+			if(Browser.IsIE && (ty == "text" || ty == "date" || ty == "color" || ty == 19 || ty == 3 || ty == 2))
 			{
 				return input;
 			}
