@@ -508,7 +508,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.Application", {
         statics: {
             mainForm: null,
-            _applicationDefition: 0,
+            _applicationDefition: 1,
             getAplicationDefition: function () {
                 return ExpressCraft.Application._applicationDefition;
             },
@@ -544,6 +544,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
             },
             run: function (_Mainform) {
+                if (ExpressCraft.Application._applicationDefition === ExpressCraft.ApplicationDefitnion.BridgeConsole) {
+                    ExpressCraft.Application.setApplicationDefinition();
+                }
+
                 ExpressCraft.Application.mainForm = _Mainform;
                 ExpressCraft.Application.mainForm.showStartNewLevel();
             }

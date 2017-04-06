@@ -28,7 +28,7 @@ namespace ExpressCraft
             Window.Close();
             Window.Location.Reload();
         }
-		private static ApplicationDefitnion _applicationDefition;
+		private static ApplicationDefitnion _applicationDefition = ApplicationDefitnion.BridgeConsole;
 		public static ApplicationDefitnion AplicationDefition { get { return _applicationDefition; } }
 		public static void SetApplicationDefinition(ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
 		{
@@ -58,6 +58,9 @@ namespace ExpressCraft
 
 		public static void Run(Form _Mainform)
 		{
+			if(_applicationDefition == ApplicationDefitnion.BridgeConsole) // So that Bridge is not the default... 
+				SetApplicationDefinition();
+
 			MainForm = _Mainform;
 			MainForm.ShowStartNewLevel();
 		}
