@@ -487,7 +487,15 @@ namespace ExpressCraft
                 ev.PreventDefault();
             };
             FormOverLay.Style.Visibility = Visibility.Visible;
-			
+
+			Window.OnKeyUp = (ev) => {
+				if(Settings.OnF2ShowThemeForm && ev.KeyCode == KeyCodes.F2)
+				{
+					ev.PreventDefault();
+					ThemeForm.ShowThemeForm();
+				}
+			};
+
 			Window.OnResize = (ev) => {
 				if(FormCollections == null)
 					return;

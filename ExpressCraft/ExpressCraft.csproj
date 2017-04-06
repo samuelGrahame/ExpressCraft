@@ -39,10 +39,12 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="controls\AceCodeEditor.cs" />
+    <Compile Include="controls\ColorInput.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
     <Compile Include="forms\ConsoleForm.cs" />
     <Compile Include="forms\InputDialog.cs" />
     <Compile Include="forms\PdfPreviewForm.cs" />
+    <Compile Include="forms\ThemeForm.cs" />
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />
     <Compile Include="utils\Firebase.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="utils\HardSoftList.cs" />
     <Compile Include="utils\Helper.cs" />
     <Compile Include="forms\MessageBoxForm.cs" />
+    <Compile Include="utils\KeyCodes.cs" />
     <Compile Include="utils\Network.cs" />
     <Compile Include="utils\Vector2.cs" />
     <Compile Include="controls\ProgressControl.cs" />

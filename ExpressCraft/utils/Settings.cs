@@ -30,6 +30,8 @@ namespace ExpressCraft
 		public static int MessageFormTextMinimumHeightInPx = 32;
 		public static int MessageFormMinimumWidthInPx = 195;
 
+		public static Vector2 ConsoleDefaultSize = new Vector2(540, 240);
+
 		public static bool MessageFormBeep = false;
 
 		public static int MaximumPixelScrollingRows = 500000;
@@ -129,59 +131,63 @@ namespace ExpressCraft
 			
 			return null;
 		}
-
 		
-
 		private static HTMLStyleElement themeElement = null;
+		public static void ApplyActiveTheme()
+		{
+			if(themeElement != null)
+			{
+				themeElement.ParentElement.RemoveChild(themeElement);
+			}
+			if(_activeTheme == null)
+				_activeTheme = Theme.Theme1;			
+
+			themeElement = new HTMLStyleElement()
+			{
+				InnerHTML = string.Format(ThemeTemplate,
+				_activeTheme.Colors[0],
+				_activeTheme.Colors[1],
+				_activeTheme.Colors[2],
+				_activeTheme.Colors[3],
+				_activeTheme.Colors[4],
+				_activeTheme.Colors[5],
+				_activeTheme.Colors[6],
+				_activeTheme.Colors[7],
+				_activeTheme.Colors[8],
+				_activeTheme.Colors[9],
+				_activeTheme.Colors[10],
+				_activeTheme.Colors[11],
+				_activeTheme.Colors[12],
+				_activeTheme.Colors[13],
+				_activeTheme.Colors[14],
+				_activeTheme.Colors[15],
+				_activeTheme.Colors[16],
+				_activeTheme.Colors[17],
+				_activeTheme.Colors[18],
+				_activeTheme.Colors[19],
+				_activeTheme.Colors[20],
+				_activeTheme.Colors[21],
+				_activeTheme.Colors[22],
+				_activeTheme.Colors[23],
+				_activeTheme.Colors[24])
+			};
+
+			Document.Body.AppendChild(themeElement);
+		}
+
 		private static Theme _activeTheme = null;
 		public static Theme ActiveTheme {
 			get { return _activeTheme; }
 			set {
 				if(_activeTheme != value)
 				{
-					if(themeElement != null)
-					{
-						themeElement.ParentElement.RemoveChild(themeElement);
-					}
-					if(value == null)
-						value = Theme.Theme1;
 					_activeTheme = value;
-
-					themeElement = new HTMLStyleElement()
-					{
-						InnerHTML = string.Format(ThemeTemplate,
-						_activeTheme.BackgroundColor1,
-						_activeTheme.BackgroundColor2,
-						_activeTheme.BackgroundColor3,
-						_activeTheme.BackgroundColor4,
-						_activeTheme.BackgroundColor5,
-						_activeTheme.BackgroundColor6,
-						_activeTheme.BackgroundColor7,
-						_activeTheme.BackgroundColor8,
-						_activeTheme.BackgroundColor9,
-						_activeTheme.BackgroundColor10,
-						_activeTheme.BackgroundColor11,
-						_activeTheme.BackgroundColor12,
-						_activeTheme.BackgroundColor13,
-						_activeTheme.BackgroundColor14,
-						_activeTheme.BackgroundColor15,
-						_activeTheme.BackgroundColor16,
-						_activeTheme.BackgroundColor17,
-						_activeTheme.BackgroundColor18,
-						_activeTheme.BackgroundColor19,
-						_activeTheme.BorderColor1,
-						_activeTheme.BorderColor2,
-						_activeTheme.BorderColor3,
-						_activeTheme.ForeColor1,
-						_activeTheme.ForeColor2,
-						_activeTheme.ForeColor3)
-					};
-
-					Document.Body.AppendChild(themeElement);
+					ApplyActiveTheme();
 				}
 			}
 		}
-
+		//ThemeForm
+		#region ThemeTemplateCode
 		private static string ThemeTemplate = @"
 .control{{
     color:{22};
@@ -405,66 +411,74 @@ namespace ExpressCraft
     background-color:{4};
 }}
 ";
+		#endregion
+
+		public static bool OnF2ShowThemeForm = true;
 	}
 	public class Theme
 	{
-		public string BackgroundColor1; // #0173C7 {0} form header color ribbon color etc, ribbon header hidden - not active..
-		public string BackgroundColor2; // #C5C5C5 {1} text selection back color, ribbon spliter
-		public string BackgroundColor3; // #CCCCCC {2} disabled backcolor
-		public string BackgroundColor4; // #F0F0F0 {3} input backcolor... - ribbon page back, ribbon group, ribbon button, ribbonsmall, ribbon header active colro
-		public string BackgroundColor5; // #C3C3C3 {4}ribbon items disabled, ribbon hover
-		public string BackgroundColor6; // #ADADAD {5} ribbon button Active		
+		public string[] Colors { get; set; }
+		//public string BackgroundColor1; // #0173C7 {0} form header color ribbon color etc, ribbon header hidden - not active..
+		//public string BackgroundColor2; // #C5C5C5 {1} text selection back color, ribbon spliter
+		//public string BackgroundColor3; // #CCCCCC {2} disabled backcolor
+		//public string BackgroundColor4; // #F0F0F0 {3} input backcolor... - ribbon page back, ribbon group, ribbon button, ribbonsmall, ribbon header active colro
+		//public string BackgroundColor5; // #C3C3C3 {4}ribbon items disabled, ribbon hover
+		//public string BackgroundColor6; // #ADADAD {5} ribbon button Active		
 
-		public string BackgroundColor7; // #2A8AD0 {6} ribbon header hidden hover
-		public string BackgroundColor8; // #D3D3D3 {7} tabcontrol header hidden
-		public string BackgroundColor9; // #2A8AD4 {8} Form Heading Button not close Hover.
-		public string BackgroundColor10; // #015C9F {9} Form Heading Button not close Active.
-		public string BackgroundColor11; // #E81123 {10} Form Heading Button close Hover.
-		public string BackgroundColor12; // #F1707A {11} Form Heading Button close Active.
-		public string BackgroundColor13; // #AEAEAE {12} CellRow Active
-		public string BackgroundColor14; // #FAFAFA {13}; Row Even			
-		public string BackgroundColor15; // white {14} Context Menu Back Color
-		public string BackgroundColor16; // #CFCFCF {15} Context Menu Item Hover
-		public string BackgroundColor17; // #B9B9B9 {16} Context Menu Item Splitter
+		//public string BackgroundColor7; // #2A8AD0 {6} ribbon header hidden hover
+		//public string BackgroundColor8; // #D3D3D3 {7} tabcontrol header hidden
+		//public string BackgroundColor9; // #2A8AD4 {8} Form Heading Button not close Hover.
+		//public string BackgroundColor10; // #015C9F {9} Form Heading Button not close Active.
+		//public string BackgroundColor11; // #E81123 {10} Form Heading Button close Hover.
+		//public string BackgroundColor12; // #F1707A {11} Form Heading Button close Active.
+		//public string BackgroundColor13; // #AEAEAE {12} CellRow Active
+		//public string BackgroundColor14; // #FAFAFA {13}; Row Even			
+		//public string BackgroundColor15; // white {14} Context Menu Back Color
+		//public string BackgroundColor16; // #CFCFCF {15} Context Menu Item Hover
+		//public string BackgroundColor17; // #B9B9B9 {16} Context Menu Item Splitter
 
-		public string BackgroundColor18; // rgba(1, 115, 199, 0.3) {17} CellRow-Selected
-		public string BackgroundColor19; // rgba(1, 115, 199, 0.5) {18} CellRow-Selected
+		//public string BackgroundColor18; // rgba(1, 115, 199, 0.3) {17} CellRow-Selected
+		//public string BackgroundColor19; // rgba(1, 115, 199, 0.5) {18} CellRow-Selected
 
-		public string BorderColor1; // #A6A6A6 {19} Button Border, splitter Border
-		public string BorderColor2; // #777777 {20} button Border Active
-		public string BorderColor3; // #80868A {21} Context Menu Border Color
-		public string ForeColor1; // #404040 {22}
-		public string ForeColor2; // ribbonpageheader white {23} ribbonpageheader-hidden
-		public string ForeColor3; // ribbonpageheader black {24} Hover tabcontrolpageheader-closebutton
+		//public string BorderColor1; // #A6A6A6 {19} Button Border, splitter Border
+		//public string BorderColor2; // #777777 {20} button Border Active
+		//public string BorderColor3; // #80868A {21} Context Menu Border Color
+		//public string ForeColor1; // #404040 {22}
+		//public string ForeColor2; // ribbonpageheader white {23} ribbonpageheader-hidden
+		//public string ForeColor3; // ribbonpageheader black {24} Hover tabcontrolpageheader-closebutton
 
-		public Theme(string bgc1, string bgc2, string bgc3, string bgc4, string bgc5, string bgc6, string bgc7, string bgc8, string bgc9, string bgc10, string bgc11, string bgc12, string bgc13, 
-			string bgc14, string bgc15, string bgc16, string bgc17, string bgc18, string bgc19, string bc1, string bc2, string bc3, string fc1,string fc2, string fc3)
+		public Theme(params string[] colors)
 		{
-			BackgroundColor1 = bgc1;
-			BackgroundColor2 = bgc2;
-			BackgroundColor3 = bgc3;
-			BackgroundColor4 = bgc4;
-			BackgroundColor5 = bgc5;
-			BackgroundColor6 = bgc6;
-			BackgroundColor7 = bgc7;
-			BackgroundColor8 = bgc8;
-			BackgroundColor9 = bgc9;
-			BackgroundColor10 = bgc10;
-			BackgroundColor11 = bgc11;
-			BackgroundColor12 = bgc12;
-			BackgroundColor13 = bgc13;
-			BackgroundColor14 = bgc14;		
-			BackgroundColor15 = bgc15;
-			BackgroundColor16 = bgc16;
-			BackgroundColor17 = bgc17;
-			BackgroundColor18 = bgc18;
-			BackgroundColor19 = bgc19;
-			BorderColor1 = bc1;
-			BorderColor2 = bc2;
-			BorderColor3 = bc3;
-			ForeColor1 = fc1;
-			ForeColor2 = fc2;
-			ForeColor3 = fc3;
+			if(colors != null && colors.Length == 25)
+			{
+				Colors = colors;				
+			}
+			
+			//BackgroundColor1 = bgc1;
+			//BackgroundColor2 = bgc2;
+			//BackgroundColor3 = bgc3;
+			//BackgroundColor4 = bgc4;
+			//BackgroundColor5 = bgc5;
+			//BackgroundColor6 = bgc6;
+			//BackgroundColor7 = bgc7;
+			//BackgroundColor8 = bgc8;
+			//BackgroundColor9 = bgc9;
+			//BackgroundColor10 = bgc10;
+			//BackgroundColor11 = bgc11;
+			//BackgroundColor12 = bgc12;
+			//BackgroundColor13 = bgc13;
+			//BackgroundColor14 = bgc14;		
+			//BackgroundColor15 = bgc15;
+			//BackgroundColor16 = bgc16;
+			//BackgroundColor17 = bgc17;
+			//BackgroundColor18 = bgc18;
+			//BackgroundColor19 = bgc19;
+			//BorderColor1 = bc1;
+			//BorderColor2 = bc2;
+			//BorderColor3 = bc3;
+			//ForeColor1 = fc1;
+			//ForeColor2 = fc2;
+			//ForeColor3 = fc3;
 		}
 
 		public static Theme Theme1 = new Theme(

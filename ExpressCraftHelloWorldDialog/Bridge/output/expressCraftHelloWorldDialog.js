@@ -167,7 +167,7 @@ Bridge.assembly("ExpressCraftHelloWorldDialog", function ($asm, globals) {
                 setText: "Ace Code Editor"
             } );
             var codeEditor = new ExpressCraft.AceCodeEditor();
-            ExpressCraft.Helper.setBoundsFull$1(codeEditor);
+            ExpressCraft.Helper.setBoundsFull(codeEditor);
 
             frm.linkchildToForm(codeEditor);
 

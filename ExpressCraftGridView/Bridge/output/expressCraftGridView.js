@@ -64,22 +64,22 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             gridColumn = this.gridView.getGridViewColumnByFieldName("Date");
             gridColumn.formatString = "{0:yyyy-MM-dd}";
 
-            ExpressCraft.Helper.setBoundsFull$1(this.gridView);
+            ExpressCraft.Helper.setBoundsFull(this.gridView);
 
             this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add New a Row"
             } );
-            ExpressCraft.Helper.setBounds$1(this.addNewRowButton, "3px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
             this.add100000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Add 100000 Row's"
             } );
-            ExpressCraft.Helper.setBounds$1(this.add100000RowsButton, "98px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds(this.add100000RowsButton, "98px", "3px", "auto", "24px");
 
             this.clearRowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
                 setText: "Clear Rows"
             } );
-            ExpressCraft.Helper.setBounds$1(this.clearRowsButton, "205px", "3px", "auto", "24px");
+            ExpressCraft.Helper.setBounds(this.clearRowsButton, "205px", "3px", "auto", "24px");
 
             this.clearRowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 dataTable.clearRows();
@@ -118,7 +118,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 })]);
             });
 
-            ExpressCraft.Helper.appendChildren$1(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton]);
+            ExpressCraft.Helper.appendChildren$2(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton]);
             this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
 
             this.linkchildToForm(this.gridView);

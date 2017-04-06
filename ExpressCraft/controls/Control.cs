@@ -25,6 +25,24 @@ namespace ExpressCraft
 
 		public ContextMenu ContextMenu = null;
 
+		public Control SetAttribute(string name, Union<string, int, float> value)
+		{
+			this.Content.SetAttribute(name, value.ToStr());
+
+			return this;
+		}
+		public string GetAttribute(string name)
+		{
+			return this.Content.GetAttribute(name);
+		}
+		public int GetAttributei(string name)
+		{
+			return Global.ParseInt(this.Content.GetAttribute(name));
+		}
+		public float GetAttributef(string name)
+		{
+			return (float)Global.ParseFloat(this.Content.GetAttribute(name));
+		}
 		public Form LinkedForm = null;		
 
 		public static string BaseClass(bool add = true)
@@ -331,7 +349,7 @@ namespace ExpressCraft
 		}
 
 		public void ChangeState(bool s, string sf = "disabled")
-		{
+		{			
 			if(s)
 			{
 				Content.ClassList.Remove(sf);

@@ -12,6 +12,10 @@ namespace ExpressCraft
 		public static bool ConsoleVisible = false;
 		private static ConsoleForm _consoleForm = null;
 		private HTMLDivElement logContent = null;
+		private static WindowState prevWindowState = WindowState.Normal;
+		private static bool firstLoad = true;
+		private static Vector2 prevLocation;
+		private static Vector2 prevSize = Settings.ConsoleDefaultSize;
 
 		public void InternalClear()
 		{
@@ -66,21 +70,52 @@ namespace ExpressCraft
 			this.Body.Style.OverflowY = Overflow.Scroll;
 
 			this.Text = Document.Title + " - Console";
+			if(firstLoad)
+			{				
+				this.StartPosition = FormStartPosition.Center;
+				this.Size = prevSize;
+			}
+			else
+			{
+				this.StartPosition = FormStartPosition.Manual;
+				this.Location = prevLocation;
 
-			this.StartPosition = FormStartPosition.Center;
-			this.Size = new Vector2(979, 512);			
+				if(prevWindowState == WindowState.Maximized)
+				{
+					prevSize = Settings.ConsoleDefaultSize;
+				}
+
+				this.Size = prevSize;
+
+				if(prevWindowState == WindowState.Maximized)
+				{
+					SetWindowState(prevWindowState);
+				}
+			}
+
+			
 		}
 
 		protected override void OnShowed()
 		{
 			base.OnShowed();
 			ConsoleVisible = true;
+			firstLoad = false;
+		}
+
+		protected override void OnClosing()
+		{
+			base.OnClosing();
+
+			prevSize = Size;
+			prevLocation = Location;
+			prevWindowState = windowState;
 		}
 
 		protected override void OnClosed()
 		{
 			base.OnClosed();
-			ConsoleVisible = false;
+			ConsoleVisible = false;			
 		}
 		private static void CheckConsoleState()
 		{

@@ -187,7 +187,7 @@ namespace ExpressCraft
 		/// <param name="c"></param>
 		public static void Delete(this Element c)
 		{
-			jQuery.Select(c).Remove();
+			c.ParentElement.RemoveChild(c);			
 		}		
 
 		public static string ToPx(this float i)
@@ -213,17 +213,11 @@ namespace ExpressCraft
 		public static void AppendChildren(this Node c, params Node[] Nodes)
         {
             if(Nodes != null && Nodes.Length > 0)
-            {
-				//var docfrag = Document.CreateDocumentFragment();
-
+            {				
                 for (int i = 0; i < Nodes.Length; i++)
                 {
-					//docfrag.AppendChild(Nodes[i]);
-
 					c.AppendChild(Nodes[i]);
-                }
-				//c.AppendChild(docfrag);
-
+                }				
 			}
         }
 
@@ -244,14 +238,17 @@ namespace ExpressCraft
             c.Content.AppendChildrenTabIndex(Nodes);
         }
 
-        public static void AppendChild(this Control c, Control Node)
+        public static Control AppendChild(this Control c, Control Node)
         {
             c.Content.AppendChild(Node);
-        }
+			return c;
+		}
 
-        public static void AppendChildren(this Control c, params Control[] Nodes)
+        public static Control AppendChildren(this Control c, params Control[] Nodes)
         {
             c.Content.AppendChildren(Nodes);
+
+			return c;
         }
 
         public static void AppendChildren(this Node c, params Control[] Nodes)
@@ -263,16 +260,22 @@ namespace ExpressCraft
 					c.AppendChild(Nodes[i]);
 				}
 			}
+
+
 		}		
         
-		public static void SetBounds(this Control c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
+		public static Control SetBounds(this Control c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
 		{
 			c.Content.SetBounds(left, top, width, height);
+
+			return c;
 		}        
 
-		public static void SetBoundsFull(this Control c)
+		public static Control SetBoundsFull(this Control c)
 		{
 			c.Content.SetBoundsFull();
+
+			return c;
 		}
 
 		public static void SetBoundsFull(this HTMLElement c)
@@ -280,9 +283,11 @@ namespace ExpressCraft
 			c.SetBounds(0, 0, "100%", "100%");
 		}
 
-		public static void SetSize(this Control c, Union<string, int, float> width, Union<string, int, float> height)
+		public static Control SetSize(this Control c, Union<string, int, float> width, Union<string, int, float> height)
 		{
 			c.Content.SetSize(width, height);
+
+			return c;
 		}    
 
         public static void SetBounds(this HTMLElement c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.1.9</version>
+    <version>0.0.2</version>
     <title>ExpressCraft</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -11,7 +11,7 @@
     <description>ExpressCraft - Library</description>
     <releaseNotes>.</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>Bridge Javascript Forms</tags>
+    <tags>Bridge Javascript Forms ExpressCraft</tags>
 	<dependencies>
 		<dependency id="Bridge" version="[15.7.0]"/>
 		<dependency id="Bridge.Core" version="[15.7.0]"/>

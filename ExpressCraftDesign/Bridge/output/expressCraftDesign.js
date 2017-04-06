@@ -397,10 +397,10 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             this.setCaption(System.String.concat(this.getClassName(), ".Form"));
 
             this.splitControlContainer2 = new ExpressCraft.SplitControlContainer();
-            ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer2);
+            ExpressCraft.Helper.setBoundsFull(this.splitControlContainer2);
 
             this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
-            ExpressCraft.Helper.setBoundsFull$1(this.splitControlContainer1);
+            ExpressCraft.Helper.setBoundsFull(this.splitControlContainer1);
 
             this.aceCodeEditor = new ExpressCraft.AceCodeEditor(ExpressCraft.AceModeTypes.csharp, ExpressCraft.AceThemeTypes.twilight);
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, (this.aceCodeEditor = Bridge.merge(new ExpressCraft.AceCodeEditor(ExpressCraft.AceModeTypes.csharp, ExpressCraft.AceThemeTypes.twilight), {
@@ -417,7 +417,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             frm.inDesign = true;
 
             this.designerContainer = ExpressCraft.Control.div();
-            ExpressCraft.Helper.setBounds(this.designerContainer, 15, 15, "calc(100% - 30px)", "calc(100% - 30px)");
+            ExpressCraft.Helper.setBounds$1(this.designerContainer, 15, 15, "calc(100% - 30px)", "calc(100% - 30px)");
 
             this.designerContainer.appendChild(ExpressCraft.Control.op_Implicit(this.formHolder.control));
 
@@ -573,11 +573,11 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             this.splitControlContainer1 = new ExpressCraft.SplitControlContainer();
 
             this.splitControlContainer1.setSplitterPosition(176);
-            ExpressCraft.Helper.setBounds$1(this.splitControlContainer1, 0, 128, "100%", "calc(100% - 128px)");
+            ExpressCraft.Helper.setBounds(this.splitControlContainer1, 0, 128, "100%", "calc(100% - 128px)");
 
             this.tabControl1 = new ExpressCraft.TabControl();
             this.tabControl1.setShowClosedButton(true);
-            ExpressCraft.Helper.setBoundsFull$1(this.tabControl1);
+            ExpressCraft.Helper.setBoundsFull(this.tabControl1);
             this.tabControl1.content.style.borderTopStyle = "solid";
             this.tabControl1.content.style.borderTopColor = "#C3C3C3";
             this.tabControl1.content.style.borderTopWidth = "thin";
@@ -585,7 +585,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel2, this.tabControl1);
 
             this.gridView1 = new ExpressCraft.GridView(true, true);
-            ExpressCraft.Helper.setBoundsFull$1(this.gridView1);
+            ExpressCraft.Helper.setBoundsFull(this.gridView1);
             this.gridView1.setDataSource(this.getToolBoxItems());
             this.gridView1.setColumnHeadersVisible(false);
             this.gridView1.setAllowRowDrag(true);
@@ -599,7 +599,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
             ExpressCraft.Helper.appendChild(this.splitControlContainer1.panel1, this.gridView1);
 
             this.linkchildrenToForm([this.gridView1, this.splitControlContainer1]);
-            ExpressCraft.Helper.appendChildren$1(this.getBody(), [this.ribbonControl1, this.splitControlContainer1]);
+            ExpressCraft.Helper.appendChildren$2(this.getBody(), [this.ribbonControl1, this.splitControlContainer1]);
 
             this.setWindowState(ExpressCraft.WindowState.Maximized);
         },
