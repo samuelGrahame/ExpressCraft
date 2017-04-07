@@ -49,7 +49,10 @@ namespace ExpressCraft
 		{
 			if(visible)
 			{
-				jQuery.Select(this.Content).FadeOut();				
+				if(this.Content != null)
+				{
+					jQuery.Select(this.Content).FadeOut();					
+				}
 				visible = false;
 				ContextMenu.TotalContextHandles--;				
 			}

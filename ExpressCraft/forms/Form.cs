@@ -22,7 +22,8 @@ namespace ExpressCraft
 		private static ToolTip _activeToolTip;
 		private static int _toolTipTimerHandle = -1;
 		private static Action<MouseEvent> _activeToolTipMouseMove;
-
+		private static ToolTipControl _activeToolTipControl = null;
+		private static int _oepntoolTipTimerHandle = -1;
 		public static ToolTip ActiveToolTip
 		{
 			get { return _activeToolTip; }
@@ -37,7 +38,11 @@ namespace ExpressCraft
 							_activeToolTipMouseMove = null;
 						}
 					}
-
+					if(_activeToolTipControl != null)
+					{
+						_activeToolTipControl.Close();
+						_activeToolTipControl = null;
+					}
 					if(_toolTipTimerHandle > -1)
 					{
 						Global.ClearTimeout(_toolTipTimerHandle);
@@ -58,13 +63,26 @@ namespace ExpressCraft
 							}
 							_toolTipTimerHandle = Global.SetTimeout(() =>
 							{
-								var control = new ToolTipControl(_activeToolTip);
-
-								control.Show(ev);
-
-								Global.SetTimeout(() =>
+								if(_activeToolTipControl != null)
 								{
-									control.Close();
+									_activeToolTipControl.Close();
+									_activeToolTipControl = null;
+								}
+								if(_oepntoolTipTimerHandle > -1)
+								{
+									Global.ClearTimeout(_oepntoolTipTimerHandle);
+									_oepntoolTipTimerHandle = -1;
+								}
+								_activeToolTipControl = new ToolTipControl(_activeToolTip);
+								_activeToolTipControl.Show(ev);
+
+								_oepntoolTipTimerHandle = Global.SetTimeout(() =>
+								{
+									if(_activeToolTipControl != null)
+									{
+										_activeToolTipControl.Close();
+										_activeToolTipControl = null;
+									}
 								}, Math.Max(1000, messageLength * Math.Max(Settings.ToolTipPopupStayOpenDelayPerCharMs, 10)));						
 
 								if(_activeToolTipMouseMove != null)
