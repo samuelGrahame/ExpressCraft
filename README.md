@@ -195,6 +195,9 @@ Settings.FormFadeDuration = 100; // Fade Duration when closing a Form
 Settings.ConsoleDefaultSize = new Vector2(540, 240); // Size of the Console Form
 
 Settings.OnF2ShowThemeForm = true; // Show the Theme Form on F2
+
+Settings.ToolTipPopupDelayMs = 1000;
+Settings.ToolTipPopupStayOpenDelayPerCharMs = 250;
 ```
 
 # Stand Alone Form Instance's
@@ -238,4 +241,7 @@ ThemeForm.ShowThemeForm();
 ```csharp
 var control = new Control();
 control.ToolTip = new ToolTip("This is a heading test.", "This is a description test.");
+
+Settings.ToolTipPopupDelayMs = 1000;
+Settings.ToolTipPopupStayOpenDelayPerCharMs = 250;
 ```
