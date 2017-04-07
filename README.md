@@ -31,6 +31,16 @@ this.LinkchildToForm(splitContainerControl);
 this.AppendChild(splitContainerControl);
 ```
 
+# How to use TabControl
+
+```csharp
+tabControl1 = new TabControl();
+tabControl1.ShowClosedButton = true; // Show the Close on the Tab
+tabControl1.SetBoundsFull();
+tabControl1.AddPages(new TabControlPage() { Caption = "Tab1" }, new TabControlPage() { Caption = "Tab2" });
+this.AppendChild(tabControl1);
+```
+
 # How to use Google Cloud Print
 
 ```csharp
