@@ -1,6 +1,6 @@
 # ExpressCraft
 
-[![NuGet](https://img.shields.io/nuget/v/expresscraft.svg)](https://www.nuget.org/packages/ExpressCraft) [![Built with Bridge.NET](https://img.shields.io/badge/built%20with-Bridge.NET-blue.svg)](http://bridge.net/)
+[![NuGet](https://buildstats.info/nuget/expresscraft.svg)](https://www.nuget.org/packages/ExpressCraft) [![Built with Bridge.NET](https://img.shields.io/badge/built%20with-Bridge.NET-blue.svg)](http://bridge.net/)
 
 Dialog Test: https://rawgit.com/samuelGrahame/ExpressCraft/master/ExpressCraftHelloWorldDialog/Bridge/www/rawprev.html
 
