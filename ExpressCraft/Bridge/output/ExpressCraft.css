@@ -599,9 +599,15 @@
     background-color:rgba(255, 255, 255, 0.996) !important;
     color:black  !important;
 }
-/****************Console****************/
+/****************ToolTip****************/
 .tool-tip{
     width:auto;
     height:auto;
+}
+.tool-tip-heading{
+    font-weight:bold;
     margin:4px;
+}
+.tool-tip-body{    
+    margin:4px;    
 }

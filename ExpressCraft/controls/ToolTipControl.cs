@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using Bridge.jQuery2;
 
 namespace ExpressCraft
 {
@@ -22,13 +23,13 @@ namespace ExpressCraft
 
 			if(_toolTip != null)
 			{
-				if(_toolTip.Heading.IsEmpty())
+				if(!_toolTip.Heading.IsEmpty())
 				{
-					this.Content.AppendChild(new HTMLSpanElement() { InnerHTML = string.Format("<b>{0}</b>", _toolTip.Heading.HtmlEscape()) });
+					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-heading", InnerHTML = _toolTip.Heading.HtmlEscape() });
 				}
-				if(_toolTip.Heading.IsEmpty())
+				if(!_toolTip.Description.IsEmpty())
 				{
-					this.Content.AppendChild(new HTMLSpanElement() { InnerHTML = string.Format("<b>{0}</b>", _toolTip.Heading.HtmlEscape()) });
+					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-body", InnerHTML = _toolTip.Description.HtmlEscape() });
 				}
 			}
 			var mouse = Helper.GetClientMouseLocation(ev);
@@ -47,8 +48,8 @@ namespace ExpressCraft
 		public void Close()
 		{
 			if(visible)
-			{				
-				this.Content.Delete();
+			{
+				jQuery.Select(this.Content).FadeOut();				
 				visible = false;
 				ContextMenu.TotalContextHandles--;				
 			}
@@ -59,6 +60,19 @@ namespace ExpressCraft
 	{
 		public string Description;
 		public string Heading;
+
+		public Control AttachedControl;
+
+		public ToolTip(string content)
+		{
+			Description = content;
+		}
+
+		public ToolTip(string heading, string description)
+		{
+			Description = description;
+			Heading = heading;
+		}
 
 		public int GetWordCount()
 		{

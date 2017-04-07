@@ -214,6 +214,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         content: null,
+        _toolTip: null,
+        _OnMouseEnterToolTip: null,
+        _OnMouseLeaveToolTip: null,
         onResize: null,
         onLoaded: null,
         contextMenu: null,
@@ -243,6 +246,39 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         $ctor3: function (cn, it) {
             this.$initialize();
             this.content = ExpressCraft.Control.input(cn, it);
+        },
+        getToolTip: function () {
+            return this._toolTip;
+        },
+        setToolTip: function (value) {
+            if (!Bridge.referenceEquals(this._toolTip, value)) {
+                if (value != null) {
+                    if (value.attachedControl != null && !Bridge.referenceEquals(value.attachedControl, this)) {
+                        value = null;
+                    } else {
+                        value.attachedControl = this;
+                    }
+                }
+                this._toolTip = value;
+
+                if (this._toolTip != null && (!ExpressCraft.Helper.isEmpty(this._toolTip.heading) || !ExpressCraft.Helper.isEmpty(this._toolTip.description))) {
+                    this._OnMouseEnterToolTip = Bridge.fn.bind(this, $asm.$.ExpressCraft.Control.f1);
+                    this._OnMouseLeaveToolTip = Bridge.fn.bind(this, $asm.$.ExpressCraft.Control.f2);
+
+                    this.content.addEventListener("mouseenter", this._OnMouseEnterToolTip);
+                    this.content.addEventListener("mouseleave", this._OnMouseLeaveToolTip);
+                    return;
+                }
+
+                if (!Bridge.staticEquals(this._OnMouseEnterToolTip, null)) {
+                    this.content.removeEventListener("mouseenter", this._OnMouseEnterToolTip);
+                    this._OnMouseEnterToolTip = null;
+                }
+                if (!Bridge.staticEquals(this._OnMouseLeaveToolTip, null)) {
+                    this.content.removeEventListener("mouseleave", this._OnMouseLeaveToolTip);
+                    this._OnMouseLeaveToolTip = null;
+                }
+            }
         },
         getWidth: function () {
             return this.content.style.width;
@@ -317,6 +353,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.content.classList.remove(sf);
             } else {
                 this.content.classList.add(sf);
+            }
+        }
+    });
+
+    Bridge.ns("ExpressCraft.Control", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraft.Control, {
+        f1: function (ev) {
+            if (!(Bridge.is(this, ExpressCraft.ToolTipControl))) {
+                ExpressCraft.Form.setActiveToolTip(this._toolTip);
+            }
+        },
+        f2: function (ev) {
+            if (!(Bridge.is(this, ExpressCraft.ToolTipControl))) {
+                ExpressCraft.Form.setActiveToolTip(null);
             }
         }
     });
@@ -2463,7 +2514,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
              * @return  {void}
              */
             delete: function (c) {
-                c.parentElement.removeChild(c);
+                if (c != null && c.parentElement != null && c.parentElement.contains(c)) {
+                    c.parentElement.removeChild(c);
+                }
             },
             toPx$2: function (i) {
                 return i + 'px';
@@ -2662,6 +2715,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (!control.classList.contains(newClass)) {
                     control.classList.add(newClass);
                 }
+            },
+            isEmpty: function (value) {
+                return System.String.isNullOrWhiteSpace(value);
             }
         }
     });
@@ -3725,8 +3781,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             formFadeDuration: 100,
             themeElement: null,
             _activeTheme: null,
-            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\t\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n\tbackground-color:{2};\r\n\tborder:1px solid {19};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n",
+            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\t\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n\tbackground-color:{2};\r\n\tborder:1px solid {19};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n.tool-tip{\r\n\tbackground-color:{14};\r\n    border: solid 1px {21};\r\n}\r\n",
             onF2ShowThemeForm: true,
+            toolTipPopupDelayMs: 1000,
+            toolTipPopupStayOpenDelayPerCharMs: 250,
             config: {
                 init: function () {
                     this.consoleDefaultSize = new ExpressCraft.Vector2.$ctor1(540, 240);
@@ -3948,6 +4006,42 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             //ForeColor1 = fc1;
             //ForeColor2 = fc2;
             //ForeColor3 = fc3;
+        }
+    });
+
+    Bridge.define("ExpressCraft.ToolTip", {
+        description: null,
+        heading: null,
+        attachedControl: null,
+        ctor: function (content) {
+            this.$initialize();
+            this.description = content;
+        },
+        $ctor1: function (heading, description) {
+            this.$initialize();
+            this.description = description;
+            this.heading = heading;
+        },
+        getWordCount: function () {
+            var fullContent = [this.heading, " ", this.description].join('').trim();
+            var length = fullContent.length;
+            var prevChar = 0;
+            var builder = new System.Text.StringBuilder();
+            var current;
+            var WordCount = 1;
+            for (var i = 0; i < length; i = (i + 1) | 0) {
+                current = fullContent.charCodeAt(i);
+                if (System.Char.isWhiteSpace(String.fromCharCode(current))) {
+                    if (System.Char.isWhiteSpace(String.fromCharCode(prevChar))) {
+                        prevChar = current;
+                        continue;
+                    } else {
+                        WordCount = (WordCount + 1) | 0;
+                    }
+                }
+                prevChar = current;
+            }
+            return WordCount;
         }
     });
 
@@ -4363,6 +4457,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.Form", {
         inherits: [ExpressCraft.Control],
         statics: {
+            _activeToolTip: null,
+            _toolTipTimerHandle: -1,
+            _activeToolTipMouseMove: null,
             movingForm: null,
             parent: null,
             formOverLay: null,
@@ -4396,6 +4493,51 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     this.standAloneForms = new ExpressCraft.FormCollection(null);
                     this.formCollections = new (System.Collections.Generic.List$1(ExpressCraft.FormCollection))();
                     this.toClean = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
+                }
+            },
+            getActiveToolTip: function () {
+                return ExpressCraft.Form._activeToolTip;
+            },
+            setActiveToolTip: function (value) {
+                if (!Bridge.referenceEquals(ExpressCraft.Form._activeToolTip, value)) {
+                    if (value != null && value.attachedControl != null && value.attachedControl.content != null) {
+                        if (!Bridge.staticEquals(ExpressCraft.Form._activeToolTipMouseMove, null)) {
+                            value.attachedControl.content.removeEventListener("mousemove", ExpressCraft.Form._activeToolTipMouseMove);
+                            ExpressCraft.Form._activeToolTipMouseMove = null;
+                        }
+                    }
+
+                    if (ExpressCraft.Form._toolTipTimerHandle > -1) {
+                        Bridge.global.clearTimeout(ExpressCraft.Form._toolTipTimerHandle);
+                        ExpressCraft.Form._toolTipTimerHandle = -1;
+                    }
+
+                    ExpressCraft.Form._activeToolTip = value;
+
+
+                    var messageLength;
+                    if (ExpressCraft.Form._activeToolTip != null && ((messageLength = ExpressCraft.Form._activeToolTip.getWordCount())) > 0 && ExpressCraft.Form._activeToolTip.attachedControl != null) {
+                        ExpressCraft.Form._activeToolTipMouseMove = function (ev) {
+                            if (ExpressCraft.Form._toolTipTimerHandle > -1) {
+                                Bridge.global.clearTimeout(ExpressCraft.Form._toolTipTimerHandle);
+                            }
+                            ExpressCraft.Form._toolTipTimerHandle = Bridge.global.setTimeout(function () {
+                                var control = new ExpressCraft.ToolTipControl(ExpressCraft.Form._activeToolTip);
+
+                                control.show(ev);
+
+                                Bridge.global.setTimeout(function () {
+                                    control.close();
+                                }, Math.max(1000, ((messageLength * Math.max(ExpressCraft.Settings.toolTipPopupStayOpenDelayPerCharMs, 10)) | 0)));
+
+                                if (!Bridge.staticEquals(ExpressCraft.Form._activeToolTipMouseMove, null)) {
+                                    value.attachedControl.content.removeEventListener("mousemove", ExpressCraft.Form._activeToolTipMouseMove);
+                                    ExpressCraft.Form._activeToolTipMouseMove = null;
+                                }
+                            }, Math.max(1, ExpressCraft.Settings.toolTipPopupDelayMs));
+                        };
+                        value.attachedControl.content.addEventListener("mousemove", ExpressCraft.Form._activeToolTipMouseMove);
+                    }
                 }
             },
             getActiveForm: function () {
@@ -8555,6 +8697,52 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         }
     });
 
+    Bridge.define("ExpressCraft.ToolTipControl", {
+        inherits: [ExpressCraft.Control],
+        visible: false,
+        _toolTip$1: null,
+        ctor: function (toolTip) {
+            this.$initialize();
+            ExpressCraft.Control.$ctor1.call(this, "tool-tip");
+            this._toolTip$1 = toolTip;
+        },
+        show: function (ev) {
+            ExpressCraft.Helper.empty(this.content);
+
+            if (this._toolTip$1 != null) {
+                if (!ExpressCraft.Helper.isEmpty(this._toolTip$1.heading)) {
+                    this.content.appendChild(Bridge.merge(document.createElement('p'), {
+                        className: "tool-tip-heading",
+                        innerHTML: ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.heading)
+                    } ));
+                }
+                if (!ExpressCraft.Helper.isEmpty(this._toolTip$1.description)) {
+                    this.content.appendChild(Bridge.merge(document.createElement('p'), {
+                        className: "tool-tip-body",
+                        innerHTML: ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.description)
+                    } ));
+                }
+            }
+            var mouse = ExpressCraft.Helper.getClientMouseLocation(ev).$clone();
+
+            this.setLocation(new ExpressCraft.Vector2.$ctor1(mouse.x, ((ExpressCraft.Helper.toInt(mouse.y) + 22) | 0)));
+
+            if (!this.visible) {
+                this.visible = true;
+                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles + 1) | 0;
+                this.content.style.zIndex = (((ExpressCraft.ContextMenu.totalContextHandles + ExpressCraft.Settings.contextMenuStartingZIndex) | 0)).toString();
+                document.body.appendChild(ExpressCraft.Control.op_Implicit(this));
+            }
+        },
+        close: function () {
+            if (this.visible) {
+                $(this.content).fadeOut();
+                this.visible = false;
+                ExpressCraft.ContextMenu.totalContextHandles = (ExpressCraft.ContextMenu.totalContextHandles - 1) | 0;
+            }
+        }
+    });
+
     Bridge.define("ExpressCraft.ColorInput", {
         inherits: [ExpressCraft.TextInput],
         ctor: function () {
@@ -9321,6 +9509,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             for (var i = 0; i < length; i = (i + 1) | 0) {
                 Panel.appendChild(ExpressCraft.Control.op_Implicit(ExpressCraft.Helper.setBounds(Bridge.merge(new ExpressCraft.ColorInput(), {
                     setText: this.currentTheme.getColors()[i],
+                    setToolTip: new ExpressCraft.ToolTip.$ctor1("This is a heading test.", "This is a description test."),
                     onTextChanged: Bridge.fn.bind(this, $asm.$.ExpressCraft.ThemeForm.f4)
                 } ).setAttribute("i", i), x, y, 95, 20)));
 

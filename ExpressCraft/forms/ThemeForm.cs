@@ -85,7 +85,7 @@ namespace ExpressCraft
 
 			for(int i = 0; i < length; i++)
 			{
-				Panel.AppendChild(new ColorInput() { Text = currentTheme.Colors[i], OnTextChanged = (tx) => {
+				Panel.AppendChild(new ColorInput() { Text = currentTheme.Colors[i], ToolTip = new ToolTip("This is a heading test.", "This is a description test."), OnTextChanged = (tx) => {
 					var index = tx.GetAttributei("i");
 					currentTheme.Colors[index] = tx.Text;
 

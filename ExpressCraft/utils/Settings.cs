@@ -421,8 +421,8 @@ namespace ExpressCraft
 
 		public static bool OnF2ShowThemeForm = true;
 
-		public static int ToolTipPopupDelayMs = 1500;
-		public static int ToolTipPopupStayOpenDelayPerCharMs = 75;
+		public static int ToolTipPopupDelayMs = 1000;
+		public static int ToolTipPopupStayOpenDelayPerCharMs = 250;
 	}
 	public class Theme
 	{

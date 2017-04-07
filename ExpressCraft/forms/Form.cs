@@ -29,20 +29,26 @@ namespace ExpressCraft
 			set {
 				if(_activeToolTip != value)
 				{
+					if(value != null && value.AttachedControl != null && value.AttachedControl.Content != null)
+					{
+						if(_activeToolTipMouseMove != null)
+						{
+							value.AttachedControl.Content.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+							_activeToolTipMouseMove = null;
+						}
+					}
+
 					if(_toolTipTimerHandle > -1)
 					{
 						Global.ClearTimeout(_toolTipTimerHandle);
 						_toolTipTimerHandle = -1;
 					}
-					if(_activeToolTipMouseMove != null)
-					{
-						Window.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
-						_activeToolTipMouseMove = null;
-					}
 
 					_activeToolTip = value;
-					int messageLength = _activeToolTip.GetWordCount();
-					if(_activeToolTip != null && messageLength > 0)					
+
+
+					int messageLength;
+					if(_activeToolTip != null && (messageLength = _activeToolTip.GetWordCount()) > 0 && _activeToolTip.AttachedControl != null)					
 					{
 						_activeToolTipMouseMove = (ev) =>
 						{
@@ -59,16 +65,16 @@ namespace ExpressCraft
 								Global.SetTimeout(() =>
 								{
 									control.Close();
-								}, Math.Min(1000, messageLength * Math.Min(Settings.ToolTipPopupStayOpenDelayPerCharMs, 10)));						
+								}, Math.Max(1000, messageLength * Math.Max(Settings.ToolTipPopupStayOpenDelayPerCharMs, 10)));						
 
 								if(_activeToolTipMouseMove != null)
 								{
-									Window.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+									value.AttachedControl.Content.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
 									_activeToolTipMouseMove = null;
 								}
-							}, Math.Min(1, Settings.ToolTipPopupDelayMs));
+							}, Math.Max(1, Settings.ToolTipPopupDelayMs));
 						};
-						Window.AddEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+						value.AttachedControl.Content.AddEventListener(EventType.MouseMove, _activeToolTipMouseMove);
 					}
 				}
 			}

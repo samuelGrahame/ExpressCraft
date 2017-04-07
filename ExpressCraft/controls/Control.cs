@@ -22,6 +22,7 @@ namespace ExpressCraft
 
 		private ToolTip _toolTip = null;
 		private Action<MouseEvent> _OnMouseEnterToolTip = null;
+		private Action<MouseEvent> _OnMouseLeaveToolTip = null;
 		public ToolTip ToolTip
 		{
 			get {
@@ -29,9 +30,21 @@ namespace ExpressCraft
 			set {
 				if(_toolTip != value)
 				{
+					if(value != null) 
+					{						
+						if(value.AttachedControl != null && value.AttachedControl != this)
+						{
+							value = null;
+						}
+						else
+						{
+							value.AttachedControl = this;
+						}												
+					}
 					_toolTip = value;
-					if(value != null && (!value.Heading.IsEmpty() || !value.Description.IsEmpty()))
-					{
+
+					if(_toolTip != null && (!_toolTip.Heading.IsEmpty() || !_toolTip.Description.IsEmpty()))
+					{						
 						_OnMouseEnterToolTip = (ev) =>
 						{
 							if(!(this is ToolTipControl))
@@ -39,12 +52,28 @@ namespace ExpressCraft
 								Form.ActiveToolTip = _toolTip;
 							}
 						};
+						_OnMouseLeaveToolTip = (ev) =>
+						{
+							if(!(this is ToolTipControl))
+							{
+								Form.ActiveToolTip = null;
+							}
+						};
+
 						Content.AddEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
+						Content.AddEventListener(EventType.MouseLeave, _OnMouseLeaveToolTip);
+						return;
 					}
-					else if(_OnMouseEnterToolTip != null)
+
+					if(_OnMouseEnterToolTip != null)
 					{
 						Content.RemoveEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
 						_OnMouseEnterToolTip = null;
+					}
+					if(_OnMouseLeaveToolTip != null)
+					{
+						Content.RemoveEventListener(EventType.MouseLeave, _OnMouseLeaveToolTip);
+						_OnMouseLeaveToolTip = null;
 					}
 				}
 			}
