@@ -197,7 +197,7 @@ Settings.ConsoleDefaultSize = new Vector2(540, 240); // Size of the Console Form
 Settings.OnF2ShowThemeForm = true; // Show the Theme Form on F2
 
 Settings.ToolTipPopupDelayMs = 1000;
-Settings.ToolTipPopupStayOpenDelayPerCharMs = 250;
+Settings.ToolTipPopupStayOpenDelayPerWordMs = 250;
 ```
 
 # Stand Alone Form Instance's
@@ -243,5 +243,5 @@ var control = new Control();
 control.ToolTip = new ToolTip("This is a heading test.", "This is a description test.");
 
 Settings.ToolTipPopupDelayMs = 1000;
-Settings.ToolTipPopupStayOpenDelayPerCharMs = 250;
+Settings.ToolTipPopupStayOpenDelayPerWordMs = 250;
 ```
