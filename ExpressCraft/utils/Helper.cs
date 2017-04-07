@@ -146,7 +146,7 @@ namespace ExpressCraft
 								   document.documentElement.scrollLeft;
 				y = e.clientY + document.body.scrollTop + 
 								   document.documentElement.scrollTop;
-			  }			  
+			  }
 			*/
 			return new Vector2(x, y);
 		}
@@ -436,6 +436,12 @@ namespace ExpressCraft
 		public static bool IsEmpty(this string value)
 		{
 			return string.IsNullOrWhiteSpace(value);
+		}
+
+		public static void StopAndLog(this Stopwatch sw, string logName = "Task")
+		{			
+			sw.Stop();			
+			ConsoleForm.Log(logName + " took " + sw.ElapsedMilliseconds + "ms to finish");
 		}
 	}	
 }

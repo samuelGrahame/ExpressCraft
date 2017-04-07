@@ -388,10 +388,14 @@ namespace ExpressCraft
 									gvc.BodyApparence.Alignment = TextAlign.Right;
 									break;
 								case DataType.DateTime:
-									if(Settings.GridViewAutoColumnGenerateFormatAsDate)
-										gvc.FormatString = "{0:d}";
-									else
-										gvc.FormatString = "{0:yyyy-MM-dd}";
+									if(Settings.GridViewAutoColumnFormatDates)
+									{
+										if(Settings.GridViewAutoColumnGenerateFormatAsDate)
+											gvc.FormatString = "{0:d}";
+										else
+											gvc.FormatString = "{0:yyyy-MM-dd}";
+									}
+									
 
 									break;
 								case DataType.Bool:
@@ -602,6 +606,330 @@ namespace ExpressCraft
 		public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
 		{
 			this.Content.Style.Overflow = Overflow.Hidden;
+
+			renderGridInternal = () =>
+			{
+				int StartedWith = RenderTime;
+				
+				GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
+				if(Settings.GridViewBlurOnScroll)
+					ProcessBlur();
+
+				ValidateGridSize();
+
+				if(ColumnCount() == 0)
+				{
+					ClearGrid();					
+					return;
+				}
+
+				int RawLeftCellIndex = 0;
+				float RawLeftCellScrollPadding = 0;
+
+				int RawLeftCellCount = Columns.Count;
+
+				float LeftLocation = 0;
+				bool foundLeftLocation = false;
+				bool foundRightLocation = false;
+
+				int ClientWidth = GridBodyContainer.ClientWidth;
+				#region "Columns"
+				float ViewWidth = GridBodyContainer.ScrollLeft + ClientWidth;
+				float _columnAutoWidthSingle = 0.0f;
+				if(_columnAutoWidth)
+				{
+					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / Columns.Count;
+				}
+
+				for(int x = 0; x < Columns.Count; x++)
+				{
+					Columns[x].CachedX = LeftLocation;
+					LeftLocation += _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
+					if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
+					{
+						foundLeftLocation = true;
+						RawLeftCellIndex = x;
+						RawLeftCellScrollPadding = LeftLocation - GridBodyContainer.ScrollLeft;
+					}
+					if(foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth)
+					{
+						foundRightLocation = true;
+						RawLeftCellCount = x + 1;
+						break;
+					}
+					if(StartedWith != RenderTime)
+					{
+						return;
+					}
+				}
+
+				var Cols = new List<HTMLSpanElement>();
+
+				int uboundRowCount = RawLeftCellCount - 1;
+				if(_columnHeadersVisible)
+				{
+					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+					{
+						//(x == uboundRowCount ? 0 : 1)
+						if(x >= Columns.Count)
+							break;
+						var gcol = Columns[x];
+						var colIndex = x;
+						var apparence = gcol.HeadingApparence;
+
+						var col = Label(gcol.Caption,
+							(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
+							apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
+
+						if(gcol.SortedMode != GridViewSortMode.None)
+						{
+							var sortImage = Div();
+							sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
+							sortImage.Style.Background = GetImageString(gcol.SortedMode == GridViewSortMode.Asc ? SortUpBase64 : SortDownBase64);
+							col.AppendChild(sortImage);
+						}
+
+						SetupColumn(col, x, gcol);
+
+						Cols.Add(col);
+
+						if(StartedWith != RenderTime)
+						{
+							return;
+						}
+					}
+				}
+
+				#endregion
+
+
+				if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
+				{
+					ClearGrid();
+					GridHeader.AppendChildren(Cols.ToArray());					
+					return;
+				}
+
+				var ppr = PixelsPerRow(_dataSource.RowCount);
+
+				float RawTopRowIndex = GetRawTopRowIndex();
+				float RawTopRowScrollPadding = RawTopRowIndex % 1.0f;
+				float RawVisibleRowCount = GetRawVisibleRowCount();
+
+				int Length = (int)(RawVisibleRowCount + RawTopRowIndex) + 1;
+				int start = (int)RawTopRowIndex;
+				#region "Selection"
+				for(int x = SelectedRows.SoftList.Count - 1; x >= 0; x--)
+				{
+					bool Found = false;
+					for(int i = start; i < Length; i++)
+					{
+						if(i < DataSource.RowCount)
+						{
+							var DataRowhandle = GetDataSourceRow(i);
+							if(SelectedRows.GetIndexValueByHardListIndex(SelectedRows.SoftList[x]).Index == DataRowhandle)
+							{
+								Found = true;
+								break;
+							}
+						}
+						if(StartedWith != RenderTime)
+						{
+							return;
+						}
+					}
+					if(StartedWith != RenderTime)
+					{
+						return;
+					}
+					if(!Found)
+					{
+						SelectedRows.SoftList.RemoveAt(x);
+					}
+				}
+				#endregion
+
+				var Rows = new List<HTMLDivElement>();
+
+				if(Settings.GridViewRowScrollPadding > 0)
+				{
+					start -= Settings.GridViewRowScrollPadding;
+					Length += Settings.GridViewRowScrollPadding;
+				}
+
+				float Y = (start * (ppr)) - RawTopRowScrollPadding;
+				var Last = Columns[RawLeftCellCount - 1];
+				var MaxWidth = (Last.CachedX + Last.Width);
+
+				if(ShowAutoFilterRow)
+				{
+					Length -= 1;
+					Y += UnitHeight;
+				}
+
+				// #TODO - CLEAN...
+				if(start < 0)
+					start = 0;
+				if(Length > DataSource.RowCount)
+					Length = DataSource.RowCount;
+				
+				for(int i = start; i < Length; i++)
+				{					
+					var DataRowhandle = GetDataSourceRow(i);
+					var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
+
+					dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+					dr.SetAttribute("i", Convert.ToString(DataRowhandle));
+
+					dr.OnClick = OnRowClick;
+					if(Settings.IsChrome)
+					{
+						dr.OnDblClick = OnDoubleClick;
+					}
+
+					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+					{
+						var col = Columns[x];
+						var apparence = col.BodyApparence;
+						bool useDefault = false;
+						HTMLElement cell;
+						if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
+						{
+							cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
+							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
+
+							dr.AppendChild(useDefault ?
+								col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
+								cell);
+						}
+						else
+						{
+							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
+							cell.SetLocation(col.CachedX, 0);
+							cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+
+							dr.AppendChild(cell);
+						}
+						cell.SetAttribute("i", x.ToString());
+						cell.OnMouseDown = OnCellRowMouseDown;
+					}
+
+					if(AllowRowDrag)
+					{
+						dr.SetAttribute("draggable", "true");
+
+						dr.OnDragStart = OnRowDragStart;
+					}
+
+					Rows.Add(dr);
+
+					Y += UnitHeight;
+					
+					if(StartedWith != RenderTime)
+					{
+						return;
+					}
+				}
+				
+				if(ShowAutoFilterRow)
+				{
+					var dr = Div("cellrow");
+
+					dr.SetBounds(0, 0, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+					dr.Style.Position = Position.Sticky;
+					dr.Style.BorderBottomColor = "darkgray";
+					dr.Style.BorderBottomStyle = BorderStyle.Solid;
+					dr.Style.BorderBottomWidth = BorderWidth.Thin;
+
+					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+					{
+						var col = Columns[x];
+						var apparence = col.BodyApparence;
+
+						HTMLElement cell;
+						TextInput tx;
+						if(col.FilterEdit == null)
+						{
+							tx = new TextInput(col.Column.DataType == DataType.DateTime ? InputType.DateTime : InputType.Text); ;
+							tx.Content.ClassList.Add("cell");
+						}
+						else
+						{
+							tx = col.FilterEdit;
+						}
+
+						tx.Text = (col.FilterValue + "");
+
+						tx.OnTextChanged = FilterRowOnChange;
+
+						cell = tx.Content;
+
+						cell.SetLocation(col.CachedX, 0);
+						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+						
+						dr.AppendChild(cell);
+
+						cell.SetAttribute("i", x.ToString());
+					}
+					Rows.Add(dr);
+				}
+
+
+				ClearGrid();
+
+				GridHeaderContainer.RemoveChild(GridHeader);
+				GridHeader.AppendChildren(Cols.ToArray());
+				GridHeaderContainer.AppendChild(GridHeader);
+
+				if(Rows.Count > 0)
+				{
+					GridBodyContainer.RemoveChild(GridBody);
+
+					var rows = Rows.ToArray();
+
+					GridBody.AppendChildren(rows);
+					var rowLeng = rows.Length;
+
+					for(int i = 0; i < rowLeng; i++)
+					{
+						if(StartedWith != RenderTime)
+						{
+							return;
+						}
+						GridBody.AppendChild(rows[i]);
+					}
+
+					if(OnCustomRowStyle != null)
+					{
+						for(int i = 0; i < rows.Length; i++)
+						{
+							if(StartedWith != RenderTime)
+							{
+								return;
+							}
+
+							try
+							{
+								OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
+
+							}
+							catch(Exception ex)
+							{
+								if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+									ConsoleForm.Log(ex.ToString(), ConsoleLogType.Error);
+							}
+						}
+					}
+
+					GridBodyContainer.AppendChild(GridBody);
+				}
+				if(StartedWith != RenderTime)
+				{
+					return;
+				}
+
+				RenderTime = -1;
+			};
 
 			GridHeaderContainer = Div("heading-container");
 			
@@ -1083,283 +1411,20 @@ namespace ExpressCraft
 
 		private Action<TextInput> FilterRowOnChange;
 
+		private int RenderTime = -1;
+		private Action renderGridInternal;
+
 		public void RenderGrid()
-		{			
-			GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
-			if(Settings.GridViewBlurOnScroll)
-				ProcessBlur();
-
-			ValidateGridSize();
-
-			if(ColumnCount() == 0)
+		{									
+			if(RenderTime > -1)
 			{
-				ClearGrid();
-				return;
+				Global.ClearTimeout(RenderTime);
+				RenderTime = Global.SetTimeout(renderGridInternal, 1);				
 			}
-
-			int RawLeftCellIndex = 0;
-			float RawLeftCellScrollPadding = 0;
-
-			int RawLeftCellCount = Columns.Count;
-
-			float LeftLocation = 0;
-			bool foundLeftLocation = false;
-			bool foundRightLocation = false;
-
-			int ClientWidth = GridBodyContainer.ClientWidth;
-			#region "Columns"
-			float ViewWidth = GridBodyContainer.ScrollLeft + ClientWidth;
-			float _columnAutoWidthSingle = 0.0f;
-			if(_columnAutoWidth)
+			else
 			{
-				_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / Columns.Count;
-			}
-
-			for(int x = 0; x < Columns.Count; x++)
-			{
-				Columns[x].CachedX = LeftLocation;
-				LeftLocation += _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
-				if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
-				{
-					foundLeftLocation = true;
-					RawLeftCellIndex = x;
-					RawLeftCellScrollPadding = LeftLocation - GridBodyContainer.ScrollLeft;
-				}
-				if(foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth)
-				{
-					foundRightLocation = true;
-					RawLeftCellCount = x + 1;
-					break;
-				}
-			}
-
-			var Cols = new List<HTMLSpanElement>();
-
-			int uboundRowCount = RawLeftCellCount - 1;
-			if(_columnHeadersVisible)
-			{
-				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-				{
-					//(x == uboundRowCount ? 0 : 1)
-					if(x >= Columns.Count)
-						break;
-					var gcol = Columns[x];
-					var colIndex = x;
-					var apparence = gcol.HeadingApparence;
-
-					var col = Label(gcol.Caption,
-						(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
-						apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
-
-					if(gcol.SortedMode != GridViewSortMode.None)
-					{
-						var sortImage = Div();
-						sortImage.SetBounds("calc(100% - 13px)", "11px", "9px", "5px");
-						sortImage.Style.Background = GetImageString(gcol.SortedMode == GridViewSortMode.Asc ? SortUpBase64 : SortDownBase64);
-						col.AppendChild(sortImage);
-					}
-
-					SetupColumn(col, x, gcol);
-
-					Cols.Add(col);
-				}
-			}
-			
-			#endregion
-
-
-			if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
-			{
-				ClearGrid();
-				GridHeader.AppendChildren(Cols.ToArray());
-
-				return;
-			}
-
-			var ppr = PixelsPerRow(_dataSource.RowCount);
-
-			float RawTopRowIndex = GetRawTopRowIndex();
-			float RawTopRowScrollPadding = RawTopRowIndex % 1.0f;
-			float RawVisibleRowCount = GetRawVisibleRowCount();
-
-			int Length = (int)(RawVisibleRowCount + RawTopRowIndex) + 1;
-			int start = (int)RawTopRowIndex;
-			#region "Selection"
-			for(int x = SelectedRows.SoftList.Count - 1; x >= 0; x--)
-			{
-				bool Found = false;
-				for(int i = start; i < Length; i++)
-				{
-					if(i < DataSource.RowCount)
-					{
-						var DataRowhandle = GetDataSourceRow(i);
-						if(SelectedRows.GetIndexValueByHardListIndex(SelectedRows.SoftList[x]).Index == DataRowhandle)
-						{
-							Found = true;
-							break;
-						}
-					}
-				}
-				if(!Found)
-				{
-					SelectedRows.SoftList.RemoveAt(x);
-				}
-			}
-			#endregion
-
-			var Rows = new List<HTMLDivElement>();
-
-			if(Settings.GridViewRowScrollPadding > 0)
-			{
-				start -= Settings.GridViewRowScrollPadding;
-				Length += Settings.GridViewRowScrollPadding;
-			}			
-
-			float Y = (start * (ppr)) - RawTopRowScrollPadding;
-			var Last = Columns[RawLeftCellCount - 1];
-			var MaxWidth = (Last.CachedX + Last.Width);
-
-			if(ShowAutoFilterRow)
-			{				
-				Length -= 1;
-				Y += UnitHeight;
-			}
-
-			// #TODO - CLEAN...
-			if(start < 0)
-				start = 0;
-			if(Length > DataSource.RowCount)			
-				Length = DataSource.RowCount;		
-				
-			for(int i = start; i < Length; i++)
-			{
-				var DataRowhandle = GetDataSourceRow(i);
-				var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
-
-				dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
-				dr.SetAttribute("i", Convert.ToString(DataRowhandle));
-
-				dr.OnClick = OnRowClick;
-				if(Settings.IsChrome)
-				{
-					dr.OnDblClick = OnDoubleClick;
-				}
-
-				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-				{
-					var col = Columns[x];
-					var apparence = col.BodyApparence;
-					bool useDefault = false;
-					HTMLElement cell;
-					if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
-					{
-						cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
-						col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
-
-						dr.AppendChild(useDefault ?
-							col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
-							cell);
-					}
-					else
-					{
-						cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
-						cell.SetLocation(col.CachedX, 0);
-						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-
-						dr.AppendChild(cell);
-					}
-					cell.SetAttribute("i", x.ToString());
-					cell.OnMouseDown = OnCellRowMouseDown;
-				}
-
-				if(AllowRowDrag)
-				{
-					dr.SetAttribute("draggable", "true");
-
-					dr.OnDragStart = OnRowDragStart;
-				}
-
-				Rows.Add(dr);
-
-				Y += UnitHeight;
-			}
-
-			if(ShowAutoFilterRow)
-			{
-				var dr = Div("cellrow");
-
-				dr.SetBounds(0, 0, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
-				dr.Style.Position = Position.Sticky;
-				dr.Style.BorderBottomColor = "darkgray";
-				dr.Style.BorderBottomStyle = BorderStyle.Solid;
-				dr.Style.BorderBottomWidth = BorderWidth.Thin;
-
-				for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-				{
-					var col = Columns[x];
-					var apparence = col.BodyApparence;
-					
-					HTMLElement cell;
-					TextInput tx;
-					if(col.FilterEdit == null)
-					{
-						tx = new TextInput(col.Column.DataType == DataType.DateTime ? InputType.DateTime : InputType.Text); ;
-						tx.Content.ClassList.Add("cell");
-					}
-					else
-					{						
-						tx = col.FilterEdit;
-					}
-					
-					tx.Text = (col.FilterValue + "");
-
-					tx.OnTextChanged = FilterRowOnChange;
-
-					cell = tx.Content;
-
-					cell.SetLocation(col.CachedX, 0);
-					cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-
-					//	Label(col.FilterValue + "",
-					//col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
-
-					dr.AppendChild(cell);
-					
-					cell.SetAttribute("i", x.ToString());
-				}
-				Rows.Add(dr);
-			}
-
-			ClearGrid();
-
-			GridHeaderContainer.RemoveChild(GridHeader);
-			GridHeader.AppendChildren(Cols.ToArray());
-			GridHeaderContainer.AppendChild(GridHeader);
-
-			if(Rows.Count > 0)
-			{
-				GridBodyContainer.RemoveChild(GridBody);
-
-
-				var rows = Rows.ToArray();
-			
-				GridBody.AppendChildren(rows);
-				for(int i = 0; i < rows.Length; i++)
-				{
-					try
-					{						
-						if(OnCustomRowStyle != null)
-							OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
-					}
-					catch(Exception ex)
-					{
-						if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
-							ConsoleForm.Log(ex.ToString(), ConsoleLogType.Error);
-					}
-				}
-
-				GridBodyContainer.AppendChild(GridBody);
-			}
+				renderGridInternal();
+			}		
 		}
 	}
 

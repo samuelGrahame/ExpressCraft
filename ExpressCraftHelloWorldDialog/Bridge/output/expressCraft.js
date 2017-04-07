@@ -82,15 +82,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$3: function (Caption, X, Y, width, IsBold, IsTiny, classr, Alignment, Forecolor) {
+            label$3: function (Caption, X, Y, width, IsBold, IsTiny, classr, Alignment, Forecolor, ignoreHtml) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
                 if (Alignment === void 0) { Alignment = 3; }
                 if (Forecolor === void 0) { Forecolor = null; }
+                if (ignoreHtml === void 0) { ignoreHtml = false; }
                 var lbl = document.createElement('span');
                 lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
-                lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
+                if (!ignoreHtml) {
+                    lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
+                } else {
+                    lbl.innerHTML = Caption;
+                }
+
                 ExpressCraft.Helper.setLocation(lbl, X, Y);
                 lbl.style.width = ExpressCraft.Helper.toPx$2(width);
                 if (Alignment !== "left") {
@@ -2480,7 +2486,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 								   document.documentElement.scrollLeft;
 				y = e.clientY + document.body.scrollTop + 
 								   document.documentElement.scrollTop;
-			  }			  
+			  }
 			
                 return new ExpressCraft.Vector2.$ctor1(x, y);
             },
@@ -2718,6 +2724,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             },
             isEmpty: function (value) {
                 return System.String.isNullOrWhiteSpace(value);
+            },
+            stopAndLog: function (sw, logName) {
+                if (logName === void 0) { logName = "Task"; }
+                sw.stop();
+                ExpressCraft.ConsoleForm.log(System.String.concat(logName, " took ", sw.milliseconds(), "ms to finish"));
             }
         }
     });
@@ -3763,6 +3774,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             defaultStyleSheet: null,
             pluginStyleSheet: null,
             gridViewAutoColumnGenerateFormatAsDate: false,
+            gridViewAutoColumnFormatDates: true,
             gridViewBlurOnScroll: false,
             gridViewRowScrollPadding: 0,
             gridViewScrollDelayed: false,
@@ -3784,7 +3796,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\t\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n\tbackground-color:{2};\r\n\tborder:1px solid {19};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n.tool-tip{\r\n\tbackground-color:{14};\r\n    border: solid 1px {21};\r\n}\r\n",
             onF2ShowThemeForm: true,
             toolTipPopupDelayMs: 1000,
-            toolTipPopupStayOpenDelayPerCharMs: 250,
+            toolTipPopupStayOpenDelayPerWordMs: 250,
             config: {
                 init: function () {
                     this.consoleDefaultSize = new ExpressCraft.Vector2.$ctor1(540, 240);
@@ -4538,7 +4550,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                 ExpressCraft.Form._activeToolTipControl = new ExpressCraft.ToolTipControl(ExpressCraft.Form._activeToolTip);
                                 ExpressCraft.Form._activeToolTipControl.show(ev);
 
-                                ExpressCraft.Form._oepntoolTipTimerHandle = Bridge.global.setTimeout($asm.$.ExpressCraft.Form.f1, Math.max(1000, ((messageLength * Math.max(ExpressCraft.Settings.toolTipPopupStayOpenDelayPerCharMs, 10)) | 0)));
+                                ExpressCraft.Form._oepntoolTipTimerHandle = Bridge.global.setTimeout($asm.$.ExpressCraft.Form.f1, Math.max(1000, ((messageLength * Math.max(ExpressCraft.Settings.toolTipPopupStayOpenDelayPerWordMs, 10)) | 0)));
 
                                 if (!Bridge.staticEquals(ExpressCraft.Form._activeToolTipMouseMove, null)) {
                                     value.attachedControl.content.removeEventListener("mousemove", ExpressCraft.Form._activeToolTipMouseMove);
@@ -6449,6 +6461,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         lastId: -1,
         prevScroll: -1,
         filterRowOnChange: null,
+        renderTime: -1,
+        renderGridInternal: null,
         config: {
             init: function () {
                 this.selectedRows = new (ExpressCraft.HardSoftList$1(Boolean))(false);
@@ -6462,6 +6476,285 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "grid");
             this.content.style.overflow = "hidden";
+
+            this.renderGridInternal = Bridge.fn.bind(this, function () {
+                var StartedWith = this.renderTime;
+
+                this.gridHeaderContainer.scrollLeft = this.gridBodyContainer.scrollLeft;
+                if (ExpressCraft.Settings.gridViewBlurOnScroll) {
+                    this.processBlur();
+                }
+
+                this.validateGridSize();
+
+                if (this.columnCount() === 0) {
+                    this.clearGrid();
+                    return;
+                }
+
+                var RawLeftCellIndex = 0;
+                var RawLeftCellScrollPadding = 0;
+
+                var RawLeftCellCount = this.columns.getCount();
+
+                var LeftLocation = 0;
+                var foundLeftLocation = false;
+                var foundRightLocation = false;
+
+                var ClientWidth = this.gridBodyContainer.clientWidth;
+                var ViewWidth = (this.gridBodyContainer.scrollLeft + ClientWidth) | 0;
+                var _columnAutoWidthSingle = 0.0;
+                if (this._columnAutoWidth) {
+                    _columnAutoWidthSingle = ClientWidth === 0 ? 0.0 : ((Bridge.Int.div(ClientWidth, this.columns.getCount())) | 0);
+                }
+
+                for (var x = 0; x < this.columns.getCount(); x = (x + 1) | 0) {
+                    this.columns.getItem(x).cachedX = LeftLocation;
+                    LeftLocation += this._columnAutoWidth ? _columnAutoWidthSingle : this.columns.getItem(x).getWidth();
+                    if (!foundLeftLocation && LeftLocation >= this.gridBodyContainer.scrollLeft) {
+                        foundLeftLocation = true;
+                        RawLeftCellIndex = x;
+                        RawLeftCellScrollPadding = LeftLocation - this.gridBodyContainer.scrollLeft;
+                    }
+                    if (foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth) {
+                        foundRightLocation = true;
+                        RawLeftCellCount = (x + 1) | 0;
+                        break;
+                    }
+                    if (StartedWith !== this.renderTime) {
+                        return;
+                    }
+                }
+
+                var Cols = new (System.Collections.Generic.List$1(HTMLSpanElement))();
+
+                var uboundRowCount = (RawLeftCellCount - 1) | 0;
+                if (this._columnHeadersVisible) {
+                    for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
+                        //(x == uboundRowCount ? 0 : 1)
+                        if (x1 >= this.columns.getCount()) {
+                            break;
+                        }
+                        var gcol = this.columns.getItem(x1);
+                        var colIndex = x1;
+                        var apparence = gcol.headingApparence;
+
+                        var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
+
+                        if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
+                            var sortImage = ExpressCraft.Control.div();
+                            ExpressCraft.Helper.setBounds$1(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
+                            sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
+                            col.appendChild(sortImage);
+                        }
+
+                        this.setupColumn(col, x1, gcol);
+
+                        Cols.add(col);
+
+                        if (StartedWith !== this.renderTime) {
+                            return;
+                        }
+                    }
+                }
+
+
+
+                if (this._dataSource == null || this._dataSource.getRowCount() === 0 || this._dataSource.getColumnCount() === 0) {
+                    this.clearGrid();
+                    ExpressCraft.Helper.appendChildren$1(this.gridHeader, Cols.toArray());
+                    return;
+                }
+
+                var ppr = this.pixelsPerRow(this._dataSource.getRowCount());
+
+                var RawTopRowIndex = this.getRawTopRowIndex();
+                var RawTopRowScrollPadding = RawTopRowIndex % 1.0;
+                var RawVisibleRowCount = this.getRawVisibleRowCount();
+
+                var Length = (Bridge.Int.clip32(RawVisibleRowCount + RawTopRowIndex) + 1) | 0;
+                var start = Bridge.Int.clip32(RawTopRowIndex);
+                for (var x2 = (this.selectedRows.softList.getCount() - 1) | 0; x2 >= 0; x2 = (x2 - 1) | 0) {
+                    var Found = false;
+                    for (var i = start; i < Length; i = (i + 1) | 0) {
+                        if (i < this.getDataSource().getRowCount()) {
+                            var DataRowhandle = this.getDataSourceRow(i);
+                            if (this.selectedRows.getIndexValueByHardListIndex(this.selectedRows.softList.getItem(x2)).index === DataRowhandle) {
+                                Found = true;
+                                break;
+                            }
+                        }
+                        if (StartedWith !== this.renderTime) {
+                            return;
+                        }
+                    }
+                    if (StartedWith !== this.renderTime) {
+                        return;
+                    }
+                    if (!Found) {
+                        this.selectedRows.softList.removeAt(x2);
+                    }
+                }
+
+                var Rows = new (System.Collections.Generic.List$1(HTMLDivElement))();
+
+                if (ExpressCraft.Settings.gridViewRowScrollPadding > 0) {
+                    start = (start - ExpressCraft.Settings.gridViewRowScrollPadding) | 0;
+                    Length = (Length + ExpressCraft.Settings.gridViewRowScrollPadding) | 0;
+                }
+
+                var Y = (start * (ppr)) - RawTopRowScrollPadding;
+                var Last = this.columns.getItem(((RawLeftCellCount - 1) | 0));
+                var MaxWidth = (Last.cachedX + Last.getWidth());
+
+                if (this.getShowAutoFilterRow()) {
+                    Length = (Length - 1) | 0;
+                    Y += ExpressCraft.GridView.UnitHeight;
+                }
+
+                // #TODO - CLEAN...
+                if (start < 0) {
+                    start = 0;
+                }
+                if (Length > this.getDataSource().getRowCount()) {
+                    Length = this.getDataSource().getRowCount();
+                }
+
+                for (var i1 = start; i1 < Length; i1 = (i1 + 1) | 0) {
+                    var DataRowhandle1 = this.getDataSourceRow(i1);
+                    var dr = ExpressCraft.Control.div$1(System.String.concat((i1 % 2 === 0 ? "cellrow even" : "cellrow"), (this.selectedRows.getValue(DataRowhandle1, true) ? " cellrow-selected" : ""), (DataRowhandle1 === this.getFocusedDataHandle() ? " focusedrow" : "")));
+
+                    ExpressCraft.Helper.setBounds$1(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
+                    dr.setAttribute("i", System.Convert.toString(DataRowhandle1));
+
+                    dr.onclick = this.onRowClick;
+                    if (ExpressCraft.Settings.isChrome) {
+                        dr.ondblclick = this.onDoubleClick;
+                    }
+
+                    for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
+                        var col1 = this.columns.getItem(x3);
+                        var apparence1 = col1.bodyApparence;
+                        var useDefault = false;
+                        var cell;
+                        if (col1.cellDisplay == null || ((useDefault = col1.cellDisplay.useDefaultElement))) {
+                            cell = ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor);
+
+                            dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
+                        } else {
+                            cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
+                            ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
+                            cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
+
+                            dr.appendChild(cell);
+                        }
+                        cell.setAttribute("i", x3.toString());
+                        cell.onmousedown = this.onCellRowMouseDown;
+                    }
+
+                    if (this.getAllowRowDrag()) {
+                        dr.setAttribute("draggable", "true");
+
+                        dr.ondragstart = this.onRowDragStart;
+                    }
+
+                    Rows.add(dr);
+
+                    Y += ExpressCraft.GridView.UnitHeight;
+
+                    if (StartedWith !== this.renderTime) {
+                        return;
+                    }
+                }
+
+                if (this.getShowAutoFilterRow()) {
+                    var dr1 = ExpressCraft.Control.div$1("cellrow");
+
+                    ExpressCraft.Helper.setBounds$1(dr1, 0, 0, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
+                    dr1.style.position = "sticky";
+                    dr1.style.borderBottomColor = "darkgray";
+                    dr1.style.borderBottomStyle = "solid";
+                    dr1.style.borderBottomWidth = "thin";
+
+                    for (var x4 = RawLeftCellIndex; x4 < RawLeftCellCount; x4 = (x4 + 1) | 0) {
+                        var col2 = this.columns.getItem(x4);
+                        var apparence2 = col2.bodyApparence;
+
+                        var cell1;
+                        var tx;
+                        if (col2.filterEdit == null) {
+                            tx = new ExpressCraft.TextInput(col2.column.dataType === ExpressCraft.DataType.DateTime ? "datetime" : "text");
+                            ;
+                            tx.content.classList.add("cell");
+                        } else {
+                            tx = col2.filterEdit;
+                        }
+
+                        tx.setText((System.String.concat(col2.getFilterValue(), "")));
+
+                        tx.onTextChanged = this.filterRowOnChange;
+
+                        cell1 = tx.content;
+
+                        ExpressCraft.Helper.setLocation(cell1, col2.cachedX, 0);
+                        cell1.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col2.getWidth()));
+
+                        dr1.appendChild(cell1);
+
+                        cell1.setAttribute("i", x4.toString());
+                    }
+                    Rows.add(dr1);
+                }
+
+
+                this.clearGrid();
+
+                this.gridHeaderContainer.removeChild(this.gridHeader);
+                ExpressCraft.Helper.appendChildren$1(this.gridHeader, Cols.toArray());
+                this.gridHeaderContainer.appendChild(this.gridHeader);
+
+                if (Rows.getCount() > 0) {
+                    this.gridBodyContainer.removeChild(this.gridBody);
+
+                    var rows = Rows.toArray();
+
+                    ExpressCraft.Helper.appendChildren$1(this.gridBody, rows);
+                    var rowLeng = rows.length;
+
+                    for (var i2 = 0; i2 < rowLeng; i2 = (i2 + 1) | 0) {
+                        if (StartedWith !== this.renderTime) {
+                            return;
+                        }
+                        this.gridBody.appendChild(rows[i2]);
+                    }
+
+                    if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
+                        for (var i3 = 0; i3 < rows.length; i3 = (i3 + 1) | 0) {
+                            if (StartedWith !== this.renderTime) {
+                                return;
+                            }
+
+                            try {
+                                this.onCustomRowStyle(rows[i3], parseInt(rows[i3].getAttribute("i")));
+
+                            }
+                            catch (ex) {
+                                ex = System.Exception.create(ex);
+                                if (ExpressCraft.Application.getAplicationDefition() === ExpressCraft.ApplicationDefitnion.ExpressCraftConsole) {
+                                    ExpressCraft.ConsoleForm.log(ex.toString(), ExpressCraft.ConsoleLogType.Error);
+                                }
+                            }
+                        }
+                    }
+
+                    this.gridBodyContainer.appendChild(this.gridBody);
+                }
+                if (StartedWith !== this.renderTime) {
+                    return;
+                }
+
+                this.renderTime = -1;
+            });
 
             this.gridHeaderContainer = ExpressCraft.Control.div$1("heading-container");
 
@@ -6643,10 +6936,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                                 gvc.bodyApparence.alignment = "right";
                                 break;
                             case ExpressCraft.DataType.DateTime: 
-                                if (ExpressCraft.Settings.gridViewAutoColumnGenerateFormatAsDate) {
-                                    gvc.formatString = "{0:d}";
-                                } else {
-                                    gvc.formatString = "{0:yyyy-MM-dd}";
+                                if (ExpressCraft.Settings.gridViewAutoColumnFormatDates) {
+                                    if (ExpressCraft.Settings.gridViewAutoColumnGenerateFormatAsDate) {
+                                        gvc.formatString = "{0:d}";
+                                    } else {
+                                        gvc.formatString = "{0:yyyy-MM-dd}";
+                                    }
                                 }
                                 break;
                             case ExpressCraft.DataType.Bool: 
@@ -7046,247 +7341,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.prevScroll = this.gridBodyContainer.scrollTop;
         },
         renderGrid: function () {
-            this.gridHeaderContainer.scrollLeft = this.gridBodyContainer.scrollLeft;
-            if (ExpressCraft.Settings.gridViewBlurOnScroll) {
-                this.processBlur();
-            }
-
-            this.validateGridSize();
-
-            if (this.columnCount() === 0) {
-                this.clearGrid();
-                return;
-            }
-
-            var RawLeftCellIndex = 0;
-            var RawLeftCellScrollPadding = 0;
-
-            var RawLeftCellCount = this.columns.getCount();
-
-            var LeftLocation = 0;
-            var foundLeftLocation = false;
-            var foundRightLocation = false;
-
-            var ClientWidth = this.gridBodyContainer.clientWidth;
-            var ViewWidth = (this.gridBodyContainer.scrollLeft + ClientWidth) | 0;
-            var _columnAutoWidthSingle = 0.0;
-            if (this._columnAutoWidth) {
-                _columnAutoWidthSingle = ClientWidth === 0 ? 0.0 : ((Bridge.Int.div(ClientWidth, this.columns.getCount())) | 0);
-            }
-
-            for (var x = 0; x < this.columns.getCount(); x = (x + 1) | 0) {
-                this.columns.getItem(x).cachedX = LeftLocation;
-                LeftLocation += this._columnAutoWidth ? _columnAutoWidthSingle : this.columns.getItem(x).getWidth();
-                if (!foundLeftLocation && LeftLocation >= this.gridBodyContainer.scrollLeft) {
-                    foundLeftLocation = true;
-                    RawLeftCellIndex = x;
-                    RawLeftCellScrollPadding = LeftLocation - this.gridBodyContainer.scrollLeft;
-                }
-                if (foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth) {
-                    foundRightLocation = true;
-                    RawLeftCellCount = (x + 1) | 0;
-                    break;
-                }
-            }
-
-            var Cols = new (System.Collections.Generic.List$1(HTMLSpanElement))();
-
-            var uboundRowCount = (RawLeftCellCount - 1) | 0;
-            if (this._columnHeadersVisible) {
-                for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
-                    //(x == uboundRowCount ? 0 : 1)
-                    if (x1 >= this.columns.getCount()) {
-                        break;
-                    }
-                    var gcol = this.columns.getItem(x1);
-                    var colIndex = x1;
-                    var apparence = gcol.headingApparence;
-
-                    var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
-
-                    if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
-                        var sortImage = ExpressCraft.Control.div();
-                        ExpressCraft.Helper.setBounds$1(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
-                        sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
-                        col.appendChild(sortImage);
-                    }
-
-                    this.setupColumn(col, x1, gcol);
-
-                    Cols.add(col);
-                }
-            }
-
-
-
-            if (this._dataSource == null || this._dataSource.getRowCount() === 0 || this._dataSource.getColumnCount() === 0) {
-                this.clearGrid();
-                ExpressCraft.Helper.appendChildren$1(this.gridHeader, Cols.toArray());
-
-                return;
-            }
-
-            var ppr = this.pixelsPerRow(this._dataSource.getRowCount());
-
-            var RawTopRowIndex = this.getRawTopRowIndex();
-            var RawTopRowScrollPadding = RawTopRowIndex % 1.0;
-            var RawVisibleRowCount = this.getRawVisibleRowCount();
-
-            var Length = (Bridge.Int.clip32(RawVisibleRowCount + RawTopRowIndex) + 1) | 0;
-            var start = Bridge.Int.clip32(RawTopRowIndex);
-            for (var x2 = (this.selectedRows.softList.getCount() - 1) | 0; x2 >= 0; x2 = (x2 - 1) | 0) {
-                var Found = false;
-                for (var i = start; i < Length; i = (i + 1) | 0) {
-                    if (i < this.getDataSource().getRowCount()) {
-                        var DataRowhandle = this.getDataSourceRow(i);
-                        if (this.selectedRows.getIndexValueByHardListIndex(this.selectedRows.softList.getItem(x2)).index === DataRowhandle) {
-                            Found = true;
-                            break;
-                        }
-                    }
-                }
-                if (!Found) {
-                    this.selectedRows.softList.removeAt(x2);
-                }
-            }
-
-            var Rows = new (System.Collections.Generic.List$1(HTMLDivElement))();
-
-            if (ExpressCraft.Settings.gridViewRowScrollPadding > 0) {
-                start = (start - ExpressCraft.Settings.gridViewRowScrollPadding) | 0;
-                Length = (Length + ExpressCraft.Settings.gridViewRowScrollPadding) | 0;
-            }
-
-            var Y = (start * (ppr)) - RawTopRowScrollPadding;
-            var Last = this.columns.getItem(((RawLeftCellCount - 1) | 0));
-            var MaxWidth = (Last.cachedX + Last.getWidth());
-
-            if (this.getShowAutoFilterRow()) {
-                Length = (Length - 1) | 0;
-                Y += ExpressCraft.GridView.UnitHeight;
-            }
-
-            // #TODO - CLEAN...
-            if (start < 0) {
-                start = 0;
-            }
-            if (Length > this.getDataSource().getRowCount()) {
-                Length = this.getDataSource().getRowCount();
-            }
-
-            for (var i1 = start; i1 < Length; i1 = (i1 + 1) | 0) {
-                var DataRowhandle1 = this.getDataSourceRow(i1);
-                var dr = ExpressCraft.Control.div$1(System.String.concat((i1 % 2 === 0 ? "cellrow even" : "cellrow"), (this.selectedRows.getValue(DataRowhandle1, true) ? " cellrow-selected" : ""), (DataRowhandle1 === this.getFocusedDataHandle() ? " focusedrow" : "")));
-
-                ExpressCraft.Helper.setBounds$1(dr, 0, Y, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
-                dr.setAttribute("i", System.Convert.toString(DataRowhandle1));
-
-                dr.onclick = this.onRowClick;
-                if (ExpressCraft.Settings.isChrome) {
-                    dr.ondblclick = this.onDoubleClick;
-                }
-
-                for (var x3 = RawLeftCellIndex; x3 < RawLeftCellCount; x3 = (x3 + 1) | 0) {
-                    var col1 = this.columns.getItem(x3);
-                    var apparence1 = col1.bodyApparence;
-                    var useDefault = false;
-                    var cell;
-                    if (col1.cellDisplay == null || ((useDefault = col1.cellDisplay.useDefaultElement))) {
-                        cell = ExpressCraft.Control.label$3(col1.getDisplayValueByDataRowHandle(DataRowhandle1), col1.cachedX, 0, this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth(), apparence1.isBold, false, "cell", apparence1.alignment, apparence1.forecolor);
-
-                        dr.appendChild(useDefault ? col1.cellDisplay.onCreateDefault(cell, this, DataRowhandle1, x3) : cell);
-                    } else {
-                        cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
-                        ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
-                        cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
-
-                        dr.appendChild(cell);
-                    }
-                    cell.setAttribute("i", x3.toString());
-                    cell.onmousedown = this.onCellRowMouseDown;
-                }
-
-                if (this.getAllowRowDrag()) {
-                    dr.setAttribute("draggable", "true");
-
-                    dr.ondragstart = this.onRowDragStart;
-                }
-
-                Rows.add(dr);
-
-                Y += ExpressCraft.GridView.UnitHeight;
-            }
-
-            if (this.getShowAutoFilterRow()) {
-                var dr1 = ExpressCraft.Control.div$1("cellrow");
-
-                ExpressCraft.Helper.setBounds$1(dr1, 0, 0, this._columnAutoWidth ? ClientWidth : MaxWidth, ExpressCraft.GridView.UnitHeight);
-                dr1.style.position = "sticky";
-                dr1.style.borderBottomColor = "darkgray";
-                dr1.style.borderBottomStyle = "solid";
-                dr1.style.borderBottomWidth = "thin";
-
-                for (var x4 = RawLeftCellIndex; x4 < RawLeftCellCount; x4 = (x4 + 1) | 0) {
-                    var col2 = this.columns.getItem(x4);
-                    var apparence2 = col2.bodyApparence;
-
-                    var cell1;
-                    var tx;
-                    if (col2.filterEdit == null) {
-                        tx = new ExpressCraft.TextInput(col2.column.dataType === ExpressCraft.DataType.DateTime ? "datetime" : "text");
-                        ;
-                        tx.content.classList.add("cell");
-                    } else {
-                        tx = col2.filterEdit;
-                    }
-
-                    tx.setText((System.String.concat(col2.getFilterValue(), "")));
-
-                    tx.onTextChanged = this.filterRowOnChange;
-
-                    cell1 = tx.content;
-
-                    ExpressCraft.Helper.setLocation(cell1, col2.cachedX, 0);
-                    cell1.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col2.getWidth()));
-
-                    //	Label(col.FilterValue + "",
-                    //col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
-
-                    dr1.appendChild(cell1);
-
-                    cell1.setAttribute("i", x4.toString());
-                }
-                Rows.add(dr1);
-            }
-
-            this.clearGrid();
-
-            this.gridHeaderContainer.removeChild(this.gridHeader);
-            ExpressCraft.Helper.appendChildren$1(this.gridHeader, Cols.toArray());
-            this.gridHeaderContainer.appendChild(this.gridHeader);
-
-            if (Rows.getCount() > 0) {
-                this.gridBodyContainer.removeChild(this.gridBody);
-
-
-                var rows = Rows.toArray();
-
-                ExpressCraft.Helper.appendChildren$1(this.gridBody, rows);
-                for (var i2 = 0; i2 < rows.length; i2 = (i2 + 1) | 0) {
-                    try {
-                        if (!Bridge.staticEquals(this.onCustomRowStyle, null)) {
-                            this.onCustomRowStyle(rows[i2], parseInt(rows[i2].getAttribute("i")));
-                        }
-                    }
-                    catch (ex) {
-                        ex = System.Exception.create(ex);
-                        if (ExpressCraft.Application.getAplicationDefition() === ExpressCraft.ApplicationDefitnion.ExpressCraftConsole) {
-                            ExpressCraft.ConsoleForm.log(ex.toString(), ExpressCraft.ConsoleLogType.Error);
-                        }
-                    }
-                }
-
-                this.gridBodyContainer.appendChild(this.gridBody);
+            if (this.renderTime > -1) {
+                Bridge.global.clearTimeout(this.renderTime);
+                this.renderTime = Bridge.global.setTimeout(this.renderGridInternal, 1);
+            } else {
+                this.renderGridInternal();
             }
         }
     });

@@ -664,7 +664,7 @@ namespace ExpressCraft
 					{
 						case MouseMoveAction.Move:
 							if(pX != X || pY != Y)
-							{
+							{								
 								MovingForm.Content.SetLocation(X, Y);
 							}
 							return;

@@ -9,8 +9,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
     Bridge.define("ExpressCraftGridView.App", {
         $main: function () {
             ExpressCraft.Settings.showExceptionDialog = false;
-            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
-
+            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.BrowserConsole);
             ExpressCraft.Application.run(new ExpressCraftGridView.App.GridForm());
         }
     });
@@ -28,41 +27,43 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             this.setWindowState(ExpressCraft.WindowState.Maximized);
 
             ExpressCraft.Settings.resourceURL = "";
+            ExpressCraft.Settings.gridViewAutoColumnFormatDates = false;
 
             this.gridView = new ExpressCraft.GridView(true, false);
 
             var dataTable = new ExpressCraft.DataTable();
 
-            dataTable.addColumn("Number", ExpressCraft.DataType.Integer);
-            dataTable.addColumn("String", ExpressCraft.DataType.String);
-            dataTable.addColumn("Date", ExpressCraft.DataType.DateTime);
-            dataTable.addColumn("Boolean", ExpressCraft.DataType.Bool);
-            dataTable.addColumn("Image", ExpressCraft.DataType.String);
+            for (var i = 0; i < 100; i = (i + 1) | 0) {
+                dataTable.addColumn(System.String.concat("Date", i.toString()), ExpressCraft.DataType.DateTime);
+            }
 
-            this.gridView.onCustomRowStyle = Bridge.fn.bind(this, function (row, handle) {
-                var $t;
-                if (row == null || handle < 0) {
-                    return;
-                }
+            //            dataTable.AddColumn("Number", DataType.Integer);
+            //            dataTable.AddColumn("String", DataType.String);                
 
-                if (System.Nullable.getValue(Bridge.cast(this.gridView.getRowCellValue$3(handle, "Number"), System.Int32)) % 2 === 0) {
-                    $t = Bridge.getEnumerator(row.children);
-                    while ($t.moveNext()) {
-                        var item = $t.getCurrent();
-                        item.style.color = ExpressCraft.Color.op_Implicit$1(ExpressCraft.Color.getRed().$clone());
-                    }
-                }
-            });
+            //dataTable.AddColumn("Boolean", DataType.Bool);
+            //dataTable.AddColumn("Image", DataType.String);
+
+            //GridView.OnCustomRowStyle = (row, handle) =>
+            //{
+            //	if(row == null || handle < 0)
+            //		return;
+
+            //	if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
+            //	{
+            //		foreach(var item in row.Children)
+            //		{
+            //			item.Style.Color = Color.Red;
+            //		}
+            //	}
+            //};
 
             this.gridView.setDataSource(dataTable);
 
-            var gridColumn = this.gridView.getGridViewColumnByFieldName("Image");
-            gridColumn.cellDisplay = Bridge.merge(new ExpressCraft.GridViewCellDisplayImage(), {
-                useBase64Resource: false
-            } );
+            //var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
+            //gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
 
-            gridColumn = this.gridView.getGridViewColumnByFieldName("Date");
-            gridColumn.formatString = "{0:yyyy-MM-dd}";
+            //gridColumn = GridView.GetGridViewColumnByFieldName("Date");
+            //gridColumn.FormatString = "{0:yyyy-MM-dd}";
 
             ExpressCraft.Helper.setBoundsFull(this.gridView);
 
@@ -72,7 +73,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             ExpressCraft.Helper.setBounds(this.addNewRowButton, "3px", "3px", "auto", "24px");
 
             this.add100000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "Add 100000 Row's"
+                setText: "Add 1000 Row's"
             } );
             ExpressCraft.Helper.setBounds(this.add100000RowsButton, "98px", "3px", "auto", "24px");
 
@@ -88,19 +89,16 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             });
 
             this.add100000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
-                dataTable.beginNewRow(100000);
+                dataTable.beginDataUpdate();
 
-                for (var i = 0; i < 100000; i = (i + 1) | 0) {
-                    this.x = (this.x + 1) | 0;
-                    var dr = dataTable.newRow();
-                    dr.setItem(0, this.x);
-                    dr.setItem(1, "Some Last Name");
-                    dr.setItem(2, Bridge.Date.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-                    dr.setItem(3, i % 2 === 0);
-                    dr.setItem(4, "");
+                for (var i1 = 0; i1 < 1000; i1 = (i1 + 1) | 0) {
+                    var data = System.Array.init(100, null, Object);
+                    for (var x = 0; x < 100; x = (x + 1) | 0) {
+                        data[x] = new Date();
+                    }
+                    dataTable.addRow$1(data);
                 }
-
-                dataTable.acceptNewRows();
+                dataTable.endDataUpdate();
 
                 this.gridView.renderGrid();
                 this.gridView.scrollToBottom();

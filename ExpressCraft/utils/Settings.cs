@@ -16,8 +16,10 @@ namespace ExpressCraft
 		public static string DefaultFont = "8.25pt Tahoma";
 		public static StyleSheet DefaultStyleSheet;
 		public static StyleSheet PluginStyleSheet;
-        public static bool GridViewAutoColumnGenerateFormatAsDate = false;
-        public static bool GridViewBlurOnScroll = false;
+		
+		public static bool GridViewAutoColumnGenerateFormatAsDate = false;
+		public static bool GridViewAutoColumnFormatDates = true;
+		public static bool GridViewBlurOnScroll = false;
         public static int GridViewRowScrollPadding = 0;
 
 		public static bool GridViewScrollDelayed = false;

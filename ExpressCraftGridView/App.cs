@@ -10,8 +10,7 @@ namespace ExpressCraftGridView
         public static void Main()
         {			            			
 			Settings.ShowExceptionDialog = false;
-			Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
-
+			Application.SetApplicationDefinition(ApplicationDefitnion.BrowserConsole);			
 			Application.Run(new GridForm());
         }
         
@@ -32,45 +31,51 @@ namespace ExpressCraftGridView
 				SetWindowState(WindowState.Maximized);
 				
 				Settings.ResourceURL = "";
+				Settings.GridViewAutoColumnFormatDates = false;
 
 				GridView = new GridView(true, false);
 
                 var dataTable = new DataTable();
-				
-                dataTable.AddColumn("Number", DataType.Integer);
-                dataTable.AddColumn("String", DataType.String);                
-                dataTable.AddColumn("Date", DataType.DateTime);
-				dataTable.AddColumn("Boolean", DataType.Bool);
-				dataTable.AddColumn("Image", DataType.String);
 
-				GridView.OnCustomRowStyle = (row, handle) =>
+				for(int i = 0; i < 100; i++)
 				{
-					if(row == null || handle < 0)
-						return;
+					dataTable.AddColumn("Date" + i.ToString(), DataType.DateTime);
+				}				
+				
+    //            dataTable.AddColumn("Number", DataType.Integer);
+    //            dataTable.AddColumn("String", DataType.String);                
+                
+				//dataTable.AddColumn("Boolean", DataType.Bool);
+				//dataTable.AddColumn("Image", DataType.String);
 
-					if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
-					{
-						foreach(var item in row.Children)
-						{
-							item.Style.Color = Color.Red;
-						}						
-					}
-				};
+				//GridView.OnCustomRowStyle = (row, handle) =>
+				//{
+				//	if(row == null || handle < 0)
+				//		return;
+
+				//	if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
+				//	{
+				//		foreach(var item in row.Children)
+				//		{
+				//			item.Style.Color = Color.Red;
+				//		}
+				//	}
+				//};
 
 				GridView.DataSource = dataTable;				
 
-				var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
-				gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
+				//var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
+				//gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
 
-				gridColumn = GridView.GetGridViewColumnByFieldName("Date");
-				gridColumn.FormatString = "{0:yyyy-MM-dd}";
+				//gridColumn = GridView.GetGridViewColumnByFieldName("Date");
+				//gridColumn.FormatString = "{0:yyyy-MM-dd}";
 
 				GridView.SetBoundsFull();
                 
                 AddNewRowButton = new SimpleButton() { Text = "Add New a Row" };
                 AddNewRowButton.SetBounds("3px", "3px", "auto", "24px");
 
-                Add100000RowsButton = new SimpleButton() { Text = "Add 100000 Row's" };
+                Add100000RowsButton = new SimpleButton() { Text = "Add 1000 Row's" };
                 Add100000RowsButton.SetBounds("98px", "3px", "auto", "24px");
 
                 ClearRowsButton = new SimpleButton() { Text = "Clear Rows" };
@@ -85,22 +90,20 @@ namespace ExpressCraftGridView
 
                 Add100000RowsButton.ItemClick = (ev) =>
                 {
-                    dataTable.BeginNewRow(100000);
+					dataTable.BeginDataUpdate();
 
-                    for (int i = 0; i < 100000; i++)
-                    {
-                        x++;
-                        var dr = dataTable.NewRow();
-                        dr[0] = x;
-                        dr[1] = "Some Last Name";
-                        dr[2] = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        dr[3] = i % 2 == 0;
-						dr[4] = "";
+                    for (int i = 0; i < 1000; i++)
+                    {						
+						var data = new object[100];
+						for(int x = 0; x < 100; x++)
+						{
+							data[x] = DateTime.Now;
+						}
+						dataTable.AddRow(data);
 					}
+					dataTable.EndDataUpdate();
 
-                    dataTable.AcceptNewRows();
-
-                    GridView.RenderGrid();
+					GridView.RenderGrid();
                     GridView.ScrollToBottom();                    
                 };
 
