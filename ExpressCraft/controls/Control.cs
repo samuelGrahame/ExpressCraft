@@ -20,6 +20,36 @@ namespace ExpressCraft
 		public bool HasRendered { get; set; } = false;
 		public const string ControlClass = "control";
 
+		private ToolTip _toolTip = null;
+		private Action<MouseEvent> _OnMouseEnterToolTip = null;
+		public ToolTip ToolTip
+		{
+			get {
+				return _toolTip; }
+			set {
+				if(_toolTip != value)
+				{
+					_toolTip = value;
+					if(value != null && (!value.Heading.IsEmpty() || !value.Description.IsEmpty()))
+					{
+						_OnMouseEnterToolTip = (ev) =>
+						{
+							if(!(this is ToolTipControl))
+							{
+								Form.ActiveToolTip = _toolTip;
+							}
+						};
+						Content.AddEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
+					}
+					else if(_OnMouseEnterToolTip != null)
+					{
+						Content.RemoveEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
+						_OnMouseEnterToolTip = null;
+					}
+				}
+			}
+		}		
+
 		public Action<Control> OnResize = null;
 		public Action<Control> OnLoaded = null;
 

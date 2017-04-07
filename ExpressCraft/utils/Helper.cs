@@ -187,8 +187,11 @@ namespace ExpressCraft
 		/// <param name="c"></param>
 		public static void Delete(this Element c)
 		{
-			c.ParentElement.RemoveChild(c);			
-		}		
+			if(c != null && 
+				c.ParentElement != null &&
+				c.ParentElement.Contains(c))
+				c.ParentElement.RemoveChild(c);
+		}
 
 		public static string ToPx(this float i)
 		{
@@ -217,7 +220,7 @@ namespace ExpressCraft
                 for (int i = 0; i < Nodes.Length; i++)
                 {
 					c.AppendChild(Nodes[i]);
-                }				
+                }
 			}
         }
 
@@ -428,6 +431,11 @@ namespace ExpressCraft
 				control.ClassList.Remove(oldClass);
 			if(!control.ClassList.Contains(newClass))
 				control.ClassList.Add(newClass);
-		}								
+		}						
+		
+		public static bool IsEmpty(this string value)
+		{
+			return string.IsNullOrWhiteSpace(value);
+		}
 	}	
 }

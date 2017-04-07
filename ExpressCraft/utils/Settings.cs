@@ -412,10 +412,17 @@ namespace ExpressCraft
 .splittervertical:hover {{
     background-color:{4};
 }}
+.tool-tip{
+	background-color:{14};
+    border: solid 1px {21};
+}
 ";
 		#endregion
 
 		public static bool OnF2ShowThemeForm = true;
+
+		public static int ToolTipPopupDelayMs = 1500;
+		public static int ToolTipPopupStayOpenDelayPerCharMs = 75;
 	}
 	public class Theme
 	{

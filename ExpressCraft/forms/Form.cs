@@ -17,7 +17,62 @@ namespace ExpressCraft
 		public static HTMLDivElement WindowHolder { get; set; }
 		public static HTMLDivElement WindowManager { get; set; }
 		public static HTMLDivElement WindowManagerStart { get; set; }
-		public static TextInput WindowManagerSearch { get; set; }		
+		public static TextInput WindowManagerSearch { get; set; }
+				
+		private static ToolTip _activeToolTip;
+		private static int _toolTipTimerHandle = -1;
+		private static Action<MouseEvent> _activeToolTipMouseMove;
+
+		public static ToolTip ActiveToolTip
+		{
+			get { return _activeToolTip; }
+			set {
+				if(_activeToolTip != value)
+				{
+					if(_toolTipTimerHandle > -1)
+					{
+						Global.ClearTimeout(_toolTipTimerHandle);
+						_toolTipTimerHandle = -1;
+					}
+					if(_activeToolTipMouseMove != null)
+					{
+						Window.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+						_activeToolTipMouseMove = null;
+					}
+
+					_activeToolTip = value;
+					int messageLength = _activeToolTip.GetWordCount();
+					if(_activeToolTip != null && messageLength > 0)					
+					{
+						_activeToolTipMouseMove = (ev) =>
+						{
+							if(_toolTipTimerHandle > -1)
+							{
+								Global.ClearTimeout(_toolTipTimerHandle);								
+							}
+							_toolTipTimerHandle = Global.SetTimeout(() =>
+							{
+								var control = new ToolTipControl(_activeToolTip);
+
+								control.Show(ev);
+
+								Global.SetTimeout(() =>
+								{
+									control.Close();
+								}, Math.Min(1000, messageLength * Math.Min(Settings.ToolTipPopupStayOpenDelayPerCharMs, 10)));						
+
+								if(_activeToolTipMouseMove != null)
+								{
+									Window.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+									_activeToolTipMouseMove = null;
+								}
+							}, Math.Min(1, Settings.ToolTipPopupDelayMs));
+						};
+						Window.AddEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+					}
+				}
+			}
+		}
 		
 		public bool InDesign = false;
 

@@ -599,3 +599,9 @@
     background-color:rgba(255, 255, 255, 0.996) !important;
     color:black  !important;
 }
+/****************Console****************/
+.tool-tip{
+    width:auto;
+    height:auto;
+    margin:4px;
+}
