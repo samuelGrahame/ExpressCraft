@@ -83,7 +83,7 @@ namespace ExpressCraft
 										_activeToolTipControl.Close();
 										_activeToolTipControl = null;
 									}
-								}, Math.Max(1000, messageLength * Math.Max(Settings.ToolTipPopupStayOpenDelayPerCharMs, 10)));						
+								}, Math.Max(1000, messageLength * Math.Max(Settings.ToolTipPopupStayOpenDelayPerWordMs, 10)));						
 
 								if(_activeToolTipMouseMove != null)
 								{
