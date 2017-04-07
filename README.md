@@ -226,8 +226,16 @@ var Theme Theme2 = new Theme(
 Settings.ActiveTheme = Theme2;
 
 // Will  Add Notes later for what the colors are used for each variable
+
 ```
 # Open the Theme Form || Press F2 when (Settings.OnF2ShowThemeForm == true)
 ```csharp
 ThemeForm.ShowThemeForm();
+```
+
+# Added Support for Tooltips
+
+```csharp
+var control = new Control();
+control.ToolTip = new ToolTip("This is a heading test.", "This is a description test.");
 ```
