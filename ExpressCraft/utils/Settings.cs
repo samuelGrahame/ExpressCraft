@@ -16,8 +16,9 @@ namespace ExpressCraft
 		public static string DefaultFont = "8.25pt Tahoma";
 		public static StyleSheet DefaultStyleSheet;
 		public static StyleSheet PluginStyleSheet;
-		
-		public static bool GridViewAutoColumnGenerateFormatAsDate = false;
+        internal static List<StyleSheet> resourceManangerSheets = new List<StyleSheet>();
+
+        public static bool GridViewAutoColumnGenerateFormatAsDate = false;
 		public static bool GridViewAutoColumnFormatDates = true;
 		public static bool GridViewBlurOnScroll = false;
         public static int GridViewRowScrollPadding = 0;
@@ -74,30 +75,56 @@ namespace ExpressCraft
 				var ownerNode = sheets[i].OwnerNode as HTMLLinkElement;
 				if(ownerNode == null)
 					continue;
-				if(ownerNode.Id == "expresscraft")
+				if(ownerNode.Id.ToLower() == "expresscraft")
 				{
 					DefaultStyleSheet = sheets[i];					
 				}				
-				if(ownerNode.Id == "expresscraftplugin")
+				if(ownerNode.Id.ToLower() == "expresscraftplugin")
 				{
 					PluginStyleSheet = sheets[i];
 				}
-			}
+                if (ownerNode.Id.ToLower() == "resourcemanager")
+                {
+                    resourceManangerSheets.Add(sheets[i]);
+                }
+            }
 			if(DefaultStyleSheet == null)
 				return;
-            var df = GetStyleRuleValue("font", ".control");
+            var df = GetExpressStyleRuleValue("font", ".control");
             if (df != null)
                 DefaultFont = df;
-
         }
 
-		public static dynamic GetStyleRuleValue(string style, string className)
-		{
+        public static dynamic GetStyleRuleValue(List<StyleSheet> cssFile, string style, string className)
+        {
             try
             {
-                if (PluginStyleSheet != null)
+                if (cssFile != null)
                 {
-                    dynamic pStyles = PluginStyleSheet;
+                    foreach (var item in cssFile)
+                    {
+                        dynamic value = GetStyleRuleValue(item, style, className);
+                        if(value != null)
+                        {
+                            return value;
+                        }
+                    }                    
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return null;
+        }
+
+        public static dynamic GetStyleRuleValue(StyleSheet cssFile, string style, string className)
+        {
+            try
+            {
+                if (cssFile != null)
+                {
+                    dynamic pStyles = cssFile;
                     if (pStyles.cssRules)
                     {
                         for (int i = 0; i < pStyles.cssRules.length; i++)
@@ -110,28 +137,22 @@ namespace ExpressCraft
                         }
                     }
                 }
-
-                if (DefaultStyleSheet == null)
-                    return null;
-                dynamic Styles = DefaultStyleSheet;
-                if (!Styles.cssRules)
-                    return null;
-
-                for (int i = 0; i < Styles.cssRules.length; i++)
-                {
-                    dynamic rule = Styles.cssRules[i];
-                    if (rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
-                    {
-                        return rule.style[style];
-                    }
-                }
             }
             catch (Exception)
             {
-                
+
             }
-			
-			return null;
+            return null;
+        }
+
+		public static dynamic GetExpressStyleRuleValue(string style, string className)
+		{
+            dynamic value = GetStyleRuleValue(PluginStyleSheet, style, className);
+            if(value == null)
+            {
+                value = GetStyleRuleValue(DefaultStyleSheet, style, className);
+            }
+            return value;            
 		}
 		
 		private static HTMLStyleElement themeElement = null;

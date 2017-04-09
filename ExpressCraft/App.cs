@@ -9,7 +9,7 @@ namespace ExpressCraft
 	{
 		public static void Main()
 		{			
-			Settings.Setup();
+			Settings.Setup();            
 		}
 	}
 }

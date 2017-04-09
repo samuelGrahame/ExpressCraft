@@ -73,6 +73,7 @@
     <Compile Include="forms\MessageBoxForm.cs" />
     <Compile Include="utils\KeyCodes.cs" />
     <Compile Include="utils\Network.cs" />
+    <Compile Include="utils\ResourceManager.cs" />
     <Compile Include="utils\Vector2.cs" />
     <Compile Include="controls\ProgressControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,7 @@
   <ItemGroup>
     <Content Include="Bridge\output\bridge.js" />
     <Content Include="Bridge\output\bridge.min.js" />
+    <Content Include="Bridge\output\ExpressCraftResourceManager.css" />
     <Content Include="Bridge\output\ExpressCraft_backup.css" />
     <Content Include="Bridge\output\ExpressCraft.css" />
     <Content Include="Bridge\output\expressCraft.js" />
