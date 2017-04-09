@@ -431,7 +431,7 @@ namespace ExpressCraft
 				control.ClassList.Remove(oldClass);
 			if(!control.ClassList.Contains(newClass))
 				control.ClassList.Add(newClass);
-		}						
+		}
 		
 		public static bool IsEmpty(this string value)
 		{

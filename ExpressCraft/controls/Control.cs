@@ -84,7 +84,10 @@ namespace ExpressCraft
 
 		public ContextMenu ContextMenu = null;
 
-		public Control SetAttribute(string name, Union<string, int, float> value)
+        public CSSStyleDeclaration Style => Content.Style;
+        public DOMTokenList ClassList => Content.ClassList;
+        
+        public Control SetAttribute(string name, Union<string, int, float> value)
 		{
 			this.Content.SetAttribute(name, value.ToStr());
 
@@ -219,10 +222,8 @@ namespace ExpressCraft
 		{
 			Content = Input(cn, it);			
 		}
-
-		public CSSStyleDeclaration Style => Content.Style;
-
-		public virtual void Render()
+        
+        public virtual void Render()
 		{
 			HasRendered = true;
 		}

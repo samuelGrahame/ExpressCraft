@@ -538,7 +538,7 @@ namespace ExpressCraft
 			WindowManagerStart = Div("form-manager-start");
 
 			WindowManagerSearch = new TextInput();
-			WindowManagerSearch.Content.ClassList.Add("form-manager-search");
+			WindowManagerSearch.ClassList.Add("form-manager-search");
 
             FormOverLay = Div("system-form-collection-overlay");			
 			FormOverLay.OnMouseDown = (ev) =>
@@ -621,40 +621,36 @@ namespace ExpressCraft
 					}
 
 					var mousePos = Helper.GetClientMouseLocation(ev);
+                    
+                    float mX;
+                    float mY;
 
-					var Y = (mousePos.Yf + MovingForm.prev_py);
-					var X = (mousePos.Xf + MovingForm.prev_px);
+                    var newX = ((mX = mousePos.Xf) + MovingForm.prev_px);
+                    var newY = ((mY = mousePos.Yf) + MovingForm.prev_py);					
 
-					if(MovingForm.windowState == WindowState.Maximized && MoveAction == MouseMoveAction.Move)
+					if(MovingForm.windowState == WindowState.Maximized &&
+                        MoveAction == MouseMoveAction.Move)
 					{
 						MovingForm.changeWindowState();
-						X = mousePos.Xf - (MovingForm.prev_width / 2);
+						newX = mousePos.Xf - (MovingForm.prev_width / 2);
+						MovingForm.prev_px = newX - mousePos.Xf;
+					}
+                    
+					float x = (float)Global.ParseFloat(MovingForm.Style.Left);
+					float y = (float)Global.ParseFloat(MovingForm.Style.Top);
+					float w =(float)Global.ParseFloat(MovingForm.Style.Width);
+					float h = (float)Global.ParseFloat(MovingForm.Style.Height);
 
-						MovingForm.prev_px = X - mousePos.Xf;
-					}					
+					float px = x;
+					float py = y;
+					float pw = w;
+					float ph = h;
 
-					var clientRec = MovingForm.Content.GetBoundingClientRect();
-
-					var bounds = MovingForm.Bounds;
-
-					float X1 = (float)Global.ParseFloat((string)bounds.X);
-					float Y1 = (float)Global.ParseFloat((string)bounds.Y);
-					float W =(float)Global.ParseFloat((string)bounds.Z);
-					float H = (float)Global.ParseFloat((string)bounds.M);
-
-					float pX = X1;
-					float pY = Y1;
-					float pW = W;
-					float pH = H;
-
-					if(Y < 1)
-						Y = 1;
-					if(X < 1)
-						X = 1;
-
-					float mX = mousePos.Xf;
-					float mY = mousePos.Yf;
-
+					if(newY < 1)
+						newY = 1;
+					if(newX < 1)
+						newX = 1;
+                    
 					if(mX < 1)
 						mX = 1;
 					if(mY < 1)
@@ -662,155 +658,121 @@ namespace ExpressCraft
 
 					switch(MoveAction)
 					{
-						case MouseMoveAction.Move:
-							if(pX != X || pY != Y)
-							{								
-								MovingForm.Content.SetLocation(X, Y);
-							}
-							return;
+						case MouseMoveAction.Move:                            							
+                            x = newX;
+                            y = newY;
+                            break;                            
 						case MouseMoveAction.TopLeftResize:							
-							W -= X - X1;
-							H -= Y - Y1;
+							w -= newX - x;
+							h -= newY - y;
 
-							if(W < MovingForm.MinWidth)
+							if(w < MovingForm.MinWidth)
 							{
-								X -= MovingForm.MinWidth - W;
-								W = MovingForm.MinWidth;
+								newX -= MovingForm.MinWidth - w;
+								w = MovingForm.MinWidth;
 							}
-
-							if(H < MovingForm.MinHeight)
+							if(h < MovingForm.MinHeight)
 							{
-								Y -= MovingForm.MinHeight - H;
-								H = MovingForm.MinHeight;
-							}
-							if(pX != X || pY != Y || pW != W || pH != H)
-							{
-								MovingForm.Content.SetBounds(X, Y, W, H);
-							}
+								newY -= MovingForm.MinHeight - h;
+								h = MovingForm.MinHeight;
+							}							
+                            x = newX;
+                            y = newY;
 							
 							break;
 						case MouseMoveAction.TopResize:							
-							H -= Y - Y1;
+							h -= newY - y;
 
-							if(H < MovingForm.MinHeight)
+							if(h < MovingForm.MinHeight)
 							{
-								Y -= MovingForm.MinHeight - H;
-								H = MovingForm.MinHeight;
+								newY -= MovingForm.MinHeight - h;
+								h = MovingForm.MinHeight;
 							}
-							if(pH != H || pY != Y)
-							{
-								MovingForm.Top = Y;
-								MovingForm.Height = H;
-							}							
+							
+                            y = newY;				
 							
 							break;
 						case MouseMoveAction.TopRightResize:						
-							H -= Y - Y1;
-							W = mX - X1;
+							h -= newY - y;
+							w = mX - x;
 
-							if(H < MovingForm.MinHeight)
+							if(h < MovingForm.MinHeight)
 							{
-								Y -= MovingForm.MinHeight - H;
-								H = MovingForm.MinHeight;
+								newY -= MovingForm.MinHeight - h;
+								h = MovingForm.MinHeight;
 							}
-
-							if(W < MovingForm.MinWidth)
-							{
-								W = MovingForm.MinWidth;
-							}
-							if(pW != W || pH != H || pY != Y)
-							{
-								MovingForm.Size = new Vector2(W, H);
-								MovingForm.Top = Y;
-							}
+							if(w < MovingForm.MinWidth)							
+								w = MovingForm.MinWidth;
 							
+                            y = newY;
 							
 							break;
 						case MouseMoveAction.LeftResize:							
-							W -= X - X1;
+							w -= newX - x;
 							
-							if(W < MovingForm.MinWidth)
+							if(w < MovingForm.MinWidth)
 							{
-								X -= MovingForm.MinWidth - W;
-								W = MovingForm.MinWidth;
+								newX -= MovingForm.MinWidth - w;
+								w = MovingForm.MinWidth;
 							}
-							if(pW != W || pX != X)
-							{
-								MovingForm.Left = X;
-								MovingForm.Width = W;
-							}
+							
+                            x = newX;
 							
 							break;
 						case MouseMoveAction.BottomLeftResize:							
-							W -= X - X1;
-							H = mY - Y1;
+							w -= newX - x;
+							h = mY - y;
 
-							if(W < MovingForm.MinWidth)
+							if(w < MovingForm.MinWidth)
 							{
-								X -= MovingForm.MinWidth - W;
-								W = MovingForm.MinWidth;
+								newX -= MovingForm.MinWidth - w;
+								w = MovingForm.MinWidth;
 							}
 
-							if(H < MovingForm.MinHeight)
-							{
-								H = MovingForm.MinHeight;
-							}
-							if(pW != W || pH != H || pX != X)
-							{
-								MovingForm.Size = new Vector2(W, H);
-								MovingForm.Left = X;
-							}							
+							if(h < MovingForm.MinHeight)							
+								h = MovingForm.MinHeight;							
+							
+                            x = newX;			
 							
 							break;
 						case MouseMoveAction.BottomResize:							
-							H = mY - Y1;
+							h = mY - y;
 
-							if(H < MovingForm.MinHeight)
-							{
-								H = MovingForm.MinHeight;
-							}
-							if(pH != H)
-							{
-								MovingForm.Height = H;
-							}								
+							if(h < MovingForm.MinHeight)							
+								h = MovingForm.MinHeight;							
 							
 							break;
 						case MouseMoveAction.RightResize:							
-							W = mX - X1;
+							w = mX - x;
 
-							if(W < MovingForm.MinWidth)
-							{
-								W = MovingForm.MinWidth;
-							}
-							if(pW != W)
-							{
-								MovingForm.Width = W;
-							}
+							if(w < MovingForm.MinWidth)							
+								w = MovingForm.MinWidth;							
 							
 							break;
 						case MouseMoveAction.BottomRightResize:							
-							W = mX - X1;
+							w = mX - x;
 
-							H = mY - Y1;
+							h = mY - y;
 
-							if(H < MovingForm.MinHeight)
-							{
-								H = MovingForm.MinHeight;
-							}
-							if(W < MovingForm.MinWidth)
-							{
-								W = MovingForm.MinWidth;
-							}
-							if(pW != W || pH != H)
-							{
-								MovingForm.Size = new Vector2(W, H);
-							}
-								
+							if(h < MovingForm.MinHeight)							
+								h = MovingForm.MinHeight;							
+							if(w < MovingForm.MinWidth)							
+								w = MovingForm.MinWidth;							
+							
 							break;
 					}
-					
-					if(pX != X || pY != Y || pW != W || pH != H)
-						MovingForm.Resizing();
+                    bool changed = false;
+                    if (px != x && (changed = true))
+                        MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                    if (py != y && (changed = true))
+                        MovingForm.Style.Top = Script.Write<string>("y + 'px'");
+                    if (pw != w && (changed = true))
+                        MovingForm.Style.Width = Script.Write<string>("w + 'px'");
+                    if (ph != h && (changed = true))
+                        MovingForm.Style.Height = Script.Write<string>("h + 'px'");
+
+                    if (changed)                    
+                        MovingForm.Resizing();                    
 				}
 			};
 
