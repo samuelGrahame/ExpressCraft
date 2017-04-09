@@ -7,784 +7,200 @@ using System.Threading.Tasks;
 namespace ExpressCraft
 {
 	public static class KeyCodes
-	{
-		//
-		// Summary:
-		//     The bitmask to extract modifiers from a key value.
-		public const int Modifiers = -65536,
-		//
-		// Summary:
-		//     No key pressed.
-		None = 0,
-		//
-		// Summary:
-		//     The left mouse button.
-		LButton = 1,
-		//
-		// Summary:
-		//     The right mouse button.
-		RButton = 2,
-		//
-		// Summary:
-		//     The CANCEL key.
-		Cancel = 3,
-		//
-		// Summary:
-		//     The middle mouse button (three-button mouse).
-		MButton = 4,
-		//
-		// Summary:
-		//     The first x mouse button (five-button mouse).
-		XButton1 = 5,
-		//
-		// Summary:
-		//     The second x mouse button (five-button mouse).
-		XButton2 = 6,
-		//
-		// Summary:
-		//     The BACKSPACE key.
-		Back = 8,
-		//
-		// Summary:
-		//     The TAB key.
-		Tab = 9,
-		//
-		// Summary:
-		//     The LINEFEED key.
-		LineFeed = 10,
-		//
-		// Summary:
-		//     The CLEAR key.
+	{		
+		public const int Modifiers = -65536,		
+		None = 0,	
+		LButton = 1,		
+		RButton = 2,		
+		Cancel = 3,		
+		MButton = 4,		
+		XButton1 = 5,		
+		XButton2 = 6,		
+		Back = 8,		
+		Tab = 9,		
+		LineFeed = 10,		
 		Clear = 12,
-		//
-		// Summary:
-		//     The RETURN key.
-		Return = 13,
-		//
-		// Summary:
-		//     The ENTER key.
-		Enter = 13,
-		//
-		// Summary:
-		//     The SHIFT key.
-		ShiftKey = 16,
-		//
-		// Summary:
-		//     The CTRL key.
-		ControlKey = 17,
-		//
-		// Summary:
-		//     The ALT key.
-		Menu = 18,
-		//
-		// Summary:
-		//     The PAUSE key.
-		Pause = 19,
-		//
-		// Summary:
-		//     The CAPS LOCK key.
-		Capital = 20,
-		//
-		// Summary:
-		//     The CAPS LOCK key.
-		CapsLock = 20,
-		//
-		// Summary:
-		//     The IME Kana mode key.
-		KanaMode = 21,
-		//
-		// Summary:
-		//     The IME Hanguel mode key. (maintained for compatibility; use HangulMode)
-		HanguelMode = 21,
-		//
-		// Summary:
-		//     The IME Hangul mode key.
-		HangulMode = 21,
-		//
-		// Summary:
-		//     The IME Junja mode key.
-		JunjaMode = 23,
-		//
-		// Summary:
-		//     The IME final mode key.
-		FinalMode = 24,
-		//
-		// Summary:
-		//     The IME Hanja mode key.
-		HanjaMode = 25,
-		//
-		// Summary:
-		//     The IME Kanji mode key.
-		KanjiMode = 25,
-		//
-		// Summary:
-		//     The ESC key.
-		Escape = 27,
-		//
-		// Summary:
-		//     The IME convert key.
-		IMEConvert = 28,
-		//
-		// Summary:
-		//     The IME nonconvert key.
-		IMENonconvert = 29,
-		//
-		// Summary:
-		//     The IME accept key, replaces System.Windows.Forms.Keys.IMEAceept.
-		IMEAccept = 30,
-		//
-		// Summary:
-		//     The IME accept key. Obsolete, use System.Windows.Forms.Keys.IMEAccept instead.
-		IMEAceept = 30,
-		//
-		// Summary:
-		//     The IME mode change key.
-		IMEModeChange = 31,
-		//
-		// Summary:
-		//     The SPACEBAR key.
-		Space = 32,
-		//
-		// Summary:
-		//     The PAGE UP key.
-		Prior = 33,
-		//
-		// Summary:
-		//     The PAGE UP key.
-		PageUp = 33,
-		//
-		// Summary:
-		//     The PAGE DOWN key.
-		Next = 34,
-		//
-		// Summary:
-		//     The PAGE DOWN key.
-		PageDown = 34,
-		//
-		// Summary:
-		//     The END key.
-		End = 35,
-		//
-		// Summary:
-		//     The HOME key.
-		Home = 36,
-		//
-		// Summary:
-		//     The LEFT ARROW key.
-		Left = 37,
-		//
-		// Summary:
-		//     The UP ARROW key.
-		Up = 38,
-		//
-		// Summary:
-		//     The RIGHT ARROW key.
-		Right = 39,
-		//
-		// Summary:
-		//     The DOWN ARROW key.
-		Down = 40,
-		//
-		// Summary:
-		//     The SELECT key.
-		Select = 41,
-		//
-		// Summary:
-		//     The PRINT key.
-		Print = 42,
-		//
-		// Summary:
-		//     The EXECUTE key.
-		Execute = 43,
-		//
-		// Summary:
-		//     The PRINT SCREEN key.
-		Snapshot = 44,
-		//
-		// Summary:
-		//     The PRINT SCREEN key.
-		PrintScreen = 44,
-		//
-		// Summary:
-		//     The INS key.
-		Insert = 45,
-		//
-		// Summary:
-		//     The DEL key.
-		Delete = 46,
-		//
-		// Summary:
-		//     The HELP key.
-		Help = 47,
-		//
-		// Summary:
-		//     The 0 key.
-		D0 = 48,
-		//
-		// Summary:
-		//     The 1 key.
-		D1 = 49,
-		//
-		// Summary:
-		//     The 2 key.
-		D2 = 50,
-		//
-		// Summary:
-		//     The 3 key.
-		D3 = 51,
-		//
-		// Summary:
-		//     The 4 key.
-		D4 = 52,
-		//
-		// Summary:
-		//     The 5 key.
-		D5 = 53,
-		//
-		// Summary:
-		//     The 6 key.
-		D6 = 54,
-		//
-		// Summary:
-		//     The 7 key.
-		D7 = 55,
-		//
-		// Summary:
-		//     The 8 key.
-		D8 = 56,
-		//
-		// Summary:
-		//     The 9 key.
-		D9 = 57,
-		//
-		// Summary:
-		//     The A key.
-		A = 65,
-		//
-		// Summary:
-		//     The B key.
-		B = 66,
-		//
-		// Summary:
-		//     The C key.
-		C = 67,
-		//
-		// Summary:
-		//     The D key.
-		D = 68,
-		//
-		// Summary:
-		//     The E key.
-		E = 69,
-		//
-		// Summary:
-		//     The F key.
-		F = 70,
-		//
-		// Summary:
-		//     The G key.
-		G = 71,
-		//
-		// Summary:
-		//     The H key.
-		H = 72,
-		//
-		// Summary:
-		//     The I key.
-		I = 73,
-		//
-		// Summary:
-		//     The J key.
-		J = 74,
-		//
-		// Summary:
-		//     The K key.
-		K = 75,
-		//
-		// Summary:
-		//     The L key.
-		L = 76,
-		//
-		// Summary:
-		//     The M key.
-		M = 77,
-		//
-		// Summary:
-		//     The N key.
-		N = 78,
-		//
-		// Summary:
-		//     The O key.
-		O = 79,
-		//
-		// Summary:
-		//     The P key.
-		P = 80,
-		//
-		// Summary:
-		//     The Q key.
-		Q = 81,
-		//
-		// Summary:
-		//     The R key.
-		R = 82,
-		//
-		// Summary:
-		//     The S key.
-		S = 83,
-		//
-		// Summary:
-		//     The T key.
-		T = 84,
-		//
-		// Summary:
-		//     The U key.
-		U = 85,
-		//
-		// Summary:
-		//     The V key.
-		V = 86,
-		//
-		// Summary:
-		//     The W key.
-		W = 87,
-		//
-		// Summary:
-		//     The X key.
-		X = 88,
-		//
-		// Summary:
-		//     The Y key.
-		Y = 89,
-		//
-		// Summary:
-		//     The Z key.
-		Z = 90,
-		//
-		// Summary:
-		//     The left Windows logo key (Microsoft Natural Keyboard).
-		LWin = 91,
-		//
-		// Summary:
-		//     The right Windows logo key (Microsoft Natural Keyboard).
-		RWin = 92,
-		//
-		// Summary:
-		//     The application key (Microsoft Natural Keyboard).
-		Apps = 93,
-		//
-		// Summary:
-		//     The computer sleep key.
-		Sleep = 95,
-		//
-		// Summary:
-		//     The 0 key on the numeric keypad.
-		NumPad0 = 96,
-		//
-		// Summary:
-		//     The 1 key on the numeric keypad.
-		NumPad1 = 97,
-		//
-		// Summary:
-		//     The 2 key on the numeric keypad.
-		NumPad2 = 98,
-		//
-		// Summary:
-		//     The 3 key on the numeric keypad.
-		NumPad3 = 99,
-		//
-		// Summary:
-		//     The 4 key on the numeric keypad.
-		NumPad4 = 100,
-		//
-		// Summary:
-		//     The 5 key on the numeric keypad.
-		NumPad5 = 101,
-		//
-		// Summary:
-		//     The 6 key on the numeric keypad.
-		NumPad6 = 102,
-		//
-		// Summary:
-		//     The 7 key on the numeric keypad.
-		NumPad7 = 103,
-		//
-		// Summary:
-		//     The 8 key on the numeric keypad.
-		NumPad8 = 104,
-		//
-		// Summary:
-		//     The 9 key on the numeric keypad.
-		NumPad9 = 105,
-		//
-		// Summary:
-		//     The multiply key.
-		Multiply = 106,
-		//
-		// Summary:
-		//     The add key.
-		Add = 107,
-		//
-		// Summary:
-		//     The separator key.
-		Separator = 108,
-		//
-		// Summary:
-		//     The subtract key.
-		Subtract = 109,
-		//
-		// Summary:
-		//     The decimal key.
-		Decimal = 110,
-		//
-		// Summary:
-		//     The divide key.
-		Divide = 111,
-		//
-		// Summary:
-		//     The F1 key.
-		F1 = 112,
-		//
-		// Summary:
-		//     The F2 key.
-		F2 = 113,
-		//
-		// Summary:
-		//     The F3 key.
-		F3 = 114,
-		//
-		// Summary:
-		//     The F4 key.
-		F4 = 115,
-		//
-		// Summary:
-		//     The F5 key.
-		F5 = 116,
-		//
-		// Summary:
-		//     The F6 key.
-		F6 = 117,
-		//
-		// Summary:
-		//     The F7 key.
-		F7 = 118,
-		//
-		// Summary:
-		//     The F8 key.
-		F8 = 119,
-		//
-		// Summary:
-		//     The F9 key.
-		F9 = 120,
-		//
-		// Summary:
-		//     The F10 key.
-		F10 = 121,
-		//
-		// Summary:
-		//     The F11 key.
-		F11 = 122,
-		//
-		// Summary:
-		//     The F12 key.
+		Return = 13,		
+		Enter = 13,		
+		ShiftKey = 16,		
+		ControlKey = 17,		
+		Menu = 18,		
+		Pause = 19,		
+		Capital = 20,		
+		CapsLock = 20,		
+		KanaMode = 21,		
+		HanguelMode = 21,		
+		HangulMode = 21,		
+		JunjaMode = 23,		
+		FinalMode = 24,		
+		HanjaMode = 25,		
+		KanjiMode = 25,		
+		Escape = 27,		
+		IMEConvert = 28,		
+		IMENonconvert = 29,		
+		IMEAccept = 30,		
+		IMEAceept = 30,		
+		IMEModeChange = 31,		
+		Space = 32,		
+		Prior = 33,		
+		PageUp = 33,		
+		Next = 34,		
+		PageDown = 34,		
+		End = 35,		
+		Home = 36,	
+		Left = 37,		
+		Up = 38,		
+		Right = 39,		
+		Down = 40,		
+		Select = 41,		
+		Print = 42,		
+		Execute = 43,		
+		Snapshot = 44,		
+		PrintScreen = 44,		
+		Insert = 45,		
+		Delete = 46,		
+		Help = 47,		
+		D0 = 48,		
+		D1 = 49,		
+		D2 = 50,		
+		D3 = 51,		
+		D4 = 52,		
+		D5 = 53,		
+		D6 = 54,		
+		D7 = 55,		
+		D8 = 56,		
+		D9 = 57,		
+		A = 65,		
+		B = 66,		
+		C = 67,		
+		D = 68,		
+		E = 69,		
+		F = 70,		
+		G = 71,		
+		H = 72,		
+		I = 73,		
+		J = 74,		
+		K = 75,		
+		L = 76,		
+		M = 77,		
+		N = 78,		
+		O = 79,		
+		P = 80,		
+		Q = 81,		
+		R = 82,	
+		S = 83,		
+		T = 84,		
+		U = 85,		
+		V = 86,		
+		W = 87,		
+		X = 88,		
+		Y = 89,		
+		Z = 90,		
+		LWin = 91,		
+		RWin = 92,		
+		Apps = 93,		
+		Sleep = 95,		
+		NumPad0 = 96,		
+		NumPad1 = 97,		
+		NumPad2 = 98,		
+		NumPad3 = 99,		
+		NumPad4 = 100,		
+		NumPad5 = 101,		
+		NumPad6 = 102,		
+		NumPad7 = 103,		
+		NumPad8 = 104,		
+		NumPad9 = 105,		
+		Multiply = 106,		
+		Add = 107,		
+		Separator = 108,		
+		Subtract = 109,		
+		Decimal = 110,		
+		Divide = 111,		
+		F1 = 112,		
+		F2 = 113,		
+		F3 = 114,		
+		F4 = 115,		
+		F5 = 116,		
+		F6 = 117,		
+		F7 = 118,		
+		F8 = 119,		
+		F9 = 120,		
+		F10 = 121,		
+		F11 = 122,		
 		F12 = 123,
-		//
-		// Summary:
-		//     The F13 key.
-		F13 = 124,
-		//
-		// Summary:
-		//     The F14 key.
-		F14 = 125,
-		//
-		// Summary:
-		//     The F15 key.
-		F15 = 126,
-		//
-		// Summary:
-		//     The F16 key.
-		F16 = 127,
-		//
-		// Summary:
-		//     The F17 key.
+		F13 = 124,		
+		F14 = 125,		
+		F15 = 126,		
+		F16 = 127,		
 		F17 = 128,
-		//
-		// Summary:
-		//     The F18 key.
-		F18 = 129,
-		//
-		// Summary:
-		//     The F19 key.
-		F19 = 130,
-		//
-		// Summary:
-		//     The F20 key.
-		F20 = 131,
-		//
-		// Summary:
-		//     The F21 key.
-		F21 = 132,
-		//
-		// Summary:
-		//     The F22 key.
-		F22 = 133,
-		//
-		// Summary:
-		//     The F23 key.
-		F23 = 134,
-		//
-		// Summary:
-		//     The F24 key.
-		F24 = 135,
-		//
-		// Summary:
-		//     The NUM LOCK key.
-		NumLock = 144,
-		//
-		// Summary:
-		//     The SCROLL LOCK key.
-		Scroll = 145,
-		//
-		// Summary:
-		//     The left SHIFT key.
-		LShiftKey = 160,
-		//
-		// Summary:
-		//     The right SHIFT key.
-		RShiftKey = 161,
-		//
-		// Summary:
-		//     The left CTRL key.
-		LControlKey = 162,
-		//
-		// Summary:
-		//     The right CTRL key.
-		RControlKey = 163,
-		//
-		// Summary:
-		//     The left ALT key.
-		LMenu = 164,
-		//
-		// Summary:
-		//     The right ALT key.
-		RMenu = 165,
-		//
-		// Summary:
-		//     The browser back key (Windows 2000 or later).
-		BrowserBack = 166,
-		//
-		// Summary:
-		//     The browser forward key (Windows 2000 or later).
-		BrowserForward = 167,
-		//
-		// Summary:
-		//     The browser refresh key (Windows 2000 or later).
-		BrowserRefresh = 168,
-		//
-		// Summary:
-		//     The browser stop key (Windows 2000 or later).
-		BrowserStop = 169,
-		//
-		// Summary:
-		//     The browser search key (Windows 2000 or later).
-		BrowserSearch = 170,
-		//
-		// Summary:
-		//     The browser favorites key (Windows 2000 or later).
-		BrowserFavorites = 171,
-		//
-		// Summary:
-		//     The browser home key (Windows 2000 or later).
-		BrowserHome = 172,
-		//
-		// Summary:
-		//     The volume mute key (Windows 2000 or later).
-		VolumeMute = 173,
-		//
-		// Summary:
-		//     The volume down key (Windows 2000 or later).
-		VolumeDown = 174,
-		//
-		// Summary:
-		//     The volume up key (Windows 2000 or later).
-		VolumeUp = 175,
-		//
-		// Summary:
-		//     The media next track key (Windows 2000 or later).
-		MediaNextTrack = 176,
-		//
-		// Summary:
-		//     The media previous track key (Windows 2000 or later).
-		MediaPreviousTrack = 177,
-		//
-		// Summary:
-		//     The media Stop key (Windows 2000 or later).
-		MediaStop = 178,
-		//
-		// Summary:
-		//     The media play pause key (Windows 2000 or later).
-		MediaPlayPause = 179,
-		//
-		// Summary:
-		//     The launch mail key (Windows 2000 or later).
-		LaunchMail = 180,
-		//
-		// Summary:
-		//     The select media key (Windows 2000 or later).
-		SelectMedia = 181,
-		//
-		// Summary:
-		//     The start application one key (Windows 2000 or later).
-		LaunchApplication1 = 182,
-		//
-		// Summary:
-		//     The start application two key (Windows 2000 or later).
-		LaunchApplication2 = 183,
-		//
-		// Summary:
-		//     The OEM Semicolon key on a US standard keyboard (Windows 2000 or later).
+		F18 = 129,		
+		F19 = 130,		
+		F20 = 131,		
+		F21 = 132,		
+		F22 = 133,		
+		F23 = 134,		
+		F24 = 135,		
+		NumLock = 144,		
+		Scroll = 145,		
+		LShiftKey = 160,		
+		RShiftKey = 161,		
+		LControlKey = 162,		
+		RControlKey = 163,		
+		LMenu = 164,		
+		RMenu = 165,		
+		BrowserBack = 166,		
+		BrowserForward = 167,		
+		BrowserRefresh = 168,		
+		BrowserStop = 169,		
+		BrowserSearch = 170,		
+		BrowserFavorites = 171,		
+		BrowserHome = 172,		
+		VolumeMute = 173,		
+		VolumeDown = 174,		
+		VolumeUp = 175,		
+		MediaNextTrack = 176,		
+		MediaPreviousTrack = 177,		
+		MediaStop = 178,		
+		MediaPlayPause = 179,		
+		LaunchMail = 180,		
+		SelectMedia = 181,		
+		LaunchApplication1 = 182,		
+		LaunchApplication2 = 183,		
 		OemSemicolon = 186,
-		//
-		// Summary:
-		//     The OEM 1 key.
-		Oem1 = 186,
-		//
-		// Summary:
-		//     The OEM plus key on any country/region keyboard (Windows 2000 or later).
-		Oemplus = 187,
-		//
-		// Summary:
-		//     The OEM comma key on any country/region keyboard (Windows 2000 or later).
-		Oemcomma = 188,
-		//
-		// Summary:
-		//     The OEM minus key on any country/region keyboard (Windows 2000 or later).
-		OemMinus = 189,
-		//
-		// Summary:
-		//     The OEM period key on any country/region keyboard (Windows 2000 or later).
-		OemPeriod = 190,
-		//
-		// Summary:
-		//     The OEM question mark key on a US standard keyboard (Windows 2000 or later).
-		OemQuestion = 191,
-		//
-		// Summary:
-		//     The OEM 2 key.
-		Oem2 = 191,
-		//
-		// Summary:
-		//     The OEM tilde key on a US standard keyboard (Windows 2000 or later).
-		Oemtilde = 192,
-		//
-		// Summary:
-		//     The OEM 3 key.
-		Oem3 = 192,
-		//
-		// Summary:
-		//     The OEM open bracket key on a US standard keyboard (Windows 2000 or later).
-		OemOpenBrackets = 219,
-		//
-		// Summary:
-		//     The OEM 4 key.
-		Oem4 = 219,
-		//
-		// Summary:
-		//     The OEM pipe key on a US standard keyboard (Windows 2000 or later).
+		Oem1 = 186,		
+		Oemplus = 187,		
+		Oemcomma = 188,		
+		OemMinus = 189,		
+		OemPeriod = 190,		
+		OemQuestion = 191,		
+		Oem2 = 191,		
+		Oemtilde = 192,		
+		Oem3 = 192,		
+		OemOpenBrackets = 219,		
+		Oem4 = 219,		
 		OemPipe = 220,
-		//
-		// Summary:
-		//     The OEM 5 key.
-		Oem5 = 220,
-		//
-		// Summary:
-		//     The OEM close bracket key on a US standard keyboard (Windows 2000 or later).
-		OemCloseBrackets = 221,
-		//
-		// Summary:
-		//     The OEM 6 key.
-		Oem6 = 221,
-		//
-		// Summary:
-		//     The OEM singled/double quote key on a US standard keyboard (Windows 2000 or later).
+		Oem5 = 220,		
+		OemCloseBrackets = 221,		
+		Oem6 = 221,		
 		OemQuotes = 222,
-		//
-		// Summary:
-		//     The OEM 7 key.
 		Oem7 = 222,
-		//
-		// Summary:
-		//     The OEM 8 key.
 		Oem8 = 223,
-		//
-		// Summary:
-		//     The OEM angle bracket or backslash key on the RT 102 key keyboard (Windows 2000
-		//     or later).
 		OemBackslash = 226,
-		//
-		// Summary:
-		//     The OEM 102 key.
 		Oem102 = 226,
-		//
-		// Summary:
-		//     The PROCESS KEY key.
-		ProcessKey = 229,
-		//
-		// Summary:
-		//     Used to pass Unicode characters as if they were keystrokes. The Packet key value
-		//     is the low word of a 32-bit virtual-key value used for non-keyboard input methods.
+		ProcessKey = 229,		
 		Packet = 231,
-		//
-		// Summary:
-		//     The ATTN key.
 		Attn = 246,
-		//
-		// Summary:
-		//     The CRSEL key.
 		Crsel = 247,
-		//
-		// Summary:
-		//     The EXSEL key.
 		Exsel = 248,
-		//
-		// Summary:
-		//     The ERASE EOF key.
 		EraseEof = 249,
-		//
-		// Summary:
-		//     The PLAY key.
 		Play = 250,
-		//
-		// Summary:
-		//     The ZOOM key.
 		Zoom = 251,
-		//
-		// Summary:
-		//     A constant reserved for future use.
 		NoName = 252,
-		//
-		// Summary:
-		//     The PA1 key.
 		Pa1 = 253,
-		//
-		// Summary:
-		//     The CLEAR key.
 		OemClear = 254,
-		//
-		// Summary:
-		//     The bitmask to extract a key code from a key value.
 		KeyCode = 65535,
-		//
-		// Summary:
-		//     The SHIFT modifier key.
 		Shift = 65536,
-		//
-		// Summary:
-		//     The CTRL modifier key.
 		Control = 131072,
-		//
-		// Summary:
-		//     The ALT modifier key.
 		Alt = 262144;
 	}
 }

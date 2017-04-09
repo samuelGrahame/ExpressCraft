@@ -20,10 +20,9 @@ namespace ExpressCraft
 
 	public class HardSoftList<T>
 	{
-		protected List<IndexValue<T>> HardList = new List<IndexValue<T>>();
-		public List<int> SoftList = new List<int>();
-
-		private List<T> HardHardList = new List<T>();
+        private List<T> _hhl = new List<T>();
+        protected List<IndexValue<T>> _hl = new List<IndexValue<T>>();
+		public List<int> SL = new List<int>();    		
 
 		private int Limit;
 
@@ -31,7 +30,7 @@ namespace ExpressCraft
 
 		public IndexValue<T> GetIndexValueByHardListIndex(int index)
 		{
-			return HardList[index];
+			return _hl[index];
 		}
 
 		public T DefaultValue;
@@ -44,9 +43,9 @@ namespace ExpressCraft
 
 		public void ClearAll()
 		{
-			HardHardList = new List<T>();
-			HardList = new List<IndexValue<T>>();
-			SoftList = new List<int>();
+			_hhl = new List<T>();
+			_hl = new List<IndexValue<T>>();
+			SL = new List<int>();
 			HardLength = 0;
 		}
 
@@ -60,8 +59,8 @@ namespace ExpressCraft
 				if(Indexs.Length > Limit)
 				{
 					HardLength = Indexs.Length;
-					HardList = new List<IndexValue<T>>();
-					SoftList = new List<int>();
+					_hl = new List<IndexValue<T>>();
+					SL = new List<int>();
 									
 					int max = 0;				
 					for(int i = 0; i < HardLength; i++)
@@ -70,24 +69,24 @@ namespace ExpressCraft
 							max = Indexs[i];
 					}
 					int length = max + 1;
-					HardHardList = new List<T>(length);
+					_hhl = new List<T>(length);
 
 					if(length == Indexs.Length)
 					{						
 						for(int i = 0; i < HardLength; i++)
 						{
-							HardHardList.Add(value);
+							_hhl.Add(value);
 						}
 					}
 					else
 					{
 						for(int i = 0; i < length; i++)
 						{
-							HardHardList.Add(DefaultValue);
+							_hhl.Add(DefaultValue);
 						}
 						for(int i = 0; i < HardLength; i++)
 						{
-							HardHardList[Indexs[i]] = value;
+							_hhl[Indexs[i]] = value;
 						}
 					}
 
@@ -95,54 +94,54 @@ namespace ExpressCraft
 				}
 				else
 				{
-					HardHardList = new List<T>();
+					_hhl = new List<T>();
 					HardLength = Indexs.Length;
-					HardList = new List<IndexValue<T>>(HardLength);
+					_hl = new List<IndexValue<T>>(HardLength);
 					for(int i = 0; i < HardLength; i++)
 					{
-						HardList.Add(new IndexValue<T>(Indexs[i], value));
+						_hl.Add(new IndexValue<T>(Indexs[i], value));
 					}
-					SoftList = new List<int>();
+					SL = new List<int>();
 				}				
 			}
 		}
 
 		public void ClearSoftList()
 		{
-			SoftList = new List<int>();
+			SL = new List<int>();
 		}
 
 		public void ClearAndAddOrSet(T value, int index, bool AddToSoftList = false)
 		{
-			HardHardList = new List<T>();
-			HardList = new List<IndexValue<T>>();
-			SoftList = new List<int>();
+			_hhl = new List<T>();
+			_hl = new List<IndexValue<T>>();
+			SL = new List<int>();
 			HardLength = 0;
 			AddOrSet(value, index, AddToSoftList);
 		}
 
 		protected IndexValue<T> GetHardOrSoftIndexValue(int index, bool AddToSoftList = false)
 		{
-			int length = SoftList.Count;
+			int length = SL.Count;
 			for(int i = 0; i < length; i++)
 			{
-				var slI = SoftList[i];
-				if(HardList[slI].Index == index)
+				var slI = SL[i];
+				if(_hl[slI].Index == index)
 				{
-					return HardList[slI];
+					return _hl[slI];
 				}
 			}			
 
-			length = HardList.Count;
+			length = _hl.Count;
 
 			for(int i = 0; i < length; i++)
 			{
-				var hli = HardList[i];
+				var hli = _hl[i];
 				if(hli.Index == index)
 				{
 					if(AddToSoftList)
 					{
-						SoftList.Add(i);						
+						SL.Add(i);						
 					}
 					return hli;
 				}					
@@ -153,11 +152,11 @@ namespace ExpressCraft
 
 		protected IndexValue<T> GetHardIndexValue(ref int index)
 		{
-			int length = HardList.Count;
+			int length = _hl.Count;
 
 			for(int i = 0; i < length; i++)
 			{
-				var hli = HardList[i];
+				var hli = _hl[i];
 				if(hli.Index == index)
 				{
 					index = i;
@@ -173,7 +172,7 @@ namespace ExpressCraft
 		{
 			if(HardLength > Limit)
 			{				
-				return HardHardList[index];
+				return _hhl[index];
 			}
 			var hiv = GetHardOrSoftIndexValue(index, AddToSoftList);
 			if(hiv == null)
@@ -200,8 +199,7 @@ namespace ExpressCraft
 			{
 				if(index >= HardLength)
 				{					
-					int addDiff = (index + 1) - HardHardList.Count;					
-
+					int addDiff = (index + 1) - _hhl.Count;					
 					if(addDiff > 0)
 					{
 						T[] data = new T[addDiff];
@@ -209,23 +207,22 @@ namespace ExpressCraft
 						{
 							data[i] = DefaultValue;
 						}
-						HardHardList.AddRange(data);
+						_hhl.AddRange(data);
 					}
-					HardHardList.Add(value);
-
-					HardLength = HardHardList.Count;
+					_hhl.Add(value);
+					HardLength = _hhl.Count;
 				}
 				else
 				{
-					HardHardList[index] = value;
+					_hhl[index] = value;
 				}
 				return;
 			}
 
-			int length = SoftList.Count;
+			int length = SL.Count;
 			for(int i = 0; i < length; i++)
 			{
-				var hli = HardList[SoftList[i]];
+				var hli = _hl[SL[i]];
 				if(hli.Index == index)
 				{
 					hli.Value = value;
@@ -236,12 +233,12 @@ namespace ExpressCraft
 			int hindex = index;
 			var hiv = GetHardIndexValue(ref hindex);
 			if(hiv == null)			
-				HardList.Add((hiv = new IndexValue<T>(index, value)));							
+				_hl.Add((hiv = new IndexValue<T>(index, value)));							
 			else			
 				hiv.Value = value;
 						
 			if(AddToSoftList)
-				SoftList.Add(hindex);			
+				SL.Add(hindex);			
 		}
 
 		public void Remove(int index, bool OnlySoftList = false)
@@ -250,14 +247,14 @@ namespace ExpressCraft
 			{
 				if(HardLength - 1 > Limit)
 				{
-					HardHardList[index] = DefaultValue;
+					_hhl[index] = DefaultValue;
 				}else
 				{				
 					for(int i = 0; i < HardLength; i++)
 					{
-						if(i != index && !HardHardList[i].Equals(DefaultValue))
+						if(i != index && !_hhl[i].Equals(DefaultValue))
 						{
-							HardList.Add(new IndexValue<T>(i, HardHardList[i]));
+							_hl.Add(new IndexValue<T>(i, _hhl[i]));
 						}
 					}
 
@@ -265,27 +262,27 @@ namespace ExpressCraft
 				}
 			}else
 			{
-				int Length = SoftList.Count;
+				int Length = SL.Count;
 				for(int i = 0; i < Length; i++)
 				{
-					var sli = SoftList[i];
-					if(HardList[sli].Index == index)
+					var sli = SL[i];
+					if(_hl[sli].Index == index)
 					{
-						SoftList.RemoveAt(i);
+						SL.RemoveAt(i);
 						if(OnlySoftList)
 							return;
-						HardList.RemoveAt(sli);
+						_hl.RemoveAt(sli);
 						return;
 					}
 				}
-				int length = HardList.Count;
+				int length = _hl.Count;
 
 				for(int i = 0; i < length; i++)
 				{
-					var hli = HardList[i];
+					var hli = _hl[i];
 					if(hli.Index == index)
 					{
-						HardList.RemoveAt(i);
+						_hl.RemoveAt(i);
 						return;
 					}
 				}

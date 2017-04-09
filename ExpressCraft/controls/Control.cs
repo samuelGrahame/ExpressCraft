@@ -274,14 +274,15 @@ namespace ExpressCraft
 			lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr));
 			if(!ignoreHtml)
 			{
-				lbl.InnerHTML = Caption.HtmlEscape();
+				lbl.TextContent = Caption.HtmlEscape();
 			}else
 			{
-				lbl.InnerHTML = Caption;
-			}
-			
-			lbl.SetLocation(X, Y);
-			lbl.Style.Width = width.ToPx();
+				lbl.TextContent = Caption;
+			}						
+            lbl.Style.Left = X.ToPx();
+            lbl.Style.Top = Y.ToPx();
+            lbl.Style.Width = width.ToPx();
+
 			if(Alignment != TextAlign.Left)
 			{				
 				if(Alignment == TextAlign.Right)

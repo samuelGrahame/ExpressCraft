@@ -1,0 +1,227 @@
+﻿.control{{
+    color:{22};
+}}
+.control:focus:not(.grid){{
+    outline: dashed 1px {0};
+}}
+.control::selection{{
+    background-color:{1};
+}}
+.control::-moz-selection{{
+    background-color:{1};
+}}
+.control:disabled{{
+    background-color:{2};
+}}
+.inputcontrol:read-only{{
+    background-color:{3};
+}}
+.ribboncontrol{{
+    background-color:{0};
+    border-left-color:{0};
+    border-right-color:{0};
+    border-bottom-color:{1};
+}}
+.ribbonpage{{
+    background-color:{3};
+}}
+.ribbongroup{{
+    background-color:{3};
+}}
+.ribbonbutton{{
+    background-color:{3};            
+}}
+.ribbonbutton:hover:not(:active):not(.disabled)
+{{
+    background-color:{4};
+}}
+.ribbonbutton:active:not(.disabled){{
+    background-color:{5};
+}}
+.ribbonbuttonsmall{{
+    background-color:{3};             
+}}
+.ribbonbuttonsmall:hover:not(:active):not(.disabled)
+{{
+    background-color:{4};
+}}
+.ribbonbuttonsmall:active:not(.disabled){{
+    background-color:{5};
+}}
+.ribbonseperator{{
+    background-color:{1};
+}}
+.ribbonpageheader-hidden{{
+    background-color:{0};
+    color:{23};
+}}
+.ribbonpageheader-hidden:hover{{
+    background-color:{6};
+}}
+.ribbonpageheader-active{{
+    background-color:{3};
+}}
+.tabcontrol{{
+    background-color:{3};
+}}
+.tabcontrolpage{{
+    background-color:{3};
+    border-top-color:{1};
+    border-left-color:{1};
+    border-right-color:{1};
+    border-bottom-color:{1};
+}}
+.tabcontrolpageheader {{
+    background-color:{3};           
+}}
+.tabcontrolpageheader-hidden{{
+    border-top-color:{3};
+    border-left-color:{3};
+    border-right-color:{3};
+    border-bottom-color:{1};
+}}
+.tabcontrolpageheader-hidden:hover{{
+    background-color:{7};
+    border-left-color:{7};
+    border-right-color:{7};
+}}
+.tabcontrolpageheader-active{{
+    border-top-color:{1};
+    border-left-color:{1};
+    border-right-color:{1};
+    border-bottom-color:{3};
+}}
+.tabcontrolpageheader-closebutton{{
+    color:{1};	
+}}
+.tabcontrolpageheader-closebutton:hover{{
+    color:{24};
+	background-color:{2};
+	border:1px solid {19};
+}}
+.inputcontrol {{
+    border:1px solid {1};   
+    background-color:{14};    
+}}
+.simplebutton{{
+    border:1px solid {19};
+    background-color:{3};
+}}
+.simplebutton:hover:not(.disabled)
+{{
+	background-color:{1};
+}}
+.simplebutton:active:not(.disabled)
+{{
+	background-color:{12};
+    border: 1px solid {20};
+}}
+@keyframes ColorFlash {{
+    from {{ background-color: {23};}}
+    to {{ background-color: {0};}}
+}}
+.form-base{{
+    border-color:{0};
+}}
+.form-heading{{
+    background-color:{0};      
+}}
+.form-heading-title{{
+    color:{23};     
+}}
+.form-heading-button{{
+    color:{23};
+}}
+.form-heading-button:hover:not(.form-heading-button-close){{
+    background-color:{8};
+}}
+.form-heading-button:active:not(.form-heading-button-close){{
+    background-color:{9};
+}}
+.form-heading-button-close:hover{{
+    background-color:{10};
+}}
+.form-heading-button-close:active{{
+    background-color:{11};
+}}
+.cell{{
+    border: 1px solid {3};       
+}}
+.cellrow{{
+    background-color:{14};
+}}
+.cellrow:hover{{
+    background-color:{3} !important;    
+}}
+.cellrow:active{{
+    background-color:{12} !important;
+}}
+.even{{
+   background-color:{13} !important;
+}}
+.cellrow-selected{{
+    background-color:{17} !important;    
+}}
+.cellrow-selected:hover{{
+    background-color:{18} !important;    
+}}
+.heading{{
+    background-color:{3};
+    border-right:1px solid {19} !important;
+}}
+.heading:hover{{
+    background-color:{1};
+}}
+.heading:active{{
+    background-color:{12};
+}}
+.heading-container{{
+    background-color:{3};
+    border-bottom:1px solid {19} !important;	
+}}
+.grid{{
+    background-color:{14};
+    border:1px solid {19}; 
+}}
+.progressbar{{
+    border:1px solid {19};
+    background-color:{14};
+}}
+.progressbarbody{{
+    background-color:{0};
+}}
+.contextmenu{{
+    background-color:{14};     
+    border: solid 1px {21};
+}}
+.contextitem:hover{{
+    background-color:{15};
+}}
+.contextitemseperator{{
+    background-color:{16};
+}}
+.dialogbuttonsection{{    
+    background-color:{3};
+}}
+.splitcontrol
+{{
+    border:1px solid {19};
+}}
+.splittervertical {{
+    border-left: 1px {4} solid;
+    border-right: 1px {4} solid;
+}}
+.splitterhorizontal {{
+    border-top: 1px {4} solid;
+    border-bottom: 1px {4} solid;
+}}
+.splitterhorizontal:hover {{
+    background-color:{4};    
+}}
+.splittervertical:hover {{
+    background-color:{4};
+}}
+.tool-tip{
+	background-color:{14};
+    border: solid 1px {21};
+}

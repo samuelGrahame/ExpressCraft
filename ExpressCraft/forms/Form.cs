@@ -1096,10 +1096,7 @@ namespace ExpressCraft
 				prev_py = (float)clientRec.Top - mousePos.Yf;
 				
 				var width = (float)clientRec.Width;
-				var height = (float)clientRec.Height;
-				
-				//int X = mev.PageX - Content.OffsetLeft;
-				//int Y = mev.PageY - Content.OffsetTop;
+				var height = (float)clientRec.Height;				
 
 				float X = mousePos.Xf - (float)clientRec.Left;
 				float Y = mousePos.Yf - (float)clientRec.Top;

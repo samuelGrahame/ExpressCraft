@@ -84,11 +84,6 @@ namespace ExpressCraft
 						Percent = ((float)pe.Loaded / (float)pe.Total) * 100.0f;
 					}
 					pc.internalProgressControl.Style.Width = Percent.ToString() + "%";
-					//pc.DisableUpdate = true;
-					//pc.Maximum = pe.Total;
-					//pc.Position = pe.Loaded;
-					//pc.DisableUpdate = false;
-					//pc.Update();
 				});
 
 				return xmlRequest;
@@ -121,13 +116,7 @@ namespace ExpressCraft
 					{
 						Percent = ((float)pe.Loaded / (float)pe.Total) * 100.0f;
 					}
-					pc.internalProgressControl.Style.Width = Percent.ToString() + "%";
-
-					//pc.DisableUpdate = true;
-					//pc.Maximum = pe.Total;
-					//pc.Position = pe.Loaded;
-					//pc.DisableUpdate = false;
-					//pc.Update();
+					pc.internalProgressControl.Style.Width = Percent.ToString() + "%";                    
 				});
 
 				return xmlRequest;
@@ -158,14 +147,14 @@ namespace ExpressCraft
 			public NetworkProgressForm(string _text = "Loading...")
 			{
 				this.Text = _text;
-				this.Width = "400px";
-				this.Height = "200px";
+				this.Width = 400;
+				this.Height = 200;
 
 				progressControl = new ProgressControl();
-				progressControl.SetBounds("50px", "50px", "calc(100% - 100px)", "23px");
+				progressControl.SetBounds(50, 50, "calc(100% - 100px)", "23px");
 
 				buttonCancel = new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel" };
-				buttonCancel.SetLocation("calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
+				buttonCancel.SetLocation("calc(100% - 78px)", "calc(100% - 26px)");
 				buttonCancel.Content.TabIndex = 0;
 
 				Body.AppendChildren(buttonCancel, progressControl);

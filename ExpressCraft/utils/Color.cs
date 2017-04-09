@@ -1111,9 +1111,8 @@ namespace ExpressCraft
 		private string NameAndARGBValue
 		{
 			get
-			{
-				object[] args = new object[] { this.Name, this.A, this.R, this.G, this.B };
-				return string.Format("{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}", args);
+			{				
+				return string.Format("{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}", this.Name, this.A, this.R, this.G, this.B);
 			}
 		}
 		public string Name
@@ -1151,11 +1150,10 @@ namespace ExpressCraft
 				return NotDefinedValue;
 			}
 		}
-		private static void CheckByte(int value, string name)
+		private static void CheckByte(int value)
 		{
 			if((value < 0) || (value > 0xff))
 			{
-				object[] args = new object[] { name, value, 0, 0xff };
 				throw new ArgumentException("InvalidEx2BoundArgument");
 			}
 		}
@@ -1172,16 +1170,16 @@ namespace ExpressCraft
 
 		public static Color FromArgb(int alpha, int red, int green, int blue)
 		{
-			CheckByte(alpha, "alpha");
-			CheckByte(red, "red");
-			CheckByte(green, "green");
-			CheckByte(blue, "blue");
+			CheckByte(alpha);
+			CheckByte(red);
+			CheckByte(green);
+			CheckByte(blue);
 			return new Color(MakeArgb((byte)alpha, (byte)red, (byte)green, (byte)blue), StateARGBValueValid, null, (KnownColor)0);
 		}
 
 		public static Color FromArgb(int alpha, Color baseColor)
 		{
-			CheckByte(alpha, "alpha");
+			CheckByte(alpha);
 			return new Color(MakeArgb((byte)alpha, baseColor.R, baseColor.G, baseColor.B), StateARGBValueValid, null, (KnownColor)0);
 		}
 
@@ -1230,28 +1228,28 @@ namespace ExpressCraft
 
 		public float GetBrightness()
 		{
-			float num = ((float)this.R) / 255f;
-			float num2 = ((float)this.G) / 255f;
-			float num3 = ((float)this.B) / 255f;
-			float num4 = num;
-			float num5 = num;
-			if(num2 > num4)
+			float z = R / q;
+			float x = G / q;
+			float c = B / q;
+			float v = z;
+			float b = z;
+			if(x > v)
 			{
-				num4 = num2;
+				v = x;
 			}
-			if(num3 > num4)
+			if(c > v)
 			{
-				num4 = num3;
+				v = c;
 			}
-			if(num2 < num5)
+			if(x < b)
 			{
-				num5 = num2;
+				b = x;
 			}
-			if(num3 < num5)
+			if(c < b)
 			{
-				num5 = num3;
+				b = c;
 			}
-			return ((num4 + num5) / 2f);
+			return ((v + b) / 2f);
 		}
 
 		public float GetHue()
@@ -1260,83 +1258,83 @@ namespace ExpressCraft
 			{
 				return 0f;
 			}
-			float num = ((float)this.R) / 255f;
-			float num2 = ((float)this.G) / 255f;
-			float num3 = ((float)this.B) / 255f;
-			float num7 = 0f;
-			float num4 = num;
-			float num5 = num;
-			if(num2 > num4)
+			float z = R / q;
+			float x = G / q;
+			float c = B / q;
+			float v = 0f;
+			float b = z;
+			float n = z;
+			if(x > b)
 			{
-				num4 = num2;
+				b = x;
 			}
-			if(num3 > num4)
+			if(c > b)
 			{
-				num4 = num3;
+				b = c;
 			}
-			if(num2 < num5)
+			if(x < n)
 			{
-				num5 = num2;
+				n = x;
 			}
-			if(num3 < num5)
+			if(c < n)
 			{
-				num5 = num3;
+				n = c;
 			}
-			float num6 = num4 - num5;
-			if(num == num4)
+			float num6 = b - n;
+			if(z == b)
 			{
-				num7 = (num2 - num3) / num6;
+				v = (x - c) / num6;
 			}
-			else if(num2 == num4)
+			else if(x == b)
 			{
-				num7 = 2f + ((num3 - num) / num6);
+				v = 2f + ((c - z) / num6);
 			}
-			else if(num3 == num4)
+			else if(c == b)
 			{
-				num7 = 4f + ((num - num2) / num6);
+				v = 4f + ((z - x) / num6);
 			}
-			num7 *= 60f;
-			if(num7 < 0f)
+			v *= 60f;
+			if(v < 0f)
 			{
-				num7 += 360f;
+				v += 360f;
 			}
-			return num7;
+			return v;
 		}
-
-		public float GetSaturation()
-		{
-			float num = ((float)this.R) / 255f;
-			float num2 = ((float)this.G) / 255f;
-			float num3 = ((float)this.B) / 255f;
-			float num7 = 0f;
-			float num4 = num;
-			float num5 = num;
-			if(num2 > num4)
+        private static float q = 255f;
+        public float GetSaturation()
+		{            
+            float z = R / q;
+			float x = G / q;
+			float c = B / q;
+			float v = 0f;
+			float b = z;
+			float n = z;
+			if(x > b)
 			{
-				num4 = num2;
+				b = x;
 			}
-			if(num3 > num4)
+			if(c > b)
 			{
-				num4 = num3;
+				b = c;
 			}
-			if(num2 < num5)
+			if(x < n)
 			{
-				num5 = num2;
+				n = x;
 			}
-			if(num3 < num5)
+			if(c < n)
 			{
-				num5 = num3;
+				n = c;
 			}
-			if(num4 == num5)
+			if(b == n)
 			{
-				return num7;
+				return v;
 			}
-			float num6 = (num4 + num5) / 2f;
-			if(num6 <= 0.5)
+			float m = (b + n) / 2f;
+			if(m <= 0.5)
 			{
-				return ((num4 - num5) / (num4 + num5));
+				return ((b - n) / (b + n));
 			}
-			return ((num4 - num5) / ((2f - num4) - num5));
+			return ((b - n) / ((2f - b) - n));
 		}
 
 		public int ToArgb()
@@ -1364,14 +1362,7 @@ namespace ExpressCraft
 			}
 			else if((this.state & StateValueMask) != 0)
 			{
-				builder.Append("A=");
-				builder.Append(this.A);
-				builder.Append(", R=");
-				builder.Append(this.R);
-				builder.Append(", G=");
-				builder.Append(this.G);
-				builder.Append(", B=");
-				builder.Append(this.B);
+                builder.AppendFormat("A={0}, R={1}, G={2}, B={3}", A, R, G, B);                
 			}
 			else
 			{
@@ -1662,330 +1653,330 @@ namespace ExpressCraft
 
 		private static void InitColorNameTable()
 		{
-			string[] strArray = new string[0xaf];
-			strArray[1] = "ActiveBorder";
-			strArray[2] = "ActiveCaption";
-			strArray[3] = "ActiveCaptionText";
-			strArray[4] = "AppWorkspace";
-			strArray[0xa8] = "ButtonFace";
-			strArray[0xa9] = "ButtonHighlight";
-			strArray[170] = "ButtonShadow";
-			strArray[5] = "Control";
-			strArray[6] = "ControlDark";
-			strArray[7] = "ControlDarkDark";
-			strArray[8] = "ControlLight";
-			strArray[9] = "ControlLightLight";
-			strArray[10] = "ControlText";
-			strArray[11] = "Desktop";
-			strArray[0xab] = "GradientActiveCaption";
-			strArray[0xac] = "GradientInactiveCaption";
-			strArray[12] = "GrayText";
-			strArray[13] = "Highlight";
-			strArray[14] = "HighlightText";
-			strArray[15] = "HotTrack";
-			strArray[0x10] = "InactiveBorder";
-			strArray[0x11] = "InactiveCaption";
-			strArray[0x12] = "InactiveCaptionText";
-			strArray[0x13] = "Info";
-			strArray[20] = "InfoText";
-			strArray[0x15] = "Menu";
-			strArray[0xad] = "MenuBar";
-			strArray[0xae] = "MenuHighlight";
-			strArray[0x16] = "MenuText";
-			strArray[0x17] = "ScrollBar";
-			strArray[0x18] = "Window";
-			strArray[0x19] = "WindowFrame";
-			strArray[0x1a] = "WindowText";
-			strArray[0x1b] = "Transparent";
-			strArray[0x1c] = "AliceBlue";
-			strArray[0x1d] = "AntiqueWhite";
-			strArray[30] = "Aqua";
-			strArray[0x1f] = "Aquamarine";
-			strArray[0x20] = "Azure";
-			strArray[0x21] = "Beige";
-			strArray[0x22] = "Bisque";
-			strArray[0x23] = "Black";
-			strArray[0x24] = "BlanchedAlmond";
-			strArray[0x25] = "Blue";
-			strArray[0x26] = "BlueViolet";
-			strArray[0x27] = "Brown";
-			strArray[40] = "BurlyWood";
-			strArray[0x29] = "CadetBlue";
-			strArray[0x2a] = "Chartreuse";
-			strArray[0x2b] = "Chocolate";
-			strArray[0x2c] = "Coral";
-			strArray[0x2d] = "CornflowerBlue";
-			strArray[0x2e] = "Cornsilk";
-			strArray[0x2f] = "Crimson";
-			strArray[0x30] = "Cyan";
-			strArray[0x31] = "DarkBlue";
-			strArray[50] = "DarkCyan";
-			strArray[0x33] = "DarkGoldenrod";
-			strArray[0x34] = "DarkGray";
-			strArray[0x35] = "DarkGreen";
-			strArray[0x36] = "DarkKhaki";
-			strArray[0x37] = "DarkMagenta";
-			strArray[0x38] = "DarkOliveGreen";
-			strArray[0x39] = "DarkOrange";
-			strArray[0x3a] = "DarkOrchid";
-			strArray[0x3b] = "DarkRed";
-			strArray[60] = "DarkSalmon";
-			strArray[0x3d] = "DarkSeaGreen";
-			strArray[0x3e] = "DarkSlateBlue";
-			strArray[0x3f] = "DarkSlateGray";
-			strArray[0x40] = "DarkTurquoise";
-			strArray[0x41] = "DarkViolet";
-			strArray[0x42] = "DeepPink";
-			strArray[0x43] = "DeepSkyBlue";
-			strArray[0x44] = "DimGray";
-			strArray[0x45] = "DodgerBlue";
-			strArray[70] = "Firebrick";
-			strArray[0x47] = "FloralWhite";
-			strArray[0x48] = "ForestGreen";
-			strArray[0x49] = "Fuchsia";
-			strArray[0x4a] = "Gainsboro";
-			strArray[0x4b] = "GhostWhite";
-			strArray[0x4c] = "Gold";
-			strArray[0x4d] = "Goldenrod";
-			strArray[0x4e] = "Gray";
-			strArray[0x4f] = "Green";
-			strArray[80] = "GreenYellow";
-			strArray[0x51] = "Honeydew";
-			strArray[0x52] = "HotPink";
-			strArray[0x53] = "IndianRed";
-			strArray[0x54] = "Indigo";
-			strArray[0x55] = "Ivory";
-			strArray[0x56] = "Khaki";
-			strArray[0x57] = "Lavender";
-			strArray[0x58] = "LavenderBlush";
-			strArray[0x59] = "LawnGreen";
-			strArray[90] = "LemonChiffon";
-			strArray[0x5b] = "LightBlue";
-			strArray[0x5c] = "LightCoral";
-			strArray[0x5d] = "LightCyan";
-			strArray[0x5e] = "LightGoldenrodYellow";
-			strArray[0x5f] = "LightGray";
-			strArray[0x60] = "LightGreen";
-			strArray[0x61] = "LightPink";
-			strArray[0x62] = "LightSalmon";
-			strArray[0x63] = "LightSeaGreen";
-			strArray[100] = "LightSkyBlue";
-			strArray[0x65] = "LightSlateGray";
-			strArray[0x66] = "LightSteelBlue";
-			strArray[0x67] = "LightYellow";
-			strArray[0x68] = "Lime";
-			strArray[0x69] = "LimeGreen";
-			strArray[0x6a] = "Linen";
-			strArray[0x6b] = "Magenta";
-			strArray[0x6c] = "Maroon";
-			strArray[0x6d] = "MediumAquamarine";
-			strArray[110] = "MediumBlue";
-			strArray[0x6f] = "MediumOrchid";
-			strArray[0x70] = "MediumPurple";
-			strArray[0x71] = "MediumSeaGreen";
-			strArray[0x72] = "MediumSlateBlue";
-			strArray[0x73] = "MediumSpringGreen";
-			strArray[0x74] = "MediumTurquoise";
-			strArray[0x75] = "MediumVioletRed";
-			strArray[0x76] = "MidnightBlue";
-			strArray[0x77] = "MintCream";
-			strArray[120] = "MistyRose";
-			strArray[0x79] = "Moccasin";
-			strArray[0x7a] = "NavajoWhite";
-			strArray[0x7b] = "Navy";
-			strArray[0x7c] = "OldLace";
-			strArray[0x7d] = "Olive";
-			strArray[0x7e] = "OliveDrab";
-			strArray[0x7f] = "Orange";
-			strArray[0x80] = "OrangeRed";
-			strArray[0x81] = "Orchid";
-			strArray[130] = "PaleGoldenrod";
-			strArray[0x83] = "PaleGreen";
-			strArray[0x84] = "PaleTurquoise";
-			strArray[0x85] = "PaleVioletRed";
-			strArray[0x86] = "PapayaWhip";
-			strArray[0x87] = "PeachPuff";
-			strArray[0x88] = "Peru";
-			strArray[0x89] = "Pink";
-			strArray[0x8a] = "Plum";
-			strArray[0x8b] = "PowderBlue";
-			strArray[140] = "Purple";
-			strArray[0x8d] = "Red";
-			strArray[0x8e] = "RosyBrown";
-			strArray[0x8f] = "RoyalBlue";
-			strArray[0x90] = "SaddleBrown";
-			strArray[0x91] = "Salmon";
-			strArray[0x92] = "SandyBrown";
-			strArray[0x93] = "SeaGreen";
-			strArray[0x94] = "SeaShell";
-			strArray[0x95] = "Sienna";
-			strArray[150] = "Silver";
-			strArray[0x97] = "SkyBlue";
-			strArray[0x98] = "SlateBlue";
-			strArray[0x99] = "SlateGray";
-			strArray[0x9a] = "Snow";
-			strArray[0x9b] = "SpringGreen";
-			strArray[0x9c] = "SteelBlue";
-			strArray[0x9d] = "Tan";
-			strArray[0x9e] = "Teal";
-			strArray[0x9f] = "Thistle";
-			strArray[160] = "Tomato";
-			strArray[0xa1] = "Turquoise";
-			strArray[0xa2] = "Violet";
-			strArray[0xa3] = "Wheat";
-			strArray[0xa4] = "White";
-			strArray[0xa5] = "WhiteSmoke";
-			strArray[0xa6] = "Yellow";
-			strArray[0xa7] = "YellowGreen";
-			colorNameTable = strArray;
+			string[] s = new string[0xaf];
+			s[1] = "ActiveBorder";
+			s[2] = "ActiveCaption";
+			s[3] = "ActiveCaptionText";
+			s[4] = "AppWorkspace";
+			s[0xa8] = "ButtonFace";
+			s[0xa9] = "ButtonHighlight";
+			s[170] = "ButtonShadow";
+			s[5] = "Control";
+			s[6] = "ControlDark";
+			s[7] = "ControlDarkDark";
+			s[8] = "ControlLight";
+			s[9] = "ControlLightLight";
+			s[10] = "ControlText";
+			s[11] = "Desktop";
+			s[0xab] = "GradientActiveCaption";
+			s[0xac] = "GradientInactiveCaption";
+			s[12] = "GrayText";
+			s[13] = "Highlight";
+			s[14] = "HighlightText";
+			s[15] = "HotTrack";
+			s[0x10] = "InactiveBorder";
+			s[0x11] = "InactiveCaption";
+			s[0x12] = "InactiveCaptionText";
+			s[0x13] = "Info";
+			s[20] = "InfoText";
+			s[0x15] = "Menu";
+			s[0xad] = "MenuBar";
+			s[0xae] = "MenuHighlight";
+			s[0x16] = "MenuText";
+			s[0x17] = "ScrollBar";
+			s[0x18] = "Window";
+			s[0x19] = "WindowFrame";
+			s[0x1a] = "WindowText";
+			s[0x1b] = "Transparent";
+			s[0x1c] = "AliceBlue";
+			s[0x1d] = "AntiqueWhite";
+			s[30] = "Aqua";
+			s[0x1f] = "Aquamarine";
+			s[0x20] = "Azure";
+			s[0x21] = "Beige";
+			s[0x22] = "Bisque";
+			s[0x23] = "Black";
+			s[0x24] = "BlanchedAlmond";
+			s[0x25] = "Blue";
+			s[0x26] = "BlueViolet";
+			s[0x27] = "Brown";
+			s[40] = "BurlyWood";
+			s[0x29] = "CadetBlue";
+			s[0x2a] = "Chartreuse";
+			s[0x2b] = "Chocolate";
+			s[0x2c] = "Coral";
+			s[0x2d] = "CornflowerBlue";
+			s[0x2e] = "Cornsilk";
+			s[0x2f] = "Crimson";
+			s[0x30] = "Cyan";
+			s[0x31] = "DarkBlue";
+			s[50] = "DarkCyan";
+			s[0x33] = "DarkGoldenrod";
+			s[0x34] = "DarkGray";
+			s[0x35] = "DarkGreen";
+			s[0x36] = "DarkKhaki";
+			s[0x37] = "DarkMagenta";
+			s[0x38] = "DarkOliveGreen";
+			s[0x39] = "DarkOrange";
+			s[0x3a] = "DarkOrchid";
+			s[0x3b] = "DarkRed";
+			s[60] = "DarkSalmon";
+			s[0x3d] = "DarkSeaGreen";
+			s[0x3e] = "DarkSlateBlue";
+			s[0x3f] = "DarkSlateGray";
+			s[0x40] = "DarkTurquoise";
+			s[0x41] = "DarkViolet";
+			s[0x42] = "DeepPink";
+			s[0x43] = "DeepSkyBlue";
+			s[0x44] = "DimGray";
+			s[0x45] = "DodgerBlue";
+			s[70] = "Firebrick";
+			s[0x47] = "FloralWhite";
+			s[0x48] = "ForestGreen";
+			s[0x49] = "Fuchsia";
+			s[0x4a] = "Gainsboro";
+			s[0x4b] = "GhostWhite";
+			s[0x4c] = "Gold";
+			s[0x4d] = "Goldenrod";
+			s[0x4e] = "Gray";
+			s[0x4f] = "Green";
+			s[80] = "GreenYellow";
+			s[0x51] = "Honeydew";
+			s[0x52] = "HotPink";
+			s[0x53] = "IndianRed";
+			s[0x54] = "Indigo";
+			s[0x55] = "Ivory";
+			s[0x56] = "Khaki";
+			s[0x57] = "Lavender";
+			s[0x58] = "LavenderBlush";
+			s[0x59] = "LawnGreen";
+			s[90] = "LemonChiffon";
+			s[0x5b] = "LightBlue";
+			s[0x5c] = "LightCoral";
+			s[0x5d] = "LightCyan";
+			s[0x5e] = "LightGoldenrodYellow";
+			s[0x5f] = "LightGray";
+			s[0x60] = "LightGreen";
+			s[0x61] = "LightPink";
+			s[0x62] = "LightSalmon";
+			s[0x63] = "LightSeaGreen";
+			s[100] = "LightSkyBlue";
+			s[0x65] = "LightSlateGray";
+			s[0x66] = "LightSteelBlue";
+			s[0x67] = "LightYellow";
+			s[0x68] = "Lime";
+			s[0x69] = "LimeGreen";
+			s[0x6a] = "Linen";
+			s[0x6b] = "Magenta";
+			s[0x6c] = "Maroon";
+			s[0x6d] = "MediumAquamarine";
+			s[110] = "MediumBlue";
+			s[0x6f] = "MediumOrchid";
+			s[0x70] = "MediumPurple";
+			s[0x71] = "MediumSeaGreen";
+			s[0x72] = "MediumSlateBlue";
+			s[0x73] = "MediumSpringGreen";
+			s[0x74] = "MediumTurquoise";
+			s[0x75] = "MediumVioletRed";
+			s[0x76] = "MidnightBlue";
+			s[0x77] = "MintCream";
+			s[120] = "MistyRose";
+			s[0x79] = "Moccasin";
+			s[0x7a] = "NavajoWhite";
+			s[0x7b] = "Navy";
+			s[0x7c] = "OldLace";
+			s[0x7d] = "Olive";
+			s[0x7e] = "OliveDrab";
+			s[0x7f] = "Orange";
+			s[0x80] = "OrangeRed";
+			s[0x81] = "Orchid";
+			s[130] = "PaleGoldenrod";
+			s[0x83] = "PaleGreen";
+			s[0x84] = "PaleTurquoise";
+			s[0x85] = "PaleVioletRed";
+			s[0x86] = "PapayaWhip";
+			s[0x87] = "PeachPuff";
+			s[0x88] = "Peru";
+			s[0x89] = "Pink";
+			s[0x8a] = "Plum";
+			s[0x8b] = "PowderBlue";
+			s[140] = "Purple";
+			s[0x8d] = "Red";
+			s[0x8e] = "RosyBrown";
+			s[0x8f] = "RoyalBlue";
+			s[0x90] = "SaddleBrown";
+			s[0x91] = "Salmon";
+			s[0x92] = "SandyBrown";
+			s[0x93] = "SeaGreen";
+			s[0x94] = "SeaShell";
+			s[0x95] = "Sienna";
+			s[150] = "Silver";
+			s[0x97] = "SkyBlue";
+			s[0x98] = "SlateBlue";
+			s[0x99] = "SlateGray";
+			s[0x9a] = "Snow";
+			s[0x9b] = "SpringGreen";
+			s[0x9c] = "SteelBlue";
+			s[0x9d] = "Tan";
+			s[0x9e] = "Teal";
+			s[0x9f] = "Thistle";
+			s[160] = "Tomato";
+			s[0xa1] = "Turquoise";
+			s[0xa2] = "Violet";
+			s[0xa3] = "Wheat";
+			s[0xa4] = "White";
+			s[0xa5] = "WhiteSmoke";
+			s[0xa6] = "Yellow";
+			s[0xa7] = "YellowGreen";
+			colorNameTable = s;
 		}
 
 		private static void InitColorTable()
 		{
-			int[] colorTable = new int[0xaf];			
+			int[] c = new int[0xaf];			
 			
-			colorTable[0x1b] = 0xffffff;
-			colorTable[0x1c] = -984833;
-			colorTable[0x1d] = -332841;
-			colorTable[30] = -16711681;
-			colorTable[0x1f] = -8388652;
-			colorTable[0x20] = -983041;
-			colorTable[0x21] = -657956;
-			colorTable[0x22] = -6972;
-			colorTable[0x23] = -16777216;
-			colorTable[0x24] = -5171;
-			colorTable[0x25] = -16776961;
-			colorTable[0x26] = -7722014;
-			colorTable[0x27] = -5952982;
-			colorTable[40] = -2180985;
-			colorTable[0x29] = -10510688;
-			colorTable[0x2a] = -8388864;
-			colorTable[0x2b] = -2987746;
-			colorTable[0x2c] = -32944;
-			colorTable[0x2d] = -10185235;
-			colorTable[0x2e] = -1828;
-			colorTable[0x2f] = -2354116;
-			colorTable[0x30] = -16711681;
-			colorTable[0x31] = -16777077;
-			colorTable[50] = -16741493;
-			colorTable[0x33] = -4684277;
-			colorTable[0x34] = -5658199;
-			colorTable[0x35] = -16751616;
-			colorTable[0x36] = -4343957;
-			colorTable[0x37] = -7667573;
-			colorTable[0x38] = -11179217;
-			colorTable[0x39] = -29696;
-			colorTable[0x3a] = -6737204;
-			colorTable[0x3b] = -7667712;
-			colorTable[60] = -1468806;
-			colorTable[0x3d] = -7357301;
-			colorTable[0x3e] = -12042869;
-			colorTable[0x3f] = -13676721;
-			colorTable[0x40] = -16724271;
-			colorTable[0x41] = -7077677;
-			colorTable[0x42] = -60269;
-			colorTable[0x43] = -16728065;
-			colorTable[0x44] = -9868951;
-			colorTable[0x45] = -14774017;
-			colorTable[70] = -5103070;
-			colorTable[0x47] = -1296;
-			colorTable[0x48] = -14513374;
-			colorTable[0x49] = -65281;
-			colorTable[0x4a] = -2302756;
-			colorTable[0x4b] = -460545;
-			colorTable[0x4c] = -10496;
-			colorTable[0x4d] = -2448096;
-			colorTable[0x4e] = -8355712;
-			colorTable[0x4f] = -16744448;
-			colorTable[80] = -5374161;
-			colorTable[0x51] = -983056;
-			colorTable[0x52] = -38476;
-			colorTable[0x53] = -3318692;
-			colorTable[0x54] = -11861886;
-			colorTable[0x55] = -16;
-			colorTable[0x56] = -989556;
-			colorTable[0x57] = -1644806;
-			colorTable[0x58] = -3851;
-			colorTable[0x59] = -8586240;
-			colorTable[90] = -1331;
-			colorTable[0x5b] = -5383962;
-			colorTable[0x5c] = -1015680;
-			colorTable[0x5d] = -2031617;
-			colorTable[0x5e] = -329006;
-			colorTable[0x5f] = -2894893;
-			colorTable[0x60] = -7278960;
-			colorTable[0x61] = -18751;
-			colorTable[0x62] = -24454;
-			colorTable[0x63] = -14634326;
-			colorTable[100] = -7876870;
-			colorTable[0x65] = -8943463;
-			colorTable[0x66] = -5192482;
-			colorTable[0x67] = -32;
-			colorTable[0x68] = -16711936;
-			colorTable[0x69] = -13447886;
-			colorTable[0x6a] = -331546;
-			colorTable[0x6b] = -65281;
-			colorTable[0x6c] = -8388608;
-			colorTable[0x6d] = -10039894;
-			colorTable[110] = -16777011;
-			colorTable[0x6f] = -4565549;
-			colorTable[0x70] = -7114533;
-			colorTable[0x71] = -12799119;
-			colorTable[0x72] = -8689426;
-			colorTable[0x73] = -16713062;
-			colorTable[0x74] = -12004916;
-			colorTable[0x75] = -3730043;
-			colorTable[0x76] = -15132304;
-			colorTable[0x77] = -655366;
-			colorTable[120] = -6943;
-			colorTable[0x79] = -6987;
-			colorTable[0x7a] = -8531;
-			colorTable[0x7b] = -16777088;
-			colorTable[0x7c] = -133658;
-			colorTable[0x7d] = -8355840;
-			colorTable[0x7e] = -9728477;
-			colorTable[0x7f] = -23296;
-			colorTable[0x80] = -47872;
-			colorTable[0x81] = -2461482;
-			colorTable[130] = -1120086;
-			colorTable[0x83] = -6751336;
-			colorTable[0x84] = -5247250;
-			colorTable[0x85] = -2396013;
-			colorTable[0x86] = -4139;
-			colorTable[0x87] = -9543;
-			colorTable[0x88] = -3308225;
-			colorTable[0x89] = -16181;
-			colorTable[0x8a] = -2252579;
-			colorTable[0x8b] = -5185306;
-			colorTable[140] = -8388480;
-			colorTable[0x8d] = -65536;
-			colorTable[0x8e] = -4419697;
-			colorTable[0x8f] = -12490271;
-			colorTable[0x90] = -7650029;
-			colorTable[0x91] = -360334;
-			colorTable[0x92] = -744352;
-			colorTable[0x93] = -13726889;
-			colorTable[0x94] = -2578;
-			colorTable[0x95] = -6270419;
-			colorTable[150] = -4144960;
-			colorTable[0x97] = -7876885;
-			colorTable[0x98] = -9807155;
-			colorTable[0x99] = -9404272;
-			colorTable[0x9a] = -1286;
-			colorTable[0x9b] = -16711809;
-			colorTable[0x9c] = -12156236;
-			colorTable[0x9d] = -2968436;
-			colorTable[0x9e] = -16744320;
-			colorTable[0x9f] = -2572328;
-			colorTable[160] = -40121;
-			colorTable[0xa1] = -12525360;
-			colorTable[0xa2] = -1146130;
-			colorTable[0xa3] = -663885;
-			colorTable[0xa4] = -1;
-			colorTable[0xa5] = -657931;
-			colorTable[0xa6] = -256;
-			colorTable[0xa7] = -6632142;
-			KnownColorTable.colorTable = colorTable;
+			c[0x1b] = 0xffffff;
+			c[0x1c] = -984833;
+			c[0x1d] = -332841;
+			c[30] = -16711681;
+			c[0x1f] = -8388652;
+			c[0x20] = -983041;
+			c[0x21] = -657956;
+			c[0x22] = -6972;
+			c[0x23] = -16777216;
+			c[0x24] = -5171;
+			c[0x25] = -16776961;
+			c[0x26] = -7722014;
+			c[0x27] = -5952982;
+			c[40] = -2180985;
+			c[0x29] = -10510688;
+			c[0x2a] = -8388864;
+			c[0x2b] = -2987746;
+			c[0x2c] = -32944;
+			c[0x2d] = -10185235;
+			c[0x2e] = -1828;
+			c[0x2f] = -2354116;
+			c[0x30] = -16711681;
+			c[0x31] = -16777077;
+			c[50] = -16741493;
+			c[0x33] = -4684277;
+			c[0x34] = -5658199;
+			c[0x35] = -16751616;
+			c[0x36] = -4343957;
+			c[0x37] = -7667573;
+			c[0x38] = -11179217;
+			c[0x39] = -29696;
+			c[0x3a] = -6737204;
+			c[0x3b] = -7667712;
+			c[60] = -1468806;
+			c[0x3d] = -7357301;
+			c[0x3e] = -12042869;
+			c[0x3f] = -13676721;
+			c[0x40] = -16724271;
+			c[0x41] = -7077677;
+			c[0x42] = -60269;
+			c[0x43] = -16728065;
+			c[0x44] = -9868951;
+			c[0x45] = -14774017;
+			c[70] = -5103070;
+			c[0x47] = -1296;
+			c[0x48] = -14513374;
+			c[0x49] = -65281;
+			c[0x4a] = -2302756;
+			c[0x4b] = -460545;
+			c[0x4c] = -10496;
+			c[0x4d] = -2448096;
+			c[0x4e] = -8355712;
+			c[0x4f] = -16744448;
+			c[80] = -5374161;
+			c[0x51] = -983056;
+			c[0x52] = -38476;
+			c[0x53] = -3318692;
+			c[0x54] = -11861886;
+			c[0x55] = -16;
+			c[0x56] = -989556;
+			c[0x57] = -1644806;
+			c[0x58] = -3851;
+			c[0x59] = -8586240;
+			c[90] = -1331;
+			c[0x5b] = -5383962;
+			c[0x5c] = -1015680;
+			c[0x5d] = -2031617;
+			c[0x5e] = -329006;
+			c[0x5f] = -2894893;
+			c[0x60] = -7278960;
+			c[0x61] = -18751;
+			c[0x62] = -24454;
+			c[0x63] = -14634326;
+			c[100] = -7876870;
+			c[0x65] = -8943463;
+			c[0x66] = -5192482;
+			c[0x67] = -32;
+			c[0x68] = -16711936;
+			c[0x69] = -13447886;
+			c[0x6a] = -331546;
+			c[0x6b] = -65281;
+			c[0x6c] = -8388608;
+			c[0x6d] = -10039894;
+			c[110] = -16777011;
+			c[0x6f] = -4565549;
+			c[0x70] = -7114533;
+			c[0x71] = -12799119;
+			c[0x72] = -8689426;
+			c[0x73] = -16713062;
+			c[0x74] = -12004916;
+			c[0x75] = -3730043;
+			c[0x76] = -15132304;
+			c[0x77] = -655366;
+			c[120] = -6943;
+			c[0x79] = -6987;
+			c[0x7a] = -8531;
+			c[0x7b] = -16777088;
+			c[0x7c] = -133658;
+			c[0x7d] = -8355840;
+			c[0x7e] = -9728477;
+			c[0x7f] = -23296;
+			c[0x80] = -47872;
+			c[0x81] = -2461482;
+			c[130] = -1120086;
+			c[0x83] = -6751336;
+			c[0x84] = -5247250;
+			c[0x85] = -2396013;
+			c[0x86] = -4139;
+			c[0x87] = -9543;
+			c[0x88] = -3308225;
+			c[0x89] = -16181;
+			c[0x8a] = -2252579;
+			c[0x8b] = -5185306;
+			c[140] = -8388480;
+			c[0x8d] = -65536;
+			c[0x8e] = -4419697;
+			c[0x8f] = -12490271;
+			c[0x90] = -7650029;
+			c[0x91] = -360334;
+			c[0x92] = -744352;
+			c[0x93] = -13726889;
+			c[0x94] = -2578;
+			c[0x95] = -6270419;
+			c[150] = -4144960;
+			c[0x97] = -7876885;
+			c[0x98] = -9807155;
+			c[0x99] = -9404272;
+			c[0x9a] = -1286;
+			c[0x9b] = -16711809;
+			c[0x9c] = -12156236;
+			c[0x9d] = -2968436;
+			c[0x9e] = -16744320;
+			c[0x9f] = -2572328;
+			c[160] = -40121;
+			c[0xa1] = -12525360;
+			c[0xa2] = -1146130;
+			c[0xa3] = -663885;
+			c[0xa4] = -1;
+			c[0xa5] = -657931;
+			c[0xa6] = -256;
+			c[0xa7] = -6632142;
+            colorTable = c;
 		}
 
 		public static int KnownColorToArgb(KnownColor color)

@@ -92,13 +92,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 var lbl = document.createElement('span');
                 lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
                 if (!ignoreHtml) {
-                    lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
+                    lbl.textContent = ExpressCraft.Helper.htmlEscape$1(Caption);
                 } else {
-                    lbl.innerHTML = Caption;
+                    lbl.textContent = Caption;
                 }
+                lbl.style.left = ExpressCraft.Helper.toPx(X);
+                lbl.style.top = ExpressCraft.Helper.toPx(Y);
+                lbl.style.width = ExpressCraft.Helper.toPx(width);
 
-                ExpressCraft.Helper.setLocation(lbl, X, Y);
-                lbl.style.width = ExpressCraft.Helper.toPx$2(width);
                 if (Alignment !== "left") {
                     if (Alignment === "right") {
                         lbl.style.direction = "rtl";
@@ -137,7 +138,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
                 ExpressCraft.Helper.setLocation(lbl, X, Y);
-                lbl.style.width = ExpressCraft.Helper.toPx$1(width);
+                lbl.style.width = ExpressCraft.Helper.toPx(width);
                 ExpressCraft.Control.setBT(lbl, IsBold, IsTiny);
 
                 return lbl;
@@ -640,6 +641,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ARGBRedShift: 16,
             ARGBGreenShift: 8,
             ARGBBlueShift: 0,
+            q: 255.0,
             config: {
                 init: function () {
                     this.empty = new ExpressCraft.Color();
@@ -1068,9 +1070,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             getYellowGreen: function () {
                 return new ExpressCraft.Color.$ctor1(ExpressCraft.KnownColor.YellowGreen);
             },
-            checkByte: function (value, name) {
+            checkByte: function (value) {
                 if ((value < 0) || (value > 255)) {
-                    var args = System.Array.init([name, value, 0, 255], Object);
                     throw new System.ArgumentException("InvalidEx2BoundArgument");
                 }
             },
@@ -1081,14 +1082,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return new ExpressCraft.Color.$ctor2(System.Int64(argb).and((System.Int64([-1,0]))), ExpressCraft.Color.stateARGBValueValid, null, 0);
             },
             fromArgb$3: function (alpha, red, green, blue) {
-                ExpressCraft.Color.checkByte(alpha, "alpha");
-                ExpressCraft.Color.checkByte(red, "red");
-                ExpressCraft.Color.checkByte(green, "green");
-                ExpressCraft.Color.checkByte(blue, "blue");
+                ExpressCraft.Color.checkByte(alpha);
+                ExpressCraft.Color.checkByte(red);
+                ExpressCraft.Color.checkByte(green);
+                ExpressCraft.Color.checkByte(blue);
                 return new ExpressCraft.Color.$ctor2(ExpressCraft.Color.makeArgb((alpha & 255), (red & 255), (green & 255), (blue & 255)), ExpressCraft.Color.stateARGBValueValid, null, 0);
             },
             fromArgb$1: function (alpha, baseColor) {
-                ExpressCraft.Color.checkByte(alpha, "alpha");
+                ExpressCraft.Color.checkByte(alpha);
                 return new ExpressCraft.Color.$ctor2(ExpressCraft.Color.makeArgb((alpha & 255), baseColor.getR(), baseColor.getG(), baseColor.getB()), ExpressCraft.Color.stateARGBValueValid, null, 0);
             },
             fromArgb$2: function (red, green, blue) {
@@ -1179,8 +1180,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             return true;
         },
         getNameAndARGBValue: function () {
-            var args = System.Array.init([this.getName(), this.getA(), this.getR(), this.getG(), this.getB()], Object);
-            return System.String.format.apply(System.String, ["{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}"].concat(args));
+            return System.String.format("{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}", this.getName(), this.getA(), this.getR(), this.getG(), this.getB());
         },
         getName: function () {
             if ((this.state & ExpressCraft.Color.stateNameValid) !== 0) {
@@ -1216,88 +1216,88 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             }
         },
         getBrightness: function () {
-            var num = this.getR() / 255.0;
-            var num2 = this.getG() / 255.0;
-            var num3 = this.getB() / 255.0;
-            var num4 = num;
-            var num5 = num;
-            if (num2 > num4) {
-                num4 = num2;
+            var z = this.getR() / ExpressCraft.Color.q;
+            var x = this.getG() / ExpressCraft.Color.q;
+            var c = this.getB() / ExpressCraft.Color.q;
+            var v = z;
+            var b = z;
+            if (x > v) {
+                v = x;
             }
-            if (num3 > num4) {
-                num4 = num3;
+            if (c > v) {
+                v = c;
             }
-            if (num2 < num5) {
-                num5 = num2;
+            if (x < b) {
+                b = x;
             }
-            if (num3 < num5) {
-                num5 = num3;
+            if (c < b) {
+                b = c;
             }
-            return ((num4 + num5) / 2.0);
+            return ((v + b) / 2.0);
         },
         getHue: function () {
             if ((this.getR() === this.getG()) && (this.getG() === this.getB())) {
                 return 0.0;
             }
-            var num = this.getR() / 255.0;
-            var num2 = this.getG() / 255.0;
-            var num3 = this.getB() / 255.0;
-            var num7 = 0.0;
-            var num4 = num;
-            var num5 = num;
-            if (num2 > num4) {
-                num4 = num2;
+            var z = this.getR() / ExpressCraft.Color.q;
+            var x = this.getG() / ExpressCraft.Color.q;
+            var c = this.getB() / ExpressCraft.Color.q;
+            var v = 0.0;
+            var b = z;
+            var n = z;
+            if (x > b) {
+                b = x;
             }
-            if (num3 > num4) {
-                num4 = num3;
+            if (c > b) {
+                b = c;
             }
-            if (num2 < num5) {
-                num5 = num2;
+            if (x < n) {
+                n = x;
             }
-            if (num3 < num5) {
-                num5 = num3;
+            if (c < n) {
+                n = c;
             }
-            var num6 = num4 - num5;
-            if (num === num4) {
-                num7 = (num2 - num3) / num6;
-            } else if (num2 === num4) {
-                num7 = 2.0 + ((num3 - num) / num6);
-            } else if (num3 === num4) {
-                num7 = 4.0 + ((num - num2) / num6);
+            var num6 = b - n;
+            if (z === b) {
+                v = (x - c) / num6;
+            } else if (x === b) {
+                v = 2.0 + ((c - z) / num6);
+            } else if (c === b) {
+                v = 4.0 + ((z - x) / num6);
             }
-            num7 *= 60.0;
-            if (num7 < 0.0) {
-                num7 += 360.0;
+            v *= 60.0;
+            if (v < 0.0) {
+                v += 360.0;
             }
-            return num7;
+            return v;
         },
         getSaturation: function () {
-            var num = this.getR() / 255.0;
-            var num2 = this.getG() / 255.0;
-            var num3 = this.getB() / 255.0;
-            var num7 = 0.0;
-            var num4 = num;
-            var num5 = num;
-            if (num2 > num4) {
-                num4 = num2;
+            var z = this.getR() / ExpressCraft.Color.q;
+            var x = this.getG() / ExpressCraft.Color.q;
+            var c = this.getB() / ExpressCraft.Color.q;
+            var v = 0.0;
+            var b = z;
+            var n = z;
+            if (x > b) {
+                b = x;
             }
-            if (num3 > num4) {
-                num4 = num3;
+            if (c > b) {
+                b = c;
             }
-            if (num2 < num5) {
-                num5 = num2;
+            if (x < n) {
+                n = x;
             }
-            if (num3 < num5) {
-                num5 = num3;
+            if (c < n) {
+                n = c;
             }
-            if (num4 === num5) {
-                return num7;
+            if (b === n) {
+                return v;
             }
-            var num6 = (num4 + num5) / 2.0;
-            if (num6 <= 0.5) {
-                return ((num4 - num5) / (num4 + num5));
+            var m = (b + n) / 2.0;
+            if (m <= 0.5) {
+                return ((b - n) / (b + n));
             }
-            return ((num4 - num5) / ((2.0 - num4) - num5));
+            return ((b - n) / ((2.0 - b) - n));
         },
         toArgb: function () {
             return System.Int64.clip32(this.getValue());
@@ -1314,14 +1314,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } else if ((this.state & ExpressCraft.Color.stateKnownColorValid) !== 0) {
                 builder.append(this.getName());
             } else if ((this.state & ExpressCraft.Color.stateValueMask) !== 0) {
-                builder.append("A=");
-                builder.append(this.getA());
-                builder.append(", R=");
-                builder.append(this.getR());
-                builder.append(", G=");
-                builder.append(this.getG());
-                builder.append(", B=");
-                builder.append(this.getB());
+                builder.appendFormat("A={0}, R={1}, G={2}, B={3}", this.getA(), this.getR(), this.getG(), this.getB());
             } else {
                 builder.append("Empty");
             }
@@ -2219,17 +2212,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     });
 
     Bridge.define("ExpressCraft.HardSoftList$1", function (T) { return {
-        hardList: null,
-        softList: null,
-        hardHardList: null,
+        _hhl: null,
+        _hl: null,
+        SL: null,
         limit: 0,
         hardLength: 0,
         defaultValue: Bridge.getDefaultValue(T),
         config: {
             init: function () {
-                this.hardList = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
-                this.softList = new (System.Collections.Generic.List$1(System.Int32))();
-                this.hardHardList = new (System.Collections.Generic.List$1(T))();
+                this._hhl = new (System.Collections.Generic.List$1(T))();
+                this._hl = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
+                this.SL = new (System.Collections.Generic.List$1(System.Int32))();
             }
         },
         ctor: function (defaultValue, limit) {
@@ -2240,12 +2233,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.limit = limit;
         },
         getIndexValueByHardListIndex: function (index) {
-            return this.hardList.getItem(index);
+            return this._hl.getItem(index);
         },
         clearAll: function () {
-            this.hardHardList = new (System.Collections.Generic.List$1(T))();
-            this.hardList = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
-            this.softList = new (System.Collections.Generic.List$1(System.Int32))();
+            this._hhl = new (System.Collections.Generic.List$1(T))();
+            this._hl = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
+            this.SL = new (System.Collections.Generic.List$1(System.Int32))();
             this.hardLength = 0;
         },
         clearAllSetHardRange: function (value, Indexs) {
@@ -2256,8 +2249,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             } else {
                 if (Indexs.length > this.limit) {
                     this.hardLength = Indexs.length;
-                    this.hardList = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
-                    this.softList = new (System.Collections.Generic.List$1(System.Int32))();
+                    this._hl = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
+                    this.SL = new (System.Collections.Generic.List$1(System.Int32))();
 
                     var max = 0;
                     for (var i = 0; i < this.hardLength; i = (i + 1) | 0) {
@@ -2266,61 +2259,61 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         }
                     }
                     var length = (max + 1) | 0;
-                    this.hardHardList = new (System.Collections.Generic.List$1(T))(length);
+                    this._hhl = new (System.Collections.Generic.List$1(T))(length);
 
                     if (length === Indexs.length) {
                         for (var i1 = 0; i1 < this.hardLength; i1 = (i1 + 1) | 0) {
-                            this.hardHardList.add(value);
+                            this._hhl.add(value);
                         }
                     } else {
                         for (var i2 = 0; i2 < length; i2 = (i2 + 1) | 0) {
-                            this.hardHardList.add(this.defaultValue);
+                            this._hhl.add(this.defaultValue);
                         }
                         for (var i3 = 0; i3 < this.hardLength; i3 = (i3 + 1) | 0) {
-                            this.hardHardList.setItem(Indexs[i3], value);
+                            this._hhl.setItem(Indexs[i3], value);
                         }
                     }
 
 
                 } else {
-                    this.hardHardList = new (System.Collections.Generic.List$1(T))();
+                    this._hhl = new (System.Collections.Generic.List$1(T))();
                     this.hardLength = Indexs.length;
-                    this.hardList = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))(this.hardLength);
+                    this._hl = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))(this.hardLength);
                     for (var i4 = 0; i4 < this.hardLength; i4 = (i4 + 1) | 0) {
-                        this.hardList.add(new (ExpressCraft.IndexValue$1(T))(Indexs[i4], value));
+                        this._hl.add(new (ExpressCraft.IndexValue$1(T))(Indexs[i4], value));
                     }
-                    this.softList = new (System.Collections.Generic.List$1(System.Int32))();
+                    this.SL = new (System.Collections.Generic.List$1(System.Int32))();
                 }
             }
         },
         clearSoftList: function () {
-            this.softList = new (System.Collections.Generic.List$1(System.Int32))();
+            this.SL = new (System.Collections.Generic.List$1(System.Int32))();
         },
         clearAndAddOrSet: function (value, index, AddToSoftList) {
             if (AddToSoftList === void 0) { AddToSoftList = false; }
-            this.hardHardList = new (System.Collections.Generic.List$1(T))();
-            this.hardList = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
-            this.softList = new (System.Collections.Generic.List$1(System.Int32))();
+            this._hhl = new (System.Collections.Generic.List$1(T))();
+            this._hl = new (System.Collections.Generic.List$1(ExpressCraft.IndexValue$1(T)))();
+            this.SL = new (System.Collections.Generic.List$1(System.Int32))();
             this.hardLength = 0;
             this.addOrSet(value, index, AddToSoftList);
         },
         getHardOrSoftIndexValue: function (index, AddToSoftList) {
             if (AddToSoftList === void 0) { AddToSoftList = false; }
-            var length = this.softList.getCount();
+            var length = this.SL.getCount();
             for (var i = 0; i < length; i = (i + 1) | 0) {
-                var slI = this.softList.getItem(i);
-                if (this.hardList.getItem(slI).index === index) {
-                    return this.hardList.getItem(slI);
+                var slI = this.SL.getItem(i);
+                if (this._hl.getItem(slI).index === index) {
+                    return this._hl.getItem(slI);
                 }
             }
 
-            length = this.hardList.getCount();
+            length = this._hl.getCount();
 
             for (var i1 = 0; i1 < length; i1 = (i1 + 1) | 0) {
-                var hli = this.hardList.getItem(i1);
+                var hli = this._hl.getItem(i1);
                 if (hli.index === index) {
                     if (AddToSoftList) {
-                        this.softList.add(i1);
+                        this.SL.add(i1);
                     }
                     return hli;
                 }
@@ -2329,10 +2322,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             return null;
         },
         getHardIndexValue: function (index) {
-            var length = this.hardList.getCount();
+            var length = this._hl.getCount();
 
             for (var i = 0; i < length; i = (i + 1) | 0) {
-                var hli = this.hardList.getItem(i);
+                var hli = this._hl.getItem(i);
                 if (hli.index === index.v) {
                     index.v = i;
                     return hli;
@@ -2345,7 +2338,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         getValue: function (index, AddToSoftList) {
             if (AddToSoftList === void 0) { AddToSoftList = false; }
             if (this.hardLength > this.limit) {
-                return this.hardHardList.getItem(index);
+                return this._hhl.getItem(index);
             }
             var hiv = this.getHardOrSoftIndexValue(index, AddToSoftList);
             if (hiv == null) {
@@ -2368,8 +2361,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (AddToSoftList === void 0) { AddToSoftList = false; }
             if (this.hardLength > this.limit) {
                 if (index >= this.hardLength) {
-                    var addDiff = ((((index + 1) | 0)) - this.hardHardList.getCount()) | 0;
-
+                    var addDiff = ((((index + 1) | 0)) - this._hhl.getCount()) | 0;
                     if (addDiff > 0) {
                         var data = System.Array.init(addDiff, function (){
                             return Bridge.getDefaultValue(T);
@@ -2377,20 +2369,19 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         for (var i = 0; i < addDiff; i = (i + 1) | 0) {
                             data[i] = this.defaultValue;
                         }
-                        this.hardHardList.addRange(data);
+                        this._hhl.addRange(data);
                     }
-                    this.hardHardList.add(value);
-
-                    this.hardLength = this.hardHardList.getCount();
+                    this._hhl.add(value);
+                    this.hardLength = this._hhl.getCount();
                 } else {
-                    this.hardHardList.setItem(index, value);
+                    this._hhl.setItem(index, value);
                 }
                 return;
             }
 
-            var length = this.softList.getCount();
+            var length = this.SL.getCount();
             for (var i1 = 0; i1 < length; i1 = (i1 + 1) | 0) {
-                var hli = this.hardList.getItem(this.softList.getItem(i1));
+                var hli = this._hl.getItem(this.SL.getItem(i1));
                 if (hli.index === index) {
                     hli.value = value;
                     return;
@@ -2400,48 +2391,48 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var hindex = { v : index };
             var hiv = this.getHardIndexValue(hindex);
             if (hiv == null) {
-                this.hardList.add(((hiv = new (ExpressCraft.IndexValue$1(T))(index, value))));
+                this._hl.add(((hiv = new (ExpressCraft.IndexValue$1(T))(index, value))));
             } else {
                 hiv.value = value;
             }
 
             if (AddToSoftList) {
-                this.softList.add(hindex.v);
+                this.SL.add(hindex.v);
             }
         },
         remove: function (index, OnlySoftList) {
             if (OnlySoftList === void 0) { OnlySoftList = false; }
             if (this.hardLength > this.limit) {
                 if (((this.hardLength - 1) | 0) > this.limit) {
-                    this.hardHardList.setItem(index, this.defaultValue);
+                    this._hhl.setItem(index, this.defaultValue);
                 } else {
                     for (var i = 0; i < this.hardLength; i = (i + 1) | 0) {
-                        if (i !== index && !Bridge.equals(this.hardHardList.getItem(i), this.defaultValue)) {
-                            this.hardList.add(new (ExpressCraft.IndexValue$1(T))(i, this.hardHardList.getItem(i)));
+                        if (i !== index && !Bridge.equals(this._hhl.getItem(i), this.defaultValue)) {
+                            this._hl.add(new (ExpressCraft.IndexValue$1(T))(i, this._hhl.getItem(i)));
                         }
                     }
 
                     this.hardLength = (this.hardLength - 1) | 0;
                 }
             } else {
-                var Length = this.softList.getCount();
+                var Length = this.SL.getCount();
                 for (var i1 = 0; i1 < Length; i1 = (i1 + 1) | 0) {
-                    var sli = this.softList.getItem(i1);
-                    if (this.hardList.getItem(sli).index === index) {
-                        this.softList.removeAt(i1);
+                    var sli = this.SL.getItem(i1);
+                    if (this._hl.getItem(sli).index === index) {
+                        this.SL.removeAt(i1);
                         if (OnlySoftList) {
                             return;
                         }
-                        this.hardList.removeAt(sli);
+                        this._hl.removeAt(sli);
                         return;
                     }
                 }
-                var length = this.hardList.getCount();
+                var length = this._hl.getCount();
 
                 for (var i2 = 0; i2 < length; i2 = (i2 + 1) | 0) {
-                    var hli = this.hardList.getItem(i2);
+                    var hli = this._hl.getItem(i2);
                     if (hli.index === index) {
-                        this.hardList.removeAt(i2);
+                        this._hl.removeAt(i2);
                         return;
                     }
                 }
@@ -2527,12 +2518,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     c.parentElement.removeChild(c);
                 }
             },
-            toPx$2: function (i) {
-                return i + 'px';
-            },
-            toPx$1: function (i) {
-                return i + 'px';
-            },
             toPx: function (i) {
                 return i + 'px';
             },
@@ -2613,9 +2598,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     return value;
                 } else {
                     if (Bridge.is(value, System.Int32)) {
-                        return ExpressCraft.Helper.toPx$1(value);
+                        return ExpressCraft.Helper.toPx(value);
                     } else {
-                        return ExpressCraft.Helper.toPx$2(value);
+                        return ExpressCraft.Helper.toPx(value);
                     }
                 }
             },
@@ -2639,7 +2624,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 c.style.backgroundSize = "100% 100%";
             },
             setLocation$2: function (c, left, top) {
-                ExpressCraft.Helper.setLocation(c.content, ExpressCraft.Helper.toPx$1(left), ExpressCraft.Helper.toPx$1(top));
+                ExpressCraft.Helper.setLocation(c.content, ExpressCraft.Helper.toPx(left), ExpressCraft.Helper.toPx(top));
             },
             setLocation$1: function (c, left, top) {
                 ExpressCraft.Helper.setLocation(c.content, left, top);
@@ -2739,15 +2724,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.Helper.DataTableJson", {
         statics: {
             fromExternal: function (o) {
-                // #TODO - Get Namespace auto..
-                var sw = System.Diagnostics.Stopwatch.startNew();
-                var obj = Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);
-
-                sw.stop();
-
-                Bridge.Console.log("FromExternal: " + sw.milliseconds());
-
-                return obj;
+                var x;
+                x = Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);
+                return x;
             },
             parse: function (o) {
                 var dt = new ExpressCraft.DataTable();
@@ -2772,8 +2751,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         rows: null,
         dataTypes: null,
         toTable: function () {
-            var sw = System.Diagnostics.Stopwatch.startNew();
-
             var dt = new ExpressCraft.DataTable();
 
             for (var i = 0; i < this.fieldNames.length; i = (i + 1) | 0) {
@@ -2789,9 +2766,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
                 dt.acceptNewRows();
             }
-
-            sw.stop();
-            Bridge.Console.log("ToTable: " + sw.milliseconds());
 
             return dt;
         }
@@ -3227,328 +3201,328 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return ExpressCraft.KnownColorTable.encode(255, value & 255, (value >> 8) & 255, (value >> 16) & 255);
             },
             initColorNameTable: function () {
-                var strArray = System.Array.init(175, null, String);
-                strArray[1] = "ActiveBorder";
-                strArray[2] = "ActiveCaption";
-                strArray[3] = "ActiveCaptionText";
-                strArray[4] = "AppWorkspace";
-                strArray[168] = "ButtonFace";
-                strArray[169] = "ButtonHighlight";
-                strArray[170] = "ButtonShadow";
-                strArray[5] = "Control";
-                strArray[6] = "ControlDark";
-                strArray[7] = "ControlDarkDark";
-                strArray[8] = "ControlLight";
-                strArray[9] = "ControlLightLight";
-                strArray[10] = "ControlText";
-                strArray[11] = "Desktop";
-                strArray[171] = "GradientActiveCaption";
-                strArray[172] = "GradientInactiveCaption";
-                strArray[12] = "GrayText";
-                strArray[13] = "Highlight";
-                strArray[14] = "HighlightText";
-                strArray[15] = "HotTrack";
-                strArray[16] = "InactiveBorder";
-                strArray[17] = "InactiveCaption";
-                strArray[18] = "InactiveCaptionText";
-                strArray[19] = "Info";
-                strArray[20] = "InfoText";
-                strArray[21] = "Menu";
-                strArray[173] = "MenuBar";
-                strArray[174] = "MenuHighlight";
-                strArray[22] = "MenuText";
-                strArray[23] = "ScrollBar";
-                strArray[24] = "Window";
-                strArray[25] = "WindowFrame";
-                strArray[26] = "WindowText";
-                strArray[27] = "Transparent";
-                strArray[28] = "AliceBlue";
-                strArray[29] = "AntiqueWhite";
-                strArray[30] = "Aqua";
-                strArray[31] = "Aquamarine";
-                strArray[32] = "Azure";
-                strArray[33] = "Beige";
-                strArray[34] = "Bisque";
-                strArray[35] = "Black";
-                strArray[36] = "BlanchedAlmond";
-                strArray[37] = "Blue";
-                strArray[38] = "BlueViolet";
-                strArray[39] = "Brown";
-                strArray[40] = "BurlyWood";
-                strArray[41] = "CadetBlue";
-                strArray[42] = "Chartreuse";
-                strArray[43] = "Chocolate";
-                strArray[44] = "Coral";
-                strArray[45] = "CornflowerBlue";
-                strArray[46] = "Cornsilk";
-                strArray[47] = "Crimson";
-                strArray[48] = "Cyan";
-                strArray[49] = "DarkBlue";
-                strArray[50] = "DarkCyan";
-                strArray[51] = "DarkGoldenrod";
-                strArray[52] = "DarkGray";
-                strArray[53] = "DarkGreen";
-                strArray[54] = "DarkKhaki";
-                strArray[55] = "DarkMagenta";
-                strArray[56] = "DarkOliveGreen";
-                strArray[57] = "DarkOrange";
-                strArray[58] = "DarkOrchid";
-                strArray[59] = "DarkRed";
-                strArray[60] = "DarkSalmon";
-                strArray[61] = "DarkSeaGreen";
-                strArray[62] = "DarkSlateBlue";
-                strArray[63] = "DarkSlateGray";
-                strArray[64] = "DarkTurquoise";
-                strArray[65] = "DarkViolet";
-                strArray[66] = "DeepPink";
-                strArray[67] = "DeepSkyBlue";
-                strArray[68] = "DimGray";
-                strArray[69] = "DodgerBlue";
-                strArray[70] = "Firebrick";
-                strArray[71] = "FloralWhite";
-                strArray[72] = "ForestGreen";
-                strArray[73] = "Fuchsia";
-                strArray[74] = "Gainsboro";
-                strArray[75] = "GhostWhite";
-                strArray[76] = "Gold";
-                strArray[77] = "Goldenrod";
-                strArray[78] = "Gray";
-                strArray[79] = "Green";
-                strArray[80] = "GreenYellow";
-                strArray[81] = "Honeydew";
-                strArray[82] = "HotPink";
-                strArray[83] = "IndianRed";
-                strArray[84] = "Indigo";
-                strArray[85] = "Ivory";
-                strArray[86] = "Khaki";
-                strArray[87] = "Lavender";
-                strArray[88] = "LavenderBlush";
-                strArray[89] = "LawnGreen";
-                strArray[90] = "LemonChiffon";
-                strArray[91] = "LightBlue";
-                strArray[92] = "LightCoral";
-                strArray[93] = "LightCyan";
-                strArray[94] = "LightGoldenrodYellow";
-                strArray[95] = "LightGray";
-                strArray[96] = "LightGreen";
-                strArray[97] = "LightPink";
-                strArray[98] = "LightSalmon";
-                strArray[99] = "LightSeaGreen";
-                strArray[100] = "LightSkyBlue";
-                strArray[101] = "LightSlateGray";
-                strArray[102] = "LightSteelBlue";
-                strArray[103] = "LightYellow";
-                strArray[104] = "Lime";
-                strArray[105] = "LimeGreen";
-                strArray[106] = "Linen";
-                strArray[107] = "Magenta";
-                strArray[108] = "Maroon";
-                strArray[109] = "MediumAquamarine";
-                strArray[110] = "MediumBlue";
-                strArray[111] = "MediumOrchid";
-                strArray[112] = "MediumPurple";
-                strArray[113] = "MediumSeaGreen";
-                strArray[114] = "MediumSlateBlue";
-                strArray[115] = "MediumSpringGreen";
-                strArray[116] = "MediumTurquoise";
-                strArray[117] = "MediumVioletRed";
-                strArray[118] = "MidnightBlue";
-                strArray[119] = "MintCream";
-                strArray[120] = "MistyRose";
-                strArray[121] = "Moccasin";
-                strArray[122] = "NavajoWhite";
-                strArray[123] = "Navy";
-                strArray[124] = "OldLace";
-                strArray[125] = "Olive";
-                strArray[126] = "OliveDrab";
-                strArray[127] = "Orange";
-                strArray[128] = "OrangeRed";
-                strArray[129] = "Orchid";
-                strArray[130] = "PaleGoldenrod";
-                strArray[131] = "PaleGreen";
-                strArray[132] = "PaleTurquoise";
-                strArray[133] = "PaleVioletRed";
-                strArray[134] = "PapayaWhip";
-                strArray[135] = "PeachPuff";
-                strArray[136] = "Peru";
-                strArray[137] = "Pink";
-                strArray[138] = "Plum";
-                strArray[139] = "PowderBlue";
-                strArray[140] = "Purple";
-                strArray[141] = "Red";
-                strArray[142] = "RosyBrown";
-                strArray[143] = "RoyalBlue";
-                strArray[144] = "SaddleBrown";
-                strArray[145] = "Salmon";
-                strArray[146] = "SandyBrown";
-                strArray[147] = "SeaGreen";
-                strArray[148] = "SeaShell";
-                strArray[149] = "Sienna";
-                strArray[150] = "Silver";
-                strArray[151] = "SkyBlue";
-                strArray[152] = "SlateBlue";
-                strArray[153] = "SlateGray";
-                strArray[154] = "Snow";
-                strArray[155] = "SpringGreen";
-                strArray[156] = "SteelBlue";
-                strArray[157] = "Tan";
-                strArray[158] = "Teal";
-                strArray[159] = "Thistle";
-                strArray[160] = "Tomato";
-                strArray[161] = "Turquoise";
-                strArray[162] = "Violet";
-                strArray[163] = "Wheat";
-                strArray[164] = "White";
-                strArray[165] = "WhiteSmoke";
-                strArray[166] = "Yellow";
-                strArray[167] = "YellowGreen";
-                ExpressCraft.KnownColorTable.colorNameTable = strArray;
+                var s = System.Array.init(175, null, String);
+                s[1] = "ActiveBorder";
+                s[2] = "ActiveCaption";
+                s[3] = "ActiveCaptionText";
+                s[4] = "AppWorkspace";
+                s[168] = "ButtonFace";
+                s[169] = "ButtonHighlight";
+                s[170] = "ButtonShadow";
+                s[5] = "Control";
+                s[6] = "ControlDark";
+                s[7] = "ControlDarkDark";
+                s[8] = "ControlLight";
+                s[9] = "ControlLightLight";
+                s[10] = "ControlText";
+                s[11] = "Desktop";
+                s[171] = "GradientActiveCaption";
+                s[172] = "GradientInactiveCaption";
+                s[12] = "GrayText";
+                s[13] = "Highlight";
+                s[14] = "HighlightText";
+                s[15] = "HotTrack";
+                s[16] = "InactiveBorder";
+                s[17] = "InactiveCaption";
+                s[18] = "InactiveCaptionText";
+                s[19] = "Info";
+                s[20] = "InfoText";
+                s[21] = "Menu";
+                s[173] = "MenuBar";
+                s[174] = "MenuHighlight";
+                s[22] = "MenuText";
+                s[23] = "ScrollBar";
+                s[24] = "Window";
+                s[25] = "WindowFrame";
+                s[26] = "WindowText";
+                s[27] = "Transparent";
+                s[28] = "AliceBlue";
+                s[29] = "AntiqueWhite";
+                s[30] = "Aqua";
+                s[31] = "Aquamarine";
+                s[32] = "Azure";
+                s[33] = "Beige";
+                s[34] = "Bisque";
+                s[35] = "Black";
+                s[36] = "BlanchedAlmond";
+                s[37] = "Blue";
+                s[38] = "BlueViolet";
+                s[39] = "Brown";
+                s[40] = "BurlyWood";
+                s[41] = "CadetBlue";
+                s[42] = "Chartreuse";
+                s[43] = "Chocolate";
+                s[44] = "Coral";
+                s[45] = "CornflowerBlue";
+                s[46] = "Cornsilk";
+                s[47] = "Crimson";
+                s[48] = "Cyan";
+                s[49] = "DarkBlue";
+                s[50] = "DarkCyan";
+                s[51] = "DarkGoldenrod";
+                s[52] = "DarkGray";
+                s[53] = "DarkGreen";
+                s[54] = "DarkKhaki";
+                s[55] = "DarkMagenta";
+                s[56] = "DarkOliveGreen";
+                s[57] = "DarkOrange";
+                s[58] = "DarkOrchid";
+                s[59] = "DarkRed";
+                s[60] = "DarkSalmon";
+                s[61] = "DarkSeaGreen";
+                s[62] = "DarkSlateBlue";
+                s[63] = "DarkSlateGray";
+                s[64] = "DarkTurquoise";
+                s[65] = "DarkViolet";
+                s[66] = "DeepPink";
+                s[67] = "DeepSkyBlue";
+                s[68] = "DimGray";
+                s[69] = "DodgerBlue";
+                s[70] = "Firebrick";
+                s[71] = "FloralWhite";
+                s[72] = "ForestGreen";
+                s[73] = "Fuchsia";
+                s[74] = "Gainsboro";
+                s[75] = "GhostWhite";
+                s[76] = "Gold";
+                s[77] = "Goldenrod";
+                s[78] = "Gray";
+                s[79] = "Green";
+                s[80] = "GreenYellow";
+                s[81] = "Honeydew";
+                s[82] = "HotPink";
+                s[83] = "IndianRed";
+                s[84] = "Indigo";
+                s[85] = "Ivory";
+                s[86] = "Khaki";
+                s[87] = "Lavender";
+                s[88] = "LavenderBlush";
+                s[89] = "LawnGreen";
+                s[90] = "LemonChiffon";
+                s[91] = "LightBlue";
+                s[92] = "LightCoral";
+                s[93] = "LightCyan";
+                s[94] = "LightGoldenrodYellow";
+                s[95] = "LightGray";
+                s[96] = "LightGreen";
+                s[97] = "LightPink";
+                s[98] = "LightSalmon";
+                s[99] = "LightSeaGreen";
+                s[100] = "LightSkyBlue";
+                s[101] = "LightSlateGray";
+                s[102] = "LightSteelBlue";
+                s[103] = "LightYellow";
+                s[104] = "Lime";
+                s[105] = "LimeGreen";
+                s[106] = "Linen";
+                s[107] = "Magenta";
+                s[108] = "Maroon";
+                s[109] = "MediumAquamarine";
+                s[110] = "MediumBlue";
+                s[111] = "MediumOrchid";
+                s[112] = "MediumPurple";
+                s[113] = "MediumSeaGreen";
+                s[114] = "MediumSlateBlue";
+                s[115] = "MediumSpringGreen";
+                s[116] = "MediumTurquoise";
+                s[117] = "MediumVioletRed";
+                s[118] = "MidnightBlue";
+                s[119] = "MintCream";
+                s[120] = "MistyRose";
+                s[121] = "Moccasin";
+                s[122] = "NavajoWhite";
+                s[123] = "Navy";
+                s[124] = "OldLace";
+                s[125] = "Olive";
+                s[126] = "OliveDrab";
+                s[127] = "Orange";
+                s[128] = "OrangeRed";
+                s[129] = "Orchid";
+                s[130] = "PaleGoldenrod";
+                s[131] = "PaleGreen";
+                s[132] = "PaleTurquoise";
+                s[133] = "PaleVioletRed";
+                s[134] = "PapayaWhip";
+                s[135] = "PeachPuff";
+                s[136] = "Peru";
+                s[137] = "Pink";
+                s[138] = "Plum";
+                s[139] = "PowderBlue";
+                s[140] = "Purple";
+                s[141] = "Red";
+                s[142] = "RosyBrown";
+                s[143] = "RoyalBlue";
+                s[144] = "SaddleBrown";
+                s[145] = "Salmon";
+                s[146] = "SandyBrown";
+                s[147] = "SeaGreen";
+                s[148] = "SeaShell";
+                s[149] = "Sienna";
+                s[150] = "Silver";
+                s[151] = "SkyBlue";
+                s[152] = "SlateBlue";
+                s[153] = "SlateGray";
+                s[154] = "Snow";
+                s[155] = "SpringGreen";
+                s[156] = "SteelBlue";
+                s[157] = "Tan";
+                s[158] = "Teal";
+                s[159] = "Thistle";
+                s[160] = "Tomato";
+                s[161] = "Turquoise";
+                s[162] = "Violet";
+                s[163] = "Wheat";
+                s[164] = "White";
+                s[165] = "WhiteSmoke";
+                s[166] = "Yellow";
+                s[167] = "YellowGreen";
+                ExpressCraft.KnownColorTable.colorNameTable = s;
             },
             initColorTable: function () {
-                var colorTable = System.Array.init(175, 0, System.Int32);
+                var c = System.Array.init(175, 0, System.Int32);
 
-                colorTable[27] = 16777215;
-                colorTable[28] = -984833;
-                colorTable[29] = -332841;
-                colorTable[30] = -16711681;
-                colorTable[31] = -8388652;
-                colorTable[32] = -983041;
-                colorTable[33] = -657956;
-                colorTable[34] = -6972;
-                colorTable[35] = -16777216;
-                colorTable[36] = -5171;
-                colorTable[37] = -16776961;
-                colorTable[38] = -7722014;
-                colorTable[39] = -5952982;
-                colorTable[40] = -2180985;
-                colorTable[41] = -10510688;
-                colorTable[42] = -8388864;
-                colorTable[43] = -2987746;
-                colorTable[44] = -32944;
-                colorTable[45] = -10185235;
-                colorTable[46] = -1828;
-                colorTable[47] = -2354116;
-                colorTable[48] = -16711681;
-                colorTable[49] = -16777077;
-                colorTable[50] = -16741493;
-                colorTable[51] = -4684277;
-                colorTable[52] = -5658199;
-                colorTable[53] = -16751616;
-                colorTable[54] = -4343957;
-                colorTable[55] = -7667573;
-                colorTable[56] = -11179217;
-                colorTable[57] = -29696;
-                colorTable[58] = -6737204;
-                colorTable[59] = -7667712;
-                colorTable[60] = -1468806;
-                colorTable[61] = -7357301;
-                colorTable[62] = -12042869;
-                colorTable[63] = -13676721;
-                colorTable[64] = -16724271;
-                colorTable[65] = -7077677;
-                colorTable[66] = -60269;
-                colorTable[67] = -16728065;
-                colorTable[68] = -9868951;
-                colorTable[69] = -14774017;
-                colorTable[70] = -5103070;
-                colorTable[71] = -1296;
-                colorTable[72] = -14513374;
-                colorTable[73] = -65281;
-                colorTable[74] = -2302756;
-                colorTable[75] = -460545;
-                colorTable[76] = -10496;
-                colorTable[77] = -2448096;
-                colorTable[78] = -8355712;
-                colorTable[79] = -16744448;
-                colorTable[80] = -5374161;
-                colorTable[81] = -983056;
-                colorTable[82] = -38476;
-                colorTable[83] = -3318692;
-                colorTable[84] = -11861886;
-                colorTable[85] = -16;
-                colorTable[86] = -989556;
-                colorTable[87] = -1644806;
-                colorTable[88] = -3851;
-                colorTable[89] = -8586240;
-                colorTable[90] = -1331;
-                colorTable[91] = -5383962;
-                colorTable[92] = -1015680;
-                colorTable[93] = -2031617;
-                colorTable[94] = -329006;
-                colorTable[95] = -2894893;
-                colorTable[96] = -7278960;
-                colorTable[97] = -18751;
-                colorTable[98] = -24454;
-                colorTable[99] = -14634326;
-                colorTable[100] = -7876870;
-                colorTable[101] = -8943463;
-                colorTable[102] = -5192482;
-                colorTable[103] = -32;
-                colorTable[104] = -16711936;
-                colorTable[105] = -13447886;
-                colorTable[106] = -331546;
-                colorTable[107] = -65281;
-                colorTable[108] = -8388608;
-                colorTable[109] = -10039894;
-                colorTable[110] = -16777011;
-                colorTable[111] = -4565549;
-                colorTable[112] = -7114533;
-                colorTable[113] = -12799119;
-                colorTable[114] = -8689426;
-                colorTable[115] = -16713062;
-                colorTable[116] = -12004916;
-                colorTable[117] = -3730043;
-                colorTable[118] = -15132304;
-                colorTable[119] = -655366;
-                colorTable[120] = -6943;
-                colorTable[121] = -6987;
-                colorTable[122] = -8531;
-                colorTable[123] = -16777088;
-                colorTable[124] = -133658;
-                colorTable[125] = -8355840;
-                colorTable[126] = -9728477;
-                colorTable[127] = -23296;
-                colorTable[128] = -47872;
-                colorTable[129] = -2461482;
-                colorTable[130] = -1120086;
-                colorTable[131] = -6751336;
-                colorTable[132] = -5247250;
-                colorTable[133] = -2396013;
-                colorTable[134] = -4139;
-                colorTable[135] = -9543;
-                colorTable[136] = -3308225;
-                colorTable[137] = -16181;
-                colorTable[138] = -2252579;
-                colorTable[139] = -5185306;
-                colorTable[140] = -8388480;
-                colorTable[141] = -65536;
-                colorTable[142] = -4419697;
-                colorTable[143] = -12490271;
-                colorTable[144] = -7650029;
-                colorTable[145] = -360334;
-                colorTable[146] = -744352;
-                colorTable[147] = -13726889;
-                colorTable[148] = -2578;
-                colorTable[149] = -6270419;
-                colorTable[150] = -4144960;
-                colorTable[151] = -7876885;
-                colorTable[152] = -9807155;
-                colorTable[153] = -9404272;
-                colorTable[154] = -1286;
-                colorTable[155] = -16711809;
-                colorTable[156] = -12156236;
-                colorTable[157] = -2968436;
-                colorTable[158] = -16744320;
-                colorTable[159] = -2572328;
-                colorTable[160] = -40121;
-                colorTable[161] = -12525360;
-                colorTable[162] = -1146130;
-                colorTable[163] = -663885;
-                colorTable[164] = -1;
-                colorTable[165] = -657931;
-                colorTable[166] = -256;
-                colorTable[167] = -6632142;
-                ExpressCraft.KnownColorTable.colorTable = colorTable;
+                c[27] = 16777215;
+                c[28] = -984833;
+                c[29] = -332841;
+                c[30] = -16711681;
+                c[31] = -8388652;
+                c[32] = -983041;
+                c[33] = -657956;
+                c[34] = -6972;
+                c[35] = -16777216;
+                c[36] = -5171;
+                c[37] = -16776961;
+                c[38] = -7722014;
+                c[39] = -5952982;
+                c[40] = -2180985;
+                c[41] = -10510688;
+                c[42] = -8388864;
+                c[43] = -2987746;
+                c[44] = -32944;
+                c[45] = -10185235;
+                c[46] = -1828;
+                c[47] = -2354116;
+                c[48] = -16711681;
+                c[49] = -16777077;
+                c[50] = -16741493;
+                c[51] = -4684277;
+                c[52] = -5658199;
+                c[53] = -16751616;
+                c[54] = -4343957;
+                c[55] = -7667573;
+                c[56] = -11179217;
+                c[57] = -29696;
+                c[58] = -6737204;
+                c[59] = -7667712;
+                c[60] = -1468806;
+                c[61] = -7357301;
+                c[62] = -12042869;
+                c[63] = -13676721;
+                c[64] = -16724271;
+                c[65] = -7077677;
+                c[66] = -60269;
+                c[67] = -16728065;
+                c[68] = -9868951;
+                c[69] = -14774017;
+                c[70] = -5103070;
+                c[71] = -1296;
+                c[72] = -14513374;
+                c[73] = -65281;
+                c[74] = -2302756;
+                c[75] = -460545;
+                c[76] = -10496;
+                c[77] = -2448096;
+                c[78] = -8355712;
+                c[79] = -16744448;
+                c[80] = -5374161;
+                c[81] = -983056;
+                c[82] = -38476;
+                c[83] = -3318692;
+                c[84] = -11861886;
+                c[85] = -16;
+                c[86] = -989556;
+                c[87] = -1644806;
+                c[88] = -3851;
+                c[89] = -8586240;
+                c[90] = -1331;
+                c[91] = -5383962;
+                c[92] = -1015680;
+                c[93] = -2031617;
+                c[94] = -329006;
+                c[95] = -2894893;
+                c[96] = -7278960;
+                c[97] = -18751;
+                c[98] = -24454;
+                c[99] = -14634326;
+                c[100] = -7876870;
+                c[101] = -8943463;
+                c[102] = -5192482;
+                c[103] = -32;
+                c[104] = -16711936;
+                c[105] = -13447886;
+                c[106] = -331546;
+                c[107] = -65281;
+                c[108] = -8388608;
+                c[109] = -10039894;
+                c[110] = -16777011;
+                c[111] = -4565549;
+                c[112] = -7114533;
+                c[113] = -12799119;
+                c[114] = -8689426;
+                c[115] = -16713062;
+                c[116] = -12004916;
+                c[117] = -3730043;
+                c[118] = -15132304;
+                c[119] = -655366;
+                c[120] = -6943;
+                c[121] = -6987;
+                c[122] = -8531;
+                c[123] = -16777088;
+                c[124] = -133658;
+                c[125] = -8355840;
+                c[126] = -9728477;
+                c[127] = -23296;
+                c[128] = -47872;
+                c[129] = -2461482;
+                c[130] = -1120086;
+                c[131] = -6751336;
+                c[132] = -5247250;
+                c[133] = -2396013;
+                c[134] = -4139;
+                c[135] = -9543;
+                c[136] = -3308225;
+                c[137] = -16181;
+                c[138] = -2252579;
+                c[139] = -5185306;
+                c[140] = -8388480;
+                c[141] = -65536;
+                c[142] = -4419697;
+                c[143] = -12490271;
+                c[144] = -7650029;
+                c[145] = -360334;
+                c[146] = -744352;
+                c[147] = -13726889;
+                c[148] = -2578;
+                c[149] = -6270419;
+                c[150] = -4144960;
+                c[151] = -7876885;
+                c[152] = -9807155;
+                c[153] = -9404272;
+                c[154] = -1286;
+                c[155] = -16711809;
+                c[156] = -12156236;
+                c[157] = -2968436;
+                c[158] = -16744320;
+                c[159] = -2572328;
+                c[160] = -40121;
+                c[161] = -12525360;
+                c[162] = -1146130;
+                c[163] = -663885;
+                c[164] = -1;
+                c[165] = -657931;
+                c[166] = -256;
+                c[167] = -6632142;
+                ExpressCraft.KnownColorTable.colorTable = c;
             },
             knownColorToArgb: function (color) {
                 ExpressCraft.KnownColorTable.ensureColorTable();
@@ -3660,11 +3634,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             Percent = (pe.loaded / pe.total) * 100.0;
                         }
                         pc.internalProgressControl.style.width = System.String.concat(System.Single.format(Percent, 'G'), "%");
-                        //pc.DisableUpdate = true;
-                        //pc.Maximum = pe.Total;
-                        //pc.Position = pe.Loaded;
-                        //pc.DisableUpdate = false;
-                        //pc.Update();
                     });
 
                     return xmlRequest;
@@ -3697,12 +3666,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             Percent = (pe.loaded / pe.total) * 100.0;
                         }
                         pc.internalProgressControl.style.width = System.String.concat(System.Single.format(Percent, 'G'), "%");
-
-                        //pc.DisableUpdate = true;
-                        //pc.Maximum = pe.Total;
-                        //pc.Position = pe.Loaded;
-                        //pc.DisableUpdate = false;
-                        //pc.Update();
                     });
 
                     return xmlRequest;
@@ -3796,7 +3759,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             formFadeDuration: 100,
             themeElement: null,
             _activeTheme: null,
-            themeTemplate: "\r\n.control{{\r\n    color:{22};\r\n}}\r\n.control:focus:not(.grid){{\r\n    outline: dashed 1px {0};\r\n}}\r\n.control::selection{{\r\n    background-color:{1};\r\n}}\r\n.control::-moz-selection{{\r\n    background-color:{1};\r\n}}\r\n.control:disabled{{\r\n    background-color:{2};\r\n}}\r\n.inputcontrol:read-only{{\r\n    background-color:{3};\r\n}}\r\n.ribboncontrol{{\r\n    background-color:{0};\r\n    border-left-color:{0};\r\n    border-right-color:{0};\r\n    border-bottom-color:{1};\r\n}}\r\n.ribbonpage{{\r\n    background-color:{3};\r\n}}\r\n.ribbongroup{{\r\n    background-color:{3};\r\n}}\r\n.ribbonbutton{{\r\n    background-color:{3};            \r\n}}\r\n.ribbonbutton:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbutton:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonbuttonsmall{{\r\n    background-color:{3};             \r\n}}\r\n.ribbonbuttonsmall:hover:not(:active):not(.disabled)\r\n{{\r\n    background-color:{4};\r\n}}\r\n.ribbonbuttonsmall:active:not(.disabled){{\r\n    background-color:{5};\r\n}}\r\n.ribbonseperator{{\r\n    background-color:{1};\r\n}}\r\n.ribbonpageheader-hidden{{\r\n    background-color:{0};\r\n    color:{23};\r\n}}\r\n.ribbonpageheader-hidden:hover{{\r\n    background-color:{6};\r\n}}\r\n.ribbonpageheader-active{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrol{{\r\n    background-color:{3};\r\n}}\r\n.tabcontrolpage{{\r\n    background-color:{3};\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader {{\r\n    background-color:{3};           \r\n}}\r\n.tabcontrolpageheader-hidden{{\r\n    border-top-color:{3};\r\n    border-left-color:{3};\r\n    border-right-color:{3};\r\n    border-bottom-color:{1};\r\n}}\r\n.tabcontrolpageheader-hidden:hover{{\r\n    background-color:{7};\r\n    border-left-color:{7};\r\n    border-right-color:{7};\r\n}}\r\n.tabcontrolpageheader-active{{\r\n    border-top-color:{1};\r\n    border-left-color:{1};\r\n    border-right-color:{1};\r\n    border-bottom-color:{3};\r\n}}\r\n.tabcontrolpageheader-closebutton{{\r\n    color:{1};\t\r\n}}\r\n.tabcontrolpageheader-closebutton:hover{{\r\n    color:{24};\r\n\tbackground-color:{2};\r\n\tborder:1px solid {19};\r\n}}\r\n.inputcontrol {{\r\n    border:1px solid {1};   \r\n    background-color:{14};    \r\n}}\r\n.simplebutton{{\r\n    border:1px solid {19};\r\n    background-color:{3};\r\n}}\r\n.simplebutton:hover:not(.disabled)\r\n{{\r\n\tbackground-color:{1};\r\n}}\r\n.simplebutton:active:not(.disabled)\r\n{{\r\n\tbackground-color:{12};\r\n    border: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\n    from {{ background-color: {23};}}\r\n    to {{ background-color: {0};}}\r\n}}\r\n.form-base{{\r\n    border-color:{0};\r\n}}\r\n.form-heading{{\r\n    background-color:{0};      \r\n}}\r\n.form-heading-title{{\r\n    color:{23};     \r\n}}\r\n.form-heading-button{{\r\n    color:{23};\r\n}}\r\n.form-heading-button:hover:not(.form-heading-button-close){{\r\n    background-color:{8};\r\n}}\r\n.form-heading-button:active:not(.form-heading-button-close){{\r\n    background-color:{9};\r\n}}\r\n.form-heading-button-close:hover{{\r\n    background-color:{10};\r\n}}\r\n.form-heading-button-close:active{{\r\n    background-color:{11};\r\n}}\r\n.cell{{\r\n    border: 1px solid {3};       \r\n}}\r\n.cellrow{{\r\n    background-color:{14};\r\n}}\r\n.cellrow:hover{{\r\n    background-color:{3} !important;    \r\n}}\r\n.cellrow:active{{\r\n    background-color:{12} !important;\r\n}}\r\n.even{{\r\n   background-color:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n    background-color:{17} !important;    \r\n}}\r\n.cellrow-selected:hover{{\r\n    background-color:{18} !important;    \r\n}}\r\n.heading{{\r\n    background-color:{3};\r\n    border-right:1px solid {19} !important;\r\n}}\r\n.heading:hover{{\r\n    background-color:{1};\r\n}}\r\n.heading:active{{\r\n    background-color:{12};\r\n}}\r\n.heading-container{{\r\n    background-color:{3};\r\n    border-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n    background-color:{14};\r\n    border:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n    border:1px solid {19};\r\n    background-color:{14};\r\n}}\r\n.progressbarbody{{\r\n    background-color:{0};\r\n}}\r\n.contextmenu{{\r\n    background-color:{14};     \r\n    border: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n    background-color:{15};\r\n}}\r\n.contextitemseperator{{\r\n    background-color:{16};\r\n}}\r\n.dialogbuttonsection{{    \r\n    background-color:{3};\r\n}}\r\n.splitcontrol\r\n{{\r\n    border:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n    border-left: 1px {4} solid;\r\n    border-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n    border-top: 1px {4} solid;\r\n    border-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n    background-color:{4};    \r\n}}\r\n.splittervertical:hover {{\r\n    background-color:{4};\r\n}}\r\n.tool-tip{\r\n\tbackground-color:{14};\r\n    border: solid 1px {21};\r\n}\r\n",
+            themeTemplate: ".{25}{{\r\n    color:{22};\r\n}}\r\n.{25}:focus:not(.grid){{\r\noutline: dashed 1px {0};\r\n}}\r\n.{25}::selection{{\r\n{26}:{1};\r\n}}\r\n.{25}::-moz-selection{{\r\n{26}:{1};\r\n}}\r\n.{25}:disabled{{\r\n{26}:{2};\r\n}}\r\n.input{25}:read-only{{\r\n{26}:{3};\r\n}}\r\n.{28}{25}{{\r\n{26}:{0};\r\n{27}{29}:{0};\r\n{27}{31}:{0};\r\n{27}{32}:{1};\r\n}}\r\n.{28}page{{\r\n{26}:{3};\r\n}}\r\n.{28}group{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}{33}small{{\r\n{26}:{3}; \r\n}}\r\n.{28}{33}small:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}small:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}seperator{{\r\n{26}:{1};\r\n}}\r\n.{28}{35}-hidden{{\r\n{26}:{0};\r\ncolor:{23};\r\n}}\r\n.{28}{35}-hidden:hover{{\r\n{26}:{6};\r\n}}\r\n.{28}{35}-active{{\r\n{26}:{3};\r\n}}\r\n.tab{25}{{\r\n{26}:{3};\r\n}}\r\n.tab{25}page{{\r\n{26}:{3};\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35} {{\r\n{26}:{3};   \r\n}}\r\n.tab{25}{35}-hidden{{\r\n{27}{30}:{3};\r\n{27}{29}:{3};\r\n{27}{31}:{3};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35}-hidden:hover{{\r\n{26}:{7};\r\n{27}{29}:{7};\r\n{27}{31}:{7};\r\n}}\r\n.tab{25}{35}-active{{\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{3};\r\n}}\r\n.tab{25}{35}-close{33}{{\r\ncolor:{1};\t\r\n}}\r\n.tab{25}{35}-close{33}:hover{{\r\ncolor:{24};\r\n\t{26}:{2};\r\n\t{27}:1px solid {19};\r\n}}\r\n.input{25} {{\r\n{27}:1px solid {1};   \r\n{26}:{14};\r\n}}\r\n.simple{33}{{\r\n{27}:1px solid {19};\r\n{26}:{3};\r\n}}\r\n.simple{33}:hover:not(.disabled)\r\n{{\r\n\t{26}:{1};\r\n}}\r\n.simple{33}:active:not(.disabled)\r\n{{\r\n\t{26}:{12};\r\n{27}: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\nfrom {{ {26}: {23};}}\r\nto {{ {26}: {0};}}\r\n}}\r\n.form-base{{\r\n{27}-color:{0};\r\n}}\r\n.{34}{{\r\n{26}:{0};  \r\n}}\r\n.{34}-title{{\r\ncolor:{23}; \r\n}}\r\n.{34}-{33}{{\r\ncolor:{23};\r\n}}\r\n.{34}-{33}:hover:not(.{34}-{33}-close){{\r\n{26}:{8};\r\n}}\r\n.{34}-{33}:active:not(.{34}-{33}-close){{\r\n{26}:{9};\r\n}}\r\n.{34}-{33}-close:hover{{\r\n{26}:{10};\r\n}}\r\n.{34}-{33}-close:active{{\r\n{26}:{11};\r\n}}\r\n.cell{{\r\n{27}: 1px solid {3};   \r\n}}\r\n.cellrow{{\r\n{26}:{14};\r\n}}\r\n.cellrow:hover{{\r\n{26}:{3} !important;\r\n}}\r\n.cellrow:active{{\r\n{26}:{12} !important;\r\n}}\r\n.even{{\r\n   {26}:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n{26}:{17} !important;\r\n}}\r\n.cellrow-selected:hover{{\r\n{26}:{18} !important;\r\n}}\r\n.{36}{{\r\n{26}:{3};\r\n{27}-right:1px solid {19} !important;\r\n}}\r\n.{36}:hover{{\r\n{26}:{1};\r\n}}\r\n.{36}:active{{\r\n{26}:{12};\r\n}}\r\n.{36}-container{{\r\n{26}:{3};\r\n{27}-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n{26}:{14};\r\n{27}:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n{27}:1px solid {19};\r\n{26}:{14};\r\n}}\r\n.progressbarbody{{\r\n{26}:{0};\r\n}}\r\n.contextmenu{{\r\n{26}:{14}; \r\n{27}: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n{26}:{15};\r\n}}\r\n.contextitemseperator{{\r\n{26}:{16};\r\n}}\r\n.dialog{33}section{{\r\n{26}:{3};\r\n}}\r\n.split{25}\r\n{{\r\n{27}:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n{27}-left: 1px {4} solid;\r\n{27}-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n{27}-top: 1px {4} solid;\r\n{27}-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n{26}:{4};\r\n}}\r\n.splittervertical:hover {{\r\n{26}:{4};\r\n}}\r\n.tool-tip{{\r\n{26}:{14};\r\n{27}: solid 1px {21};\r\n}}\r\n",
             onF2ShowThemeForm: true,
             toolTipPopupDelayMs: 1000,
             toolTipPopupStayOpenDelayPerWordMs: 250,
@@ -3894,9 +3857,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (ExpressCraft.Settings._activeTheme == null) {
                     ExpressCraft.Settings._activeTheme = ExpressCraft.Theme.theme1;
                 }
+                var objList = new (System.Collections.Generic.List$1(Object))();
+                objList.addRange(ExpressCraft.Settings._activeTheme.getColors());
+                objList.addRange(System.Array.init(["control", "background-color", "border", "ribbon", "-left-color", "-top-color", "-right-color", "-bottom-color", "button", "form-heading", "pageheader", "heading"], Object));
+
 
                 ExpressCraft.Settings.themeElement = Bridge.merge(document.createElement('style'), {
-                    innerHTML: System.String.format(ExpressCraft.Settings.themeTemplate, ExpressCraft.Settings._activeTheme.getColors()[0], ExpressCraft.Settings._activeTheme.getColors()[1], ExpressCraft.Settings._activeTheme.getColors()[2], ExpressCraft.Settings._activeTheme.getColors()[3], ExpressCraft.Settings._activeTheme.getColors()[4], ExpressCraft.Settings._activeTheme.getColors()[5], ExpressCraft.Settings._activeTheme.getColors()[6], ExpressCraft.Settings._activeTheme.getColors()[7], ExpressCraft.Settings._activeTheme.getColors()[8], ExpressCraft.Settings._activeTheme.getColors()[9], ExpressCraft.Settings._activeTheme.getColors()[10], ExpressCraft.Settings._activeTheme.getColors()[11], ExpressCraft.Settings._activeTheme.getColors()[12], ExpressCraft.Settings._activeTheme.getColors()[13], ExpressCraft.Settings._activeTheme.getColors()[14], ExpressCraft.Settings._activeTheme.getColors()[15], ExpressCraft.Settings._activeTheme.getColors()[16], ExpressCraft.Settings._activeTheme.getColors()[17], ExpressCraft.Settings._activeTheme.getColors()[18], ExpressCraft.Settings._activeTheme.getColors()[19], ExpressCraft.Settings._activeTheme.getColors()[20], ExpressCraft.Settings._activeTheme.getColors()[21], ExpressCraft.Settings._activeTheme.getColors()[22], ExpressCraft.Settings._activeTheme.getColors()[23], ExpressCraft.Settings._activeTheme.getColors()[24])
+                    innerHTML: System.String.format.apply(System.String, [ExpressCraft.Settings.themeTemplate].concat(objList.toArray()))
                 } );
 
                 document.body.appendChild(ExpressCraft.Settings.themeElement);
@@ -6105,8 +6072,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         top = (top + 1) | 0;
                         var sep = ExpressCraft.Control.div$1("contextitemseperator");
 
-                        sep.style.top = ExpressCraft.Helper.toPx$1(top);
-                        sep.style.width = ExpressCraft.Helper.toPx$1(calwidth);
+                        sep.style.top = ExpressCraft.Helper.toPx(top);
+                        sep.style.width = ExpressCraft.Helper.toPx(calwidth);
 
                         this.content.appendChild(sep);
 
@@ -6401,8 +6368,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
     Bridge.define("ExpressCraft.GridView", {
         inherits: [ExpressCraft.Control],
         statics: {
-            SortDownBase64: "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",
-            SortUpBase64: "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",
             UnitHeight: 28.0
         },
         gridHeader: null,
@@ -6519,7 +6484,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 var uboundRowCount = (RawLeftCellCount - 1) | 0;
                 if (this._columnHeadersVisible) {
                     for (var x1 = RawLeftCellIndex; x1 < RawLeftCellCount; x1 = (x1 + 1) | 0) {
-                        //(x == uboundRowCount ? 0 : 1)
                         if (x1 >= this.columns.getCount()) {
                             break;
                         }
@@ -6528,11 +6492,9 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         var apparence = gcol.headingApparence;
 
                         var col = ExpressCraft.Control.label$3(gcol.caption, (this._columnAutoWidth ? gcol.cachedX : gcol.cachedX), 0, (this._columnAutoWidth ? _columnAutoWidthSingle : gcol.getWidth()) - (x1 === uboundRowCount ? 0 : 1), apparence.isBold, false, "heading", apparence.alignment, apparence.forecolor);
-
                         if (gcol.sortedMode !== ExpressCraft.GridViewSortMode.None) {
-                            var sortImage = ExpressCraft.Control.div();
-                            ExpressCraft.Helper.setBounds$1(sortImage, "calc(100% - 13px)", "11px", "9px", "5px");
-                            sortImage.style.background = ExpressCraft.Control.getImageString(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? ExpressCraft.GridView.SortUpBase64 : ExpressCraft.GridView.SortDownBase64);
+                            var sortImage = ExpressCraft.Control.div$1(gcol.sortedMode === ExpressCraft.GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");
+                            ExpressCraft.Helper.setBounds$1(sortImage, "calc(100% - 13px)", 11, 9, 5);
                             col.appendChild(sortImage);
                         }
 
@@ -6562,12 +6524,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 var Length = (Bridge.Int.clip32(RawVisibleRowCount + RawTopRowIndex) + 1) | 0;
                 var start = Bridge.Int.clip32(RawTopRowIndex);
-                for (var x2 = (this.selectedRows.softList.getCount() - 1) | 0; x2 >= 0; x2 = (x2 - 1) | 0) {
+                for (var x2 = (this.selectedRows.SL.getCount() - 1) | 0; x2 >= 0; x2 = (x2 - 1) | 0) {
                     var Found = false;
                     for (var i = start; i < Length; i = (i + 1) | 0) {
                         if (i < this.getDataSource().getRowCount()) {
                             var DataRowhandle = this.getDataSourceRow(i);
-                            if (this.selectedRows.getIndexValueByHardListIndex(this.selectedRows.softList.getItem(x2)).index === DataRowhandle) {
+                            if (this.selectedRows.getIndexValueByHardListIndex(this.selectedRows.SL.getItem(x2)).index === DataRowhandle) {
                                 Found = true;
                                 break;
                             }
@@ -6580,7 +6542,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         return;
                     }
                     if (!Found) {
-                        this.selectedRows.softList.removeAt(x2);
+                        this.selectedRows.SL.removeAt(x2);
                     }
                 }
 
@@ -6632,7 +6594,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         } else {
                             cell = col1.cellDisplay.onCreate(this, DataRowhandle1, x3);
                             ExpressCraft.Helper.setLocation(cell, col1.cachedX, 0);
-                            cell.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
+                            cell.style.width = ExpressCraft.Helper.toPx((this._columnAutoWidth ? _columnAutoWidthSingle : col1.getWidth()));
 
                             dr.appendChild(cell);
                         }
@@ -6685,7 +6647,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         cell1 = tx.content;
 
                         ExpressCraft.Helper.setLocation(cell1, col2.cachedX, 0);
-                        cell1.style.width = ExpressCraft.Helper.toPx$2((this._columnAutoWidth ? _columnAutoWidthSingle : col2.getWidth()));
+                        cell1.style.width = ExpressCraft.Helper.toPx((this._columnAutoWidth ? _columnAutoWidthSingle : col2.getWidth()));
 
                         dr1.appendChild(cell1);
 
@@ -7244,8 +7206,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         validateGridWidth: function () {
             var width = this.getColumnWidths();
-            this.gridBody.style.width = ExpressCraft.Helper.toPx$2((width));
-            this.gridHeader.style.width = ExpressCraft.Helper.toPx$2(((width) + 24)); // (width).ToPx();
+            this.gridBody.style.width = ExpressCraft.Helper.toPx((width));
+            this.gridHeader.style.width = ExpressCraft.Helper.toPx(((width) + 24)); // (width).ToPx();
             if (this.rightOfTable == null) {
                 this.rightOfTable = ExpressCraft.Control.div();
                 this.gridBody.appendChild(this.rightOfTable);
@@ -7273,7 +7235,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 height += ((this.gridBodyContainer.clientHeight / ExpressCraft.GridView.UnitHeight) * ppr);
             }
 
-            this.gridBody.style.height = ExpressCraft.Helper.toPx$2(height);
+            this.gridBody.style.height = ExpressCraft.Helper.toPx(height);
             if (this.bottonOfTable == null) {
                 this.bottonOfTable = ExpressCraft.Control.div();
                 this.gridBody.appendChild(this.bottonOfTable);
@@ -8693,8 +8655,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         } ));
                     }
 
-                    page.v.tabPageHeader.style.left = ExpressCraft.Helper.toPx$1(width);
-                    page.v.tabPageHeader.style.width = ExpressCraft.Helper.toPx$1(inwidth);
+                    page.v.tabPageHeader.style.left = ExpressCraft.Helper.toPx(width);
+                    page.v.tabPageHeader.style.width = ExpressCraft.Helper.toPx(inwidth);
 
                     width = (width + (((inwidth + 2) | 0))) | 0;
 
@@ -8960,16 +8922,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Form.ctor.call(this);
             this.setText(_text);
-            this.setWidth("400px");
-            this.setHeight("200px");
+            this.setWidth(400);
+            this.setHeight(200);
 
             this.progressControl = new ExpressCraft.ProgressControl();
-            ExpressCraft.Helper.setBounds(this.progressControl, "50px", "50px", "calc(100% - 100px)", "23px");
+            ExpressCraft.Helper.setBounds(this.progressControl, 50, 50, "calc(100% - 100px)", "23px");
 
             this.buttonCancel = Bridge.merge(new ExpressCraft.SimpleDialogButton(this, ExpressCraft.DialogResultEnum.Cancel), {
                 setText: "Cancel"
             } );
-            ExpressCraft.Helper.setLocation$1(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");				
+            ExpressCraft.Helper.setLocation$1(this.buttonCancel, "calc(100% - 78px)", "calc(100% - 26px)");
             this.buttonCancel.content.tabIndex = 0;
 
             ExpressCraft.Helper.appendChildren$2(this.getBody(), [this.buttonCancel, this.progressControl]);
@@ -9237,7 +9199,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         ctor: function (title, width, question) {
             this.$initialize();
             ExpressCraft.DialogForm.ctor.call(this, title);
-            this.setWidth(ExpressCraft.Helper.toPx$1(width));
+            this.setWidth(ExpressCraft.Helper.toPx(width));
             this.setWrapper(ExpressCraft.Control.div());
             this.setQuestionDiv(ExpressCraft.Control.div());
             this.setAnswerDiv(ExpressCraft.Control.div());
@@ -9282,7 +9244,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
-            this.setHeight(ExpressCraft.Helper.toPx$1(height));
+            this.setHeight(ExpressCraft.Helper.toPx(height));
             this.allowSizeChange = false;
         }
     });
@@ -9458,7 +9420,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             section.style.overflowY = "auto";
             section.style.height = "100%";
-            section.style.maxHeight = ExpressCraft.Helper.toPx$1(ExpressCraft.Settings.messageFormTextMaximumHeightInPx);
+            section.style.maxHeight = ExpressCraft.Helper.toPx(ExpressCraft.Settings.messageFormTextMaximumHeightInPx);
             section.appendChild(textContent);
             section.style.top = "32px";
             section.style.width = "90%";
@@ -9475,7 +9437,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Helper.appendChildrenTabIndex(this.buttonSection, this._buttonCollection.toArray());
 
             this.setHeight(System.Single.format(tb.computedHeight + 77 + 29 + 32, 'G') + "px");
-            this.setWidth(ExpressCraft.Helper.toPx$1(width));
+            this.setWidth(ExpressCraft.Helper.toPx(width));
             this.allowSizeChange = false;
         },
         onShowed: function () {
@@ -9573,7 +9535,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             for (var i = 0; i < length; i = (i + 1) | 0) {
                 Panel.appendChild(ExpressCraft.Control.op_Implicit(ExpressCraft.Helper.setBounds(Bridge.merge(new ExpressCraft.ColorInput(), {
-                    setText: this.currentTheme.getColors()[i],
+                    setText: this.currentTheme.getColors()[i].toString(),
                     setToolTip: new ExpressCraft.ToolTip.$ctor1("This is a heading test.", "This is a description test."),
                     onTextChanged: Bridge.fn.bind(this, $asm.$.ExpressCraft.ThemeForm.f4)
                 } ).setAttribute("i", i), x, y, 95, 20)));

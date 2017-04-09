@@ -21,15 +21,9 @@ namespace ExpressCraft
 
 			public static DataTableJson FromExternal(object o)
 			{
-				// #TODO - Get Namespace auto..
-				var sw = Stopwatch.StartNew();				
-				var obj = Script.Write<DataTableJson>("Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);");
-				
-				sw.Stop();
-
-				Console.WriteLine("FromExternal: " + sw.ElapsedMilliseconds);
-
-				return obj;
+                DataTableJson x;
+				x = Script.Write<DataTableJson>("Bridge.merge(Bridge.createInstance(ExpressCraft.Helper.DataTableJson), o);");
+                return x;
 			}
 
 			public static DataTable Parse(dynamic o)
@@ -56,9 +50,7 @@ namespace ExpressCraft
 			}            
 
 			public DataTable ToTable()
-			{
-				var sw = Stopwatch.StartNew();
-
+			{				
 				var dt = new DataTable();
 
 				for(int i = 0; i < fieldNames.Length; i++)
@@ -77,10 +69,7 @@ namespace ExpressCraft
 					}
 					dt.AcceptNewRows();
 				}
-
-				sw.Stop();
-				Console.WriteLine("ToTable: " + sw.ElapsedMilliseconds);
-
+                
 				return dt;
 			}
 		}
@@ -192,18 +181,8 @@ namespace ExpressCraft
 				c.ParentElement.Contains(c))
 				c.ParentElement.RemoveChild(c);
 		}
-
-		public static string ToPx(this float i)
-		{
-			return Script.Write<string>("i + 'px'");			
-		}
-
-		public static string ToPx(this int i)
-		{
-			return Script.Write<string>("i + 'px'");
-		}
-
-		public static string ToPx(this decimal i)
+        
+		public static string ToPx(this object i)
 		{
 			return Script.Write<string>("i + 'px'");
 		}
