@@ -107,10 +107,10 @@ namespace ExpressCraft
 		}
 		public Form LinkedForm = null;		
 
-		public static string BaseClass(bool add = true)
+		public static string BaseClass(bool add = true, bool ac = true)
 		{
-			return add ? " " + ControlClass :
-				ControlClass;
+			return ac ? (add ? " " + ControlClass :
+				ControlClass) : "";
 		}		
 
 		public Union<string, int, float> Width
@@ -198,29 +198,29 @@ namespace ExpressCraft
             return string.Format("url('{0}{1}') no-repeat", useResourceURL ? Settings.ResourceURL : "", s);
         }		
 
-		public Control()
+		public Control(bool ac = true)
 		{
-			Content = Div();
+			Content = Div(ac);
 		}
 
-		public Control(string cn)
+		public Control(string cn, bool ac = true)
 		{
-			Content = Div(cn);
+			Content = Div(cn, ac);
 		}
 
-		public Control(string cn, ButtonType bt)
+		public Control(string cn, ButtonType bt, bool ac = true)
 		{
-			Content = Button(cn, bt);
+			Content = Button(cn, bt, ac);
 		}
 
-		public Control(string cn, ComboBoxTypes ct)
+		public Control(string cn, ComboBoxTypes ct, bool ac = true)
 		{
-			Content = ComboBox(cn, ct);
+			Content = ComboBox(cn, ct, ac);
 		}
 
-		public Control(string cn, InputType it)
+		public Control(string cn, InputType it, bool ac = true)
 		{
-			Content = Input(cn, it);			
+			Content = Input(cn, it, ac);			
 		}
         
         public virtual void Render()
@@ -228,19 +228,19 @@ namespace ExpressCraft
 			HasRendered = true;
 		}
 
-		public static HTMLDivElement Div()
+		public static HTMLDivElement Div(bool ac = true)
 		{
-			return new HTMLDivElement() { ClassName = BaseClass(false) };
+			return new HTMLDivElement() { ClassName = BaseClass(false, ac) };
 		}
 
-		public static HTMLSpanElement Span()
+		public static HTMLSpanElement Span(bool ac = true)
 		{
-			return new HTMLSpanElement() { ClassName = BaseClass(false) };
+			return new HTMLSpanElement() { ClassName = BaseClass(false, ac) };
 		}
 
-		public static HTMLSpanElement Label(string Caption, float X, float Y, bool IsBold = false, bool IsTiny = false)
+		public static HTMLSpanElement Label(string Caption, float X, float Y, bool IsBold = false, bool IsTiny = false, bool ac = true)
 		{
-			var lbl = new HTMLSpanElement() { ClassName = BaseClass(false) };
+			var lbl = new HTMLSpanElement() { ClassName = BaseClass(false, ac) };
 
 			lbl.InnerHTML = Caption.HtmlEscape();
 			lbl.SetLocation(X, Y);
@@ -251,7 +251,7 @@ namespace ExpressCraft
 
 		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null)
 		{
-			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
+			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
 			lbl.InnerHTML = Caption.HtmlEscape();
 			lbl.SetBounds(X, Y, width, height);			
@@ -343,14 +343,14 @@ namespace ExpressCraft
 			return Label(c, (float)X, (float)Y, IsBold, IsTiny);			
 		}
 
-		public static HTMLSpanElement Span(string cn)
+		public static HTMLSpanElement Span(string cn, bool ac = true)
 		{
-			return new HTMLSpanElement() { ClassName = cn + BaseClass(true) };
+			return new HTMLSpanElement() { ClassName = cn + BaseClass(true, ac) };
 		}
 
-		public static HTMLSelectElement ComboBox(string cn, ComboBoxTypes ct)
+		public static HTMLSelectElement ComboBox(string cn, ComboBoxTypes ct, bool ac = true)
 		{			
-			var combo = new HTMLSelectElement() { ClassName = cn + BaseClass(true) };
+			var combo = new HTMLSelectElement() { ClassName = cn + BaseClass(true, ac) };
 			if(ct == ComboBoxTypes.Default)
 			{
 
@@ -358,20 +358,20 @@ namespace ExpressCraft
 			return combo;
 		}
 
-		public static HTMLButtonElement Button(string cn, ButtonType bt)
+		public static HTMLButtonElement Button(string cn, ButtonType bt, bool ac = true)
 		{
-			return new HTMLButtonElement() { ClassName = cn + BaseClass(true), Type = bt };
+			return new HTMLButtonElement() { ClassName = cn + BaseClass(true, ac), Type = bt };
 		}
 
-		public static HTMLDivElement Div(string cn)
+		public static HTMLDivElement Div(string cn, bool ac = true)
 		{
-			return new HTMLDivElement() { ClassName = cn + BaseClass(true) };
+			return new HTMLDivElement() { ClassName = cn + BaseClass(true, ac) };
 		}
 
-		public static HTMLInputElement Input(string cn, InputType it)
+		public static HTMLInputElement Input(string cn, InputType it, bool ac = true)
 		{
 			var input = new HTMLInputElement();
-			input.ClassName = cn + BaseClass(!string.IsNullOrWhiteSpace(cn));
+			input.ClassName = cn + BaseClass(!string.IsNullOrWhiteSpace(cn), ac);
 			dynamic ty = it;
 			if(Browser.IsIE && (ty == "text" || ty == "date" || ty == "color" || ty == 19 || ty == 3 || ty == 2))
 			{

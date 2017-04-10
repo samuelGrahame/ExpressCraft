@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.2.2</version>
+    <version>0.0.2.3</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -11,9 +11,9 @@
     <description>ExpressCraft (For Bridge.Net) - Create a Windows Application using ExpressCraft UI and Bridge for the Browser.
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
-    <releaseNotes>.Added Tooltip to the base Class Control - Tooltip Contains a Heading and Description. Just simple assign to the control</releaseNotes>
+    <releaseNotes>.Added Form.AppendChild,Children - returns this, Addded IncludeFocusRegion - settings</releaseNotes>
     <copyright>Copyright 2017</copyright>
-    <tags>Bridge Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
+    <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>
 		<dependency id="Bridge" version="[15.7.0]"/>
 		<dependency id="Bridge.Core" version="[15.7.0]"/>
