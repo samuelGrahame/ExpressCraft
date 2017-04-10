@@ -21,7 +21,10 @@ namespace ExpressCraft
                 ev.PreventDefault();
             };
 
-            this.SetSize("69px", "20px");
+			if(ac)
+				Style.Font = Settings.Font;
+
+			this.SetSize("69px", "20px");
 
 			Content.OnClick = (ev) => {                
 				if(enabled)

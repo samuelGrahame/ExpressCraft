@@ -19,7 +19,7 @@ namespace ExpressCraft
         public readonly InputType Type;
 
         public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", type, ac)
-		{
+		{			
             Type = type;
             this.Content.OnChange = (ev) => {
                 CheckTextChanged();

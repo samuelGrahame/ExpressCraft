@@ -3778,6 +3778,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             networkURL: "Host.ashx",
             resourceURL: "./images/",
             autoRender: true,
+            Font: "8.25pt Tahoma",
             defaultFont: "8.25pt Tahoma",
             defaultStyleSheet: null,
             pluginStyleSheet: null,
@@ -4858,10 +4859,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.dialogResults = new (System.Collections.Generic.List$1(ExpressCraft.DialogResult))();
             }
         },
-        ctor: function () {
+        ctor: function (font) {
+            if (font === void 0) { font = "8.25pt Tahoma"; }
+
             this.$initialize();
             ExpressCraft.Control.$ctor4.call(this, "form-base");
+            if (!System.String.isNullOrWhiteSpace(font)) {
+                this.getStyle().font = font;
+            }
             this.setHeading(ExpressCraft.Control.div$1("form-heading"));
+            this.getHeading().style.font = ExpressCraft.Settings.Font;
 
             this.getHeading().oncontextmenu = $asm.$.ExpressCraft.Form.f7;
 
@@ -5502,6 +5509,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (document.activeElement != null) {
                 document.activeElement.focus();
                 ev.preventDefault();
+                ExpressCraft.Form.setCursor("default");
             }
         },
         f6: function (ev) {
@@ -5714,6 +5722,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.movingForm = null;
             ExpressCraft.Form.setMouse_Down(false);
             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
+            ExpressCraft.Form.setCursor("default");
         },
         f12: function (ev) {
             if (!ExpressCraft.Settings.allowCloseWithoutQuestion) {
@@ -8343,6 +8352,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.$initialize();
             ExpressCraft.Control.$ctor1.call(this, "simplebutton", button, ac);
             this.content.oncontextmenu = $asm.$.ExpressCraft.SimpleButton.f1;
+
+            if (ac) {
+                this.getStyle().font = ExpressCraft.Settings.Font;
+            }
 
             ExpressCraft.Helper.setSize(this, "69px", "20px");
 

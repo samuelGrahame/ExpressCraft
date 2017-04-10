@@ -1067,13 +1067,14 @@ namespace ExpressCraft
 			return butt;
 		}
         
-		public Form(string font = "font:8.25pt Tahoma;") : base("form-base")
+		public Form(string font = Settings.Font) : base("form-base")
 		{
-			if(!string.IsNullOrWhiteSpace(font)
-				Style.Font = font;
+			if(!string.IsNullOrWhiteSpace(font))
+				Style.Font = font;			
 			Heading = Div("form-heading");
-
-            Heading.OnContextMenu = (ev) => {
+			Heading.Style.Font = Settings.Font;
+			
+			Heading.OnContextMenu = (ev) => {
                 ev.StopPropagation();
                 ev.PreventDefault();
             };

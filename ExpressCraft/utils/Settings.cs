@@ -13,7 +13,10 @@ namespace ExpressCraft
 		public static string NetworkURL = "Host.ashx";
 		public static string ResourceURL = "./images/";
 		public static bool AutoRender = true;
-		public static string DefaultFont = "8.25pt Tahoma";
+		public const string Font = "8.25pt Tahoma";
+
+		public static string DefaultFont = Font;
+		
 		public static StyleSheet DefaultStyleSheet;
 		public static StyleSheet PluginStyleSheet;
         internal static List<StyleSheet> resourceManangerSheets = new List<StyleSheet>();
