@@ -17,8 +17,7 @@
     -moz-user-select:none;
     -webkit-user-select:none;
     user-select:none;    
-    cursor:default;    
-    font:8.25pt Tahoma;
+    cursor:default;
 }
 .control:focus:not(.grid){
 

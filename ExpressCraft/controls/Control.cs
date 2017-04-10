@@ -328,7 +328,7 @@ namespace ExpressCraft
 
 		public static HTMLSpanElement Label(string c, int X, int Y, int width, bool IsBold = false, bool IsTiny = false, string classr = "", bool ac = true)
 		{
-			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr, ac)) };
+			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
 			lbl.InnerHTML = c.HtmlEscape();
 			lbl.SetLocation(X, Y);

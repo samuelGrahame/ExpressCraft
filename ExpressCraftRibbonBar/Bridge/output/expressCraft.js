@@ -66,7 +66,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$5: function (Caption, X, Y, width, height, IsBold, IsTiny, classr, Alignment, Forecolor, ac) {
+            label$4: function (Caption, X, Y, width, height, IsBold, IsTiny, classr, Alignment, Forecolor, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
@@ -89,15 +89,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$3: function (Caption, X, Y, width, IsBold, IsTiny, classr, Alignment, Forecolor, ignoreHtml) {
+            label$3: function (Caption, X, Y, width, IsBold, IsTiny, classr, Alignment, Forecolor, ignoreHtml, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
                 if (Alignment === void 0) { Alignment = 3; }
                 if (Forecolor === void 0) { Forecolor = null; }
                 if (ignoreHtml === void 0) { ignoreHtml = false; }
+                if (ac === void 0) { ac = true; }
                 var lbl = document.createElement('span');
-                lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)));
+                lbl.className = System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr), ac));
                 if (!ignoreHtml) {
                     lbl.textContent = ExpressCraft.Helper.htmlEscape$1(Caption);
                 } else {
@@ -121,12 +122,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$4: function (c, X, Y, width, height, IsBold, IsTiny, classr) {
+            label$5: function (c, X, Y, width, height, IsBold, IsTiny, classr, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
+                if (ac === void 0) { ac = true; }
                 var lbl = Bridge.merge(document.createElement('span'), {
-                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
+                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr), ac))
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
@@ -135,12 +137,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$1: function (c, X, Y, width, IsBold, IsTiny, classr) {
+            label$1: function (c, X, Y, width, IsBold, IsTiny, classr, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
+                if (ac === void 0) { ac = true; }
                 var lbl = Bridge.merge(document.createElement('span'), {
-                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
+                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr), ac))
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(c);
@@ -150,10 +153,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label: function (c, X, Y, IsBold, IsTiny) {
+            label: function (c, X, Y, IsBold, IsTiny, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
-                return ExpressCraft.Control.label$2(c, X, Y, IsBold, IsTiny);
+                if (ac === void 0) { ac = true; }
+                return ExpressCraft.Control.label$2(c, X, Y, IsBold, IsTiny, ac);
             },
             setBT: function (lbl, IsBold, IsTiny) {
                 if (IsBold) {

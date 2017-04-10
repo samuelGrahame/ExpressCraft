@@ -576,6 +576,7 @@ namespace ExpressCraft
 				{
 					Document.ActiveElement.Focus();
 					ev.PreventDefault();
+					SetCursor(Cursor.Default);
 				}
 			};
             FormOverLay.OnClick = (ev) => {                
@@ -816,6 +817,7 @@ namespace ExpressCraft
 				MovingForm = null;
 				Mouse_Down = false;
 				MoveAction = MouseMoveAction.Move;
+				SetCursor(Cursor.Default);
 			};
             Window.OnBeforeUnload = (ev) =>
             {
