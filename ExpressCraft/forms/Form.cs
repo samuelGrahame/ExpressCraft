@@ -1069,7 +1069,8 @@ namespace ExpressCraft
         
 		public Form(string font = "font:8.25pt Tahoma;") : base("form-base")
 		{
-			Style.Font = font;
+			if(!string.IsNullOrWhiteSpace(font)
+				Style.Font = font;
 			Heading = Div("form-heading");
 
             Heading.OnContextMenu = (ev) => {
