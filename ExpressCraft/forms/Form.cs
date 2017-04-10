@@ -1067,8 +1067,9 @@ namespace ExpressCraft
 			return butt;
 		}
         
-		public Form() : base("form-base")
-		{			
+		public Form(string font = "font:8.25pt Tahoma;") : base("form-base")
+		{
+			Style.Font = font;
 			Heading = Div("form-heading");
 
             Heading.OnContextMenu = (ev) => {
