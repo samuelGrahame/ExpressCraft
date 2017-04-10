@@ -179,6 +179,35 @@ namespace ExpressCraft
 				children[i].LinkedForm = this;
 			}
 		}
+
+		public Form AppendChild(Control node)
+		{
+			this.Body.AppendChild(node);
+
+			return this;
+		}
+
+		public Form AppendChildren(params Control[] node)
+		{
+			this.Body.AppendChildren(node);
+
+			return this;
+		}
+
+		public Form AppendChild(HTMLElement node)
+		{
+			this.Body.AppendChild(node);
+
+			return this;
+		}
+
+		public Form AppendChildren(params HTMLElement[] node)
+		{
+			this.Body.AppendChildren(node);
+
+			return this;
+		}
+
 		protected static FormCollection standAloneForms = new FormCollection(null);
 		public static List<FormCollection> FormCollections = new List<FormCollection>();        
 

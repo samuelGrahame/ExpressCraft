@@ -171,11 +171,25 @@ namespace ExpressCraft
 
             themeElement = new HTMLStyleElement()
 			{                
-				InnerHTML = string.Format(ThemeTemplate,
-                objList.ToArray())
+				InnerHTML = string.Format(themeTemplate.Replace("#focusLine;", _includeFocusRegion ? themefocusValue : string.Empty),
+				objList.ToArray())
 			};
 
 			Document.Body.AppendChild(themeElement);
+		}
+		private static bool _includeFocusRegion = true;
+		public static bool IncludeFocusRegion { get
+			{
+				return _includeFocusRegion;
+			}
+			set
+			{
+				if(_includeFocusRegion != value)
+				{
+					_includeFocusRegion = value;
+					ApplyActiveTheme();
+				}
+			}
 		}
 
 		private static Theme _activeTheme = null;
@@ -191,12 +205,13 @@ namespace ExpressCraft
 		}
 		//ThemeForm
 		#region ThemeTemplateCode
-		private static string ThemeTemplate = @".{25}{{
+		private static string themefocusValue = @".{25}:focus:not(.grid){{
+outline: dashed 1px {0};
+}}";
+		private static string themeTemplate = @".{25}{{
     color:{22};
 }}
-.{25}:focus:not(.grid){{
-outline: dashed 1px {0};
-}}
+#focusLine;
 .{25}::selection{{
 {26}:{1};
 }}

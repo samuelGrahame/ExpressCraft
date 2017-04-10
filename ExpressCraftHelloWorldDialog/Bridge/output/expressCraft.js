@@ -3777,8 +3777,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             showExceptionDialog: true,
             formFadeDuration: 100,
             themeElement: null,
+            _includeFocusRegion: true,
             _activeTheme: null,
-            themeTemplate: ".{25}{{\r\n    color:{22};\r\n}}\r\n.{25}:focus:not(.grid){{\r\noutline: dashed 1px {0};\r\n}}\r\n.{25}::selection{{\r\n{26}:{1};\r\n}}\r\n.{25}::-moz-selection{{\r\n{26}:{1};\r\n}}\r\n.{25}:disabled{{\r\n{26}:{2};\r\n}}\r\n.input{25}:read-only{{\r\n{26}:{3};\r\n}}\r\n.{28}{25}{{\r\n{26}:{0};\r\n{27}{29}:{0};\r\n{27}{31}:{0};\r\n{27}{32}:{1};\r\n}}\r\n.{28}page{{\r\n{26}:{3};\r\n}}\r\n.{28}group{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}{33}small{{\r\n{26}:{3}; \r\n}}\r\n.{28}{33}small:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}small:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}seperator{{\r\n{26}:{1};\r\n}}\r\n.{28}{35}-hidden{{\r\n{26}:{0};\r\ncolor:{23};\r\n}}\r\n.{28}{35}-hidden:hover{{\r\n{26}:{6};\r\n}}\r\n.{28}{35}-active{{\r\n{26}:{3};\r\n}}\r\n.tab{25}{{\r\n{26}:{3};\r\n}}\r\n.tab{25}page{{\r\n{26}:{3};\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35} {{\r\n{26}:{3};   \r\n}}\r\n.tab{25}{35}-hidden{{\r\n{27}{30}:{3};\r\n{27}{29}:{3};\r\n{27}{31}:{3};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35}-hidden:hover{{\r\n{26}:{7};\r\n{27}{29}:{7};\r\n{27}{31}:{7};\r\n}}\r\n.tab{25}{35}-active{{\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{3};\r\n}}\r\n.tab{25}{35}-close{33}{{\r\ncolor:{1};\t\r\n}}\r\n.tab{25}{35}-close{33}:hover{{\r\ncolor:{24};\r\n\t{26}:{2};\r\n\t{27}:1px solid {19};\r\n}}\r\n.input{25} {{\r\n{27}:1px solid {1};   \r\n{26}:{14};\r\n}}\r\n.simple{33}{{\r\n{27}:1px solid {19};\r\n{26}:{3};\r\n}}\r\n.simple{33}:hover:not(.disabled)\r\n{{\r\n\t{26}:{1};\r\n}}\r\n.simple{33}:active:not(.disabled)\r\n{{\r\n\t{26}:{12};\r\n{27}: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\nfrom {{ {26}: {23};}}\r\nto {{ {26}: {0};}}\r\n}}\r\n.form-base{{\r\n{27}-color:{0};\r\n}}\r\n.{34}{{\r\n{26}:{0};  \r\n}}\r\n.{34}-title{{\r\ncolor:{23}; \r\n}}\r\n.{34}-{33}{{\r\ncolor:{23};\r\n}}\r\n.{34}-{33}:hover:not(.{34}-{33}-close){{\r\n{26}:{8};\r\n}}\r\n.{34}-{33}:active:not(.{34}-{33}-close){{\r\n{26}:{9};\r\n}}\r\n.{34}-{33}-close:hover{{\r\n{26}:{10};\r\n}}\r\n.{34}-{33}-close:active{{\r\n{26}:{11};\r\n}}\r\n.cell{{\r\n{27}: 1px solid {3};   \r\n}}\r\n.cellrow{{\r\n{26}:{14};\r\n}}\r\n.cellrow:hover{{\r\n{26}:{3} !important;\r\n}}\r\n.cellrow:active{{\r\n{26}:{12} !important;\r\n}}\r\n.even{{\r\n   {26}:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n{26}:{17} !important;\r\n}}\r\n.cellrow-selected:hover{{\r\n{26}:{18} !important;\r\n}}\r\n.{36}{{\r\n{26}:{3};\r\n{27}-right:1px solid {19} !important;\r\n}}\r\n.{36}:hover{{\r\n{26}:{1};\r\n}}\r\n.{36}:active{{\r\n{26}:{12};\r\n}}\r\n.{36}-container{{\r\n{26}:{3};\r\n{27}-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n{26}:{14};\r\n{27}:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n{27}:1px solid {19};\r\n{26}:{14};\r\n}}\r\n.progressbarbody{{\r\n{26}:{0};\r\n}}\r\n.contextmenu{{\r\n{26}:{14}; \r\n{27}: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n{26}:{15};\r\n}}\r\n.contextitemseperator{{\r\n{26}:{16};\r\n}}\r\n.dialog{33}section{{\r\n{26}:{3};\r\n}}\r\n.split{25}\r\n{{\r\n{27}:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n{27}-left: 1px {4} solid;\r\n{27}-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n{27}-top: 1px {4} solid;\r\n{27}-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n{26}:{4};\r\n}}\r\n.splittervertical:hover {{\r\n{26}:{4};\r\n}}\r\n.tool-tip{{\r\n{26}:{14};\r\n{27}: solid 1px {21};\r\n}}\r\n",
+            themefocusValue: ".{25}:focus:not(.grid){{\r\noutline: dashed 1px {0};\r\n}}",
+            themeTemplate: ".{25}{{\r\n    color:{22};\r\n}}\r\n#focusLine;\r\n.{25}::selection{{\r\n{26}:{1};\r\n}}\r\n.{25}::-moz-selection{{\r\n{26}:{1};\r\n}}\r\n.{25}:disabled{{\r\n{26}:{2};\r\n}}\r\n.input{25}:read-only{{\r\n{26}:{3};\r\n}}\r\n.{28}{25}{{\r\n{26}:{0};\r\n{27}{29}:{0};\r\n{27}{31}:{0};\r\n{27}{32}:{1};\r\n}}\r\n.{28}page{{\r\n{26}:{3};\r\n}}\r\n.{28}group{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}{{\r\n{26}:{3};\r\n}}\r\n.{28}{33}:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}{33}small{{\r\n{26}:{3}; \r\n}}\r\n.{28}{33}small:hover:not(:active):not(.disabled)\r\n{{\r\n{26}:{4};\r\n}}\r\n.{28}{33}small:active:not(.disabled){{\r\n{26}:{5};\r\n}}\r\n.{28}seperator{{\r\n{26}:{1};\r\n}}\r\n.{28}{35}-hidden{{\r\n{26}:{0};\r\ncolor:{23};\r\n}}\r\n.{28}{35}-hidden:hover{{\r\n{26}:{6};\r\n}}\r\n.{28}{35}-active{{\r\n{26}:{3};\r\n}}\r\n.tab{25}{{\r\n{26}:{3};\r\n}}\r\n.tab{25}page{{\r\n{26}:{3};\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35} {{\r\n{26}:{3};   \r\n}}\r\n.tab{25}{35}-hidden{{\r\n{27}{30}:{3};\r\n{27}{29}:{3};\r\n{27}{31}:{3};\r\n{27}{32}:{1};\r\n}}\r\n.tab{25}{35}-hidden:hover{{\r\n{26}:{7};\r\n{27}{29}:{7};\r\n{27}{31}:{7};\r\n}}\r\n.tab{25}{35}-active{{\r\n{27}{30}:{1};\r\n{27}{29}:{1};\r\n{27}{31}:{1};\r\n{27}{32}:{3};\r\n}}\r\n.tab{25}{35}-close{33}{{\r\ncolor:{1};\t\r\n}}\r\n.tab{25}{35}-close{33}:hover{{\r\ncolor:{24};\r\n\t{26}:{2};\r\n\t{27}:1px solid {19};\r\n}}\r\n.input{25} {{\r\n{27}:1px solid {1};   \r\n{26}:{14};\r\n}}\r\n.simple{33}{{\r\n{27}:1px solid {19};\r\n{26}:{3};\r\n}}\r\n.simple{33}:hover:not(.disabled)\r\n{{\r\n\t{26}:{1};\r\n}}\r\n.simple{33}:active:not(.disabled)\r\n{{\r\n\t{26}:{12};\r\n{27}: 1px solid {20};\r\n}}\r\n@keyframes ColorFlash {{\r\nfrom {{ {26}: {23};}}\r\nto {{ {26}: {0};}}\r\n}}\r\n.form-base{{\r\n{27}-color:{0};\r\n}}\r\n.{34}{{\r\n{26}:{0};  \r\n}}\r\n.{34}-title{{\r\ncolor:{23}; \r\n}}\r\n.{34}-{33}{{\r\ncolor:{23};\r\n}}\r\n.{34}-{33}:hover:not(.{34}-{33}-close){{\r\n{26}:{8};\r\n}}\r\n.{34}-{33}:active:not(.{34}-{33}-close){{\r\n{26}:{9};\r\n}}\r\n.{34}-{33}-close:hover{{\r\n{26}:{10};\r\n}}\r\n.{34}-{33}-close:active{{\r\n{26}:{11};\r\n}}\r\n.cell{{\r\n{27}: 1px solid {3};   \r\n}}\r\n.cellrow{{\r\n{26}:{14};\r\n}}\r\n.cellrow:hover{{\r\n{26}:{3} !important;\r\n}}\r\n.cellrow:active{{\r\n{26}:{12} !important;\r\n}}\r\n.even{{\r\n   {26}:{13} !important;\r\n}}\r\n.cellrow-selected{{\r\n{26}:{17} !important;\r\n}}\r\n.cellrow-selected:hover{{\r\n{26}:{18} !important;\r\n}}\r\n.{36}{{\r\n{26}:{3};\r\n{27}-right:1px solid {19} !important;\r\n}}\r\n.{36}:hover{{\r\n{26}:{1};\r\n}}\r\n.{36}:active{{\r\n{26}:{12};\r\n}}\r\n.{36}-container{{\r\n{26}:{3};\r\n{27}-bottom:1px solid {19} !important;\t\r\n}}\r\n.grid{{\r\n{26}:{14};\r\n{27}:1px solid {19}; \r\n}}\r\n.progressbar{{\r\n{27}:1px solid {19};\r\n{26}:{14};\r\n}}\r\n.progressbarbody{{\r\n{26}:{0};\r\n}}\r\n.contextmenu{{\r\n{26}:{14}; \r\n{27}: solid 1px {21};\r\n}}\r\n.contextitem:hover{{\r\n{26}:{15};\r\n}}\r\n.contextitemseperator{{\r\n{26}:{16};\r\n}}\r\n.dialog{33}section{{\r\n{26}:{3};\r\n}}\r\n.split{25}\r\n{{\r\n{27}:1px solid {19};\r\n}}\r\n.splittervertical {{\r\n{27}-left: 1px {4} solid;\r\n{27}-right: 1px {4} solid;\r\n}}\r\n.splitterhorizontal {{\r\n{27}-top: 1px {4} solid;\r\n{27}-bottom: 1px {4} solid;\r\n}}\r\n.splitterhorizontal:hover {{\r\n{26}:{4};\r\n}}\r\n.splittervertical:hover {{\r\n{26}:{4};\r\n}}\r\n.tool-tip{{\r\n{26}:{14};\r\n{27}: solid 1px {21};\r\n}}\r\n",
             onF2ShowThemeForm: true,
             toolTipPopupDelayMs: 1000,
             toolTipPopupStayOpenDelayPerWordMs: 250,
@@ -3796,6 +3798,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (value !== ExpressCraft.Settings._WindowManagerVisible) {
                     ExpressCraft.Settings._WindowManagerVisible = value;
                     ExpressCraft.Form.setupWindowManager();
+                }
+            },
+            getIncludeFocusRegion: function () {
+                return ExpressCraft.Settings._includeFocusRegion;
+            },
+            setIncludeFocusRegion: function (value) {
+                if (ExpressCraft.Settings._includeFocusRegion !== value) {
+                    ExpressCraft.Settings._includeFocusRegion = value;
+                    ExpressCraft.Settings.applyActiveTheme();
                 }
             },
             getActiveTheme: function () {
@@ -3896,7 +3907,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
 
                 ExpressCraft.Settings.themeElement = Bridge.merge(document.createElement('style'), {
-                    innerHTML: System.String.format.apply(System.String, [ExpressCraft.Settings.themeTemplate].concat(objList.toArray()))
+                    innerHTML: System.String.format.apply(System.String, [System.String.replaceAll(ExpressCraft.Settings.themeTemplate, "#focusLine;", ExpressCraft.Settings._includeFocusRegion ? ExpressCraft.Settings.themefocusValue : "")].concat(objList.toArray()))
                 } );
 
                 document.body.appendChild(ExpressCraft.Settings.themeElement);
@@ -4950,6 +4961,28 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             for (var i = 0; i < children.length; i = (i + 1) | 0) {
                 children[i].linkedForm = this;
             }
+        },
+        appendChild$1: function (node) {
+            this.getBody().appendChild(ExpressCraft.Control.op_Implicit(node));
+
+            return this;
+        },
+        appendChild: function (node) {
+            this.getBody().appendChild(node);
+
+            return this;
+        },
+        appendChildren$1: function (node) {
+            if (node === void 0) { node = []; }
+            ExpressCraft.Helper.appendChildren$2(this.getBody(), node);
+
+            return this;
+        },
+        appendChildren: function (node) {
+            if (node === void 0) { node = []; }
+            ExpressCraft.Helper.appendChildren$1(this.getBody(), node);
+
+            return this;
         },
         resizeChildren: function (parent) {
             if (!Bridge.staticEquals(this.onResize, null)) {
