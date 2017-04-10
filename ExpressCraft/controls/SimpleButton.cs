@@ -13,7 +13,7 @@ namespace ExpressCraft
         public Form ParentForm = null;
         public DialogResultEnum DialogResult = DialogResultEnum.None;        
 
-        public SimpleButton(ButtonType button = ButtonType.Button) : base("simplebutton", button)
+        public SimpleButton(ButtonType button = ButtonType.Button, bool ac = true) : base("simplebutton", button, ac)
 		{
             Content.OnContextMenu = (ev) =>
             {

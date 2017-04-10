@@ -10,9 +10,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         statics: {
             ControlClass: "control",
             cva: null,
-            baseClass: function (add) {
+            baseClass: function (add, ac) {
                 if (add === void 0) { add = true; }
-                return add ? " control" : ExpressCraft.Control.ControlClass;
+                if (ac === void 0) { ac = true; }
+                return ac ? (add ? " control" : ExpressCraft.Control.ControlClass) : "";
             },
             getImageString: function (s) {
                 //url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
@@ -27,31 +28,36 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 //"./Images/"
                 return System.String.format("url('{0}{1}') no-repeat", useResourceURL ? ExpressCraft.Settings.resourceURL : "", s);
             },
-            div: function () {
+            div: function (ac) {
+                if (ac === void 0) { ac = true; }
                 return Bridge.merge(document.createElement('div'), {
-                    className: ExpressCraft.Control.baseClass(false)
+                    className: ExpressCraft.Control.baseClass(false, ac)
                 } );
             },
-            div$1: function (cn) {
+            div$1: function (cn, ac) {
+                if (ac === void 0) { ac = true; }
                 return Bridge.merge(document.createElement('div'), {
-                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true))
+                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true, ac))
                 } );
             },
-            span: function () {
+            span: function (ac) {
+                if (ac === void 0) { ac = true; }
                 return Bridge.merge(document.createElement('span'), {
-                    className: ExpressCraft.Control.baseClass(false)
+                    className: ExpressCraft.Control.baseClass(false, ac)
                 } );
             },
-            span$1: function (cn) {
+            span$1: function (cn, ac) {
+                if (ac === void 0) { ac = true; }
                 return Bridge.merge(document.createElement('span'), {
-                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true))
+                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true, ac))
                 } );
             },
-            label$2: function (Caption, X, Y, IsBold, IsTiny) {
+            label$2: function (Caption, X, Y, IsBold, IsTiny, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
+                if (ac === void 0) { ac = true; }
                 var lbl = Bridge.merge(document.createElement('span'), {
-                    className: ExpressCraft.Control.baseClass(false)
+                    className: ExpressCraft.Control.baseClass(false, ac)
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
@@ -60,14 +66,15 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
                 return lbl;
             },
-            label$5: function (Caption, X, Y, width, height, IsBold, IsTiny, classr, Alignment, Forecolor) {
+            label$5: function (Caption, X, Y, width, height, IsBold, IsTiny, classr, Alignment, Forecolor, ac) {
                 if (IsBold === void 0) { IsBold = false; }
                 if (IsTiny === void 0) { IsTiny = false; }
                 if (classr === void 0) { classr = ""; }
                 if (Alignment === void 0) { Alignment = 3; }
                 if (Forecolor === void 0) { Forecolor = null; }
+                if (ac === void 0) { ac = true; }
                 var lbl = Bridge.merge(document.createElement('span'), {
-                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr)))
+                    className: System.String.concat(classr, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(classr), ac))
                 } );
 
                 lbl.innerHTML = ExpressCraft.Helper.htmlEscape$1(Caption);
@@ -156,24 +163,27 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     lbl.style.fontSize = "6.75pt";
                 }
             },
-            comboBox: function (cn, ct) {
+            comboBox: function (cn, ct, ac) {
+                if (ac === void 0) { ac = true; }
                 var combo = Bridge.merge(document.createElement('select'), {
-                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true))
+                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true, ac))
                 } );
                 if (ct === ExpressCraft.ComboBoxTypes.Default) {
 
                 }
                 return combo;
             },
-            button: function (cn, bt) {
+            button: function (cn, bt, ac) {
+                if (ac === void 0) { ac = true; }
                 return Bridge.merge(document.createElement('button'), {
-                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true)),
+                    className: System.String.concat(cn, ExpressCraft.Control.baseClass(true, ac)),
                     type: bt
                 } );
             },
-            input: function (cn, it) {
+            input: function (cn, it, ac) {
+                if (ac === void 0) { ac = true; }
                 var input = document.createElement('input');
-                input.className = System.String.concat(cn, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(cn)));
+                input.className = System.String.concat(cn, ExpressCraft.Control.baseClass(!System.String.isNullOrWhiteSpace(cn), ac));
                 var ty = it;
                 if (Bridge.Browser.isIE && (Bridge.referenceEquals(ty, "text") || Bridge.referenceEquals(ty, "date") || Bridge.referenceEquals(ty, "color") || Bridge.referenceEquals(ty, 19) || Bridge.referenceEquals(ty, 3) || Bridge.referenceEquals(ty, 2))) {
                     return input;
@@ -234,25 +244,35 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 HasRendered: false
             }
         },
-        ctor: function () {
+        ctor: function (ac) {
+            if (ac === void 0) { ac = true; }
+
             this.$initialize();
-            this.content = ExpressCraft.Control.div();
+            this.content = ExpressCraft.Control.div(ac);
         },
-        $ctor1: function (cn) {
+        $ctor4: function (cn, ac) {
+            if (ac === void 0) { ac = true; }
+
             this.$initialize();
-            this.content = ExpressCraft.Control.div$1(cn);
+            this.content = ExpressCraft.Control.div$1(cn, ac);
         },
-        $ctor2: function (cn, bt) {
+        $ctor1: function (cn, bt, ac) {
+            if (ac === void 0) { ac = true; }
+
             this.$initialize();
-            this.content = ExpressCraft.Control.button(cn, bt);
+            this.content = ExpressCraft.Control.button(cn, bt, ac);
         },
-        $ctor4: function (cn, ct) {
+        $ctor3: function (cn, ct, ac) {
+            if (ac === void 0) { ac = true; }
+
             this.$initialize();
-            this.content = ExpressCraft.Control.comboBox(cn, ct);
+            this.content = ExpressCraft.Control.comboBox(cn, ct, ac);
         },
-        $ctor3: function (cn, it) {
+        $ctor2: function (cn, it, ac) {
+            if (ac === void 0) { ac = true; }
+
             this.$initialize();
-            this.content = ExpressCraft.Control.input(cn, it);
+            this.content = ExpressCraft.Control.input(cn, it, ac);
         },
         getToolTip: function () {
             return this._toolTip;
@@ -4264,11 +4284,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         type: "button",
         enabled: true,
         _readonly: false,
-        ctor: function (type) {
+        ctor: function (type, ac) {
             if (type === void 0) { type = 19; }
+            if (ac === void 0) { ac = true; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", type);
+            ExpressCraft.Control.$ctor2.call(this, "inputcontrol", type, ac);
             this.type = type;
             this.content.onchange = Bridge.fn.bind(this, $asm.$.ExpressCraft.TextInput.f1);
             this.content.oncontextmenu = $asm.$.ExpressCraft.TextInput.f2;
@@ -4395,7 +4416,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _readonly: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
+            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
             this.comboBoxBase = Bridge.as(this.content, HTMLSelectElement);
 
             this.content.oncontextmenu = $asm.$.ExpressCraft.ComboBoxEdit.f1;
@@ -4835,7 +4856,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "form-base");
+            ExpressCraft.Control.$ctor4.call(this, "form-base");
             this.setHeading(ExpressCraft.Control.div$1("form-heading"));
 
             this.getHeading().oncontextmenu = $asm.$.ExpressCraft.Form.f7;
@@ -6082,7 +6103,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "contextmenu");
+            ExpressCraft.Control.$ctor4.call(this, "contextmenu");
             this.content.onmouseleave = Bridge.fn.bind(this, $asm.$.ExpressCraft.ContextMenu.f1);
         },
         renderContextMenu: function () {
@@ -6364,7 +6385,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         visible: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
+            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
             this.gridView = Bridge.merge(new ExpressCraft.GridView(true, true), {
                 setSize: new ExpressCraft.Vector2.$ctor1(250, 400)
             } );
@@ -6490,7 +6511,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (columnAutoWidth === void 0) { columnAutoWidth = false; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "grid");
+            ExpressCraft.Control.$ctor4.call(this, "grid");
             this.content.style.overflow = "hidden";
 
             this.renderGridInternal = Bridge.fn.bind(this, function () {
@@ -7662,7 +7683,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         disableUpdate: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "progressbar");
+            ExpressCraft.Control.$ctor4.call(this, "progressbar");
             this.internalProgressControl = ExpressCraft.Control.div$1("progressbarbody");
         },
         getMaximum: function () {
@@ -7735,7 +7756,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_isSmallCaption === void 0) { _isSmallCaption = false; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
+            ExpressCraft.Control.$ctor4.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
             this._caption = caption;
             this.isSmallCaption = _isSmallCaption;
         },
@@ -7880,7 +7901,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (type === void 0) { type = 0; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, System.String.concat("ribboncontrol", (type === ExpressCraft.RibbonControl.RibbonType.Full ? "" : " ribboncontrol-compact")));
+            ExpressCraft.Control.$ctor4.call(this, System.String.concat("ribboncontrol", (type === ExpressCraft.RibbonControl.RibbonType.Full ? "" : " ribboncontrol-compact")));
             this.type = type;
 
             this.content.oncontextmenu = $asm.$.ExpressCraft.RibbonControl.f1;
@@ -8027,7 +8048,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_caption === void 0) { _caption = ""; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "ribbongroup");
+            ExpressCraft.Control.$ctor4.call(this, "ribbongroup");
             this.setCaption(_caption);
             this.setButtons(new (System.Collections.Generic.List$1(ExpressCraft.RibbonButton))());
         },
@@ -8035,7 +8056,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (buttons === void 0) { buttons = []; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "ribbongroup");
+            ExpressCraft.Control.$ctor4.call(this, "ribbongroup");
             this.setCaption(_caption);
             this.setButtons(new (System.Collections.Generic.List$1(ExpressCraft.RibbonButton))());
             if (buttons != null) {
@@ -8281,7 +8302,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_caption === void 0) { _caption = ""; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "ribbonpage");
+            ExpressCraft.Control.$ctor4.call(this, "ribbonpage");
             this.setCaption(_caption);
         },
         addRibbonGroups: function (pages) {
@@ -8311,11 +8332,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         parentForm: null,
         dialogResult: 0,
         enabled: true,
-        ctor: function (button) {
+        ctor: function (button, ac) {
             if (button === void 0) { button = 2; }
+            if (ac === void 0) { ac = true; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor2.call(this, "simplebutton", button);
+            ExpressCraft.Control.$ctor1.call(this, "simplebutton", button, ac);
             this.content.oncontextmenu = $asm.$.ExpressCraft.SimpleButton.f1;
 
             ExpressCraft.Helper.setSize(this, "69px", "20px");
@@ -8398,7 +8420,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "splitcontrol");
+            ExpressCraft.Control.$ctor4.call(this, "splitcontrol");
             this.panel1 = Bridge.merge(new ExpressCraft.Control.ctor(), {
                 setLocation: new ExpressCraft.Vector2.$ctor1(0, 0)
             } );
@@ -8610,7 +8632,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "tabcontrol");
+            ExpressCraft.Control.$ctor4.call(this, "tabcontrol");
             this.content.oncontextmenu = $asm.$.ExpressCraft.TabControl.f1;
         },
         getShowClosedButton: function () {
@@ -8780,7 +8802,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "tabcontrolpage");
+            ExpressCraft.Control.$ctor4.call(this, "tabcontrolpage");
 
         }
     });
@@ -8791,7 +8813,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _toolTip$1: null,
         ctor: function (toolTip) {
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "tool-tip");
+            ExpressCraft.Control.$ctor4.call(this, "tool-tip");
             this._toolTip$1 = toolTip;
         },
         show: function (ev) {

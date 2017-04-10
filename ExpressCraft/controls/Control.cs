@@ -249,7 +249,7 @@ namespace ExpressCraft
             return lbl;
 		}
 
-		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null)
+		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
 		{
 			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
@@ -268,10 +268,10 @@ namespace ExpressCraft
 			return lbl;
 		}
 
-		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ignoreHtml = false)
+		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ignoreHtml = false, bool ac = true)
 		{
 			var lbl = new HTMLSpanElement();
-			lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr));
+			lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
 			if(!ignoreHtml)
 			{
 				lbl.TextContent = Caption.HtmlEscape();
@@ -315,9 +315,9 @@ namespace ExpressCraft
             }
         }
 
-		public static HTMLSpanElement Label(string c, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr ="")
+		public static HTMLSpanElement Label(string c, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr ="", bool ac = true)
 		{
-			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
+			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
 		    lbl.InnerHTML = c.HtmlEscape();
 			lbl.SetBounds(X, Y, width, height);
@@ -326,9 +326,9 @@ namespace ExpressCraft
             return lbl;
 		}
 
-		public static HTMLSpanElement Label(string c, int X, int Y, int width, bool IsBold = false, bool IsTiny = false, string classr = "")
+		public static HTMLSpanElement Label(string c, int X, int Y, int width, bool IsBold = false, bool IsTiny = false, string classr = "", bool ac = true)
 		{
-			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr)) };
+			var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr, ac)) };
 
 			lbl.InnerHTML = c.HtmlEscape();
 			lbl.SetLocation(X, Y);
@@ -338,9 +338,9 @@ namespace ExpressCraft
 			return lbl;
 		}
 
-		public static HTMLSpanElement Label(string c, int X, int Y, bool IsBold = false, bool IsTiny = false)
+		public static HTMLSpanElement Label(string c, int X, int Y, bool IsBold = false, bool IsTiny = false, bool ac = true)
 		{
-			return Label(c, (float)X, (float)Y, IsBold, IsTiny);			
+			return Label(c, (float)X, (float)Y, IsBold, IsTiny, ac);			
 		}
 
 		public static HTMLSpanElement Span(string cn, bool ac = true)
