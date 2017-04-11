@@ -203,6 +203,11 @@ namespace ExpressCraft
 			Content = Div(ac);
 		}
 
+		public Control(HTMLElement element)
+		{
+			Content = element;
+		}
+
 		public Control(string cn, bool ac = true)
 		{
 			Content = Div(cn, ac);

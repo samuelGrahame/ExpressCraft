@@ -321,7 +321,7 @@ Bridge.assembly("ExpressCraftDesign", function ($asm, globals) {
 
                         fdtcp.generateSourceCode();
                     } else if (Bridge.referenceEquals(ControlName, "Control")) {
-                        var ribbc5 = Bridge.merge(new ExpressCraft.Control.ctor(), {
+                        var ribbc5 = Bridge.merge(new ExpressCraft.Control.$ctor1(), {
                             setName: ExpressCraftDesign.ControlHolder.getNewName("control", fdtcp),
                             setLocation: new ExpressCraft.Vector2.$ctor1(x, y),
                             setSize: new ExpressCraft.Vector2.$ctor1(200, 200)

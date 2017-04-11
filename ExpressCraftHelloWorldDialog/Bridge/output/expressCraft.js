@@ -248,31 +248,35 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 HasRendered: false
             }
         },
-        ctor: function (ac) {
+        $ctor1: function (ac) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
             this.content = ExpressCraft.Control.div(ac);
         },
-        $ctor4: function (cn, ac) {
+        ctor: function (element) {
+            this.$initialize();
+            this.content = element;
+        },
+        $ctor5: function (cn, ac) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
             this.content = ExpressCraft.Control.div$1(cn, ac);
         },
-        $ctor1: function (cn, bt, ac) {
+        $ctor2: function (cn, bt, ac) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
             this.content = ExpressCraft.Control.button(cn, bt, ac);
         },
-        $ctor3: function (cn, ct, ac) {
+        $ctor4: function (cn, ct, ac) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
             this.content = ExpressCraft.Control.comboBox(cn, ct, ac);
         },
-        $ctor2: function (cn, it, ac) {
+        $ctor3: function (cn, it, ac) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
@@ -4294,7 +4298,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor2.call(this, "inputcontrol", type, ac);
+            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", type, ac);
             this.type = type;
             this.content.onchange = Bridge.fn.bind(this, $asm.$.ExpressCraft.TextInput.f1);
             this.content.oncontextmenu = $asm.$.ExpressCraft.TextInput.f2;
@@ -4421,7 +4425,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _readonly: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
+            ExpressCraft.Control.$ctor4.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
             this.comboBoxBase = Bridge.as(this.content, HTMLSelectElement);
 
             this.content.oncontextmenu = $asm.$.ExpressCraft.ComboBoxEdit.f1;
@@ -4863,7 +4867,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (font === void 0) { font = "8.25pt Tahoma"; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "form-base");
+            ExpressCraft.Control.$ctor5.call(this, "form-base");
             if (!System.String.isNullOrWhiteSpace(font)) {
                 this.getStyle().font = font;
             }
@@ -6116,7 +6120,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "contextmenu");
+            ExpressCraft.Control.$ctor5.call(this, "contextmenu");
             this.content.onmouseleave = Bridge.fn.bind(this, $asm.$.ExpressCraft.ContextMenu.f1);
         },
         renderContextMenu: function () {
@@ -6398,7 +6402,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         visible: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor3.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
+            ExpressCraft.Control.$ctor4.call(this, "inputcontrol", ExpressCraft.ComboBoxTypes.Default);
             this.gridView = Bridge.merge(new ExpressCraft.GridView(true, true), {
                 setSize: new ExpressCraft.Vector2.$ctor1(250, 400)
             } );
@@ -6524,7 +6528,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (columnAutoWidth === void 0) { columnAutoWidth = false; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "grid");
+            ExpressCraft.Control.$ctor5.call(this, "grid");
             this.content.style.overflow = "hidden";
 
             this.renderGridInternal = Bridge.fn.bind(this, function () {
@@ -7696,7 +7700,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         disableUpdate: false,
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "progressbar");
+            ExpressCraft.Control.$ctor5.call(this, "progressbar");
             this.internalProgressControl = ExpressCraft.Control.div$1("progressbarbody");
         },
         getMaximum: function () {
@@ -7769,7 +7773,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_isSmallCaption === void 0) { _isSmallCaption = false; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
+            ExpressCraft.Control.$ctor5.call(this, _isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton");
             this._caption = caption;
             this.isSmallCaption = _isSmallCaption;
         },
@@ -7914,7 +7918,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (type === void 0) { type = 0; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, System.String.concat("ribboncontrol", (type === ExpressCraft.RibbonControl.RibbonType.Full ? "" : " ribboncontrol-compact")));
+            ExpressCraft.Control.$ctor5.call(this, System.String.concat("ribboncontrol", (type === ExpressCraft.RibbonControl.RibbonType.Full ? "" : " ribboncontrol-compact")));
             this.type = type;
 
             this.content.oncontextmenu = $asm.$.ExpressCraft.RibbonControl.f1;
@@ -8061,7 +8065,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_caption === void 0) { _caption = ""; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "ribbongroup");
+            ExpressCraft.Control.$ctor5.call(this, "ribbongroup");
             this.setCaption(_caption);
             this.setButtons(new (System.Collections.Generic.List$1(ExpressCraft.RibbonButton))());
         },
@@ -8069,7 +8073,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (buttons === void 0) { buttons = []; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "ribbongroup");
+            ExpressCraft.Control.$ctor5.call(this, "ribbongroup");
             this.setCaption(_caption);
             this.setButtons(new (System.Collections.Generic.List$1(ExpressCraft.RibbonButton))());
             if (buttons != null) {
@@ -8315,7 +8319,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (_caption === void 0) { _caption = ""; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "ribbonpage");
+            ExpressCraft.Control.$ctor5.call(this, "ribbonpage");
             this.setCaption(_caption);
         },
         addRibbonGroups: function (pages) {
@@ -8350,7 +8354,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (ac === void 0) { ac = true; }
 
             this.$initialize();
-            ExpressCraft.Control.$ctor1.call(this, "simplebutton", button, ac);
+            ExpressCraft.Control.$ctor2.call(this, "simplebutton", button, ac);
             this.content.oncontextmenu = $asm.$.ExpressCraft.SimpleButton.f1;
 
             if (ac) {
@@ -8437,12 +8441,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "splitcontrol");
-            this.panel1 = Bridge.merge(new ExpressCraft.Control.ctor(), {
+            ExpressCraft.Control.$ctor5.call(this, "splitcontrol");
+            this.panel1 = Bridge.merge(new ExpressCraft.Control.$ctor1(), {
                 setLocation: new ExpressCraft.Vector2.$ctor1(0, 0)
             } );
-            this.panel2 = new ExpressCraft.Control.ctor();
-            this.splitter = new ExpressCraft.Control.ctor();
+            this.panel2 = new ExpressCraft.Control.$ctor1();
+            this.splitter = new ExpressCraft.Control.$ctor1();
 
             this.splitter.content.onmousedown = Bridge.fn.bind(this, $asm.$.ExpressCraft.SplitControlContainer.f1);
 
@@ -8649,7 +8653,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "tabcontrol");
+            ExpressCraft.Control.$ctor5.call(this, "tabcontrol");
             this.content.oncontextmenu = $asm.$.ExpressCraft.TabControl.f1;
         },
         getShowClosedButton: function () {
@@ -8819,7 +8823,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         ctor: function () {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "tabcontrolpage");
+            ExpressCraft.Control.$ctor5.call(this, "tabcontrolpage");
 
         }
     });
@@ -8830,7 +8834,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         _toolTip$1: null,
         ctor: function (toolTip) {
             this.$initialize();
-            ExpressCraft.Control.$ctor4.call(this, "tool-tip");
+            ExpressCraft.Control.$ctor5.call(this, "tool-tip");
             this._toolTip$1 = toolTip;
         },
         show: function (ev) {
