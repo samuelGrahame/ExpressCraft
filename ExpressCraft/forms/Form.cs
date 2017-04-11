@@ -298,8 +298,15 @@ namespace ExpressCraft
 		{
 			
 		}
+		
+		private WindowState windowState;
 
-		public WindowState windowState { get; set; }
+		public WindowState Windowstate
+		{
+			get { return windowState; }
+			set { SetWindowState(value); }
+		}
+
 
 		public static bool MidleOfAction()
 		{
@@ -1510,6 +1517,12 @@ namespace ExpressCraft
                 // Already Open???
                 throw new Exception("Invalid request to open form as a dialog that is already visible!");
             }
+
+			if(StartPosition == FormStartPosition.Center)
+			{
+				CentreForm();
+			}
+
             AddFormToParentElement(owner);
             
             Body.Focus();

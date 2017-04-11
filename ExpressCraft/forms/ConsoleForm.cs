@@ -109,7 +109,7 @@ namespace ExpressCraft
 
 			prevSize = Size;
 			prevLocation = Location;
-			prevWindowState = windowState;
+			prevWindowState = Windowstate;
 		}
 
 		protected override void OnClosed()

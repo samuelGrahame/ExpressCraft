@@ -4840,6 +4840,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         prev_height: 0,
         prev_top: 0,
         prev_left: 0,
+        windowState: 0,
         dialogResults: null,
         _seperateInstance: false,
         closeAction: null,
@@ -4855,8 +4856,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 BodyOverLay: null,
                 Owner: null,
                 MinWidth: 200,
-                MinHeight: 50,
-                windowState: 0
+                MinHeight: 50
             },
             init: function () {
                 this.children = new (System.Collections.Generic.List$1(ExpressCraft.Control))();
@@ -4959,6 +4959,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
         },
         setShowMaximize: function (value) {
             this.changeHeadingButton(ExpressCraft.FormButtonType.Maximize, value);
+        },
+        getWindowstate: function () {
+            return this.windowState;
+        },
+        setWindowstate: function (value) {
+            this.setWindowState(value);
         },
         getText: function () {
             return this.getHeadingTitle().innerHTML;
@@ -5129,10 +5135,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return;
             }
 
-            if (((this.setwindowState(State), State)) === ExpressCraft.WindowState.Normal) {
+            if (((this.windowState = State)) === ExpressCraft.WindowState.Normal) {
                 ExpressCraft.Helper.setBounds(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
-            } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
+            } else if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 this.prev_left = ExpressCraft.Helper.toInt(this.getLeft());
                 this.prev_top = ExpressCraft.Helper.toInt(this.getTop());
                 this.prev_width = ExpressCraft.Helper.toInt(this.getWidth());
@@ -5145,7 +5151,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this.resizing();
         },
         changeWindowState: function () {
-            if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
+            if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 this.setWindowState(ExpressCraft.WindowState.Normal);
             } else {
                 this.setWindowState(ExpressCraft.WindowState.Maximized);
@@ -5255,6 +5261,11 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 // Already Open???
                 throw new System.Exception("Invalid request to open form as a dialog that is already visible!");
             }
+
+            if (this.startPosition === ExpressCraft.FormStartPosition.Center) {
+                this.centreForm();
+            }
+
             this.addFormToParentElement(owner);
 
             this.getBody().focus();
@@ -5365,8 +5376,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.addFormToParentElement(owner);
 
                 this.content.style.visibility = "visible";
-                if (this.startPosition !== ExpressCraft.FormStartPosition.Manual && this.getwindowState() === ExpressCraft.WindowState.Normal) {
-                    if (this.startPosition === ExpressCraft.FormStartPosition.Center || (activeCollect == null || visbileForms == null || visbileForms.getCount() === 0 || visbileForms.getItem(((visbileForms.getCount() - 1) | 0)).getwindowState() !== ExpressCraft.WindowState.Normal || visbileForms.getItem(((visbileForms.getCount() - 1) | 0)).content == null)) {
+                if (this.startPosition !== ExpressCraft.FormStartPosition.Manual && this.windowState === ExpressCraft.WindowState.Normal) {
+                    if (this.startPosition === ExpressCraft.FormStartPosition.Center || (activeCollect == null || visbileForms == null || visbileForms.getCount() === 0 || visbileForms.getItem(((visbileForms.getCount() - 1) | 0)).windowState !== ExpressCraft.WindowState.Normal || visbileForms.getItem(((visbileForms.getCount() - 1) | 0)).content == null)) {
                         this.centreForm();
 
                     } else if (this.startPosition === ExpressCraft.FormStartPosition.WindowsDefaultLocation) {
@@ -5586,7 +5597,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 var newX = (((mX = mousePos.getXf())) + ExpressCraft.Form.movingForm.prev_px);
                 var newY = (((mY = mousePos.getYf())) + ExpressCraft.Form.movingForm.prev_py);
 
-                if (ExpressCraft.Form.movingForm.getwindowState() === ExpressCraft.WindowState.Maximized && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
+                if (ExpressCraft.Form.movingForm.windowState === ExpressCraft.WindowState.Maximized && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
                     ExpressCraft.Form.movingForm.changeWindowState();
                     newX = mousePos.getXf() - (((Bridge.Int.div(ExpressCraft.Form.movingForm.prev_width, 2)) | 0));
                     ExpressCraft.Form.movingForm.prev_px = newX - mousePos.getXf();
@@ -5803,7 +5814,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             var X = mousePos.getXf() - clientRec.left;
             var Y = mousePos.getYf() - clientRec.top;
 
-            if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
+            if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 ExpressCraft.Form.setCursor("default");
                 ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
             } else {
@@ -5889,7 +5900,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (ExpressCraft.Form.movingForm != null && ExpressCraft.Form.moveAction === ExpressCraft.MouseMoveAction.Move) {
                 ExpressCraft.Form.setCursor("default");
                 return;
-            } else if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
+            } else if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 ExpressCraft.Form.setCursor("default");
                 return;
             }
@@ -5928,7 +5939,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 return;
             }
 
-            if (this.getwindowState() === ExpressCraft.WindowState.Maximized) {
+            if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 ExpressCraft.Form.movingForm = this;
                 ExpressCraft.Form.setCursor("default");
 
@@ -6062,7 +6073,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.Form.setMouse_Down(false);
 
-            this.setwindowState(ExpressCraft.WindowState.Minimized);
+            this.windowState = ExpressCraft.WindowState.Minimized;
         },
         f33: function (ev) {
             if (ExpressCraft.Form.movingForm != null) {
@@ -8990,7 +9001,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
 
             ExpressCraft.ConsoleForm.prevSize = this.getSize().$clone();
             ExpressCraft.ConsoleForm.prevLocation = this.getLocation().$clone();
-            ExpressCraft.ConsoleForm.prevWindowState = this.getwindowState();
+            ExpressCraft.ConsoleForm.prevWindowState = this.getWindowstate();
         },
         onClosed: function () {
             ExpressCraft.Form.prototype.onClosed.call(this);
