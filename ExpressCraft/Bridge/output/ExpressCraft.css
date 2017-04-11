@@ -19,6 +19,12 @@
     user-select:none;    
     cursor:default;
 }
+.selection{    
+    -ms-user-select:text;
+    -moz-user-select:text;
+    -webkit-user-select:text;
+    user-select:text;        
+}
 .control:focus:not(.grid){
 
 }
