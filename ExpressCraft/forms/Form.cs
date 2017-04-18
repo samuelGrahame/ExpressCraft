@@ -896,6 +896,7 @@ namespace ExpressCraft
 			{				
 				this.SetBounds(prev_left, prev_top, prev_width, prev_height);				
 				Resizing();
+				Style.BorderWidthString = "1px";
 			}
 			else if(windowState == WindowState.Maximized)
 			{
@@ -904,7 +905,9 @@ namespace ExpressCraft
 				prev_width = Width.ToInt();
 				prev_height = Height.ToInt();
 
-				var calc_2px = "calc(100% - 2px)";
+				Style.BorderWidthString = "0";
+
+				var calc_2px = "100%";
 
 				this.SetBounds(0, 0, calc_2px, calc_2px);				
 			}

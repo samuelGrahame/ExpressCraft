@@ -5137,13 +5137,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (((this.windowState = State)) === ExpressCraft.WindowState.Normal) {
                 ExpressCraft.Helper.setBounds(this, this.prev_left, this.prev_top, this.prev_width, this.prev_height);
                 this.resizing();
+                this.getStyle().borderWidth = "1px";
             } else if (this.windowState === ExpressCraft.WindowState.Maximized) {
                 this.prev_left = ExpressCraft.Helper.toInt(this.getLeft());
                 this.prev_top = ExpressCraft.Helper.toInt(this.getTop());
                 this.prev_width = ExpressCraft.Helper.toInt(this.getWidth());
                 this.prev_height = ExpressCraft.Helper.toInt(this.getHeight());
 
-                var calc_2px = "calc(100% - 2px)";
+                this.getStyle().borderWidth = "0";
+
+                var calc_2px = "100%";
 
                 ExpressCraft.Helper.setBounds(this, 0, 0, calc_2px, calc_2px);
             }
