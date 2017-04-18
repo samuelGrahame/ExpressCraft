@@ -443,7 +443,6 @@ namespace ExpressCraft
 				}
 				BodyOverLay.Style.Visibility = Visibility.Visible;
 			}
-                
         }
 
 		protected virtual void OnGotFocus()

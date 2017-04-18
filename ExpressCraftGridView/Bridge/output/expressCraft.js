@@ -5122,7 +5122,6 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
                 this.getBodyOverLay().style.visibility = "visible";
             }
-
         },
         onGotFocus: function () {
 
