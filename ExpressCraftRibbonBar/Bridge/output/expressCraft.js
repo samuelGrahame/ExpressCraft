@@ -4631,7 +4631,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             ExpressCraft.Form._ActiveForm.bringToFront();
                         }
 
-                        if (Bridge.referenceEquals(ExpressCraft.Form._ActiveForm, ExpressCraft.Form.getActiveFormCollection().formOwner)) {
+                        if (ExpressCraft.Form.getActiveFormCollection() != null && ExpressCraft.Form.getActiveFormCollection().formOwner != null && Bridge.referenceEquals(ExpressCraft.Form._ActiveForm, ExpressCraft.Form.getActiveFormCollection().formOwner)) {
                             ExpressCraft.Form.clearZIndex();
                         } else {
                             ExpressCraft.Form.applyZIndex();

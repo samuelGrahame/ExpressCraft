@@ -487,7 +487,7 @@ namespace ExpressCraft
 							_ActiveForm.BringToFront();
 						}
 
-						if(_ActiveForm == GetActiveFormCollection().FormOwner)
+						if(GetActiveFormCollection() != null && GetActiveFormCollection().FormOwner != null &&  _ActiveForm == GetActiveFormCollection().FormOwner)
 						{
 							ClearZIndex();
 						}
