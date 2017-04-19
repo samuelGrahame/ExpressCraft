@@ -4756,15 +4756,16 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
             },
             calculateZOrder$1: function (formCollection, zIndex) {
+                zIndex = {v:zIndex};
                 var TopMostForms = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
 
                 var VisibleForms = formCollection.visibleForms;
 
                 if (formCollection.formOwner != null) {
-                    ExpressCraft.Helper.delete(formCollection.formOwner.content);
+                    //formCollection.FormOwner.Content.Delete();
 
-                    ExpressCraft.Form.getWindowHolder().appendChild(ExpressCraft.Control.op_Implicit(formCollection.formOwner));
-                    //formCollection.FormOwner.SetZIndex(ref zIndex);
+                    //WindowHolder.AppendChild(formCollection.FormOwner);
+                    formCollection.formOwner.setZIndex(zIndex);
                 }
 
                 for (var i = 0; i < VisibleForms.getCount(); i = (i + 1) | 0) {
@@ -4792,14 +4793,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
                 for (var i3 = 0; i3 < VisibleForms.getCount(); i3 = (i3 + 1) | 0) {
                     if (VisibleForms.getItem(i3) != null && VisibleForms.getItem(i3).content != null) {
-                        ExpressCraft.Helper.delete(VisibleForms.getItem(i3).content);
-                        ExpressCraft.Form.getWindowHolder().appendChild(VisibleForms.getItem(i3).content);
+                        //VisibleForms[i].Content.Delete();
+                        //WindowHolder.AppendChild(VisibleForms[i].Content);
 
-                        //VisibleForms[i].SetZIndex(ref zIndex);
+                        VisibleForms.getItem(i3).setZIndex(zIndex);
                     }
                 }
 
-                return zIndex;
+                return zIndex.v;
             },
             calculateZOrder: function () {
                 ExpressCraft.Form.getActiveFormCollection();
@@ -4820,16 +4821,21 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                     }
                 }
 
-                ExpressCraft.Helper.delete(ExpressCraft.Form.formOverLay);
+                //			FormOverLay.Delete();
+                //WindowHolder.Empty();
 
                 for (var x = 0; x < ExpressCraft.Form.formCollections.getCount(); x = (x + 1) | 0) {
                     if (x === ((ExpressCraft.Form.formCollections.getCount() - 1) | 0)) {
-                        //FormOverLay.Style.ZIndex = (zIndex++).ToString();
-                        ExpressCraft.Form.getWindowHolder().appendChild(ExpressCraft.Form.formOverLay);
+                        ExpressCraft.Form.formOverLay.style.zIndex = (Bridge.identity(zIndex, (zIndex = (zIndex + 1) | 0))).toString();
+                        //WindowHolder.AppendChild(FormOverLay);
                     }
                     zIndex = ExpressCraft.Form.calculateZOrder$1(ExpressCraft.Form.formCollections.getItem(x), zIndex);
                 }
                 zIndex = ExpressCraft.Form.calculateZOrder$1(ExpressCraft.Form.standAloneForms, zIndex);
+
+                if (ExpressCraft.Form.getActiveForm() != null) {
+                    ExpressCraft.Form.getActiveForm().getBody().focus();
+                }
             }
         },
         inDesign: false,
@@ -5748,6 +5754,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             ExpressCraft.Form.setMouse_Down(false);
             ExpressCraft.Form.moveAction = ExpressCraft.MouseMoveAction.Move;
             ExpressCraft.Form.setCursor("default");
+
+
         },
         f12: function (ev) {
             if (!ExpressCraft.Settings.allowCloseWithoutQuestion) {
@@ -5796,13 +5804,14 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             if (ExpressCraft.Form.inExternalMouseEvent) {
                 return;
             }
-            if (!this.isActiveFormCollection()) {
-                return;
-            }
-
             var mev = ev;
 
             mev.stopPropagation();
+            mev.stopImmediatePropagation();
+
+            if (!this.isActiveFormCollection()) {
+                return;
+            }
 
             ExpressCraft.Form.setMouse_Down(true);
 

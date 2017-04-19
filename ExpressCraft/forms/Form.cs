@@ -817,13 +817,15 @@ namespace ExpressCraft
 				InExternalMouseEvent = false;
 				if(MovingForm != null)
 				{
-					MovingForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+					MovingForm.BodyOverLay.Style.Visibility = Visibility.Collapse;				
 				}
 
 				MovingForm = null;
 				Mouse_Down = false;
 				MoveAction = MouseMoveAction.Move;
 				SetCursor(Cursor.Default);
+				
+
 			};
             Window.OnBeforeUnload = (ev) =>
             {
@@ -1114,17 +1116,18 @@ namespace ExpressCraft
 
             Self = jQuery.Select(Content);
 			
-            Content.AddEventListener(EventType.MouseDown, (ev) => {
+            Content.AddEventListener(EventType.MouseDown, (ev) => {			
 				if(InExternalMouseEvent)
 					return;
-				if (!IsActiveFormCollection())
-                    return;
-
 				var mev = ev.As<MouseEvent>();
 
-                mev.StopPropagation();
+				mev.StopPropagation();
+				mev.StopImmediatePropagation();
 
-                Mouse_Down = true;
+				if (!IsActiveFormCollection())
+                    return;
+				
+				Mouse_Down = true;
 				
 				MovingForm = this;
 				ActiveForm = this;
@@ -1729,10 +1732,10 @@ namespace ExpressCraft
 
 			if(formCollection.FormOwner != null)
 			{
-				formCollection.FormOwner.Content.Delete();
+				//formCollection.FormOwner.Content.Delete();
 
-				WindowHolder.AppendChild(formCollection.FormOwner);
-				//formCollection.FormOwner.SetZIndex(ref zIndex);
+				//WindowHolder.AppendChild(formCollection.FormOwner);
+				formCollection.FormOwner.SetZIndex(ref zIndex);
 			}
 
 			for(int i = 0; i < VisibleForms.Count; i++)
@@ -1769,10 +1772,10 @@ namespace ExpressCraft
 				if(VisibleForms[i] != null &&
 					VisibleForms[i].Content != null)
 				{
-					VisibleForms[i].Content.Delete();
-					WindowHolder.AppendChild(VisibleForms[i].Content);
+					//VisibleForms[i].Content.Delete();
+					//WindowHolder.AppendChild(VisibleForms[i].Content);
 
-					//VisibleForms[i].SetZIndex(ref zIndex);
+					VisibleForms[i].SetZIndex(ref zIndex);
 				}
 			}
 
@@ -1780,8 +1783,8 @@ namespace ExpressCraft
 		}
 
 		public static void CalculateZOrder()
-		{
-            GetActiveFormCollection();
+		{			
+			GetActiveFormCollection();
 
 			if(FormCollections == null && standAloneForms.VisibleForms.Count == 0)
 				return;
@@ -1795,18 +1798,24 @@ namespace ExpressCraft
             else
                 FormOverLay.Style.Opacity = "0.4";
 
-			FormOverLay.Delete();
+			//			FormOverLay.Delete();
+			//WindowHolder.Empty();
 
 			for (int x = 0; x < FormCollections.Count; x++)
             {                
                 if(x == FormCollections.Count - 1)
                 {
-					//FormOverLay.Style.ZIndex = (zIndex++).ToString();
-					WindowHolder.AppendChild(FormOverLay);
+					FormOverLay.Style.ZIndex = (zIndex++).ToString();
+					//WindowHolder.AppendChild(FormOverLay);
 				}
 				zIndex = CalculateZOrder(FormCollections[x], zIndex);
 			}
 			zIndex = CalculateZOrder(standAloneForms, zIndex);
+						
+			if(ActiveForm != null)
+			{
+				ActiveForm.Body.Focus();
+			}			
 		}
 
 		public static List<Form> ToClean = new List<Form>();

@@ -20,6 +20,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         addNewRowButton: null,
         add100000RowsButton: null,
         clearRowsButton: null,
+        newFormButton: null,
         x: 0,
         ctor: function () {
             this.$initialize();
@@ -82,11 +83,19 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
             } );
             ExpressCraft.Helper.setBounds(this.clearRowsButton, "205px", "3px", "auto", "24px");
 
+            this.newFormButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
+                setText: "New Form"
+            } );
+            ExpressCraft.Helper.setBounds(this.newFormButton, "308px", "3px", "auto", "24px");
+
             this.clearRowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 dataTable.clearRows();
 
                 this.gridView.renderGrid();
             });
+
+            this.newFormButton.itemClick = $asm.$.ExpressCraftGridView.App.GridForm.f1;
+
 
             this.add100000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
                 dataTable.beginDataUpdate();
@@ -116,7 +125,7 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
                 })]);
             });
 
-            ExpressCraft.Helper.appendChildren$2(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton]);
+            ExpressCraft.Helper.appendChildren$2(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton, this.newFormButton]);
             this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
 
             this.linkchildToForm(this.gridView);
@@ -125,6 +134,14 @@ Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
         },
         onShowing: function () {
             ExpressCraft.Form.prototype.onShowing.call(this);
+        }
+    });
+
+    Bridge.ns("ExpressCraftGridView.App.GridForm", $asm.$);
+
+    Bridge.apply($asm.$.ExpressCraftGridView.App.GridForm, {
+        f1: function (ev) {
+            new ExpressCraft.Form().show();
         }
     });
 });
