@@ -1728,7 +1728,12 @@ namespace ExpressCraft
 			var VisibleForms = formCollection.VisibleForms;
 
 			if(formCollection.FormOwner != null)
-				formCollection.FormOwner.SetZIndex(ref zIndex);
+			{
+				formCollection.FormOwner.Content.Delete();
+
+				WindowHolder.AppendChild(formCollection.FormOwner);
+				//formCollection.FormOwner.SetZIndex(ref zIndex);
+			}
 
 			for(int i = 0; i < VisibleForms.Count; i++)
 			{
@@ -1764,7 +1769,10 @@ namespace ExpressCraft
 				if(VisibleForms[i] != null &&
 					VisibleForms[i].Content != null)
 				{
-					VisibleForms[i].SetZIndex(ref zIndex);
+					VisibleForms[i].Content.Delete();
+					WindowHolder.AppendChild(VisibleForms[i].Content);
+
+					//VisibleForms[i].SetZIndex(ref zIndex);
 				}
 			}
 
@@ -1785,14 +1793,17 @@ namespace ExpressCraft
             else if(FormCollections.Count == 1)
                 FormOverLay.Style.Opacity = "0";            
             else
-                FormOverLay.Style.Opacity = "0.4";                                
+                FormOverLay.Style.Opacity = "0.4";
 
-            for (int x = 0; x < FormCollections.Count; x++)
+			FormOverLay.Delete();
+
+			for (int x = 0; x < FormCollections.Count; x++)
             {                
                 if(x == FormCollections.Count - 1)
                 {
-					FormOverLay.Style.ZIndex = (zIndex++).ToString();					
-                }
+					//FormOverLay.Style.ZIndex = (zIndex++).ToString();
+					WindowHolder.AppendChild(FormOverLay);
+				}
 				zIndex = CalculateZOrder(FormCollections[x], zIndex);
 			}
 			zIndex = CalculateZOrder(standAloneForms, zIndex);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
+
 	public enum WindowState
 	{
 		Normal,
