@@ -4630,6 +4630,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                             ExpressCraft.Form._ActiveForm.getBodyOverLay().style.visibility = "collapse";
                             ExpressCraft.Form._ActiveForm.bringToFront();
                         }
+
+                        if (Bridge.referenceEquals(ExpressCraft.Form._ActiveForm, ExpressCraft.Form.getActiveFormCollection().formOwner)) {
+                            ExpressCraft.Form.clearZIndex();
+                        } else {
+                            ExpressCraft.Form.applyZIndex();
+                        }
                     }
                 }
 
@@ -4755,8 +4761,17 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             setCursor: function (cursor) {
                 ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
             },
+            clearZIndex: function () {
+                for (var i = 0; i < ExpressCraft.Form.getWindowHolder().childElementCount; i = (i + 1) | 0) {
+                    ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = "";
+                }
+            },
+            applyZIndex: function () {
+                for (var i = 0; i < ExpressCraft.Form.getWindowHolder().childElementCount; i = (i + 1) | 0) {
+                    ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = i.toString();
+                }
+            },
             calculateZOrder$1: function (formCollection, zIndex) {
-                zIndex = {v:zIndex};
                 var TopMostForms = new (System.Collections.Generic.List$1(ExpressCraft.Form))();
 
                 var VisibleForms = formCollection.visibleForms;
@@ -4764,8 +4779,8 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 if (formCollection.formOwner != null) {
                     //formCollection.FormOwner.Content.Delete();
 
-                    //WindowHolder.AppendChild(formCollection.FormOwner);
-                    formCollection.formOwner.setZIndex(zIndex);
+                    ExpressCraft.Form.getWindowHolder().appendChild(ExpressCraft.Control.op_Implicit(formCollection.formOwner));
+                    //formCollection.FormOwner.SetZIndex(ref zIndex);
                 }
 
                 for (var i = 0; i < VisibleForms.getCount(); i = (i + 1) | 0) {
@@ -4794,13 +4809,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 for (var i3 = 0; i3 < VisibleForms.getCount(); i3 = (i3 + 1) | 0) {
                     if (VisibleForms.getItem(i3) != null && VisibleForms.getItem(i3).content != null) {
                         //VisibleForms[i].Content.Delete();
-                        //WindowHolder.AppendChild(VisibleForms[i].Content);
+                        ExpressCraft.Form.getWindowHolder().appendChild(VisibleForms.getItem(i3).content);
 
-                        VisibleForms.getItem(i3).setZIndex(zIndex);
+                        //VisibleForms[i].SetZIndex(ref zIndex);
                     }
                 }
 
-                return zIndex.v;
+                return zIndex;
             },
             calculateZOrder: function () {
                 ExpressCraft.Form.getActiveFormCollection();
@@ -4822,12 +4837,12 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 }
 
                 //			FormOverLay.Delete();
-                //WindowHolder.Empty();
+                ExpressCraft.Helper.empty(ExpressCraft.Form.getWindowHolder());
 
                 for (var x = 0; x < ExpressCraft.Form.formCollections.getCount(); x = (x + 1) | 0) {
                     if (x === ((ExpressCraft.Form.formCollections.getCount() - 1) | 0)) {
-                        ExpressCraft.Form.formOverLay.style.zIndex = (Bridge.identity(zIndex, (zIndex = (zIndex + 1) | 0))).toString();
-                        //WindowHolder.AppendChild(FormOverLay);
+                        //FormOverLay.Style.ZIndex = (zIndex++).ToString();
+                        ExpressCraft.Form.getWindowHolder().appendChild(ExpressCraft.Form.formOverLay);
                     }
                     zIndex = ExpressCraft.Form.calculateZOrder$1(ExpressCraft.Form.formCollections.getItem(x), zIndex);
                 }

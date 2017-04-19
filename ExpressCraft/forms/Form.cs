@@ -486,6 +486,15 @@ namespace ExpressCraft
 							_ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;							
 							_ActiveForm.BringToFront();
 						}
+
+						if(_ActiveForm == GetActiveFormCollection().FormOwner)
+						{
+							ClearZIndex();
+						}
+						else
+						{
+							ApplyZIndex();
+						}
 					}
 				}
 
@@ -1724,6 +1733,22 @@ namespace ExpressCraft
 			//Self.Css("zIndex", zIndex++);
         }
 
+		private static void ClearZIndex()
+		{
+			for(int i = 0; i < WindowHolder.ChildElementCount; i++)
+			{
+				WindowHolder.Children[i].Style.ZIndex = "";
+			}
+		}
+
+		private static void ApplyZIndex()
+		{
+			for(int i = 0; i < WindowHolder.ChildElementCount; i++)
+			{
+				WindowHolder.Children[i].Style.ZIndex = i.ToString();
+			}
+		}
+
 		private static int CalculateZOrder(FormCollection formCollection, int zIndex)
 		{
 			List<Form> TopMostForms = new List<Form>();
@@ -1734,8 +1759,8 @@ namespace ExpressCraft
 			{
 				//formCollection.FormOwner.Content.Delete();
 
-				//WindowHolder.AppendChild(formCollection.FormOwner);
-				formCollection.FormOwner.SetZIndex(ref zIndex);
+				WindowHolder.AppendChild(formCollection.FormOwner);
+				//formCollection.FormOwner.SetZIndex(ref zIndex);
 			}
 
 			for(int i = 0; i < VisibleForms.Count; i++)
@@ -1773,9 +1798,9 @@ namespace ExpressCraft
 					VisibleForms[i].Content != null)
 				{
 					//VisibleForms[i].Content.Delete();
-					//WindowHolder.AppendChild(VisibleForms[i].Content);
+					WindowHolder.AppendChild(VisibleForms[i].Content);
 
-					VisibleForms[i].SetZIndex(ref zIndex);
+					//VisibleForms[i].SetZIndex(ref zIndex);
 				}
 			}
 
@@ -1799,14 +1824,14 @@ namespace ExpressCraft
                 FormOverLay.Style.Opacity = "0.4";
 
 			//			FormOverLay.Delete();
-			//WindowHolder.Empty();
+				WindowHolder.Empty();
 
 			for (int x = 0; x < FormCollections.Count; x++)
             {                
                 if(x == FormCollections.Count - 1)
                 {
-					FormOverLay.Style.ZIndex = (zIndex++).ToString();
-					//WindowHolder.AppendChild(FormOverLay);
+					//FormOverLay.Style.ZIndex = (zIndex++).ToString();
+					WindowHolder.AppendChild(FormOverLay);
 				}
 				zIndex = CalculateZOrder(FormCollections[x], zIndex);
 			}
