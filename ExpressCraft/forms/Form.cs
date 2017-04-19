@@ -807,9 +807,9 @@ namespace ExpressCraft
 							break;
 					}
                     bool changed = false;
-                    if (px != x && (changed = true))
+                    if (px != x)
                         MovingForm.Style.Left = Script.Write<string>("x + 'px'");
-                    if (py != y && (changed = true))
+                    if (py != y)
                         MovingForm.Style.Top = Script.Write<string>("y + 'px'");
                     if (pw != w && (changed = true))
                         MovingForm.Style.Width = Script.Write<string>("w + 'px'");

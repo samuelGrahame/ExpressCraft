@@ -5741,10 +5741,10 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                         break;
                 }
                 var changed = false;
-                if (px !== x && ((changed = true))) {
+                if (px !== x) {
                     ExpressCraft.Form.movingForm.getStyle().left = x + 'px';
                 }
-                if (py !== y && ((changed = true))) {
+                if (py !== y) {
                     ExpressCraft.Form.movingForm.getStyle().top = y + 'px';
                 }
                 if (pw !== w && ((changed = true))) {
