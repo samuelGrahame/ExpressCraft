@@ -4762,11 +4762,22 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Form.windowCursorManager.innerHTML = System.String.format("\r\n\t\t\t\t.control{    \r\n\t\t\t\t\tcursor:{0} !important;    \r\n\t\t\t\t}", cursor);
             },
             clearZIndex: function () {
+                var x = ExpressCraft.Form.getActiveFormCollection().formOwner;
+                ExpressCraft.Form.getWindowHolder().style.zIndex = "-" + ExpressCraft.Form.getWindowHolder().childElementCount;
+                var Found = false;
+
                 for (var i = 0; i < ExpressCraft.Form.getWindowHolder().childElementCount; i = (i + 1) | 0) {
-                    ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = "";
+                    if (Found || Bridge.referenceEquals(x.content, ExpressCraft.Form.getWindowHolder().children[i])) {
+                        ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = "";
+                        Found = true;
+                    } else {
+                        ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = (((((i - ExpressCraft.Form.getWindowHolder().childElementCount) | 0) - 1) | 0)).toString();
+                    }
+
                 }
             },
             applyZIndex: function () {
+                ExpressCraft.Form.getWindowHolder().style.zIndex = "";
                 for (var i = 0; i < ExpressCraft.Form.getWindowHolder().childElementCount; i = (i + 1) | 0) {
                     ExpressCraft.Form.getWindowHolder().children[i].style.zIndex = i.toString();
                 }

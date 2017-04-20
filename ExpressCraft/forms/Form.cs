@@ -1735,14 +1735,28 @@ namespace ExpressCraft
 
 		private static void ClearZIndex()
 		{
+			var x = GetActiveFormCollection().FormOwner;
+			WindowHolder.Style.ZIndex = "-" + WindowHolder.ChildElementCount;
+			bool Found = false;
+
 			for(int i = 0; i < WindowHolder.ChildElementCount; i++)
 			{
-				WindowHolder.Children[i].Style.ZIndex = "";
+				if(Found || x.Content == WindowHolder.Children[i])
+				{
+					WindowHolder.Children[i].Style.ZIndex = "";
+					Found = true;
+				}
+				else
+				{
+					WindowHolder.Children[i].Style.ZIndex = (i - WindowHolder.ChildElementCount - 1).ToString();
+				}
+				
 			}
 		}
 
 		private static void ApplyZIndex()
 		{
+			WindowHolder.Style.ZIndex = "";
 			for(int i = 0; i < WindowHolder.ChildElementCount; i++)
 			{
 				WindowHolder.Children[i].Style.ZIndex = i.ToString();
