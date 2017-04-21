@@ -4912,7 +4912,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 this.getStyle().font = font;
             }
             this.setHeading(ExpressCraft.Control.div$1("form-heading"));
-            this.getHeading().style.font = ExpressCraft.Settings.Font;
+            this.getHeading().style.font = font;
 
             this.getHeading().oncontextmenu = $asm.$.ExpressCraft.Form.f7;
 

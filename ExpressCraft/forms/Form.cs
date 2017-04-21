@@ -1092,7 +1092,7 @@ namespace ExpressCraft
 			if(!string.IsNullOrWhiteSpace(font))
 				Style.Font = font;			
 			Heading = Div("form-heading");
-			Heading.Style.Font = Settings.Font;
+			Heading.Style.Font = font;
 			
 			Heading.OnContextMenu = (ev) => {
                 ev.StopPropagation();
