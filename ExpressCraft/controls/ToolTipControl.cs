@@ -20,7 +20,7 @@ namespace ExpressCraft
 
 		public void Show(MouseEvent ev)
 		{
-			if(Browser.IsPhone || Browser.IsTablet || Browser.IsiPad || Browser.IsAndroid)
+			if(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad)
 				return;
 
 			this.Content.Empty();

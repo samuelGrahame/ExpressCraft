@@ -5338,7 +5338,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.delete(this.getButtonClose());
             }
 
-            if (!(Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPad || Bridge.Browser.isAndroid)) {
+            if (!(Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPhone || Bridge.Browser.isAndroid || Bridge.Browser.isiPad)) {
                 this.startPosition = ExpressCraft.FormStartPosition.Center;
             }
 
@@ -8892,7 +8892,7 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._toolTip$1 = toolTip;
         },
         show: function (ev) {
-            if (Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPad || Bridge.Browser.isAndroid) {
+            if (Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPhone || Bridge.Browser.isAndroid || Bridge.Browser.isiPad) {
                 return;
             }
 

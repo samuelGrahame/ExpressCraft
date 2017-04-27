@@ -1564,7 +1564,7 @@ namespace ExpressCraft
             if (ButtonClose != null)
                 ButtonClose.Delete();
 
-            if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPad || Browser.IsAndroid))
+            if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad))
 				StartPosition = FormStartPosition.Center;
 
             _IsDialog = true;                        
