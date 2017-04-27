@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bridge;
 using Bridge.Html5;
 using Bridge.jQuery2;
 
@@ -19,17 +20,20 @@ namespace ExpressCraft
 
 		public void Show(MouseEvent ev)
 		{
+			if(Browser.IsPhone || Browser.IsTablet || Browser.IsiPad || Browser.IsAndroid)
+				return;
+
 			this.Content.Empty();
 
 			if(_toolTip != null)
 			{
 				if(!_toolTip.Heading.IsEmpty())
 				{
-					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-heading", InnerHTML = _toolTip.Heading.HtmlEscape() });
+					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-heading", InnerHTML = _toolTip.Heading.HtmlEscape().Replace("\r\n", "<br>") });
 				}
 				if(!_toolTip.Description.IsEmpty())
 				{
-					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-body", InnerHTML = _toolTip.Description.HtmlEscape() });
+					this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-body", InnerHTML = _toolTip.Description.HtmlEscape().Replace("\r\n", "<br>") });
 				}
 			}
 			var mouse = Helper.GetClientMouseLocation(ev);

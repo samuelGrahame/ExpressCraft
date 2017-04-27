@@ -1563,17 +1563,14 @@ namespace ExpressCraft
                 ButtonExpand.Delete();
             if (ButtonClose != null)
                 ButtonClose.Delete();
-            
-            StartPosition = FormStartPosition.Center;
+
+            if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPad || Browser.IsAndroid))
+				StartPosition = FormStartPosition.Center;
 
             _IsDialog = true;                        
 
-            ShowStartNewLevel(null);
-
-            CentreForm();
-
-            ActiveForm = this;
-
+            ShowStartNewLevel(null);						
+			
 			if(dialogResults != null && dialogResults.Length > 0)
 			{
 				DialogResults.AddRange(dialogResults);				

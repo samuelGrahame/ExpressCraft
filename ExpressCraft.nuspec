@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.3.5</version>
+    <version>0.0.3.6</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -11,7 +11,7 @@
     <description>ExpressCraft (For Bridge.Net) - Create a Windows Application using ExpressCraft UI and Bridge for the Browser.
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
-    <releaseNotes>.Added Form.AppendChild,Children - returns this, Addded IncludeFocusRegion - settings</releaseNotes>
+    <releaseNotes>Changed Font Setting on Init for the form</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>

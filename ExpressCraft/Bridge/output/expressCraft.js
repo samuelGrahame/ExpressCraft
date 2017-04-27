@@ -5338,15 +5338,13 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
                 ExpressCraft.Helper.delete(this.getButtonClose());
             }
 
-            this.startPosition = ExpressCraft.FormStartPosition.Center;
+            if (!(Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPad || Bridge.Browser.isAndroid)) {
+                this.startPosition = ExpressCraft.FormStartPosition.Center;
+            }
 
             this._IsDialog = true;
 
             this.showStartNewLevel(null);
-
-            this.centreForm();
-
-            ExpressCraft.Form.setActiveForm(this);
 
             if (dialogResults != null && dialogResults.length > 0) {
                 this.dialogResults.addRange(dialogResults);
@@ -8894,19 +8892,23 @@ Bridge.assembly("ExpressCraft", function ($asm, globals) {
             this._toolTip$1 = toolTip;
         },
         show: function (ev) {
+            if (Bridge.Browser.isPhone || Bridge.Browser.isTablet || Bridge.Browser.isiPad || Bridge.Browser.isAndroid) {
+                return;
+            }
+
             ExpressCraft.Helper.empty(this.content);
 
             if (this._toolTip$1 != null) {
                 if (!ExpressCraft.Helper.isEmpty(this._toolTip$1.heading)) {
                     this.content.appendChild(Bridge.merge(document.createElement('p'), {
                         className: "tool-tip-heading",
-                        innerHTML: ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.heading)
+                        innerHTML: System.String.replaceAll(ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.heading), "\r\n", "<br>")
                     } ));
                 }
                 if (!ExpressCraft.Helper.isEmpty(this._toolTip$1.description)) {
                     this.content.appendChild(Bridge.merge(document.createElement('p'), {
                         className: "tool-tip-body",
-                        innerHTML: ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.description)
+                        innerHTML: System.String.replaceAll(ExpressCraft.Helper.htmlEscape$1(this._toolTip$1.description), "\r\n", "<br>")
                     } ));
                 }
             }
