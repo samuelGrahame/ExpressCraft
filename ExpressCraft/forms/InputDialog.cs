@@ -98,12 +98,12 @@ namespace ExpressCraft
             var input = Input("inputcontrol", InputType.Date);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => { Result = input.ValueAsDate; };
+            input.OnChange = ev => { Result = input.Value; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
 
-        public Date Result { get; private set; }
+        public string Result { get; private set; }
     }
 
 
@@ -236,13 +236,13 @@ namespace ExpressCraft
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
             input.OnChange = ev => {
-                Result = input.ValueAsDate;
+                Result = input.Value;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
 
-        public Date Result
+        public string Result
         {
             get; private set;
         }

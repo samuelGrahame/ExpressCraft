@@ -25,7 +25,7 @@ namespace ExpressCraft {
 		public void ComputeString()
 		{
 			ElelemtsOverMax = false;
-			string[] Lines = OriginalSource.Split("\r\n");
+			string[] Lines = OriginalSource.Split(new char[] { '\r', '\n' });
 		
 			double sizePerChar = Control.GetTextWidth("M", Settings.DefaultFont);
 

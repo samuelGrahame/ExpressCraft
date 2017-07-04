@@ -1,147 +1,149 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.7.0
+ * @compiler Bridge.NET 16.0.0-beta4
  */
 Bridge.assembly("ExpressCraftGridView", function ($asm, globals) {
     "use strict";
 
     Bridge.define("ExpressCraftGridView.App", {
-        $main: function () {
-            ExpressCraft.Settings.showExceptionDialog = false;
-            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.BrowserConsole);
-            ExpressCraft.Application.run(new ExpressCraftGridView.App.GridForm());
+        main: function Main () {
+            ExpressCraft.Settings.ShowExceptionDialog = false;
+            ExpressCraft.Application.SetApplicationDefinition(ExpressCraft.ApplicationDefitnion.BrowserConsole);
+            ExpressCraft.Application.Run(new ExpressCraftGridView.App.GridForm());
         }
     });
 
     Bridge.define("ExpressCraftGridView.App.GridForm", {
         inherits: [ExpressCraft.Form],
-        gridView: null,
-        addNewRowButton: null,
-        add100000RowsButton: null,
-        clearRowsButton: null,
-        newFormButton: null,
-        x: 0,
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.Form.ctor.call(this);
-            this.setWindowState(ExpressCraft.WindowState.Maximized);
-
-            ExpressCraft.Settings.resourceURL = "";
-            ExpressCraft.Settings.gridViewAutoColumnFormatDates = false;
-
-            this.gridView = new ExpressCraft.GridView(true, false);
-
-            var dataTable = new ExpressCraft.DataTable();
-
-            for (var i = 0; i < 100; i = (i + 1) | 0) {
-                dataTable.addColumn(System.String.concat("Date", i.toString()), ExpressCraft.DataType.DateTime);
-            }
-
-            //            dataTable.AddColumn("Number", DataType.Integer);
-            //            dataTable.AddColumn("String", DataType.String);                
-
-            //dataTable.AddColumn("Boolean", DataType.Bool);
-            //dataTable.AddColumn("Image", DataType.String);
-
-            //GridView.OnCustomRowStyle = (row, handle) =>
-            //{
-            //	if(row == null || handle < 0)
-            //		return;
-
-            //	if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
-            //	{
-            //		foreach(var item in row.Children)
-            //		{
-            //			item.Style.Color = Color.Red;
-            //		}
-            //	}
-            //};
-
-            this.gridView.setDataSource(dataTable);
-
-            //var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
-            //gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
-
-            //gridColumn = GridView.GetGridViewColumnByFieldName("Date");
-            //gridColumn.FormatString = "{0:yyyy-MM-dd}";
-
-            ExpressCraft.Helper.setBoundsFull(this.gridView);
-
-            this.addNewRowButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "Add New a Row"
-            } );
-            ExpressCraft.Helper.setBounds(this.addNewRowButton, "3px", "3px", "auto", "24px");
-
-            this.add100000RowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "Add 1000 Row's"
-            } );
-            ExpressCraft.Helper.setBounds(this.add100000RowsButton, "98px", "3px", "auto", "24px");
-
-            this.clearRowsButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "Clear Rows"
-            } );
-            ExpressCraft.Helper.setBounds(this.clearRowsButton, "205px", "3px", "auto", "24px");
-
-            this.newFormButton = Bridge.merge(new ExpressCraft.SimpleButton(), {
-                setText: "New Form"
-            } );
-            ExpressCraft.Helper.setBounds(this.newFormButton, "308px", "3px", "auto", "24px");
-
-            this.clearRowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
-                dataTable.clearRows();
-
-                this.gridView.renderGrid();
-            });
-
-            this.newFormButton.itemClick = $asm.$.ExpressCraftGridView.App.GridForm.f1;
-
-
-            this.add100000RowsButton.itemClick = Bridge.fn.bind(this, function (ev) {
-                dataTable.beginDataUpdate();
-
-                for (var i1 = 0; i1 < 1000; i1 = (i1 + 1) | 0) {
-                    var data = System.Array.init(100, null, Object);
-                    for (var x = 0; x < 100; x = (x + 1) | 0) {
-                        data[x] = new Date();
-                    }
-                    dataTable.addRow$1(data);
-                }
-                dataTable.endDataUpdate();
-
-                this.gridView.renderGrid();
-                this.gridView.scrollToBottom();
-            });
-
-            this.addNewRowButton.itemClick = Bridge.fn.bind(this, function (ev) {
-                var dr = dataTable.newRow();
-                var fdre = new ExpressCraft.DataRowEditForm(dr, this.gridView, true);
-
-                fdre.showDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
-                    dataTable.acceptNewRows();
-                    this.gridView.renderGrid();
-                })), new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.Cancel, function () {
-                    dataTable.rejectNewRows();
-                })]);
-            });
-
-            ExpressCraft.Helper.appendChildren$2(this.getHeading(), [this.addNewRowButton, this.add100000RowsButton, this.clearRowsButton, this.newFormButton]);
-            this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.gridView));
-
-            this.linkchildToForm(this.gridView);
-
-            this.gridView.renderGrid();
+        fields: {
+            GridView: null,
+            AddNewRowButton: null,
+            Add100000RowsButton: null,
+            ClearRowsButton: null,
+            NewFormButton: null,
+            x: 0
         },
-        onShowing: function () {
-            ExpressCraft.Form.prototype.onShowing.call(this);
+        ctors: {
+            init: function () {
+                this.x = 0;
+            },
+            ctor: function () {
+                this.$initialize();
+                ExpressCraft.Form.ctor.call(this);
+                var $t;
+                this.SetWindowState(ExpressCraft.WindowState.Maximized);
+
+                ExpressCraft.Settings.ResourceURL = "";
+                ExpressCraft.Settings.GridViewAutoColumnFormatDates = false;
+
+                this.GridView = new ExpressCraft.GridView(true, false);
+
+                var dataTable = new ExpressCraft.DataTable();
+
+                for (var i = 0; i < 100; i = (i + 1) | 0) {
+                    dataTable.AddColumn(System.String.concat("Date", i.toString()), ExpressCraft.DataType.DateTime);
+                }
+
+                //            dataTable.AddColumn("Number", DataType.Integer);
+                //            dataTable.AddColumn("String", DataType.String);                
+
+                //dataTable.AddColumn("Boolean", DataType.Bool);
+                //dataTable.AddColumn("Image", DataType.String);
+
+                //GridView.OnCustomRowStyle = (row, handle) =>
+                //{
+                //	if(row == null || handle < 0)
+                //		return;
+
+                //	if((int)GridView.GetRowCellValue(handle, "Number") % 2 == 0)
+                //	{
+                //		foreach(var item in row.Children)
+                //		{
+                //			item.Style.Color = Color.Red;
+                //		}
+                //	}
+                //};
+
+                this.GridView.DataSource = dataTable;
+
+                //var gridColumn = GridView.GetGridViewColumnByFieldName("Image");
+                //gridColumn.CellDisplay = new GridViewCellDisplayImage() { UseBase64Resource = false };
+
+                //gridColumn = GridView.GetGridViewColumnByFieldName("Date");
+                //gridColumn.FormatString = "{0:yyyy-MM-dd}";
+
+                ExpressCraft.Helper.SetBoundsFull(this.GridView);
+
+                this.AddNewRowButton = ($t = new ExpressCraft.SimpleButton(), $t.Text = "Add New a Row", $t);
+                ExpressCraft.Helper.SetBounds(this.AddNewRowButton, "3px", "3px", "auto", "24px");
+
+                this.Add100000RowsButton = ($t = new ExpressCraft.SimpleButton(), $t.Text = "Add 1000 Row's", $t);
+                ExpressCraft.Helper.SetBounds(this.Add100000RowsButton, "98px", "3px", "auto", "24px");
+
+                this.ClearRowsButton = ($t = new ExpressCraft.SimpleButton(), $t.Text = "Clear Rows", $t);
+                ExpressCraft.Helper.SetBounds(this.ClearRowsButton, "205px", "3px", "auto", "24px");
+
+                this.NewFormButton = ($t = new ExpressCraft.SimpleButton(), $t.Text = "New Form", $t);
+                ExpressCraft.Helper.SetBounds(this.NewFormButton, "308px", "3px", "auto", "24px");
+
+                this.ClearRowsButton.ItemClick = Bridge.fn.bind(this, function (ev) {
+                    dataTable.ClearRows();
+
+                    this.GridView.RenderGrid();
+                });
+
+                this.NewFormButton.ItemClick = $asm.$.ExpressCraftGridView.App.GridForm.f1;
+
+
+                this.Add100000RowsButton.ItemClick = Bridge.fn.bind(this, function (ev) {
+                    dataTable.BeginDataUpdate();
+
+                    for (var i1 = 0; i1 < 1000; i1 = (i1 + 1) | 0) {
+                        var data = System.Array.init(100, null, System.Object);
+                        for (var x = 0; x < 100; x = (x + 1) | 0) {
+                            data[System.Array.index(x, data)] = Bridge.box(new Date(), System.DateTime, System.DateTime.format);
+                        }
+                        dataTable.AddRow$1(data);
+                    }
+                    dataTable.EndDataUpdate();
+
+                    this.GridView.RenderGrid();
+                    this.GridView.ScrollToBottom();
+                });
+
+                this.AddNewRowButton.ItemClick = Bridge.fn.bind(this, function (ev) {
+                    var dr = dataTable.NewRow();
+                    var fdre = new ExpressCraft.DataRowEditForm(dr, this.GridView, true);
+
+                    fdre.ShowDialog([new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.OK, Bridge.fn.bind(this, function () {
+                        dataTable.AcceptNewRows();
+                        this.GridView.RenderGrid();
+                    })), new ExpressCraft.DialogResult(ExpressCraft.DialogResultEnum.Cancel, function () {
+                        dataTable.RejectNewRows();
+                    })]);
+                });
+
+                ExpressCraft.Helper.AppendChildren$2(this.Heading, [this.AddNewRowButton, this.Add100000RowsButton, this.ClearRowsButton, this.NewFormButton]);
+                this.Body.AppendChild(ExpressCraft.Control.op_Implicit(this.GridView));
+
+                this.LinkchildToForm(this.GridView);
+
+                this.GridView.RenderGrid();
         }
+    },
+    methods: {
+        OnShowing: function () {
+            ExpressCraft.Form.prototype.OnShowing.call(this);
+        }
+    }
     });
 
     Bridge.ns("ExpressCraftGridView.App.GridForm", $asm.$);
 
     Bridge.apply($asm.$.ExpressCraftGridView.App.GridForm, {
         f1: function (ev) {
-            new ExpressCraft.Form().show();
+            new ExpressCraft.Form().Show();
         }
     });
 });

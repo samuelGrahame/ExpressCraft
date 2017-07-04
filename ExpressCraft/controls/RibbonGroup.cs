@@ -221,8 +221,9 @@ namespace ExpressCraft
 						}
 					}else
 					{
-						MaxWidth = Math.Max(Math.Max((int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont),
-								(int)GetTextWidth(ri.SecondButton.Caption, Settings.DefaultFont), 
+						MaxWidth = Math.Max(
+                            Math.Max(Math.Max( (int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont),
+								(int)GetTextWidth(ri.SecondButton.Caption, Settings.DefaultFont)), 
 								(int)GetTextWidth(ri.ThirdButton.Caption, Settings.DefaultFont)) + 28 + 6, 64);
 						
 						ri.FirstButton.Render();
@@ -257,7 +258,7 @@ namespace ExpressCraft
 					int inwidth = 0;
 					if(ri.FirstButton.Caption.Contains(" "))
 					{
-						var strings = ri.FirstButton.Caption.Split(" ");
+						var strings = ri.FirstButton.Caption.Split(' ');
 						var builder = new StringBuilder();
 						
 						int length = ri.FirstButton.Caption.Length / 2;						

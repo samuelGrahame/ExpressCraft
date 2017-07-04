@@ -315,7 +315,7 @@ namespace ExpressCraft
 
 		public bool IsContentVisible()
 		{
-			return Content != null && Content.Style.Visibility == Visibility.Visible;
+			return Content != null && Content.Style.Visibility.Equals(Visibility.Visible);
 		}
 		
 		public void ChangeHeadingButton(FormButtonType button, bool visible = true)
@@ -435,7 +435,7 @@ namespace ExpressCraft
         public void ShowBodyOverLayStyle()
         {
             if (BodyOverLay != null &&
-                BodyOverLay.Style.Visibility == Visibility.Collapse)
+                BodyOverLay.Style.Visibility.Equals(Visibility.Collapse))
 			{
 				if(InDesign)
 				{					
@@ -651,7 +651,7 @@ namespace ExpressCraft
 					ev.StopImmediatePropagation();
 					ev.StopPropagation();
 
-					if(MovingForm.BodyOverLay.Style.Visibility == Visibility.Collapse)
+					if(MovingForm.BodyOverLay.Style.Visibility.Equals(Visibility.Collapse))
 					{
 						if(MovingForm.InDesign)
 						{
@@ -907,7 +907,7 @@ namespace ExpressCraft
 			{				
 				this.SetBounds(prev_left, prev_top, prev_width, prev_height);				
 				Resizing();
-				Style.BorderWidthString = "1px";
+				Style.BorderWidth = "1px";
 			}
 			else if(windowState == WindowState.Maximized)
 			{
@@ -916,7 +916,7 @@ namespace ExpressCraft
 				prev_width = Width.ToInt();
 				prev_height = Height.ToInt();
 
-				Style.BorderWidthString = "0";
+				Style.BorderWidth = "0";
 
 				var calc_2px = "100%";
 

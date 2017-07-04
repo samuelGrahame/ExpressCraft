@@ -1,51 +1,55 @@
 /**
  * @version 1.0.0.0
  * @copyright Copyright ©  2017
- * @compiler Bridge.NET 15.7.0
+ * @compiler Bridge.NET 16.0.0-beta4
  */
 Bridge.assembly("ExpressCraftRibbonBar", function ($asm, globals) {
     "use strict";
 
     Bridge.define("ExpressCraftRibbonBar.App", {
+        main: function Main () {
+            ExpressCraft.Form.Setup();
+            ExpressCraft.Application.SetApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
+            var ribbonForm = new ExpressCraftRibbonBar.App.RibbonForm();
+            ribbonForm.Text = "ExpressCraft RibbonBar Test";
+            ribbonForm.RibbonControl.AddRibbonPages([ExpressCraftRibbonBar.App.CreateRandomRibbonPage("Page 01"), ExpressCraftRibbonBar.App.CreateRandomRibbonPage("Page 02"), ExpressCraftRibbonBar.App.CreateRandomRibbonPage("Page 03")]);
+            ribbonForm.SetWindowState(ExpressCraft.WindowState.Maximized);
+
+            ExpressCraft.Application.Run(ribbonForm);
+        },
         statics: {
-            r: null,
-            config: {
+            fields: {
+                r: null
+            },
+            ctors: {
                 init: function () {
                     this.r = new System.Random.ctor();
                 }
             },
-            createRandomRibbonPage: function (caption) {
-                var rp = new ExpressCraft.RibbonPage(caption);
+            methods: {
+                CreateRandomRibbonPage: function (caption) {
+                    var rp = new ExpressCraft.RibbonPage(caption);
 
-                var Groups = ExpressCraftRibbonBar.App.r.next$2(1, 5);
+                    var Groups = ExpressCraftRibbonBar.App.r.next$2(1, 5);
 
-                for (var i = 0; i < Groups; i = (i + 1) | 0) {
-                    var Group = new ExpressCraft.RibbonGroup.ctor(i.toString());
+                    for (var i = 0; i < Groups; i = (i + 1) | 0) {
+                        var Group = new ExpressCraft.RibbonGroup.ctor(i.toString());
 
-                    var buttons = ExpressCraftRibbonBar.App.r.next$2(5, 10);
-                    for (var x = 0; x < buttons; x = (x + 1) | 0) {
-                        var ribbonButt = new ExpressCraft.RibbonButton(System.String.concat(i.toString(), "_", x.toString()), ExpressCraftRibbonBar.App.r.next$2(1, 3) === 1);
-                        ribbonButt.beginGroup = ExpressCraftRibbonBar.App.r.next$2(1, 2) === 1;
+                        var buttons = ExpressCraftRibbonBar.App.r.next$2(5, 10);
+                        for (var x = 0; x < buttons; x = (x + 1) | 0) {
+                            var ribbonButt = new ExpressCraft.RibbonButton(System.String.concat(i.toString(), "_", x.toString()), ExpressCraftRibbonBar.App.r.next$2(1, 3) === 1);
+                            ribbonButt.BeginGroup = ExpressCraftRibbonBar.App.r.next$2(1, 2) === 1;
 
-                        ribbonButt.onItemClick = $asm.$.ExpressCraftRibbonBar.App.f1;
-                        Group.getButtons().add(ribbonButt);
+                            ribbonButt.OnItemClick = $asm.$.ExpressCraftRibbonBar.App.f1;
+                            Group.Buttons.add(ribbonButt);
+                        }
+
+                        rp.AddRibbonGroups([Group]);
                     }
 
-                    rp.addRibbonGroups([Group]);
+                    return rp;
                 }
-
-                return rp;
             }
-        },
-        $main: function () {
-            ExpressCraft.Form.setup();
-            ExpressCraft.Application.setApplicationDefinition(ExpressCraft.ApplicationDefitnion.ExpressCraftConsole);
-            var ribbonForm = new ExpressCraftRibbonBar.App.RibbonForm();
-            ribbonForm.setText("ExpressCraft RibbonBar Test");
-            ribbonForm.ribbonControl.addRibbonPages([ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 01"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 02"), ExpressCraftRibbonBar.App.createRandomRibbonPage("Page 03")]);
-            ribbonForm.setWindowState(ExpressCraft.WindowState.Maximized);
-
-            ExpressCraft.Application.run(ribbonForm);
         }
     });
 
@@ -53,22 +57,28 @@ Bridge.assembly("ExpressCraftRibbonBar", function ($asm, globals) {
 
     Bridge.apply($asm.$.ExpressCraftRibbonBar.App, {
         f1: function (ev) {
-            new ExpressCraft.MessageBoxForm.ctor(ev.getCaption(), ExpressCraft.MessageBoxLayout.Information).showDialog();
+            new ExpressCraft.MessageBoxForm.ctor(ev.Caption, ExpressCraft.MessageBoxLayout.Information).ShowDialog();
         }
     });
 
     Bridge.define("ExpressCraftRibbonBar.App.RibbonForm", {
         inherits: [ExpressCraft.Form],
-        ribbonControl: null,
-        ctor: function () {
-            this.$initialize();
-            ExpressCraft.Form.ctor.call(this);
-            this.ribbonControl = new ExpressCraft.RibbonControl();
+        fields: {
+            RibbonControl: null
         },
-        onShowing: function () {
-            ExpressCraft.Form.prototype.onShowing.call(this);
+        ctors: {
+            ctor: function () {
+                this.$initialize();
+                ExpressCraft.Form.ctor.call(this);
+                this.RibbonControl = new ExpressCraft.RibbonControl();
+            }
+        },
+        methods: {
+            OnShowing: function () {
+                ExpressCraft.Form.prototype.OnShowing.call(this);
 
-            this.getBody().appendChild(ExpressCraft.Control.op_Implicit(this.ribbonControl));
+                this.Body.AppendChild(ExpressCraft.Control.op_Implicit(this.RibbonControl));
+            }
         }
     });
 });

@@ -66,36 +66,44 @@ namespace ExpressCraft
 
 		public static void Setup()
 		{
-			SetupStyleDefaults();
-			ActiveTheme = Theme.Theme1;	
+            ActiveTheme = Theme.Theme1;
+            SetupStyleDefaults();		
 		}
 		
 		public static void SetupStyleDefaults()
 		{
-			StyleSheetList sheets = Document.StyleSheets;
-			for(int i = 0; i < sheets.Length; i++)
-			{
-				var ownerNode = sheets[i].OwnerNode as HTMLLinkElement;
-				if(ownerNode == null)
-					continue;
-				if(ownerNode.Id.ToLower() == "expresscraft")
-				{
-					DefaultStyleSheet = sheets[i];					
-				}				
-				if(ownerNode.Id.ToLower() == "expresscraftplugin")
-				{
-					PluginStyleSheet = sheets[i];
-				}
-                if (ownerNode.Id.ToLower() == "resourcemanager")
+            try
+            {
+                StyleSheetList sheets = Document.StyleSheets;
+                for(int i = 0; i < sheets.Length; i++)
                 {
-                    resourceManangerSheets.Add(sheets[i]);
+                    var ownerNode = sheets[i].OwnerNode as HTMLLinkElement;
+                    if(ownerNode == null)
+                        continue;
+                    if(ownerNode.Id.ToLower() == "expresscraft")
+                    {
+                        DefaultStyleSheet = sheets[i];
+                    }
+                    if(ownerNode.Id.ToLower() == "expresscraftplugin")
+                    {
+                        PluginStyleSheet = sheets[i];
+                    }
+                    if(ownerNode.Id.ToLower() == "resourcemanager")
+                    {
+                        resourceManangerSheets.Add(sheets[i]);
+                    }
                 }
+                if(DefaultStyleSheet == null)
+                    return;
+                var df = GetExpressStyleRuleValue("font", ".control");
+                if(df != null)
+                    DefaultFont = df;
             }
-			if(DefaultStyleSheet == null)
-				return;
-            var df = GetExpressStyleRuleValue("font", ".control");
-            if (df != null)
-                DefaultFont = df;
+            catch(Exception)
+            {
+                                
+            }
+			
         }
 
         public static dynamic GetStyleRuleValue(List<StyleSheet> cssFile, string style, string className)
@@ -176,7 +184,7 @@ namespace ExpressCraft
 			{                
 				InnerHTML = string.Format(themeTemplate.Replace("#focusLine;", _includeFocusRegion ? themefocusValue : string.Empty),
 				objList.ToArray())
-			};
+			};            
 
 			Document.Body.AppendChild(themeElement);
 		}
