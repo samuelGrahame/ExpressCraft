@@ -19,8 +19,7 @@ namespace ExpressCraftGridView
             public SimpleButton AddNewRowButton;
             public SimpleButton Add100000RowsButton;
             public SimpleButton ClearRowsButton;
-			public SimpleButton NewFormButton;
-
+			
 			protected override void OnShowing()
             {
                 base.OnShowing();
@@ -80,22 +79,13 @@ namespace ExpressCraftGridView
 
                 ClearRowsButton = new SimpleButton() { Text = "Clear Rows" };
                 ClearRowsButton.SetBounds("205px", "3px", "auto", "24px");
-
-				NewFormButton = new SimpleButton() { Text = "New Form" };
-				NewFormButton.SetBounds("308px", "3px", "auto", "24px");
-
+				
 				ClearRowsButton.ItemClick = (ev) =>
                 {
                     dataTable.ClearRows();
 
                     GridView.RenderGrid();
                 };
-
-				NewFormButton.ItemClick = (ev) =>
-				{
-					new Form().Show();
-				};
-
 
 				Add100000RowsButton.ItemClick = (ev) =>
                 {
@@ -129,7 +119,7 @@ namespace ExpressCraftGridView
                     }));
                 };
 
-                this.Heading.AppendChildren(AddNewRowButton, Add100000RowsButton, ClearRowsButton, NewFormButton);                
+                this.Heading.AppendChildren(AddNewRowButton, Add100000RowsButton, ClearRowsButton);                
                 this.Body.AppendChild(GridView);
 
                 this.LinkchildToForm(GridView);				

@@ -1531,14 +1531,14 @@ namespace ExpressCraft
                 // Already Open???
                 throw new Exception("Invalid request to open form as a dialog that is already visible!");
             }
-
-			if(StartPosition == FormStartPosition.Center)
-			{
-				CentreForm();
-			}
-
+			
             AddFormToParentElement(owner);
-            
+
+            if(StartPosition == FormStartPosition.Center)
+            {
+                CentreForm();
+            }
+
             Body.Focus();
 
             FormCollections.Add(new FormCollection(this));
