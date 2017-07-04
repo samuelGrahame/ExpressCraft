@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-
 	public enum DataType
 	{
 		Object,
@@ -76,7 +75,7 @@ namespace ExpressCraft
         public void ClearCells<T>(DataColumn _column)
         {
             dynamic _col = _column;
-            _col.cells = new List<T>();
+            _col.Cells = new List<T>();
         }
 
         public void ClearCells(DataColumn _column)
@@ -183,7 +182,7 @@ namespace ExpressCraft
 			for(int x = 0; x < colLength; x++)
 			{
 				dynamic col = Columns[x];
-				col.cells.add(null);				
+				col.Cells.add(null);				
 			}
 
 			RequireOnDataChangeEvent();
@@ -200,7 +199,7 @@ namespace ExpressCraft
 				for(int x = 0; x < colLength; x++)
 				{
 					dynamic col = Columns[x];
-					col.cells.add(row[x]);					
+					col.Cells.add(row[x]);					
 				}
 				RequireOnDataChangeEvent();
 			}
@@ -251,7 +250,7 @@ namespace ExpressCraft
 						DataCells[y] = NewRows[y].batchData[x];
 					}
 				}
-				col.cells.addRange(DataCells);
+				col.Cells.addRange(DataCells);
 
 			}
 			NewRows.Clear();
@@ -329,7 +328,7 @@ namespace ExpressCraft
 					return batchData[columnIndex];
 				}
 				dynamic col = ParentTable.Columns[columnIndex];
-				return col.cells.items[RowIndex];
+				return col.Cells.items[RowIndex];
 			} set {				
 				if(RowIndex == -1)
 				{
@@ -342,9 +341,9 @@ namespace ExpressCraft
 					return;
 				}
 				dynamic col = ParentTable.Columns[columnIndex];
-				if(col.cells.items[RowIndex] != value)
+				if(col.Cells.items[RowIndex] != value)
 				{
-					col.cells.items[RowIndex] = value;
+					col.Cells.items[RowIndex] = value;
 					ParentTable.RequireOnDataChangeEvent();
 				}				
 			}

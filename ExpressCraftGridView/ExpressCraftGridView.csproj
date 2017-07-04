@@ -41,19 +41,32 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\ExpressCraft\Bridge\output\ExpressCraft.css">
-      <Link>Bridge\output\ExpressCraft.css</Link>
+      <Link>ExpressCraft.css</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\ExpressCraft\Bridge\output\ExpressCraftPlugin.css">
-      <Link>Bridge\output\ExpressCraftPlugin.css</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Bridge\output\expressCraftGridView.js" />
-    <Content Include="Bridge\output\expressCraftGridView.min.js" />
-    <Content Include="Bridge\www\demo.html" />
-    <Content Include="Bridge\www\rawprev.html" />
+    <Content Include="bin\Release\Bridge\bridge.console.js" />
+    <Content Include="bin\Release\Bridge\bridge.console.min.js" />
+    <Content Include="bin\Release\Bridge\bridge.js" />
+    <Content Include="bin\Release\Bridge\bridge.meta.js" />
+    <Content Include="bin\Release\Bridge\bridge.meta.min.js" />
+    <Content Include="bin\Release\Bridge\bridge.min.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraft.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraft.meta.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraft.meta.min.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraft.min.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraftGridView.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraftGridView.meta.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraftGridView.meta.min.js" />
+    <Content Include="bin\Release\Bridge\ExpressCraftGridView.min.js" />
+    <Content Include="bin\Release\Bridge\demo.html" />
+    <Content Include="bin\Release\Bridge\index.html" />
+    <Content Include="bin\Release\Bridge\index.min.html" />
+    <Content Include="bin\Release\Bridge\jquery-2.2.4.js" />
+    <Content Include="bin\Release\Bridge\jquery-2.2.4.min.js" />
+    <Content Include="bin\Release\ExpressCraft.css" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bridge.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

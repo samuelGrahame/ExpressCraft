@@ -51,6 +51,7 @@
     <Content Include="Bridge\www\rawprev.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bridge.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

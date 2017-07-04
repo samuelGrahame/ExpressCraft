@@ -92,21 +92,16 @@
     <Compile Include="utils\Vector4.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Bridge\output\bridge.js" />
-    <Content Include="Bridge\output\bridge.min.js" />
     <Content Include="Bridge\output\ExpressCraftResourceManager.css" />
     <Content Include="Bridge\output\ExpressCraft_backup.css" />
     <Content Include="Bridge\output\ExpressCraft.css" />
-    <Content Include="Bridge\output\expressCraft.js" />
-    <Content Include="Bridge\output\expressCraft.min.js" />
     <Content Include="Bridge\output\ExpressCraftPlugin.css" />
-    <Content Include="Bridge\www\Template.html" />
     <Content Include="Bridge\output\jquery-1.12.0.min.js" />
     <Content Include="License.txt" />
     <Content Include="utils\ThemeTemplate.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bridge\bridge.json" />
+    <None Include="bridge.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -29,37 +29,13 @@ namespace ExpressCraft
             Window.Close();
             Window.Location.Reload();
         }
+
 		private static ApplicationDefitnion _applicationDefition = ApplicationDefitnion.BridgeConsole;
 		public static ApplicationDefitnion AplicationDefition { get { return _applicationDefition; } }
-		public static void SetApplicationDefinition(ApplicationDefitnion applicationDefition = ApplicationDefitnion.BrowserConsole)
-		{
-			_applicationDefition = applicationDefition;
-			switch(applicationDefition)
-			{
-				case ApplicationDefitnion.BrowserConsole:
-					/*@			
-					Bridge.Console.log = function(message) { console.log(message); };
-					Bridge.Console.error = function(message) { console.error(message); };
-					Bridge.Console.debug = function(message) { console.debug(message); };
-					Bridge.Console.clear = function() { console.clear(); };
-					*/
-					break;
-				case ApplicationDefitnion.ExpressCraftConsole:
-					/*@
-					Bridge.Console.log = function(message) { ExpressCraft.ConsoleForm.log(message) };
-					Bridge.Console.error = function(message) { ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Error); };
-					Bridge.Console.debug = function(message) { ExpressCraft.ConsoleForm.log(message, ExpressCraft.ConsoleLogType.Debug); };
-					console.clear = function() { ExpressCraft.ConsoleForm.clear(); };
-					*/
-					break;
-				default:
-					break;
-			}
-		}
-
-		public static void Run(Form _Mainform)
-		{
-			MainForm = _Mainform;
+		
+        public static void Run(Form _Mainform)
+		{           
+            MainForm = _Mainform;
 			MainForm.ShowStartNewLevel();
 		}
     }

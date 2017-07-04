@@ -40,20 +40,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\ExpressCraft\Bridge\output\ExpressCraft.css">
-      <Link>Bridge\output\ExpressCraft.css</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\ExpressCraft\Bridge\output\ExpressCraftPlugin.css">
-      <Link>Bridge\output\ExpressCraftPlugin.css</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Bridge\output\expressCraftHelloWorldDialog.js" />
-    <Content Include="Bridge\output\expressCraftHelloWorldDialog.min.js" />
-    <Content Include="Bridge\www\demo.html" />
-    <Content Include="Bridge\www\rawprev.html" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="bridge.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

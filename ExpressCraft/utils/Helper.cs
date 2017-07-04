@@ -11,7 +11,7 @@ using Bridge.jQuery2;
 namespace ExpressCraft
 {
 	public static class Helper
-	{
+	{        
 		public class DataTableJson
 		{
 			public string[] fieldNames = null;

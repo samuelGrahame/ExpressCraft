@@ -9,8 +9,7 @@ namespace ExpressCraftGridView
     {
         public static void Main()
         {			            			
-			Settings.ShowExceptionDialog = false;
-			Application.SetApplicationDefinition(ApplicationDefitnion.BrowserConsole);			
+			Settings.ShowExceptionDialog = false;		
 			Application.Run(new GridForm());
         }
         
