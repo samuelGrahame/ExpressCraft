@@ -102,29 +102,33 @@ namespace ExpressCraft
 		
 		public RibbonButton(string caption = "", bool _isSmallCaption = false) : base(_isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton")
 		{
-			_caption = caption;
+			Caption = caption;
 			IsSmallCaption = _isSmallCaption;
 		}
 
 		public override void Render()
 		{
 			HasRendered = true;
-			this.Content.Empty();
-
+			
 			Content.OnClick = (ev) => {
 				if(enabled && OnItemClick != null)
 					OnItemClick(this);
 				ev.StopPropagation();				
 			};
 
-			ProcessCaption();
-			ProcessImage();
-
-			setEnabled(enabled);
+            ProcessCaption();
+            ProcessImage();
+            
+            setEnabled(enabled);
 		}
 
 		public void ProcessCaption()
 		{
+            if(captionDiv != null)
+            {
+                captionDiv.Remove();
+                captionDiv = null;
+            }
 			if(!string.IsNullOrWhiteSpace(Caption))
 			{
 				captionDiv = Div(IsSmallCaption ? "ribbonbuttonsmallcaption" : "ribbonbuttoncaption");
@@ -132,11 +136,6 @@ namespace ExpressCraft
 				captionDiv.InnerHTML = Caption;
 
 				Content.AppendChild(captionDiv);
-
-			}else
-			{
-				if(captionDiv != null)
-					captionDiv.Remove();
 			}
 		}
 
@@ -147,18 +146,16 @@ namespace ExpressCraft
 				if(!string.IsNullOrWhiteSpace(Icon))
 				{
 					imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
-					imageDiv.Style.Background = GetImageString(Icon);
-
-					Content.AppendChild(imageDiv);
+					imageDiv.Style.Background = GetImageString(Icon);                    
 				}
 				else if(!string.IsNullOrWhiteSpace(IconURL))
 				{
 					imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
-					imageDiv.Style.Background = GetImageStringURI(IconURL);
-
-					Content.AppendChild(imageDiv);
+					imageDiv.Style.Background = GetImageStringURI(IconURL);					
 				}
-			}
+
+                Content.AppendChild(imageDiv);
+            }
 			else
 			{
 				if(!string.IsNullOrWhiteSpace(Icon))
@@ -170,6 +167,7 @@ namespace ExpressCraft
 					imageDiv.Style.Background = GetImageStringURI(IconURL);
 				}
 			}
+
 			if(imageDiv != null)
 			{
 				imageDiv.Style.BackgroundSize = "100% 100%";				

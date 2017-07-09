@@ -30,7 +30,7 @@ namespace ExpressCraft
             OK,
             Cancel,
             Abort,
-            Retry,
+            Send,
             Ignore,
             Yes,
             No

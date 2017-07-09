@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="controls\AceCodeEditor.cs" />
+    <Compile Include="controls\CheckEdit.cs" />
     <Compile Include="controls\ColorInput.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
     <Compile Include="controls\ToolTipControl.cs" />

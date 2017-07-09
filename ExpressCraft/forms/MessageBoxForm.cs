@@ -10,6 +10,8 @@ namespace ExpressCraft
     public class MessageBoxForm : DialogForm
 	{        		
 		private static HTMLAudioElement snd = null;
+        private string _prompt;
+
 		public static void Beep()
 		{
 			if(!Settings.MessageFormBeep)
@@ -55,8 +57,8 @@ namespace ExpressCraft
             var section = Div();
 			var pic = Div("image32");
 			var textContent = Div("messag-box-content");
-			
-			_buttons = buttons;
+            _prompt = prompt;
+            _buttons = buttons;
 			
 			switch( ui ) {
                 case MessageBoxLayout.Exclamation:
@@ -79,7 +81,7 @@ namespace ExpressCraft
 					break;
                 case MessageBoxLayout.Error:
                     if(_buttons == MessageBoxButtons.Auto ) {
-                        _buttons = MessageBoxButtons.AbortIgnoreRetry;
+                        _buttons = MessageBoxButtons.AbortSendCancel;
                     }
 					pic.ClassList.Add("imageerror");
 					break;
@@ -113,11 +115,20 @@ namespace ExpressCraft
                     _buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
                     _buttonCollection[2].SetLocation("calc(100% - 255px)", "calc(100% - 35px)");
                     break;
-                case MessageBoxButtons.AbortIgnoreRetry:
+                case MessageBoxButtons.AbortSendCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort" },
-                        new SimpleDialogButton(this, DialogResultEnum.Retry) { Text = "Retry" },
-                        new SimpleDialogButton(this, DialogResultEnum.Ignore) { Text = "Ignore"}
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel"},                        
+                        new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", ItemClick = (ev) => {
+                            if(Settings.OnSendError != null)
+                                Settings.OnSendError(_prompt);
+                        } },
+                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort", ItemClick = (ev) => {
+                            bool pre =Settings.AllowCloseWithoutQuestion;
+
+                            Settings.AllowCloseWithoutQuestion = false;
+                            Application.Close();
+                            Settings.AllowCloseWithoutQuestion = pre;
+                        }}
                     };
                     _buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
                     _buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
@@ -188,7 +199,7 @@ namespace ExpressCraft
         Ok,
         YesNo,
         YesNoCancel,
-        AbortIgnoreRetry
+        AbortSendCancel
     }
 
 

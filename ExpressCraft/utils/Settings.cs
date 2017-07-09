@@ -44,6 +44,8 @@ namespace ExpressCraft
 
 		private static bool _WindowManagerVisible;
 
+        public static Action<string> OnSendError = null;
+
 		public static bool WindowManagerVisible
 		{
 			get { return _WindowManagerVisible; }

@@ -513,6 +513,19 @@ namespace ExpressCraft
 			}
 		}
 
+        public static void PerformFocusShake()
+        {
+            if(ActiveForm != null)
+            {
+                var form = ActiveForm;
+                form.Heading.ClassList.Add("form-heading-flash");
+                Global.SetTimeout(() =>
+                {
+                    form.Heading.ClassList.Remove("form-heading-flash");
+                }, 800);
+            }
+        }
+
 		public static void DisableStateDrag(HTMLElement element)
 		{
 			if(element is HTMLImageElement)
@@ -594,17 +607,9 @@ namespace ExpressCraft
 					SetCursor(Cursor.Default);
 				}
 			};
-            FormOverLay.OnClick = (ev) => {                
+            FormOverLay.OnClick = (ev) => {
 
-                if(ActiveForm != null)
-                {
-                    var form = ActiveForm;
-                    form.Heading.ClassList.Add("form-heading-flash");
-                    Global.SetTimeout(() =>
-                    {
-                        form.Heading.ClassList.Remove("form-heading-flash");
-                    }, 800);
-                }
+                PerformFocusShake();
             };
             FormOverLay.OnContextMenu = (ev) => {
                 ev.StopPropagation();
@@ -1087,13 +1092,10 @@ namespace ExpressCraft
 			return butt;
 		}
         
-		public Form(string font = Settings.Font) : base("form-base")
-		{
-			if(!string.IsNullOrWhiteSpace(font))
-				Style.Font = font;			
+		public Form() : base("form-base")
+		{				
 			Heading = Div("form-heading");
-			Heading.Style.Font = font;
-			
+
 			Heading.OnContextMenu = (ev) => {
                 ev.StopPropagation();
                 ev.PreventDefault();

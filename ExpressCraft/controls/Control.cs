@@ -308,6 +308,13 @@ namespace ExpressCraft
 			return lbl;
 		}
 
+        public void Focus()
+        {
+            Global.SetTimeout(() => {
+                this.Content.Focus();
+            }, 0);
+        }
+
         private static void SetBT(HTMLSpanElement lbl, bool IsBold, bool IsTiny)
         {
             if (IsBold)

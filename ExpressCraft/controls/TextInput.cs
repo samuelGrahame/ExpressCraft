@@ -16,6 +16,8 @@ namespace ExpressCraft
         public Action<TextInput, KeyboardEvent> OnKeyUp = null;
         public Action<TextInput, KeyboardEvent> OnKeyPress = null;
 
+        public Control Controller = null;
+        
         public readonly InputType Type;
 
         public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", type, ac)
