@@ -72,21 +72,26 @@
     border-radius: 50%;
     width:48px;
     height:48px;
-    left:3px;
-    top:3px;
+    left:4px;
+    top:4px;
+    background-color:#F0F0F0;
+	z-index: 10000;
+	transition: background-color 0.5s ease;
 }
 .application-icon:hover{
-
+    background-color:white;
 }
 .application-icon:active{
-
+    background-color:#CCE3F4;
 }
 .fav-icon{
     top:8px;
     left:8px;
     width:32px;
     height:32px;    
+	z-index: 10000;
 }
+
 .ribboncontrol{
     height: 154px;
     top: 0;
@@ -120,7 +125,8 @@
     height: 100%;                
     left: 0;
 }
-.ribbonbutton{       
+.ribbonbutton{  
+	transition: background-color 0.5s ease;     
     height: 68px;
     top: 3px;
 }
@@ -146,6 +152,7 @@
 }
 .ribbonbuttonsmall{                      
     height: 22px;    
+	transition: background-color 0.5s ease;
 }
 .ribbonbuttonsmall:hover:not(:active):not(.disabled)
 {
@@ -179,7 +186,8 @@
     width: 100%;
     top: 77px;
 }
-.ribbonpageheader {                
+.ribbonpageheader {  
+	transition: background-color 0.5s ease;              
     line-height:22px;
     text-align: center;                        
     top: 29px;
@@ -189,7 +197,7 @@
     top: 5px !important;    
 }
 .ribbonpageheader-hidden{
-
+	transition: background-color 0.5s ease;
 }
 .ribbonpageheader-hidden:hover{
 
@@ -219,12 +227,14 @@
     overflow:auto;
 }
 .tabcontrolpageheader {
+	transition: background-color 0.5s ease;
     line-height:22px;
     text-align: center;                        
     top: 2px;
     height: 21px;
 }
 .tabcontrolpageheader-hidden{   
+	transition: background-color 0.5s ease;
     border-top-width: thin;
     border-left-width: thin;
     border-right-width: thin;
@@ -239,6 +249,7 @@
 
 }
 .tabcontrolpageheader-active{    
+	transition: background-color 0.5s ease;
     border-top-width: thin;
     border-left-width: thin;
     border-right-width: thin;
@@ -250,6 +261,7 @@
     border-bottom-style: solid;
 }
 .tabcontrolpageheader-closebutton{
+	transition: background-color 0.5s ease;
     right:3px;
     top:4px;
     width:12px;
@@ -279,6 +291,7 @@
 }
 /****************SimpleButton****************/
 .simplebutton{
+	transition: background-color 0.5s ease;
     box-sizing:border-box;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -352,7 +365,7 @@
 .form-base{
     box-shadow:0 0 63px -17px rgba(0,0,0,0.75);        
     border-width:1px;
-    border-style:solid;
+    border-style:solid;	
 }
 
 .form-heading-flash{
@@ -363,11 +376,17 @@
 }
 
 .form-heading{
+	transition: background-color 0.5s ease;
     height:30px;
     width:100%;
     vertical-align:top;
     margin: 0;    
 }
+
+.form-heading-min{
+	transition: background-color 0.5s ease;
+}
+
 .form-heading-title{     
     top: 50%;
     left: 50%;
@@ -376,6 +395,7 @@
     font-size:10pt;        
 }
 .form-heading-button{
+	transition: background-color 0.5s ease;
     width:45px;
     height:29px;
     font-size: 12pt;
@@ -405,6 +425,7 @@
 
 }
 .form-heading-button-close{
+	transition: background-color 0.5s ease;
     left:calc(100% - 45px);
 }
 .form-heading-button-close:hover{
@@ -425,7 +446,7 @@
     white-space: nowrap;
 }
 .cellrow{
-
+	transition: background-color 0.5s ease;
 }
 .cellrow:hover{
 
@@ -437,17 +458,19 @@
 
 }
 .cellrow-selected{
-    
+    transition: background-color 0.5s ease;
 }
 .cellrow-selected:hover{
  
 }
 .focusedrow {
+	transition: background-color 0.5s ease;
     outline: dotted 1px black !important;    
     outline-offset: -2px;
     outline-width: -2px;
 }
 .heading{    
+	transition: background-color 0.5s ease;
     line-height:29px;
     height: 29px !important;
     border-top:none !important;  
@@ -500,6 +523,7 @@
 }
 
 .contextitem{
+	transition: background-color 0.5s ease;
     height:24px;
     line-height:24px;
     text-indent:34px;
@@ -568,11 +592,13 @@
 }
 
 .splittervertical {
+	transition: background-color 0.5s ease;
     width:10px;    
     height:100%;    
 }
 
 .splitterhorizontal {
+	transition: background-color 0.5s ease;
     height:12px;
     width:100%;
 }

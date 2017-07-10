@@ -913,9 +913,8 @@ namespace ExpressCraft
 					cursor:{0} !important;    
 				}", cursor);			
 		}
-
-        private DocumentFragment hiddenBody;
-
+        Union<string, Display> previousDisplay;
+        
 		public void SetWindowState(WindowStateType State)
 		{
             if(State == windowState)
@@ -940,10 +939,8 @@ namespace ExpressCraft
                 Heading.ClassList.Remove("form-heading-min");
 
                 MinimizedForms.Remove(this);
-                
-                hiddenBody.RemoveChild(Body);
-                hiddenBody = null;
-                Content.AppendChild(Body);
+
+                Body.Style.Display = previousDisplay;
 
                 CalculateMinmizedFormsLocation();
             }
@@ -1008,11 +1005,9 @@ namespace ExpressCraft
                 {
                     ButtonMinimize.InnerHTML = "+";
                 }
-
-                Content.RemoveChild(Body);
-
-                hiddenBody = Document.CreateDocumentFragment();
-                hiddenBody.AppendChild(Body);
+                
+                previousDisplay = Body.Style.Display;
+                Body.Style.Display = Display.None;
                 
                 MinimizedForms.Add(this);
 
