@@ -44,6 +44,8 @@ namespace ExpressCraft
 			}
 		}
 
+        public Action<int> OnSelectedTabIndexChanged = null;
+
 		private int selectedindex = 0;
 		public int SelectedIndex
 		{
@@ -55,7 +57,12 @@ namespace ExpressCraft
 			{
 				if(value < 0)
 					value = 0;
-				selectedindex = value;
+                if(selectedindex != value)
+                {                    
+                    selectedindex = value;
+                    OnSelectedTabIndexChanged?.Invoke(value);
+                }
+                    
 				if(TabPages != null && TabPages.Count > 0)
 				{
 					for(int i = 0; i < TabPages.Count; i++)

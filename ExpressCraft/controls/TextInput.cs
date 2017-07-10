@@ -15,38 +15,57 @@ namespace ExpressCraft
         public Action<TextInput, KeyboardEvent> OnKeyDown = null;
         public Action<TextInput, KeyboardEvent> OnKeyUp = null;
         public Action<TextInput, KeyboardEvent> OnKeyPress = null;
+        public Action<TextInput> OnGotFocus = null;
+        public Action<TextInput> OnLostFocus = null;
 
         public Control Controller = null;
         
         public readonly InputType Type;
+        private bool IsOverride = false;
 
-        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", type, ac)
-		{			
-            Type = type;
+        public TextInput(HTMLElement overrideElement) : base(overrideElement)
+        {
+            overrideElement.ClassName = "inputcontrol" + BaseClass();
+            IsOverride = true;
+            addEvents();
+        }        
+
+        private void addEvents()
+        {
+            this.Content.OnBlur = (ev) =>
+            {
+                if(OnLostFocus != null)
+                    OnLostFocus(this);
+            };
+            this.Content.OnFocus = (ev) =>
+            {
+                if(OnGotFocus != null)
+                    OnGotFocus(this);
+            };
             this.Content.OnChange = (ev) => {
                 CheckTextChanged();
             };
-			this.Content.OnContextMenu = (ev) => {
-				ev.StopPropagation();
-			};
+            this.Content.OnContextMenu = (ev) => {
+                ev.StopPropagation();
+            };
             this.Content.OnKeyPress = (ev) =>
             {
                 CheckTextChanged();
-                if (OnKeyPress != null)
+                if(OnKeyPress != null)
                     OnKeyPress(this, ev);
             };
             this.Content.OnKeyDown = (ev) =>
             {
                 CheckTextChanged();
-                if (OnKeyDown != null)
+                if(OnKeyDown != null)
                     OnKeyDown(this, ev);
             };
             this.Content.OnKeyUp = (ev) =>
             {
                 CheckTextChanged();
-                if (OnKeyUp != null)
+                if(OnKeyUp != null)
                     OnKeyUp(this, ev);
-            };            
+            };
             this.Content.AddEventListener(EventType.Paste, () =>
             {
                 CheckTextChanged();
@@ -54,6 +73,12 @@ namespace ExpressCraft
             this.Content.AddEventListener(EventType.Cut, () => {
                 CheckTextChanged();
             });
+        }
+
+        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", type, ac)
+		{			
+            Type = type;
+            addEvents();
         }
 
         private void CheckTextChanged()
@@ -74,28 +99,43 @@ namespace ExpressCraft
 
         public string Text
 		{
-			get {
-                if(Type == InputType.Checkbox)
+			get
+            {
+                if(IsOverride)
                 {
-                    return this.Content.As<HTMLInputElement>().Checked.ToString();
+                    return this.Content.As<HTMLElement>().InnerHTML;
                 }
                 else
                 {
-                    return this.Content.As<HTMLInputElement>().Value;
-                }
-                }
+                    if(Type == InputType.Checkbox)
+                    {
+                        return this.Content.As<HTMLInputElement>().Checked.ToString();
+                    }
+                    else
+                    {
+                        return this.Content.As<HTMLInputElement>().Value;
+                    }
+                }                
+            }
 			set
 			{
-                if (Type == InputType.Checkbox)
+                if(IsOverride)
                 {
-                    value = value.ToLower();
-                    this.Content.As<HTMLInputElement>().Checked = value.IsTrue() == 1;
-                }else
-                {
-                    this.Content.As<HTMLInputElement>().Value = value;
+                    this.Content.As<HTMLElement>().InnerHTML = value;
                 }
-                    
-
+                else
+                {
+                    if(Type == InputType.Checkbox)
+                    {
+                        value = value.ToLower();
+                        this.Content.As<HTMLInputElement>().Checked = value.IsTrue() == 1;
+                    }
+                    else
+                    {
+                        this.Content.As<HTMLInputElement>().Value = value;
+                    }
+                }
+                                
                 CheckTextChanged();
             }
 		}
