@@ -66,7 +66,7 @@ namespace ExpressCraftDesign
 			this.LinkchildrenToForm(gridView1, splitControlContainer1);
 			this.Body.AppendChildren(ribbonControl1, splitControlContainer1);
 			
-			this.SetWindowState(WindowState.Maximized);
+			this.SetWindowState(WindowStateType.Maximized);
 		}
 
 		public DataTable GetToolBoxItems()

@@ -27,7 +27,7 @@ namespace ExpressCraftGridView
             private int x = 0;
             public GridForm()
             {
-				SetWindowState(WindowState.Maximized);
+				SetWindowState(WindowStateType.Maximized);
 				
 				Settings.ResourceURL = "";
 				Settings.GridViewAutoColumnFormatDates = false;

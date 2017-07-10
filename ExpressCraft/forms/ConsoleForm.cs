@@ -12,7 +12,7 @@ namespace ExpressCraft
 		public static bool ConsoleVisible = false;
 		private static ConsoleForm _consoleForm = null;
 		private HTMLDivElement logContent = null;
-		private static WindowState prevWindowState = WindowState.Normal;
+		private static WindowStateType prevWindowState = WindowStateType.Normal;
 		private static bool firstLoad = true;
 		private static Vector2 prevLocation;
 		private static Vector2 prevSize = Settings.ConsoleDefaultSize;
@@ -80,14 +80,14 @@ namespace ExpressCraft
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = prevLocation;
 
-				if(prevWindowState == WindowState.Maximized)
+				if(prevWindowState == WindowStateType.Maximized)
 				{
 					prevSize = Settings.ConsoleDefaultSize;
 				}
 
 				this.Size = prevSize;
 
-				if(prevWindowState == WindowState.Maximized)
+				if(prevWindowState == WindowStateType.Maximized)
 				{
 					SetWindowState(prevWindowState);
 				}
@@ -109,7 +109,7 @@ namespace ExpressCraft
 
 			prevSize = Size;
 			prevLocation = Location;
-			prevWindowState = Windowstate;
+			prevWindowState = WindowState;
 		}
 
 		protected override void OnClosed()

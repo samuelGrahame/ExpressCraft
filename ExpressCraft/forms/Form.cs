@@ -18,8 +18,9 @@ namespace ExpressCraft
 		public static HTMLDivElement WindowManager { get; set; }
 		public static HTMLDivElement WindowManagerStart { get; set; }
 		public static TextInput WindowManagerSearch { get; set; }
-				
-		private static ToolTip _activeToolTip;
+        public static List<Form> MinimizedForms = new List<Form>();
+
+        private static ToolTip _activeToolTip;
 		private static int _toolTipTimerHandle = -1;
 		private static Action<MouseEvent> _activeToolTipMouseMove;
 		private static ToolTipControl _activeToolTipControl = null;
@@ -111,6 +112,11 @@ namespace ExpressCraft
 
 		public bool HasSetup { get { return _hasSetup; } }
 
+        private bool PreviousSizeChange = true;
+        private bool PreviousMoveChange = true;
+        private bool PreviousShowMax = true;
+        private string PreviousOpacity = "";
+
 		public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
 
@@ -139,7 +145,7 @@ namespace ExpressCraft
 
 		public bool ShowMaximize
 		{
-			get { return ButtonClose != null; }
+			get { return ButtonExpand != null; }
 			set
 			{
 				ChangeHeadingButton(FormButtonType.Maximize, value);
@@ -299,9 +305,10 @@ namespace ExpressCraft
 			
 		}
 		
-		private WindowState windowState;
+		private WindowStateType windowState;
+        private WindowStateType _prevwindowState = WindowStateType.Normal;
 
-		public WindowState Windowstate
+        public WindowStateType WindowState
 		{
 			get { return windowState; }
 			set { SetWindowState(value); }
@@ -319,7 +326,7 @@ namespace ExpressCraft
 		}
 		
 		public void ChangeHeadingButton(FormButtonType button, bool visible = true)
-		{
+		{            
 			switch(button)
 			{
 				case FormButtonType.Minimize:
@@ -330,8 +337,7 @@ namespace ExpressCraft
 					}
 					if(visible)
 					{
-						ButtonMinimize = CreateFormButton(button);
-
+						ButtonMinimize = CreateFormButton(button);                        
 					}
 
 					break;
@@ -343,7 +349,7 @@ namespace ExpressCraft
 					}
 					if(visible)
 					{
-						ButtonExpand = CreateFormButton(button);
+						ButtonExpand = CreateFormButton(button);                        
 					}
 					break;
 				case FormButtonType.Close:
@@ -360,7 +366,10 @@ namespace ExpressCraft
 				default:
 					break;
 			}
-		}
+
+            CalculateButtonLocations();
+
+        }
 
 		protected virtual void Initialise()
 		{
@@ -642,6 +651,8 @@ namespace ExpressCraft
 							fc.VisibleForms[x].Resizing();
 					}
 				}
+
+                CalculateMinmizedFormsLocation();
 			};
 			Window.OnMouseMove = (ev) =>
 			{
@@ -678,7 +689,7 @@ namespace ExpressCraft
                     var newX = ((mX = mousePos.Xf) + MovingForm.prev_px);
                     var newY = ((mY = mousePos.Yf) + MovingForm.prev_py);					
 
-					if(MovingForm.windowState == WindowState.Maximized &&
+					if(MovingForm.windowState == WindowStateType.Maximized &&
                         MoveAction == MouseMoveAction.Move)
 					{
 						MovingForm.changeWindowState();
@@ -903,44 +914,201 @@ namespace ExpressCraft
 				}", cursor);			
 		}
 
-		public void SetWindowState(WindowState State)
-		{    
+        private DocumentFragment hiddenBody;
+
+		public void SetWindowState(WindowStateType State)
+		{
+            if(State == windowState)
+                return;
+
+            _prevwindowState = windowState;
+            
+            if(_prevwindowState == WindowStateType.Minimized)
+            {
+                Body.Style.Opacity = PreviousOpacity;
+                AllowSizeChange = PreviousSizeChange;
+                AllowMoveChange = PreviousMoveChange;
+                ShowMaximize = PreviousShowMax;
+                HeadingTitle.Style.Left = "";
+                HeadingTitle.Style.MarginRight = "";
+                HeadingTitle.Style.Transform = "";
+                
+                if(ButtonMinimize != null)
+                {
+                    ButtonMinimize.InnerHTML = "-";
+                }
+                Heading.ClassList.Remove("form-heading-min");
+
+                MinimizedForms.Remove(this);
+                
+                hiddenBody.RemoveChild(Body);
+                hiddenBody = null;
+                Content.AppendChild(Body);
+
+                CalculateMinmizedFormsLocation();
+            }
+
             if(!AllowSizeChange)
 				return;
             
-			if((windowState = State) == WindowState.Normal)
-			{				
-				this.SetBounds(prev_left, prev_top, prev_width, prev_height);				
-				Resizing();
-				Style.BorderWidth = "1px";
-			}
-			else if(windowState == WindowState.Maximized)
-			{
-				prev_left = Left.ToInt();
-				prev_top = Top.ToInt();
-				prev_width = Width.ToInt();
-				prev_height = Height.ToInt();
+            if((windowState = State) == WindowStateType.Normal)
+            {
+                this.SetBounds(prev_left, prev_top, prev_width, prev_height);
+                Resizing();
+                Style.BorderWidth = "1px";
+            }
+            else if(windowState == WindowStateType.Maximized)
+            {
+                if(_prevwindowState == WindowStateType.Normal)
+                {
+                    prev_left = Left.ToInt();
+                    prev_top = Top.ToInt();
+                    prev_width = Width.ToInt();
+                    prev_height = Height.ToInt();
+                }                
 
-				Style.BorderWidth = "0";
+                Style.BorderWidth = "0";
 
-				var calc_2px = "100%";
+                var calc_2px = "100%";
 
-				this.SetBounds(0, 0, calc_2px, calc_2px);				
-			}
-			Resizing();
+                this.SetBounds(0, 0, calc_2px, calc_2px);
+            }
+            else if(windowState == WindowStateType.Minimized)
+            {
+                PreviousSizeChange = AllowSizeChange;
+                PreviousMoveChange = AllowMoveChange;
+                PreviousOpacity = Body.Style.Opacity;
+                PreviousShowMax = ShowMaximize;
+                
+                AllowSizeChange = false;
+                Body.Style.Opacity = "0";
+                ShowMaximize = false;
+                AllowMoveChange = false;
+
+                if(_prevwindowState == WindowStateType.Normal)
+                {
+                    prev_left = Left.ToInt();
+                    prev_top = Top.ToInt();
+                    prev_width = Width.ToInt();
+                    prev_height = Height.ToInt();
+                }                
+
+                HeadingTitle.Style.MarginRight = "0";
+                HeadingTitle.Style.Left = "3px";                
+                HeadingTitle.Style.Transform = "translate(0, -50%)";
+                
+                var offset = (!ShowClose ? 45.5f : 45.5f * 2);
+
+                Width = (float)Math.Max(GetTextWidth(Text, Settings.DefaultFont), 100) + offset;
+                Height = 30;
+                
+                Heading.ClassList.Add("form-heading-min");
+                
+                if(ButtonMinimize != null)
+                {
+                    ButtonMinimize.InnerHTML = "+";
+                }
+
+                Content.RemoveChild(Body);
+
+                hiddenBody = Document.CreateDocumentFragment();
+                hiddenBody.AppendChild(Body);
+                
+                MinimizedForms.Add(this);
+
+                CalculateMinmizedFormsLocation();
+            }
+
+            Resizing();
 		}
+
+        private static void CalculateMinmizedFormsLocation()
+        {
+            MinimizedForms.Remove(null);
+            var RemoveList = new List<Form>();
+            int count = 0;
+            float widthTotal = 0;
+            int y = 30;
+
+            var viewSize = Parent.GetBoundingClientRect();
+            
+            foreach(var item in MinimizedForms)
+            {
+                if(item.Content == null || item.windowState != WindowStateType.Minimized)
+                {
+                    RemoveList.Add(item);
+                }
+                else
+                {
+                    var ToIncrement = 3 + item.Width.ToFloat();
+
+                    if(widthTotal + ToIncrement  > viewSize.Width)
+                    {
+                        widthTotal = 0;
+                        count = 0;
+                        y += 33;
+                    }
+
+                    item.Location = new Vector2(widthTotal, "calc(100% - " + (y + 2) + "px)");
+
+                    count++;
+                    
+                    widthTotal += ToIncrement;                    
+                }
+                  
+            }
+            foreach(var item in RemoveList)
+            {
+                MinimizedForms.Remove(item);
+            }            
+
+            //Left = 0;
+            //Top = "calc(100% - 30px)";
+        }
 
 		private void changeWindowState()
 		{
-			if(windowState == WindowState.Maximized)
+			if(windowState == WindowStateType.Maximized)
 			{
-				SetWindowState(WindowState.Normal);
+				SetWindowState(WindowStateType.Normal);
 			}
-			else
+            else if(windowState == WindowStateType.Minimized)
+            {
+                SetWindowState(_prevwindowState);
+            }
+            else
 			{
-				SetWindowState(WindowState.Maximized);
+				SetWindowState(WindowStateType.Maximized);
 			}
-		}
+        }
+
+        public void CalculateButtonLocations()
+        {            
+            float RightOffset = 0;
+
+            if(ShowClose)
+            {
+                RightOffset += 45.5f;
+                if(!Heading.Children.Contains(ButtonClose))
+                    Heading.AppendChild(ButtonClose);
+            }
+            
+            if(ShowMaximize)
+            {
+                RightOffset += 45.5f;
+                ButtonExpand.Style.Left = "calc(100% - " + RightOffset + "px)";
+                if(!Heading.Children.Contains(ButtonExpand))
+                    Heading.AppendChild(ButtonExpand);
+            }
+            if(ShowMinimize)
+            {
+                RightOffset += 45.5f;
+                ButtonMinimize.Style.Left = "calc(100% - " + RightOffset + "px)";
+                if(!Heading.Children.Contains(ButtonMinimize))
+                    Heading.AppendChild(ButtonMinimize);
+            }
+        }
+
 
 		private HTMLDivElement CreateFormButton(FormButtonType Type)
 		{
@@ -950,7 +1118,7 @@ namespace ExpressCraft
 			{
 				case FormButtonType.Close:
 					butt.ClassList.Add("form-heading-button-close");
-					butt.InnerHTML = "X";
+					butt.InnerHTML = "&times;";
 
 					butt.OnMouseDown = (ev) =>
 					{
@@ -976,30 +1144,9 @@ namespace ExpressCraft
 							return;
 
 						Close();
-					};
-
-					butt.OnMouseEnter = (ev) =>
-					{
-						if(MovingForm != null) //  || WindowHolderSelectionBox != null
-							return;
-
-						SetCursor(Cursor.Default);
-					};
-
-					butt.OnMouseLeave = (ev) =>
-					{
-						if(MovingForm != null) //  || WindowHolderSelectionBox != null
-							return;					
-					};
-
+					};					
 					break;
-				case FormButtonType.Maximize:
-					if(ShowMinimize)
-					{
-						ButtonMinimize.Style.Left = "calc(100% - 137px)";
-					}
-
-					butt.Style.Left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
+				case FormButtonType.Maximize:									
 					butt.InnerHTML = "&#9633;";
 			
 					butt.OnMouseUp = (ev) =>
@@ -1016,16 +1163,7 @@ namespace ExpressCraft
 					};
 
 					break;
-				case FormButtonType.Minimize:
-					if(ShowMaximize)
-					{
-						butt.Style.Left = "calc(100% - 137px)"; // StyleController.Calc(100, 137);
-					}
-					else
-					{
-						butt.Style.Left = "calc(100% - 91px)"; // StyleController.Calc(100, 91);				
-					}
-					
+				case FormButtonType.Minimize:					
 					butt.InnerHTML = "-";
 
 					butt.OnMouseUp = (ev) =>
@@ -1036,13 +1174,24 @@ namespace ExpressCraft
 						ev.StopPropagation();
 						ev.PreventDefault();
 
-						Mouse_Down = false;						
+                        if(butt.InnerHTML == "-")
+                        {
+                            butt.InnerHTML = "+";
+                            WindowState = WindowStateType.Minimized;
 
-						windowState = WindowState.Minimized;
+                        }
+                        else
+                        {                            
+                            WindowState = _prevwindowState == WindowStateType.Minimized ? WindowStateType.Normal  : _prevwindowState;
+                            butt.InnerHTML = "-";
+                        }
+                        
+                        Mouse_Down = false;												
 					};
 
 					break;
 				case FormButtonType.Restore:
+
 					break;
 				case FormButtonType.Help:
 					break;
@@ -1060,7 +1209,14 @@ namespace ExpressCraft
 					break;
 			}
 
-			butt.OnDblClick = (ev) => {
+            butt.OnMouseEnter = (ev) =>
+            {
+                if(MovingForm != null) //  || WindowHolderSelectionBox != null
+                    return;
+                SetCursor(Cursor.Default);
+            };
+
+            butt.OnDblClick = (ev) => {
 				ev.StopPropagation();
 			};
 
@@ -1158,11 +1314,18 @@ namespace ExpressCraft
 				float X = mousePos.Xf - (float)clientRec.Left;
 				float Y = mousePos.Yf - (float)clientRec.Top;
 
-				if(windowState == WindowState.Maximized)
+				if(windowState == WindowStateType.Maximized)
 				{
 					SetCursor(Cursor.Default);
 					MoveAction = MouseMoveAction.Move;                    
-				}else
+				}
+                else if(windowState == WindowStateType.Minimized)
+                {
+                    SetCursor(Cursor.Default);                
+                    MoveAction = MouseMoveAction.None;
+                    changeWindowState();
+                }
+                else
 				{
 					if(InDesign)
 						return;
@@ -1232,12 +1395,13 @@ namespace ExpressCraft
 				}
 			});
 
-			Heading.AddEventListener(EventType.DblClick, (ev) => {				
-				if(AllowSizeChange)
+			Heading.AddEventListener(EventType.DblClick, (ev) => {
+                if(AllowSizeChange)
                 {
                     changeWindowState();
-                }				
-				ev.PreventDefault();
+                }
+
+                ev.PreventDefault();
 				ev.StopPropagation();
 			});
 
@@ -1272,7 +1436,7 @@ namespace ExpressCraft
 					SetCursor(Cursor.Default);
 					return;
 				}
-				else if(windowState == WindowState.Maximized)
+				else if(windowState == WindowStateType.Maximized)
 				{
 					SetCursor(Cursor.Default);
 					return;
@@ -1330,7 +1494,7 @@ namespace ExpressCraft
                 if (!IsActiveFormCollection())
                     return;
 
-				if(windowState == WindowState.Maximized)
+				if(windowState == WindowStateType.Maximized)
 				{
 					MovingForm = this;
 					SetCursor(Cursor.Default);
@@ -1422,10 +1586,7 @@ namespace ExpressCraft
 			Content.AppendChild(BodyOverLay);
 
 			Heading.AppendChild(HeadingTitle);
-			Heading.AppendChild(ButtonClose);
-			Heading.AppendChild(ButtonExpand);
-			Heading.AppendChild(ButtonMinimize);
-
+            
 			 closeAction = () => {
 				 Content.Empty();
 				 if(Content != null)
@@ -1658,9 +1819,9 @@ namespace ExpressCraft
                 AddFormToParentElement(owner);
 
                 Content.Style.Visibility = Visibility.Visible;
-				if(StartPosition != FormStartPosition.Manual && windowState == WindowState.Normal)
+				if(StartPosition != FormStartPosition.Manual && windowState == WindowStateType.Normal)
 				{
-                    if (StartPosition == FormStartPosition.Center || (activeCollect == null || visbileForms == null || visbileForms.Count == 0 || visbileForms[visbileForms.Count - 1].windowState != WindowState.Normal || visbileForms[visbileForms.Count - 1].Content == null))
+                    if (StartPosition == FormStartPosition.Center || (activeCollect == null || visbileForms == null || visbileForms.Count == 0 || visbileForms[visbileForms.Count - 1].windowState != WindowStateType.Normal || visbileForms[visbileForms.Count - 1].Content == null))
 					{
                         CentreForm();
 
@@ -1924,8 +2085,14 @@ namespace ExpressCraft
 				}
 			}
 
-            OnClosed();			
-		}
+            OnClosed();
+
+            if(WindowState == WindowStateType.Minimized)
+            {
+                MinimizedForms.Remove(this);
+                CalculateMinmizedFormsLocation();
+            }            
+        }
 
 		private bool InDialogResult = false;				
 	}
