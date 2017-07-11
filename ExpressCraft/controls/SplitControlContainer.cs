@@ -196,7 +196,7 @@ namespace ExpressCraft
 			{
 				Panel1.ExchangeClass("splitvertical", "splithorizontal");
 				Panel2.ExchangeClass("splitvertical", "splithorizontal");
-				Splitter.ExchangeClass("splitvertical", "splitvertical");
+				Splitter.ExchangeClass("splittervertical", "splitterhorizontal");
 
 				Panel1.Width = "";
 				Splitter.Width = "";
@@ -217,7 +217,7 @@ namespace ExpressCraft
 					Panel1.Height = "calc(100% - " + sp + "px)";
 
 					Panel2.Height = sp;
-					Panel2.Location = new Vector2(0, "calc(100% - " + sp + 12 + "px)");
+					Panel2.Location = new Vector2(0, "calc(100% - " + (sp + 12) + "px)");
 				}
 			}
 			else
@@ -246,7 +246,7 @@ namespace ExpressCraft
 					Panel1.Width = "calc(100% - " + sp + "px)";
 
 					Panel2.Width = sp;
-					Panel2.Location = new Vector2("calc(100% - " + sp + 12 + "px)", 0);
+					Panel2.Location = new Vector2("calc(100% - " + (sp + 12) + "px)", 0);
 				}				
 			}
 		}

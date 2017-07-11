@@ -933,6 +933,7 @@ namespace ExpressCraft
                 HeadingTitle.Style.Left = "";
                 HeadingTitle.Style.MarginRight = "";
                 HeadingTitle.Style.Transform = "";
+
                 
                 if(ButtonMinimize != null)
                 {
@@ -992,7 +993,11 @@ namespace ExpressCraft
                     prev_top = Top.ToInt();
                     prev_width = Width.ToInt();
                     prev_height = Height.ToInt();
-                }                
+                }
+                else
+                {
+                    Style.BorderWidth = "1px";
+                }
 
                 HeadingTitle.Style.MarginRight = "0";
                 HeadingTitle.Style.Left = "3px";                
