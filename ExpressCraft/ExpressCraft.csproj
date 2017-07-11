@@ -42,6 +42,7 @@
     <Compile Include="controls\CheckEdit.cs" />
     <Compile Include="controls\ColorInput.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
+    <Compile Include="controls\ImageEdit.cs" />
     <Compile Include="controls\MemoInput.cs" />
     <Compile Include="controls\ToolTipControl.cs" />
     <Compile Include="forms\ConsoleForm.cs" />

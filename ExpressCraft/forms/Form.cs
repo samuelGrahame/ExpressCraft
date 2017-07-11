@@ -115,6 +115,7 @@ namespace ExpressCraft
         private bool PreviousSizeChange = true;
         private bool PreviousMoveChange = true;
         private bool PreviousShowMax = true;
+        private bool PreviousShowMin = true;
         private string PreviousOpacity = "";
 
 		public bool AllowSizeChange = true;
@@ -928,6 +929,7 @@ namespace ExpressCraft
                 AllowSizeChange = PreviousSizeChange;
                 AllowMoveChange = PreviousMoveChange;
                 ShowMaximize = PreviousShowMax;
+                ShowMinimize = PreviousShowMin;
                 HeadingTitle.Style.Left = "";
                 HeadingTitle.Style.MarginRight = "";
                 HeadingTitle.Style.Transform = "";
@@ -973,13 +975,15 @@ namespace ExpressCraft
             else if(windowState == WindowStateType.Minimized)
             {
                 PreviousSizeChange = AllowSizeChange;
-                PreviousMoveChange = AllowMoveChange;
+                PreviousMoveChange = AllowMoveChange;                
                 PreviousOpacity = Body.Style.Opacity;
                 PreviousShowMax = ShowMaximize;
-                
+                PreviousShowMin = ShowMinimize;
+
                 AllowSizeChange = false;
                 Body.Style.Opacity = "0";
                 ShowMaximize = false;
+                ShowMinimize = false;
                 AllowMoveChange = false;
 
                 if(_prevwindowState == WindowStateType.Normal)
@@ -994,9 +998,9 @@ namespace ExpressCraft
                 HeadingTitle.Style.Left = "3px";                
                 HeadingTitle.Style.Transform = "translate(0, -50%)";
                 
-                var offset = (!ShowClose ? 45.5f : 45.5f * 2);
+                var offset = (ShowClose ? 45.5f : 0);
 
-                Width = (float)Math.Max(GetTextWidth(Text, Settings.DefaultFont), 100) + offset;
+                Width = (float)Math.Max(GetTextWidth(Text, Settings.DefaultFont) + 32, 100) + offset;
                 Height = 30;
                 
                 Heading.ClassList.Add("form-heading-min");

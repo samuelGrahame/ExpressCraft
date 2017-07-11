@@ -405,6 +405,10 @@ namespace ExpressCraft
         /// <returns>TextMetrics</returns>
 		public static TextMetrics GetTextMetrics(string t, string f)
 		{
+            if(f == "")
+            {
+                f = "8.25pt Tahoma";
+            }
             var c = (cva ?? (cva = new HTMLCanvasElement())).GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D).As<CanvasRenderingContext2D>();
             c.Font = f;
             return c.MeasureText(t);
