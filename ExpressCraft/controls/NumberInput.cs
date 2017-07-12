@@ -14,9 +14,11 @@ namespace ExpressCraft
             UsedEdit.SetAttribute("step", "any");
         }
 
-        public override void OnDropDownClicked()
-        {
-            base.OnDropDownClicked();
+        public override void OnDropDownClicked(MouseEvent mouseEvent)
+        {    
+            (new CalcForm(this)).
+                ShowPopup(FormPopup.
+                    GetPopupDefaultLocation(DropDownButton, true));            
         }
     }
 }

@@ -16,6 +16,11 @@ namespace ExpressCraft
 		public const string Font = "8.25pt Tahoma";
 
 		public static string DefaultFont = Font;
+
+        /// <summary>
+        /// Only for firefox - as no error with number input
+        /// </summary>
+        public static bool OnFocusSelectAll = true;
 		
 		public static StyleSheet DefaultStyleSheet;
 		public static StyleSheet PluginStyleSheet;

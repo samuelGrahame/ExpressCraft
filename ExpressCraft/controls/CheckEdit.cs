@@ -16,8 +16,7 @@ namespace ExpressCraft
         {
             get { return Edit.Text.IsTrue() == 1; }
             set { Edit.Text = value.ToString(); }
-        }
-
+        }        
 
         public CheckEdit(string label = "") : base(new HTMLLabelElement() { ClassName = BaseClass(false, true) })
         {

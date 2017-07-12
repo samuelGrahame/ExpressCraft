@@ -12,14 +12,37 @@ namespace ExpressCraft
         protected SimpleButton DropDownButton;
         protected TextInput UsedEdit;
 
-        public TextInputDropDown(InputType inputType = InputType.Text) : base(new HTMLDivElement())
+        public override string GetDisplayFormat()
         {
-            UsedEdit = new TextInput(inputType) { Location = new Vector2(0, 0), Size = new Vector2("calc(100% - 20px)", "100%") };
-            DropDownButton = new SimpleButton() { Location = new Vector2("calc(100% - 20px)", 0), Size = new Vector2("20px", "100%"), ItemClick = (s) => 
-                {
-                OnDropDownClicked();
-                }
+            return UsedEdit.GetDisplayFormat();
+        }
+
+        public override void SetDisplayFormat(string value)
+        {
+            UsedEdit.SetDisplayFormat(value);
+        }
+
+        public override void OnFocus()
+        {
+            UsedEdit.Focus();
+        }        
+
+        public override HTMLInputElement GetInput()
+        {
+            return UsedEdit.GetInput();
+        }
+
+        public TextInputDropDown(InputType inputType = InputType.Text) : base(new HTMLDivElement(), true, false)
+        {
+            UsedEdit = new TextInput(inputType) { Location = new Vector2(0, 0), Size = new Vector2("calc(100% - 16px)", "100%") };
+            DropDownButton = new SimpleButton() { Location = new Vector2("calc(100% - 17px)", 0), Size = new Vector2("17px", "100%")};
+            DropDownButton.Content.OnMouseDown = (ev) =>
+            {
+                OnDropDownClicked(ev);
             };
+            
+            Style.Border = "0";
+
             DropDownButton.ClassList.Add("dropdown");
             Content.AppendChildren(UsedEdit, DropDownButton);            
         }
@@ -34,7 +57,7 @@ namespace ExpressCraft
             UsedEdit.Text = value;
         }
 
-        public virtual void OnDropDownClicked()
+        public virtual void OnDropDownClicked(MouseEvent mouseEvent)
         {
 
         }        

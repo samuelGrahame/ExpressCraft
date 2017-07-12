@@ -47,6 +47,7 @@
     <Compile Include="controls\NumberInput.cs" />
     <Compile Include="controls\TextInputDropDown.cs" />
     <Compile Include="controls\ToolTipControl.cs" />
+    <Compile Include="forms\CalcForm.cs" />
     <Compile Include="forms\ConsoleForm.cs" />
     <Compile Include="forms\FormPopup.cs" />
     <Compile Include="forms\InputDialog.cs" />

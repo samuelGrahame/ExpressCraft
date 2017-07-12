@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -17,7 +18,28 @@ namespace ExpressCraft
         public Action<TextInput, KeyboardEvent> OnKeyPress = null;
         public Action<TextInput> OnGotFocus = null;
         public Action<TextInput> OnLostFocus = null;
+        
+        private string _displayFormat = "";
 
+        public virtual void SetDisplayFormat(string value)
+        {
+            _displayFormat = value;
+            formatText();
+        }
+
+        public virtual string GetDisplayFormat()
+        {
+            return _displayFormat;
+        }
+
+        public string DisplayFormat
+        {
+            get { return _displayFormat; }
+            set {
+                SetDisplayFormat(value);
+            }
+        }
+        
         public Control Controller = null;
         
         public readonly InputType Type;
@@ -33,22 +55,121 @@ namespace ExpressCraft
             Content.InnerHTML = value;
         }
 
-        public TextInput(HTMLElement overrideElement) : base(overrideElement)
+        public TextInput(HTMLElement overrideElement, bool addInputControl = true, bool addEventsOnControl = true) : base(overrideElement)
         {
-            overrideElement.ClassName = "inputcontrol" + BaseClass();
+            overrideElement.ClassName = (addInputControl ? "inputcontrol" : "") + BaseClass(addInputControl);
             IsOverride = true;
-            addEvents();
+            if(addEventsOnControl)
+                addEvents();            
+        }
+
+        public virtual void OnFocus()
+        {
+
+        }
+        
+        public virtual HTMLInputElement GetInput()
+        {
+            if(Content.Is<HTMLInputElement>())
+            {
+                return Content.As<HTMLInputElement>();
+            }else
+            {
+                return Content.As<HTMLInputElement>();
+            }            
         }        
+
+        public string GetDisplayValue()
+        {
+            if(string.IsNullOrWhiteSpace(DisplayFormat))
+            {
+                return Text;
+            }else
+            {
+                if(Type == InputType.Number)
+                {
+                    decimal value = Text.StripNonNumberString();
+                    if(DisplayFormat.StartsWith("c"))
+                    {
+                        return string.Format("${0:" + DisplayFormat.Replace("c", "n") + "}", value);
+                    }
+                    else if(DisplayFormat.StartsWith("C"))
+                    {
+                        return string.Format("${0:" + DisplayFormat.Replace("C", "N") + "}", value);
+                    }
+                    else
+                    {
+                        return string.Format("{0:" + DisplayFormat + "}", value);
+                    }
+                }
+                else
+                {
+                    return string.Format("{0:" + DisplayFormat + "}", Text);
+                }
+            }            
+        }
+
+        private void formatText()
+        {
+            var input = GetInput();
+            if(input != null && input != Document.ActiveElement) // Is Active
+            {                
+                if(!string.IsNullOrWhiteSpace(DisplayFormat))
+                {
+                    input.Type = InputType.Text;
+                    string newText = GetDisplayValue();     
+                                   
+                    if(newText != Text)
+                    {
+                        Text = newText;
+                    }
+                }
+            }
+        }
 
         private void addEvents()
         {
+            if(!IsOverride)
+            {
+                var input = GetInput();
+                if(input != null)
+                {                
+                    if(!string.IsNullOrWhiteSpace(DisplayFormat))
+                    {
+                        if(Type == InputType.Password)
+                            return;
+                        input.Type = InputType.Text;
+                    }
+                }
+            }
+            
             this.Content.OnBlur = (ev) =>
             {
+                formatText();
+
                 if(OnLostFocus != null)
                     OnLostFocus(this);
             };
             this.Content.OnFocus = (ev) =>
             {
+                OnFocus();
+
+                var input = GetInput();
+                if(input != null)
+                {
+                    if(!string.IsNullOrWhiteSpace(DisplayFormat))
+                    {
+                        Text = Text.StripNonNumberString().ToString();
+                        if(!Helper.IsFireFox() && !Readonly)
+                        {                            
+                            input.Type = Type;
+                        }
+                    }
+                    if(Type != InputType.Checkbox &&
+                    Settings.OnFocusSelectAll) // && Helper.IsFireFox() && Browser.IsIE
+                        input.Select();
+                }                
+                
                 if(OnGotFocus != null)
                     OnGotFocus(this);
             };
@@ -85,10 +206,24 @@ namespace ExpressCraft
             });
         }
 
-        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", type, ac)
+        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", Helper.IsFireFox() ? (type == InputType.Password ? type : InputType.Text) : type, ac)
 		{			
             Type = type;
+
+            if(Type == InputType.Number)
+            {
+                Content.Style.TextAlign = TextAlign.Right;
+                Content.Style.TextIndent = "3px";
+            }
+
             addEvents();
+
+            if(type == InputType.Number)
+            {
+                DisplayFormat = "n2";
+            }
+
+            formatText();
         }
 
         private void CheckTextChanged()
@@ -143,6 +278,7 @@ namespace ExpressCraft
                     else
                     {
                         this.Content.As<HTMLInputElement>().Value = value;
+                        formatText();
                     }
                 }
                                 

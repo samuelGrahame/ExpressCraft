@@ -588,18 +588,30 @@ namespace ExpressCraft
 					Parent.RemoveChild(WindowManager);
 			}			
 		}
-
-        public static List<FormPopup> FormPopups = new List<FormPopup>();
-
+        
         public static void CloseFormPopups()
-        {
-            FormPopups.Remove(null);
-
-            foreach(var item in FormPopups)
+        {            
+            try
             {
-                item.Close();
+                var x = GetActiveFormCollection();
+
+                for(int i = 0; i < x.VisibleForms.Count; i++)
+                {
+                    if(x.VisibleForms[i] != null && x.VisibleForms[i] is FormPopup &&
+                        x.VisibleForms[i].IsContentVisible())
+                    {
+                        x.VisibleForms[i].Close();
+                    }
+                }
+                if(x.FormOwner is FormPopup)
+                {
+                    x.FormOwner.Close();
+                }
             }
-            FormPopups = new List<FormPopup>();
+            catch(Exception)
+            {
+                                
+            }
         }
 
 		public static void Setup(HTMLElement parent = null)
@@ -628,7 +640,7 @@ namespace ExpressCraft
 			{
                 if(ActiveForm is FormPopup)
                 {
-                    CloseFormPopups();
+                    CloseFormPopups();                    
                 }
 
                 if(Document.ActiveElement != null)
@@ -1753,9 +1765,12 @@ namespace ExpressCraft
             if (ButtonClose != null)
                 ButtonClose.Delete();
 
-            if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad))
-				StartPosition = FormStartPosition.Center;
-
+            if(StartPosition != FormStartPosition.Manual)
+            {
+                if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad))
+                    StartPosition = FormStartPosition.Center;
+            }
+            
             _IsDialog = true;                        
 
             ShowStartNewLevel(null);						
@@ -1810,7 +1825,8 @@ namespace ExpressCraft
 
 		public void Shown()
 		{
-			if(Children == null)
+            InClose = false;
+            if(Children == null)
 				return;
 			for(int i = 0; i < Children.Count; i++)
 			{
@@ -2045,11 +2061,15 @@ namespace ExpressCraft
 
 		public static List<Form> ToClean = new List<Form>();
 		private Action closeAction;
+        protected bool InClose = false;
 		public void Close()
-		{
-			if(_IsDialog && InDialogResult)
+		{            
+            if(_IsDialog && InDialogResult)
 				return;
-			OnClosing();           
+
+            InClose = true;
+
+            OnClosing();           
 
 			ToClean.Add(this);
 
@@ -2117,7 +2137,9 @@ namespace ExpressCraft
             {
                 MinimizedForms.Remove(this);
                 CalculateMinmizedFormsLocation();
-            }            
+            }
+
+            InClose = false; 
         }
 
 		private bool InDialogResult = false;				
