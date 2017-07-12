@@ -259,9 +259,9 @@ namespace ExpressCraft
 		private int prev_left;
 
 		public int MinWidth { get; set; } = 200;
-		public int MinHeight { get; set; } = 50;
-
-		public void ResizeChildren(HTMLElement parent)
+		public int MinHeight { get; set; } = 50;        
+        
+        public void ResizeChildren(HTMLElement parent)
 		{
 			if(OnResize != null)
 				OnResize(this);
@@ -489,7 +489,7 @@ namespace ExpressCraft
 					}
 					_ActiveForm = value;
 					if(_ActiveForm != null)
-					{
+					{                        
 						_ActiveForm.OnGotFocus();
 						if(_ActiveForm.Content != null)
 						{
@@ -506,6 +506,10 @@ namespace ExpressCraft
 							ApplyZIndex();
 						}
 					}
+                    if(_PrevActiveForm is FormPopup && ((_ActiveForm != null && !(_ActiveForm is FormPopup)) || _ActiveForm == null))
+                    {
+                        CloseFormPopups();
+                    }
 				}
 
 			}
@@ -585,6 +589,18 @@ namespace ExpressCraft
 			}			
 		}
 
+        public static List<FormPopup> FormPopups = new List<FormPopup>();
+
+        public static void CloseFormPopups()
+        {
+            FormPopups.Remove(null);
+
+            foreach(var item in FormPopups)
+            {
+                item.Close();
+            }
+            FormPopups = new List<FormPopup>();
+        }
 
 		public static void Setup(HTMLElement parent = null)
 		{
@@ -610,13 +626,19 @@ namespace ExpressCraft
             FormOverLay = Div("system-form-collection-overlay");			
 			FormOverLay.OnMouseDown = (ev) =>
 			{
-				if(Document.ActiveElement != null)
-				{
-					Document.ActiveElement.Focus();
-					ev.PreventDefault();
-					SetCursor(Cursor.Default);
-				}
-			};
+                if(ActiveForm is FormPopup)
+                {
+                    CloseFormPopups();
+                }
+
+                if(Document.ActiveElement != null)
+                {
+                    //FormPopup
+                    Document.ActiveElement.Focus();
+                    ev.PreventDefault();
+                    SetCursor(Cursor.Default);
+                }
+            };
             FormOverLay.OnClick = (ev) => {
 
                 PerformFocusShake();

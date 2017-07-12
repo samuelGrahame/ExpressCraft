@@ -23,6 +23,16 @@ namespace ExpressCraft
         public readonly InputType Type;
         private bool IsOverride = false;
 
+        public virtual string GetValue()
+        {
+            return Content.InnerHTML;
+        }
+
+        public virtual void SetValue(string value)
+        {
+            Content.InnerHTML = value;
+        }
+
         public TextInput(HTMLElement overrideElement) : base(overrideElement)
         {
             overrideElement.ClassName = "inputcontrol" + BaseClass();
@@ -103,7 +113,7 @@ namespace ExpressCraft
             {
                 if(IsOverride)
                 {
-                    return this.Content.As<HTMLElement>().InnerHTML;
+                    return GetValue();
                 }
                 else
                 {
@@ -121,7 +131,7 @@ namespace ExpressCraft
 			{
                 if(IsOverride)
                 {
-                    this.Content.As<HTMLElement>().InnerHTML = value;
+                    SetValue(value);
                 }
                 else
                 {

@@ -117,7 +117,12 @@ namespace ExpressCraft
 		{
 			get { return this.Content.Style.Width; }
 			set {
-				this.Content.Style.Width = value.ToHtmlValue();				
+                var x = value.ToHtmlValue();
+                if(this.Content.Style.Width != x)
+                {
+                    this.Content.Style.Width = x;
+                    OnSizeChanged();
+                }                
 			}
 		}
 		
@@ -126,7 +131,12 @@ namespace ExpressCraft
 			get { return this.Content.Style.Height; }
 			set
 			{
-				this.Content.Style.Height = value.ToHtmlValue();
+                var x = value.ToHtmlValue();
+                if(x != this.Content.Style.Height)
+                {
+                    this.Content.Style.Height = x;
+                    OnSizeChanged();
+                }                
 			}
 		}
 
@@ -135,7 +145,12 @@ namespace ExpressCraft
 			get { return this.Content.Style.Left; }
 			set
 			{
-				this.Content.Style.Left = value.ToHtmlValue();
+                var x = value.ToHtmlValue();
+                if(x != this.Content.Style.Left)
+                {
+                    this.Content.Style.Left = x;
+                    OnLocationChanged();
+                }               
 			}
 		}
 
@@ -144,17 +159,32 @@ namespace ExpressCraft
 			get { return this.Content.Style.Top; }
 			set
 			{
-				this.Content.Style.Top = value.ToHtmlValue();
-			}
+                var x = value.ToHtmlValue();
+                if(this.Content.Style.Top != x)
+                {
+                    this.Content.Style.Top = x;
+                    OnLocationChanged();
+                }               
+            }
 		}
 
-		public Vector2 Size
+        public virtual void OnLocationChanged()
+        {
+
+        }
+
+        public virtual void OnSizeChanged()
+        {
+
+        }
+
+        public Vector2 Size
 		{
 			get { return new Vector2(this.Width, this.Height); }
 			set
 			{
 				this.Width = value.X;
-				this.Height = value.Y;
+				this.Height = value.Y;                
 			}
 		}
 

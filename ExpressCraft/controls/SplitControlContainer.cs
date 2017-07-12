@@ -75,7 +75,10 @@ namespace ExpressCraft
 		{
 			Panel1 = new Control() { Location = new Vector2(0, 0) };
 			Panel2 = new Control();
-			Splitter = new Control();
+            Panel1.Style.Overflow = Overflow.Auto;
+            Panel2.Style.Overflow = Overflow.Auto;
+
+            Splitter = new Control();
 			
 			Splitter.Content.OnMouseDown = (ev) =>
 			{
@@ -212,12 +215,12 @@ namespace ExpressCraft
 				}
 				else
 				{					
-					Splitter.Location = new Vector2(0, "calc(100% - " + sp + "px)");
+					Splitter.Location = new Vector2(0, "calc(100% - " + (sp) + "px)");
 
 					Panel1.Height = "calc(100% - " + sp + "px)";
 
-					Panel2.Height = sp;
-					Panel2.Location = new Vector2(0, "calc(100% - " + (sp + 12) + "px)");
+					Panel2.Height = sp - 12;
+					Panel2.Location = new Vector2(0, "calc(100% - " + (sp - 12) + "px)");
 				}
 			}
 			else
