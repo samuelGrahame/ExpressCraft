@@ -106,6 +106,13 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             return value;            
         }
 
+        public static void FocusElement(this HTMLElement element)
+        {
+            Global.SetTimeout(() => {
+                element.Focus();
+            }, 0);
+        }
+
         public static decimal StripNonNumberString(this string value)
         {
             if(string.IsNullOrWhiteSpace(value))
@@ -120,7 +127,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
 
             decimal value1 = 0;
-            decimal.TryParse(builder.ToString(), out value1);
+            decimal.TryParse(builder.ToString(), out value1);            
         
             return value1;
         }

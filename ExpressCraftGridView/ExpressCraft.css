@@ -76,7 +76,7 @@
     top:4px;
     background-color:#F0F0F0;
 	z-index: 10000;
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
 }
 .application-icon:hover{
     background-color:white;
@@ -126,7 +126,7 @@
     left: 0;
 }
 .ribbonbutton{  
-	transition: background-color 0.5s ease;     
+	transition: background-color 0.25s ease;     
     height: 68px;
     top: 3px;
 }
@@ -152,7 +152,7 @@
 }
 .ribbonbuttonsmall{                      
     height: 22px;    
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
 }
 .ribbonbuttonsmall:hover:not(:active):not(.disabled)
 {
@@ -187,7 +187,7 @@
     top: 77px;
 }
 .ribbonpageheader {  
-	transition: background-color 0.5s ease;              
+	transition: background-color 0.25s ease;              
     line-height:22px;
     text-align: center;                        
     top: 29px;
@@ -197,7 +197,7 @@
     top: 5px !important;    
 }
 .ribbonpageheader-hidden{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
 }
 .ribbonpageheader-hidden:hover{
 
@@ -227,14 +227,14 @@
     overflow:auto;
 }
 .tabcontrolpageheader {
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     line-height:22px;
     text-align: center;                        
     top: 2px;
     height: 21px;
 }
 .tabcontrolpageheader-hidden{   
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     border-top-width: thin;
     border-left-width: thin;
     border-right-width: thin;
@@ -249,7 +249,7 @@
 
 }
 .tabcontrolpageheader-active{    
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     border-top-width: thin;
     border-left-width: thin;
     border-right-width: thin;
@@ -261,7 +261,7 @@
     border-bottom-style: solid;
 }
 .tabcontrolpageheader-closebutton{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     right:3px;
     top:4px;
     width:12px;
@@ -294,7 +294,7 @@
 }
 /****************SimpleButton****************/
 .simplebutton{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     box-sizing:border-box;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -379,7 +379,7 @@
 }
 
 .form-heading{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     height:30px;
     width:100%;
     vertical-align:top;
@@ -387,7 +387,7 @@
 }
 
 .form-heading-min{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
 }
 
 .form-heading-title{     
@@ -398,7 +398,7 @@
     font-size:10pt;        
 }
 .form-heading-button{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     width:45px;
     height:29px;
     font-size: 12pt;
@@ -428,7 +428,7 @@
 
 }
 .form-heading-button-close{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     left:calc(100% - 45px);
 }
 .form-heading-button-close:hover{
@@ -449,7 +449,7 @@
     white-space: nowrap;
 }
 .cellrow{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
 }
 .cellrow:hover{
 
@@ -461,19 +461,19 @@
 
 }
 .cellrow-selected{
-    transition: background-color 0.5s ease;
+    transition: background-color 0.25s ease;
 }
 .cellrow-selected:hover{
  
 }
 .focusedrow {
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     outline: dotted 1px black !important;    
     outline-offset: -2px;
     outline-width: -2px;
 }
 .heading{    
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     line-height:29px;
     height: 29px !important;
     border-top:none !important;  
@@ -526,7 +526,7 @@
 }
 
 .contextitem{
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     height:24px;
     line-height:24px;
     text-indent:34px;
@@ -595,13 +595,13 @@
 }
 
 .splittervertical {
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     width:10px;    
     height:100%;    
 }
 
 .splitterhorizontal {
-	transition: background-color 0.5s ease;
+	transition: background-color 0.25s ease;
     height:12px;
     width:100%;
 }

@@ -159,7 +159,18 @@ namespace ExpressCraft
                 {
                     if(!string.IsNullOrWhiteSpace(DisplayFormat))
                     {
-                        Text = Text.StripNonNumberString().ToString();
+                        if(Type == InputType.Number)
+                        {
+                            try
+                            {
+                                Text = Text.StripNonNumberString().ToString();
+                            }
+                            catch(Exception)
+                            {
+                                Text = "0.00";
+                            }                            
+                        }
+                                               
                         if(!Helper.IsFireFox() && !Readonly)
                         {                            
                             input.Type = Type;
@@ -206,7 +217,7 @@ namespace ExpressCraft
             });
         }
 
-        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", Helper.IsFireFox() ? (type == InputType.Password ? type : InputType.Text) : type, ac)
+        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", Helper.IsFireFox() ? (type == InputType.Password || type == InputType.Checkbox ? type : InputType.Text) : type, ac)
 		{			
             Type = type;
 
@@ -214,14 +225,11 @@ namespace ExpressCraft
             {
                 Content.Style.TextAlign = TextAlign.Right;
                 Content.Style.TextIndent = "3px";
+                Content.Style.TextIndent = "3px";
+                DisplayFormat = "n2";                
             }
 
-            addEvents();
-
-            if(type == InputType.Number)
-            {
-                DisplayFormat = "n2";
-            }
+            addEvents();            
 
             formatText();
         }
