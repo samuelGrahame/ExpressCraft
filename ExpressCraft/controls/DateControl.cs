@@ -96,8 +96,7 @@ namespace ExpressCraft
                         startDate : startDate.AddDays(-startDayIndex);
 
                     var endDayIndex = (endDate.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)endDate.DayOfWeek) - 1;
-                    int incrementOffset = 0;
-
+                    
                     for(int i = 0; i < 42; i++)
                     {
                         DateTime curDate = startOutside;
@@ -167,11 +166,6 @@ namespace ExpressCraft
 
             var doc = Document.CreateDocumentFragment();
 
-    //            top: 50%;
-    //left: 50%;
-    //margin-right: -50%;
-    //transform: translate(-50%, -50%);
-
             btnTop = new SimpleButton();
             btnTop.Style.Transform = "translate(-50%, 0)";
             btnTop.Style.Left = "50%";
@@ -179,9 +173,7 @@ namespace ExpressCraft
             btnTop.Top = 6;
             btnTop.Width = "auto";
             btnTop.Style.BorderColor = "transparent";
-
-            Content.Style.BackgroundColor = "white";
-
+            
             btnSelectedRange = new SimpleButton() { ItemClick = (ev) => {
                 MoveUp();
             } };
