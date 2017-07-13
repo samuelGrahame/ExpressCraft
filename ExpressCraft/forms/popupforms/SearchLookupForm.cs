@@ -89,7 +89,7 @@ namespace ExpressCraft
             SearchEdit.OnGotFocus = (obj) =>
             {
                 SearchEdit.GetInput().SelectionStart = SearchEdit.Text.Length;
-            };            
+            };
         }
 
         protected override void OnClosed()

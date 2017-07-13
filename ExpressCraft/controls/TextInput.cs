@@ -353,7 +353,23 @@ namespace ExpressCraft
 			}
 		}
 
-		private bool enabled = true;
+        public DateTime GetDateTime()
+        {
+            dynamic obj = this.Content;
+            var str = obj.value;
+            DateTime dt;
+
+            if(DateTime.TryParse(str, out dt))
+            {
+                return dt;
+            }
+            else
+            {
+                return DateTime.MinValue;
+            }
+        }
+
+        private bool enabled = true;
 		public bool Enabled
 		{
 			get { return enabled; }

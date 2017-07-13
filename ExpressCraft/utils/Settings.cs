@@ -455,6 +455,11 @@ color:{23};
 .{34}-min:hover{{
 	{26}:{8};
 }}
+.simplebutton-active
+{{
+	{26}:{12};
+{27}: 1px solid {20};
+}}
 ";
 		#endregion
 

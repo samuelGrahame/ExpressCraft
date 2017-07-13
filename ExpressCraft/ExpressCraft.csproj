@@ -42,6 +42,8 @@
     <Compile Include="controls\CalculatorControl.cs" />
     <Compile Include="controls\CheckEdit.cs" />
     <Compile Include="controls\ColorInput.cs" />
+    <Compile Include="controls\DateControl.cs" />
+    <Compile Include="controls\DateInput.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
     <Compile Include="controls\ImageEdit.cs" />
     <Compile Include="controls\MemoInput.cs" />
@@ -49,6 +51,7 @@
     <Compile Include="controls\SearchInput.cs" />
     <Compile Include="controls\TextInputDropDown.cs" />
     <Compile Include="controls\ToolTipControl.cs" />
+    <Compile Include="forms\popupforms\DateForm.cs" />
     <Compile Include="forms\popupforms\CalcForm.cs" />
     <Compile Include="forms\ConsoleForm.cs" />
     <Compile Include="forms\FormPopup.cs" />
