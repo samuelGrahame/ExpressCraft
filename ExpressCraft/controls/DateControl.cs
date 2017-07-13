@@ -177,6 +177,7 @@ namespace ExpressCraft
             btnSelectedRange = new SimpleButton() { ItemClick = (ev) => {
                 MoveUp();
             } };
+
             btnSelectedRange.Style.Transform = "translate(-50%, 0)";
             btnSelectedRange.Style.Left = "50%";
             btnSelectedRange.Style.MarginRight = "50%";
