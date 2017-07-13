@@ -19,7 +19,7 @@ namespace ExpressCraft
             {
                 var rec = control.Content.GetBoundingClientRect();
                 return new Vector2((float)rec.Left, (float)(rec.Top + rec.Height));
-            }                    
+            }
         }
 
         public FormPopup()
@@ -44,6 +44,32 @@ namespace ExpressCraft
         {            
             this.Location = location;
             ShowDialog();
+        }
+
+        private void MoveFormUp()
+        {
+            this.Location = new Vector2(this.Left, this.Top.ToFloat() - this.Height.ToFloat() - 20);
+        }
+
+        protected override void OnShowed()
+        {
+            base.OnShowed();
+
+            var rect = Content.GetBoundingClientRect();
+           
+            try
+            {
+                if(rect.Bottom > Window.InnerHeight || rect.Bottom > Document.DocumentElement.ClientHeight)
+                {
+                    MoveFormUp();                    
+                }
+            }
+            catch(Exception)
+            {
+
+            }
+
+
         }
 
         protected override void OnClosed()

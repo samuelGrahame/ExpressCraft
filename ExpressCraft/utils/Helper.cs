@@ -132,6 +132,45 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             return value1;
         }
 
+        public static decimal AddTax(decimal value, decimal taxPercent = -1)
+        {
+            if(value == 0)
+                return value;
+
+            if(taxPercent == -1)
+                taxPercent = Settings.TaxPercent;
+            if(taxPercent == 0)
+                return value;
+
+            return value * (1 + taxPercent);            
+        }
+        
+        public static decimal GetPortionTax(decimal value, decimal taxPercent = -1)
+        {
+            if(value == 0)
+                return value;
+
+            if(taxPercent == -1)
+                taxPercent = Settings.TaxPercent;
+            if(taxPercent == 0)
+                return 0;
+
+            return value - value / (1 + taxPercent);
+        }
+
+        public static decimal DeductTax(decimal value, decimal taxPercent = -1)
+        {
+            if(value == 0)
+                return value;
+
+            if(taxPercent == -1)
+                taxPercent = Settings.TaxPercent;
+            if(taxPercent == 0)
+                return value;
+
+            return value - GetPortionTax(value, taxPercent);            
+        }
+
         public static bool IsNumber(this object value)
 		{
 			return value is sbyte

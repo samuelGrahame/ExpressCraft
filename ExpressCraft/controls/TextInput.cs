@@ -18,7 +18,9 @@ namespace ExpressCraft
         public Action<TextInput, KeyboardEvent> OnKeyPress = null;
         public Action<TextInput> OnGotFocus = null;
         public Action<TextInput> OnLostFocus = null;
-        
+
+        public bool OnFocusDontSelectAll { get; set; }
+
         private string _displayFormat = "";
 
         public virtual void SetDisplayFormat(string value)
@@ -77,7 +79,25 @@ namespace ExpressCraft
             {
                 return Content.As<HTMLInputElement>();
             }            
-        }        
+        }
+
+        public decimal GetNumberValue()
+        {
+            decimal value = Text.StripNonNumberString();
+            return value;
+        }
+
+        public object GetEditValue()
+        {
+            if(Type == InputType.Number)
+            {
+                decimal value = Text.StripNonNumberString();
+                return value;
+            }else
+            {
+                return Text;
+            }
+        }
 
         public string GetDisplayValue()
         {
@@ -177,7 +197,7 @@ namespace ExpressCraft
                         }
                     }
                     if(Type != InputType.Checkbox &&
-                    Settings.OnFocusSelectAll) // && Helper.IsFireFox() && Browser.IsIE
+                    Settings.OnFocusSelectAll && !OnFocusDontSelectAll) // && Helper.IsFireFox() && Browser.IsIE
                         input.Select();
                 }                
                 
