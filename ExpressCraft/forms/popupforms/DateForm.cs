@@ -31,7 +31,14 @@ namespace ExpressCraft
                     inputControl.SetDate(string.Format("{0:" + inputControl.DisplayFormat + "}", date));
                 }                
             };
-            
+
+            DateControl.OnRequestToClose = () =>
+            {
+                this.Close();
+            };
+
+            Content.OnKeyDown = DateControl.BlockTabEvent;
+
             this.Content.AppendChild(DateControl);            
         }
 

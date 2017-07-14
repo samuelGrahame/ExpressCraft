@@ -168,7 +168,7 @@ namespace ExpressCraft
 			{
 				GridHeaderContainer.SetBounds("0", "0", "100%", "29px");				
 				GridBodyContainer.SetBounds("0px", "31px", "100%", "calc(100% - 31px)");
-				GridHeader.Style.Visibility = Visibility.Visible;
+				GridHeader.Style.Visibility = Visibility.Inherit;
 			}
 			else
 			{

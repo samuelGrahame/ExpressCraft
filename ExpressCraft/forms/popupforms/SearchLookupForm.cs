@@ -30,9 +30,13 @@ namespace ExpressCraft
             var x = searchInput.Content.GetBoundingClientRect();
 
             MinHeight = 100;
-            MinWidth = 100;
+            MinWidth = 150;
 
-            Size = new Vector2((float)x.Width, 250);
+            var wid = (float)x.Width;
+            if(wid < 150)
+                wid = 150;
+
+            Size = new Vector2(wid, 250);
 
             AllowSizeChange = true;
 

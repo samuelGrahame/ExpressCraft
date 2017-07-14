@@ -107,7 +107,7 @@ namespace ExpressCraft
             }else
             {
                 if(Type == InputType.Number)
-                {
+                {                    
                     decimal value = Text.StripNonNumberString();
                     if(DisplayFormat.StartsWith("c"))
                     {
@@ -116,6 +116,10 @@ namespace ExpressCraft
                     else if(DisplayFormat.StartsWith("C"))
                     {
                         return string.Format("${0:" + DisplayFormat.Replace("C", "N") + "}", value);
+                    }
+                    else if(DisplayFormat.ToLower().StartsWith("p"))
+                    {                                              
+                        return string.Format("{0:" + DisplayFormat + "}", value == 0 ? 0 : value / 100.0m);
                     }
                     else
                     {

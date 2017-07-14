@@ -111,6 +111,11 @@ namespace ExpressCraft
                             Bounds = new Vector4(offsetStart * 30, (22 * row) - 6, 30, 22),
                             ItemClick = (ev) =>
                             {
+                                if(GetViewDateTime() == curDate)
+                                {
+                                    if(OnRequestToClose != null)
+                                        OnRequestToClose();
+                                }
                                 SetViewDateTime(curDate);
                             }
                         };
@@ -127,6 +132,7 @@ namespace ExpressCraft
                         {
                             btn.Style.Color = "rgb(191, 11, 11)";
                         }
+                        btn.Content.OnKeyDown = BlockTabEvent;
 
                         doc.AppendChild(btn);
 
@@ -163,12 +169,25 @@ namespace ExpressCraft
             ContentRange.Content.AppendChild(doc);
         }
 
+        public Action OnRequestToClose;
+
+        public void BlockTabEvent(KeyboardEvent ev)
+        {
+            if(ev.KeyCode == 9)
+            {
+                if(OnRequestToClose != null)
+                    OnRequestToClose();
+                ev.PreventDefault();
+            }
+        }
 
         public DateControl(DateTime startDate) : base()
         {
             Size = new Vector2(230, 245);
 
             var doc = Document.CreateDocumentFragment();
+
+            Content.OnKeyDown = BlockTabEvent;
 
             btnTop = new SimpleButton();
             btnTop.Style.Transform = "translate(-50%, 0)";
@@ -177,7 +196,9 @@ namespace ExpressCraft
             btnTop.Top = 6;
             btnTop.Width = "auto";
             btnTop.Style.BorderColor = "transparent";
-            
+            btnTop.Content.OnKeyDown = BlockTabEvent;
+
+
             btnSelectedRange = new SimpleButton() { ItemClick = (ev) => {
                 MoveUp();
             } };
@@ -188,10 +209,14 @@ namespace ExpressCraft
             btnSelectedRange.Top =  30;
             btnSelectedRange.Width = "auto";
             btnSelectedRange.Style.BorderColor = "transparent";
+            btnSelectedRange.Content.OnKeyDown = BlockTabEvent;
 
             btnLeft = new SimpleButton() { Text = "<", Location = new Vector2(14, 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveLeft(); } };
+            btnLeft.Content.OnKeyDown = BlockTabEvent;
+
             btnRight = new SimpleButton() { Text = ">", Location = new Vector2("calc(100% - 26px)", 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveRight(); } };
-            
+            btnRight.Content.OnKeyDown = BlockTabEvent;
+
             btnLeft.Style.BorderRadius = "50%";            
             btnRight.Style.BorderRadius = "50%";
 
@@ -199,25 +224,33 @@ namespace ExpressCraft
             btnRight.Style.LineHeight = "0";
 
             ContentRange = new Control() { Size = new Vector2(211, 143), Location = new Vector2(11, 60) };
-            
+            ContentRange.Content.OnKeyDown = BlockTabEvent;
+
             btnToday = new SimpleButton()
             {
                 Text = "Today",
                 Width = 50,
                 ItemClick = (ev) =>
-                {
+                {                    
                     ActiveDisplayMode = DisplayMode.Day;                    
                     SetViewDateTime(DateTime.Today);
                     
                     if(OnDateChanged != null)
                         OnDateChanged(DateTime.Today);
+
+                    if(GetViewDateTime() == DateTime.Today)
+                    {
+                        if(OnRequestToClose != null)
+                            OnRequestToClose();
+                    }
                 }
             };
 
             btnToday.Style.Transform = "translate(-50%, 0)";
             btnToday.Style.Left = "50%";
             btnToday.Style.MarginRight = "50%";
-            btnToday.Top = 217;            
+            btnToday.Top = 217;
+            btnToday.Content.OnKeyDown = BlockTabEvent;
 
             doc.AppendChildren(btnTop, btnLeft, btnSelectedRange, btnRight, ContentRange, btnToday);
             if(startDate == DateTime.MinValue)
@@ -236,6 +269,7 @@ namespace ExpressCraft
 
         public void MoveUp()
         {
+            return;
             if(_activeDisplayMode != DisplayMode.Year)
             {
                 _activeDisplayMode++;
