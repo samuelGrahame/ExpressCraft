@@ -12,22 +12,14 @@ namespace ExpressCraft
         public object EditValue { get; set; }
         public string DisplayMember { get; set; }
         public string ValueMember { get; set; }
-        private int popupTimerIndex = -1;
-        
+                
         public SearchInput() : base(InputType.Text)
         {            
             UsedEdit.OnKeyDown = (obj, ev) =>
-            {              
-                if(popupTimerIndex != -1)
-                {                    
-                    Global.ClearTimeout(popupTimerIndex);
-                }                
-                if(ev.KeyCode != 9)
+            {                              
+                if(ev.KeyCode == 13 || ev.KeyCode == 40)
                 {
-                    popupTimerIndex = Global.SetTimeout(() =>
-                    {
-                        OnDropDownClicked(new MouseEvent("onmousedown"));
-                    }, 100);                    
+                    OnDropDownClicked(new MouseEvent("onmousedown"));
                 }    
             };
             UsedEdit.Content.OnMouseDown = (ev) =>

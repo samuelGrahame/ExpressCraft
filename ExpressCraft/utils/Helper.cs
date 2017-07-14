@@ -120,11 +120,20 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 return 0;
 
             var builder = new StringBuilder();
+
+            bool AddedDigits = false;                        
             
             for(int i = 0; i < value.Length; i++)
-            {
+            {                
                 if(char.IsDigit(value[i]) || value[i] == '.')
+                {
                     builder.Append(value[i]);
+                    AddedDigits = true;
+                }else if(value[i] == '-' && !AddedDigits)
+                {
+                    builder.Append(value[i]);
+                    AddedDigits = true;
+                }
             }
 
             decimal value1 = 0;

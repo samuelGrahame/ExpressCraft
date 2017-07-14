@@ -109,14 +109,18 @@ namespace ExpressCraft
                 if(Type == InputType.Number)
                 {                    
                     decimal value = Text.StripNonNumberString();
-                    if(DisplayFormat.StartsWith("c"))
+                    if(DisplayFormat.ToLower().StartsWith("c"))
                     {
-                        return string.Format("${0:" + DisplayFormat.Replace("c", "n") + "}", value);
-                    }
-                    else if(DisplayFormat.StartsWith("C"))
-                    {
-                        return string.Format("${0:" + DisplayFormat.Replace("C", "N") + "}", value);
-                    }
+                        bool wasNeg = false;
+                        if(value < 0)
+                        {
+                            wasNeg = true;
+                            value = -value;
+                        }
+                            
+                        return (wasNeg ? "-" : "") + 
+                            string.Format("${0:" + DisplayFormat.Replace("c", "n").Replace("C", "N") + "}", value);
+                    }                    
                     else if(DisplayFormat.ToLower().StartsWith("p"))
                     {                                              
                         return string.Format("{0:" + DisplayFormat + "}", value == 0 ? 0 : value / 100.0m);
@@ -287,8 +291,9 @@ namespace ExpressCraft
             if(Type == InputType.Number)
             {
                 Content.Style.TextAlign = TextAlign.Right;
-                Content.Style.TextIndent = "3px";
-                Content.Style.TextIndent = "3px";
+                Content.Style.TextIndent = "3px";                                                
+                Content.Style.PaddingRight = "3px";
+
                 DisplayFormat = "n2";                
             }else if(Type == InputType.Date)
             {
