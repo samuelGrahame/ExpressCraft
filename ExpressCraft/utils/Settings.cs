@@ -42,6 +42,19 @@ namespace ExpressCraft
 		public static int MessageFormTextMinimumHeightInPx = 32;
 		public static int MessageFormMinimumWidthInPx = 195;
 
+        public static DatePosition DayPosition = DatePosition.First;
+        public static DatePosition MonthPosition = DatePosition.Second;
+        public static DatePosition YearPosition = DatePosition.Third;
+
+        public static char DateSeperator = '/';
+        
+        public enum DatePosition
+        {
+            First,
+            Second,
+            Third
+        }        
+
 		public static Vector2 ConsoleDefaultSize = new Vector2(540, 240);
 
 		public static bool MessageFormBeep = false;

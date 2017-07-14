@@ -11,7 +11,7 @@ namespace ExpressCraft
     {
         public SimpleButton btnTop;
         public SimpleButton btnSelectedRange;
-        public SimpleButton btnClear;
+        public SimpleButton btnToday;
 
         public SimpleButton btnLeft;
         public SimpleButton btnRight;
@@ -55,9 +55,14 @@ namespace ExpressCraft
                 SelectedMonth = newSelectedMonth;
                 SelectedDay = newSelectedDay;
 
+                if(OnDateChanged != null)
+                    OnDateChanged(date);
+
                 RefreshView();
             }
         }
+
+        public Action<DateTime> OnDateChanged;
 
         private static string[] Days = new string[] {
             "MO",
@@ -73,7 +78,6 @@ namespace ExpressCraft
         {
             var date = GetViewDateTime();
             btnTop.Text = date.ToString("ddd, dd MMM yyyy");
-
             
             var doc = Document.CreateDocumentFragment();
 
@@ -196,26 +200,26 @@ namespace ExpressCraft
 
             ContentRange = new Control() { Size = new Vector2(211, 143), Location = new Vector2(11, 60) };
             
-            btnClear = new SimpleButton()
+            btnToday = new SimpleButton()
             {
-                Text = "Clear",
+                Text = "Today",
                 Width = 50,
                 ItemClick = (ev) =>
                 {
-                    _activeDisplayMode = DisplayMode.Day;
-                    SelectedYear = DateTime.Today.Year;
-                    SelectedMonth = DateTime.Today.Month;
-                    SelectedDay = DateTime.Today.Day;
-                    RefreshView();
+                    ActiveDisplayMode = DisplayMode.Day;                    
+                    SetViewDateTime(DateTime.Today);
+                    
+                    if(OnDateChanged != null)
+                        OnDateChanged(DateTime.Today);
                 }
             };
 
-            btnClear.Style.Transform = "translate(-50%, 0)";
-            btnClear.Style.Left = "50%";
-            btnClear.Style.MarginRight = "50%";
-            btnClear.Top = 217;            
+            btnToday.Style.Transform = "translate(-50%, 0)";
+            btnToday.Style.Left = "50%";
+            btnToday.Style.MarginRight = "50%";
+            btnToday.Top = 217;            
 
-            doc.AppendChildren(btnTop, btnLeft, btnSelectedRange, btnRight, ContentRange, btnClear);
+            doc.AppendChildren(btnTop, btnLeft, btnSelectedRange, btnRight, ContentRange, btnToday);
             if(startDate == DateTime.MinValue)
                 startDate = DateTime.Today;
 

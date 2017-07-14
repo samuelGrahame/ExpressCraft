@@ -121,6 +121,16 @@ namespace ExpressCraft
                     {
                         return string.Format("{0:" + DisplayFormat + "}", value);
                     }
+                }else if (Type == InputType.Date)
+                {
+                    DateTime value = Text.StripNonDateString();
+                    if(value == DateTime.MinValue)
+                    {
+                        return "";
+                    }else
+                    {
+                        return string.Format("{0:" + DisplayFormat + "}", value);
+                    }                    
                 }
                 else
                 {
@@ -188,10 +198,28 @@ namespace ExpressCraft
                             catch(Exception)
                             {
                                 Text = "0.00";
-                            }                            
+                            }
+                        }else if(Type == InputType.Date)
+                        {
+                            //try
+                            //{
+                            //    var date = GetDateTime();
+                            //    if(date != DateTime.MinValue)
+                            //    {
+                            //        Text = string.Format  date.ToString(DisplayFormat);
+                            //    }
+                            //    else
+                            //    {
+                            //        Text = "";
+                            //    }                                
+                            //}
+                            //catch(Exception)
+                            //{
+                            //    Text = "";
+                            //}
                         }
-                                               
-                        if(!Helper.IsFireFox() && !Readonly)
+
+                        if(!Helper.IsFireFox() && !Readonly && Type != InputType.Date)
                         {                            
                             input.Type = Type;
                         }
@@ -237,7 +265,18 @@ namespace ExpressCraft
             });
         }
 
-        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", Helper.IsFireFox() ? (type == InputType.Password || type == InputType.Checkbox ? type : InputType.Text) : type, ac)
+        public static InputType FixInput(InputType type)
+        {
+            if(type == InputType.Date || (Helper.IsFireFox() && type != InputType.Password && type != InputType.Checkbox))
+            {
+                return InputType.Text;
+            }else
+            {
+                return type;
+            }            
+        }
+
+        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", FixInput(type), ac)
 		{			
             Type = type;
 
@@ -247,6 +286,20 @@ namespace ExpressCraft
                 Content.Style.TextIndent = "3px";
                 Content.Style.TextIndent = "3px";
                 DisplayFormat = "n2";                
+            }else if(Type == InputType.Date)
+            {
+                var str = new string[3];
+                str[(int)Settings.DayPosition] = "dd";
+                str[(int)Settings.MonthPosition] = "MM";
+                str[(int)Settings.YearPosition] = "yyyy";
+                var builder = new StringBuilder();
+
+                for(int i = 0; i < 3; i++)
+                {
+                    builder.Append(str[i] + Settings.DateSeperator);
+                }
+                builder.Length--;                
+                DisplayFormat = builder.ToString();
             }
 
             addEvents();            
@@ -315,58 +368,47 @@ namespace ExpressCraft
 		}
 
 		public void SetDate(string date)
-		{
-			dynamic obj = this.Content;
-			
-			if(date != null)
+		{			
+			if(!string.IsNullOrWhiteSpace(date))
 			{
-				DateTime dt;
-				if(DateTime.TryParse(date, out dt) && dt != DateTime.MinValue)
-				{
-					obj.value = dt.ToString("yyyy-MM-dd");
-				}
-				else
-				{
-					obj.value = null;
-				}				
+                var dd = date.StripNonDateString();
+                if(dd == DateTime.MinValue)
+                {
+                    Text = "";
+                }else
+                {
+                    Text = string.Format("{0:" + DisplayFormat + "}", dd);
+                }                
 			}
 			else
 			{
-				obj.value = null;
-			}
-			//obj.value = DateTime.Parse(Convert.ToString(date)).ToString("yyyy-MM-dd");
+                Text = "";
+            }			
 		}
 
 		public string GetDate()
 		{
-			dynamic obj = this.Content;
-			var str = obj.value;
-			DateTime dt;
-
-			if(DateTime.TryParse(str, out dt))
-			{
-				return dt.ToString("yyyy-MM-dd");
-			}
-			else
-			{
-				return "0001-01-01";
-			}
-		}
-
-        public DateTime GetDateTime()
-        {
-            dynamic obj = this.Content;
-            var str = obj.value;
-            DateTime dt;
-
-            if(DateTime.TryParse(str, out dt))
+            if(!string.IsNullOrWhiteSpace(Text))
             {
-                return dt;
+                var dd = Text.StripNonDateString();
+                if(dd == DateTime.MinValue)
+                {
+                    return "";
+                }
+                else
+                {
+                    return string.Format("{0:" + DisplayFormat + "}", dd);
+                }
             }
             else
             {
-                return DateTime.MinValue;
+                return "";
             }
+        }
+
+        public DateTime GetDateTime()
+        {
+            return Text.StripNonDateString();
         }
 
         private bool enabled = true;

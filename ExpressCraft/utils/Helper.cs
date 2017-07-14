@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Bridge;
 using Bridge.Html5;
 using Bridge.jQuery2;
+using static ExpressCraft.Settings;
 
 namespace ExpressCraft
 {
@@ -130,6 +131,132 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             decimal.TryParse(builder.ToString(), out value1);            
         
             return value1;
+        }
+
+        public static DateTime StripNonDateString(this string value)
+        {
+            if(string.IsNullOrWhiteSpace(value))
+                return DateTime.MinValue;
+
+            try
+            {
+                value = value.Trim().Replace('\\', DateSeperator);
+
+                bool startsWithPlus = (value.StartsWith("+"));
+                bool startsWithMunus = !startsWithPlus && (value.StartsWith("-"));
+
+                if(startsWithMunus)
+                {
+                    value = value.Substring(1);
+                }
+
+                value = value.Replace('-', DateSeperator);
+
+                bool endsWithMonth = (startsWithPlus || startsWithMunus) && (value.ToLower().EndsWith("m"));
+                bool endsWithyear = !endsWithMonth && (startsWithPlus || startsWithMunus) && (value.ToLower().EndsWith("y"));
+
+                if(value.ToLower() == "d")
+                {
+                    return DateTime.Today;
+                }
+
+                var builder = new StringBuilder();
+
+                List<int> Values = new List<int>();
+
+                for(int i = 0; i < value.Length; i++)
+                {
+                    if(char.IsDigit(value[i]))
+                        builder.Append(value[i]);
+                    else if(value[i] == DateSeperator)
+                    {
+                        Values.Add(int.Parse(builder.ToString()));
+                        builder = new StringBuilder();
+                    }
+                }
+
+                if(builder.Length > 0)
+                {
+                    Values.Add(int.Parse(builder.ToString()));
+                }
+
+                builder = null;
+                if(Values.Count >= 3)
+                {
+                    return new DateTime(Values[(int)YearPosition], Values[(int)MonthPosition], Values[(int)DayPosition]);
+                }
+                else if(Values.Count == 1)
+                {
+                    if(DayPosition == DatePosition.First)
+                    {
+                        if(startsWithPlus || startsWithMunus)
+                        {
+                            var date = DateTime.Today;
+                            if(endsWithMonth)
+                            {
+                                date = date.AddMonths(startsWithMunus ? -Values[0] : Values[0]);
+                            }
+                            else if(endsWithyear)
+                            {
+                                if(startsWithMunus)
+                                {
+                                    date = date.AddYears(-Values[0]);
+                                }
+                                else
+                                {
+                                    date = date.AddYears(Values[0]);
+                                }
+                            }
+                            else
+                            {
+                                date = date.AddDays(startsWithMunus ? -Values[0] : Values[0]);
+                            }
+                            if(date.Hour == 23)
+                            {
+                                date.AddHours(1);
+                            }
+                            return date;
+                        }
+                        else
+                        {
+                            return new DateTime(DateTime.Today.Year, DateTime.Today.Month, Values[0]);
+                        }
+                    }
+                    else if(MonthPosition == DatePosition.First)
+                    {
+                        return new DateTime(DateTime.Today.Year, Values[0], DateTime.Today.Day);
+                    }
+                    else if(YearPosition == DatePosition.First)
+                    {
+                        return new DateTime(Values[0], DateTime.Today.Month, DateTime.Today.Day);
+                    }
+                }
+                else if(Values.Count == 2)
+                {
+                    if(DayPosition == DatePosition.First && MonthPosition == DatePosition.Second)
+                    {
+                        return new DateTime(DateTime.Today.Year, Values[1], Values[0]);
+                    }
+                    else if(DayPosition == DatePosition.Second && MonthPosition == DatePosition.First)
+                    {
+                        return new DateTime(DateTime.Today.Year, Values[0], Values[1]);
+                    }
+                    else if(YearPosition == DatePosition.Second && MonthPosition == DatePosition.First)
+                    {
+                        return new DateTime(Values[1], Values[0], DateTime.Today.Day);
+                    }
+                    else if(YearPosition == DatePosition.First && MonthPosition == DatePosition.Second)
+                    {
+                        return new DateTime(Values[0], Values[1], DateTime.Today.Day);
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                
+            }
+                        
+            return DateTime.MinValue;
         }
 
         public static decimal AddTax(decimal value, decimal taxPercent = -1)

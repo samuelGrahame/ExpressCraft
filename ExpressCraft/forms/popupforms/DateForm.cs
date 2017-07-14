@@ -11,7 +11,7 @@ namespace ExpressCraft
     {
         public TextInput InputControl;
 
-        public DateControl CalControl;
+        public DateControl DateControl;
         public bool ClickedClose = false;
 
         public DateForm(TextInput inputControl)
@@ -19,9 +19,20 @@ namespace ExpressCraft
             Size = new Vector2(232, 247);
 
             InputControl = inputControl;
-            CalControl = new DateControl(inputControl.GetDateTime());
+            DateControl = new DateControl(inputControl.GetDateTime());
+
+            DateControl.OnDateChanged = (date) =>
+            {
+                if(date == DateTime.MinValue)
+                {
+                    inputControl.SetDate("");
+                }
+                else {                     
+                    inputControl.SetDate(string.Format("{0:" + inputControl.DisplayFormat + "}", date));
+                }                
+            };
             
-            this.Content.AppendChild(CalControl);            
+            this.Content.AppendChild(DateControl);            
         }
 
         protected override void OnClosed()
@@ -36,7 +47,7 @@ namespace ExpressCraft
             if(InputControl == null)
                 this.Close();
 
-            CalControl.btnClear.Focus();
+            DateControl.btnToday.Focus();
         }
     }
 }
