@@ -214,7 +214,7 @@ namespace ExpressCraft
             btnLeft = new SimpleButton() { Text = "<", Location = new Vector2(14, 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveLeft(); } };
             btnLeft.Content.OnKeyDown = BlockTabEvent;
 
-            btnRight = new SimpleButton() { Text = ">", Location = new Vector2("calc(100% - 26px)", 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveRight(); } };
+            btnRight = new SimpleButton() { Text = ">", Location = new Vector2("(100% - 26px)", 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveRight(); } };
             btnRight.Content.OnKeyDown = BlockTabEvent;
 
             btnLeft.Style.BorderRadius = "50%";            

@@ -20,23 +20,28 @@ namespace ExpressCraft
 			SourceUrl = sourceUrl;
 		}
 
-		public void Setup()
+		public void Setup(bool async = false, bool defer = false)
 		{
 			if(!SetupCompleted)
 			{
 				if(InLoad) return;
 				InLoad = true;
-
-				Document.Head.AppendChild(new HTMLScriptElement()
-				{
-					OnLoad = (ele) => {
-						SetupCompleted = true;
-						InLoad = false;
-						if(OnReady != null)
-							OnReady();
-					},
-					Src = SourceUrl
-				});
+                var script = new HTMLScriptElement()
+                {
+                    OnLoad = (ele) =>
+                    {
+                        SetupCompleted = true;
+                        InLoad = false;
+                        if(OnReady != null)
+                            OnReady();
+                    },
+                    Src = SourceUrl
+                };
+                if(async)
+                    script.Async = async;
+                if(defer)
+                    script.Defer = defer;            
+                Document.Head.AppendChild(script);
 			}
 		}
 

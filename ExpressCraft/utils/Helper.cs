@@ -496,18 +496,18 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
         public static string ToHtmlValue(this Union<string, int, float> value)
         {
             if (value.Is<string>())
-                return value.As<string>();
+                return Vector2.pf(value.As<string>());
             else if (value.Is<int>())
                 return value.As<int>().ToPx();
             else
                 return value.As<float>().ToPx();
         }
 
-        public static void SetImage(this Control c, string str, bool useURL = true)
+        public static void SetImage(this Control c, string str, bool useURL = true, bool useResource = true)
         {
             if(!str.StartsWith("url("))
             {
-                str = useURL ? Control.GetImageStringURI(str) : Control.GetImageString(str);
+                str = useURL ? Control.GetImageStringURI(str, useResource) : Control.GetImageString(str);
             }
             SetImage(c.Content, str, useURL);
         }

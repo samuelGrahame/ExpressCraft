@@ -167,13 +167,13 @@ namespace ExpressCraft
 			if(_columnHeadersVisible)
 			{
 				GridHeaderContainer.SetBounds("0", "0", "100%", "29px");				
-				GridBodyContainer.SetBounds("0px", "31px", "100%", "calc(100% - 31px)");
+				GridBodyContainer.SetBounds("0px", "31px", "100%", "(100% - 31px)");
 				GridHeader.Style.Visibility = Visibility.Inherit;
 			}
 			else
 			{
 				GridHeader.Style.Visibility = Visibility.Hidden;
-				GridBodyContainer.SetBounds("0px", "1px", "100%", "calc(100% - 1px)");
+				GridBodyContainer.SetBounds("0px", "1px", "100%", "(100% - 1px)");
 			}
 		}
 
@@ -680,7 +680,7 @@ namespace ExpressCraft
 						if(gcol.SortedMode != GridViewSortMode.None)
 						{                            
                             var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");                        
-                            sortImage.SetBounds("calc(100% - 13px)", 11, 9, 5);
+                            sortImage.SetBounds("(100% - 13px)", 11, 9, 5);
 							col.AppendChild(sortImage);
 						}
 

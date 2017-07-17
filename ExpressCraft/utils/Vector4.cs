@@ -15,8 +15,8 @@ namespace ExpressCraft
 		public Union<string, int, float> M;
 		
 		public Vector4(Union<string, int, float> x, Union<string, int, float> y, Union<string, int, float> z, Union<string, int, float> m)
-		{
-			X = x;
+		{            
+            X = x;
 			Y = y;
 			Z = z;
 			M = m;

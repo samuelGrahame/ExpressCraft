@@ -46,22 +46,22 @@ namespace ExpressCraft
 
             frag.AppendChildren(
                 SearchEdit = new TextInput() { Text = SearchInput.Text, OnFocusDontSelectAll = true,
-                    Bounds = new Vector4(4, 4, "calc(100% - 68px)", 20)
+                    Bounds = new Vector4(4, 4, "(100% - 68px)", 20)
                 },
                 btnSearch = new SimpleButton() { Text = "Search",
-                    Bounds = new Vector4("calc(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
+                    Bounds = new Vector4("(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
                         SearchInput.OnRequestSearch(SearchEdit.Text, View);
                     } },
                 View =  new GridView() { ColumnHeadersVisible = false, AllowMultiSelection = false,
-                    Bounds = new Vector4(4, 28, "calc(100% - 10px)", "calc(100% - 60px)") },
+                    Bounds = new Vector4(4, 28, "(100% - 10px)", "(100% - 60px)") },
                 btnClose = new SimpleButton() { Text = "&times;" ,
-                    Bounds = new Vector4(4, "calc(100% - 25px)", 20, 20), ItemClick = (s) => {
+                    Bounds = new Vector4(4, "(100% - 25px)", 20, 20), ItemClick = (s) => {
                         Close();
                     } },
                 btnNew = new SimpleButton()
                 {
                     Text = "New",
-                    Bounds = new Vector4("calc(100% - 65px)", "calc(100% - 25px)", 61, 20),
+                    Bounds = new Vector4("(100% - 65px)", "(100% - 25px)", 61, 20),
                     ItemClick = (s) => {
                         SearchInput.OnRequestNew(View);
                     }

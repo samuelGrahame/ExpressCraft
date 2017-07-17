@@ -330,7 +330,7 @@ namespace ExpressCraft
             };
 
             Wrapper.Style.OverflowY = Overflow.Hidden;
-            Wrapper.SetBounds("0px", "0px", "100%", "calc(100% - 60px)");
+            Wrapper.SetBounds("0px", "0px", "100%", "(100% - 60px)");
             QuestionDiv.Style.Position = Position.Relative;
             QuestionDiv.Style.Height = "auto";
             QuestionDiv.Style.MarginLeft = "10px";
@@ -338,8 +338,8 @@ namespace ExpressCraft
             QuestionDiv.Style.MarginTop = "10px";
             AnswerDiv.Style.Position = Position.Relative;
             AnswerDiv.Style.Height = "auto";
-            _buttonCollection[0].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
-            _buttonCollection[1].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
+            _buttonCollection[0].SetLocation("(100% - 170px)", "(100% - 35px)");
+            _buttonCollection[1].SetLocation("(100% - 85px)", "(100% - 35px)");
 
             var tb = new TextBlock(question, width - 25);
             tb.ComputeString();

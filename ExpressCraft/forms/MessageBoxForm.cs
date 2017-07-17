@@ -93,36 +93,30 @@ namespace ExpressCraft
             {
                 case MessageBoxButtons.Ok:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok"}
-                    };
-                    _buttonCollection[0].SetLocation("calc(50% - 37.5px)", "calc(100% - 35px)");
+                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok", Location = new Vector2("(50% - 37.5px)", "(100% - 35px)")}
+                    };                    
                     break;
                 case MessageBoxButtons.YesNo:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No"},
-                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes"}
-                    };
-                    _buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-                    _buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
+                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 85px)", "(100% - 35px)")},
+                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 170px)", "(100% - 35px)")}
+                    };                    
                     break;
                 case MessageBoxButtons.YesNoCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel" },
-                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No" },
-                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes" }
-                    };
-                    _buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-                    _buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
-                    _buttonCollection[2].SetLocation("calc(100% - 255px)", "calc(100% - 35px)");
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)") },
+                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 170px)", "(100% - 35px)") },
+                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 255px)", "(100% - 35px)") }
+                    };                    
                     break;
                 case MessageBoxButtons.AbortSendCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel"},                        
-                        new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", ItemClick = (ev) => {
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)")},                        
+                        new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", Location = new Vector2("(100% - 170px)", "(100% - 35px)"), ItemClick = (ev) => {
                             if(Settings.OnSendError != null)
                                 Settings.OnSendError(_prompt);
                         } },
-                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort", ItemClick = (ev) => {
+                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort", Location = new Vector2("(100% - 255px)", "(100% - 35px)"), ItemClick = (ev) => {
                             bool pre =Settings.AllowCloseWithoutQuestion;
 
                             Settings.AllowCloseWithoutQuestion = false;
@@ -130,9 +124,6 @@ namespace ExpressCraft
                             Settings.AllowCloseWithoutQuestion = pre;
                         }}
                     };
-                    _buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-                    _buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
-                    _buttonCollection[2].SetLocation("calc(100% - 255px)", "calc(100% - 35px)");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -200,46 +191,5 @@ namespace ExpressCraft
         YesNo,
         YesNoCancel,
         AbortSendCancel
-    }
-
-
-    //public class MessageBoxForm : Form
-    //{
-    //    List<SimpleButton> Buttons = new List<SimpleButton>();
-    //    public SimpleDialogButton ButtonOk;
-
-    //    public MessageBoxForm(string message, string title = "Intelogy Group - Business Manager")
-    //    {
-    //        this.Text = title;
-    //        this.Body.InnerHTML = message;
-    //        this.Width = "400px";
-    //        this.Height = "200px";
-
-    //        ButtonOk = new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok" };            
-    //        //var ButtonCancel = new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel" };
-    //        //var ButtonOpenMeAgain = new SimpleDialogButton(this, DialogResultEnum.None) { Text = "New Dialog", ItemClick = (r) =>
-    //        //{
-    //        //    var dlg = new MessageBoxForm("This is a new Order!");
-
-    //        //    dlg.ShowDialog();
-    //        //}};
-
-    //        //var Input = new TextInput() { Text = "hello" };
-    //        //Input.SetBounds("calc(100% - 103px)", "calc(100% - 52px)", "100px", "23px");
-
-    //        //ButtonOpenMeAgain.SetLocation("calc(100% - 234px)", "calc(100% - 26px)");
-    //        ButtonOk.SetLocation("calc(100% - 78px)", "calc(100% - 26px)"); //.SetLocation("calc(100% - 156px)", "calc(100% - 26px)");
-
-    //        Body.AppendChildren(ButtonOk); //, ButtonCancel, ButtonOpenMeAgain, Input);
-    //        ButtonOk.Content.TabIndex = 0;            
-
-    //        AllowSizeChange = false;
-    //    }
-
-    //    protected override void OnShowed()
-    //    {
-    //        base.OnShowed();
-    //        ButtonOk.Content.Focus();
-    //    }
-    //}
+    }    
 }

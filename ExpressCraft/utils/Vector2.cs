@@ -36,9 +36,19 @@ namespace ExpressCraft
 			set { Y = value; }
 		}
 
+        /// <summary>
+        /// adds calc to (100% - 50px) turns to calc(100% - 50px)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        internal static string pf(string a)
+        {            
+            return !string.IsNullOrWhiteSpace(a) && a.StartsWith("(") && a.EndsWith(")") ? "calc" + a : a;            
+        }
+
 		public Vector2(Union<string, int, float> x, Union<string, int, float> y)
-		{
-			X = x;
+		{            
+            X = x;
 			Y = y;
 		}
 	}

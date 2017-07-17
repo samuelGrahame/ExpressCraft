@@ -62,6 +62,7 @@
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />
     <Compile Include="utils\Firebase.cs" />
+    <Compile Include="utils\Gmail.cs" />
     <Compile Include="utils\GoogleCloudPrint.cs" />
     <Compile Include="forms\DialogForm.cs" />
     <Compile Include="forms\EnumForms.cs" />

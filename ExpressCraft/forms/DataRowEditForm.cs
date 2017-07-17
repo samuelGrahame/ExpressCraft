@@ -37,11 +37,11 @@ namespace ExpressCraft
 
             Panel = Div();
             Panel.Style.OverflowY = Overflow.Auto;
-            Panel.SetBounds("0", "0", "100%", "calc(100% - 60px)");
+            Panel.SetBounds("0", "0", "100%", "(100% - 60px)");
             Body.Style.BackgroundColor = "white";
             
             _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", ItemClick = (ev) => {
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)"), ItemClick = (ev) => {
                             for (int i = 0; i < DataRow.ParentTable.ColumnCount; i++)
                             {
                                 _dataRow[i] = prevData[i];
@@ -49,10 +49,8 @@ namespace ExpressCraft
 
                             GridView.RenderGrid();
                         }},
-                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK"  }
-                    };
-			_buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-			_buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
+                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK", Location = new Vector2("(100% - 170px)", "(100% - 35px)")  }
+                    };			
 
             ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
 

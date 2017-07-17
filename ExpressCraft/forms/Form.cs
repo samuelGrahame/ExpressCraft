@@ -1002,10 +1002,8 @@ namespace ExpressCraft
                 }                
 
                 Style.BorderWidth = "0";
-
-                var calc_2px = "100%";
-
-                this.SetBounds(0, 0, calc_2px, calc_2px);
+                
+                this.SetBounds(0, 0, "100%", "100%");
             }
             else if(windowState == WindowStateType.Minimized)
             {
@@ -1087,7 +1085,7 @@ namespace ExpressCraft
                         y += 33;
                     }
 
-                    item.Location = new Vector2(widthTotal, "calc(100% - " + (y + 2) + "px)");
+                    item.Location = new Vector2(widthTotal, "(100% - " + (y + 2) + "px)");
 
                     count++;
                     

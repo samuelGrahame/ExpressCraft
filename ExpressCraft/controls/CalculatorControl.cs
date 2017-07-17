@@ -363,7 +363,7 @@ namespace ExpressCraft
                 DisplayInput = new MemoInput()
                 {
                     Readonly = true,
-                    Bounds = new Vector4(4, 3, "calc(100% - 8px)", 22)
+                    Bounds = new Vector4(4, 3, "(100% - 8px)", 22)
                 },
                 btnClose = new SimpleButton()
                 {

@@ -143,7 +143,6 @@ namespace ExpressCraft
 			public ProgressControl progressControl;
 			public SimpleDialogButton buttonCancel;
 
-
 			public NetworkProgressForm(string _text = "Loading...")
 			{
 				this.Text = _text;
@@ -151,10 +150,10 @@ namespace ExpressCraft
 				this.Height = 200;
 
 				progressControl = new ProgressControl();
-				progressControl.SetBounds(50, 50, "calc(100% - 100px)", "23px");
+				progressControl.SetBounds(50, 50, "(100% - 100px)", "23px");
 
 				buttonCancel = new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel" };
-				buttonCancel.SetLocation("calc(100% - 78px)", "calc(100% - 26px)");
+				buttonCancel.SetLocation("(100% - 78px)", "(100% - 26px)");
 				buttonCancel.Content.TabIndex = 0;
 
 				Body.AppendChildren(buttonCancel, progressControl);

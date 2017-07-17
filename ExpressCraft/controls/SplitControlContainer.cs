@@ -211,16 +211,16 @@ namespace ExpressCraft
 
 					Panel1.Height = sp;				
 					Panel2.Location = new Vector2(0, sp + 12);
-					Panel2.Height = "calc(100% - " + (sp + 12) + "px)"; ;
+					Panel2.Height = "(100% - " + (sp + 12) + "px)"; ;
 				}
 				else
 				{					
-					Splitter.Location = new Vector2(0, "calc(100% - " + (sp) + "px)");
+					Splitter.Location = new Vector2(0, "(100% - " + (sp) + "px)");
 
-					Panel1.Height = "calc(100% - " + sp + "px)";
+					Panel1.Height = "(100% - " + sp + "px)";
 
 					Panel2.Height = sp - 12;
-					Panel2.Location = new Vector2(0, "calc(100% - " + (sp - 12) + "px)");
+					Panel2.Location = new Vector2(0, "(100% - " + (sp - 12) + "px)");
 				}
 			}
 			else
@@ -239,17 +239,17 @@ namespace ExpressCraft
 
 					Panel1.Width = sp;
 
-					Panel2.Width = "calc(100% - " + (sp + 12) + "px)";
+					Panel2.Width = "(100% - " + (sp + 12) + "px)";
 					Panel2.Location = new Vector2(sp + 12, 0);
 				}
 				else
 				{
-					Splitter.Location = new Vector2("calc(100% - " + sp + "px)", 0);
+					Splitter.Location = new Vector2("(100% - " + sp + "px)", 0);
 
-					Panel1.Width = "calc(100% - " + sp + "px)";
+					Panel1.Width = "(100% - " + sp + "px)";
 
 					Panel2.Width = sp;
-					Panel2.Location = new Vector2("calc(100% - " + (sp + 12) + "px)", 0);
+					Panel2.Location = new Vector2("(100% - " + (sp + 12) + "px)", 0);
 				}				
 			}
 		}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
+using Newtonsoft.Json;
 
 namespace ExpressCraft
 {
@@ -53,24 +54,20 @@ namespace ExpressCraft
 		public ThemeForm()
 		{
 			prevTheme = Settings.ActiveTheme;
-			currentTheme = JSON.Parse<Theme>(JSON.Stringify(prevTheme));
+			currentTheme = JsonConvert.DeserializeObject<Theme>(JsonConvert.SerializeObject(prevTheme));
 
 			Settings.ActiveTheme = currentTheme;
 			
 			_buttonCollection = new List<SimpleDialogButton>() {
-						new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", ItemClick = (ev) => {
+						new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)"), ItemClick = (ev) => {
 							Settings.ActiveTheme = prevTheme;
 							this.Close();
 						}},
-						new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK", ItemClick = (ev) => {							
+						new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "OK", Location = new Vector2("(100% - 170px)", "(100% - 35px)"), ItemClick = (ev) => {							
 							Settings.ApplyActiveTheme();
 							this.Close();
 						}}
-					};
-
-			_buttonCollection[0].SetLocation("calc(100% - 85px)", "calc(100% - 35px)");
-			_buttonCollection[1].SetLocation("calc(100% - 170px)", "calc(100% - 35px)");
-
+					};            
 			ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
 
 			int length = currentTheme.Colors.Length;
@@ -79,7 +76,7 @@ namespace ExpressCraft
 
 			var Panel = Div();
 			Panel.Style.OverflowY = Overflow.Auto;
-			Panel.SetBounds(0, 0, "100%", "calc(100% - 60px)");
+			Panel.SetBounds(0, 0, "100%", "(100% - 60px)");
 
 			Body.Style.BackgroundColor = Color.White;
 

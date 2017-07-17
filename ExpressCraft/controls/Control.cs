@@ -118,6 +118,7 @@ namespace ExpressCraft
 			get { return this.Content.Style.Width; }
 			set {
                 var x = value.ToHtmlValue();
+                x = Vector2.pf(x);
                 if(this.Content.Style.Width != x)
                 {
                     this.Content.Style.Width = x;
@@ -132,6 +133,7 @@ namespace ExpressCraft
 			set
 			{
                 var x = value.ToHtmlValue();
+                x = Vector2.pf(x);
                 if(x != this.Content.Style.Height)
                 {
                     this.Content.Style.Height = x;
@@ -146,6 +148,7 @@ namespace ExpressCraft
 			set
 			{
                 var x = value.ToHtmlValue();
+                x = Vector2.pf(x);
                 if(x != this.Content.Style.Left)
                 {
                     this.Content.Style.Left = x;
@@ -160,6 +163,7 @@ namespace ExpressCraft
 			set
 			{
                 var x = value.ToHtmlValue();
+                x = Vector2.pf(x);
                 if(this.Content.Style.Top != x)
                 {
                     this.Content.Style.Top = x;
