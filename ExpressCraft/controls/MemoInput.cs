@@ -27,12 +27,27 @@ namespace ExpressCraft
         private string PreZIndex;
         private bool _hasGotFocus;
 
+        public bool DisableResize { get; set; }
+
+        public override string GetValue()
+        {
+            return Content.As<HTMLTextAreaElement>().Value;
+        }
+
+        public override void SetValue(string value)
+        {
+            Content.As<HTMLTextAreaElement>().Value = value;
+        }
+
         public MemoInput() : base(new HTMLTextAreaElement())
         {
             Style.Resize = Resize.None;
             
             OnGotFocus = (memo) =>
             {
+                if(DisableResize)
+                    return;
+
                 Style.Resize = Resize.Both;
                 PrePreSize = Size;
                 PreZIndex = Content.Style.ZIndex;

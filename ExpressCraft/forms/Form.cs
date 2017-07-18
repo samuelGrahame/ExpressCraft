@@ -1037,7 +1037,7 @@ namespace ExpressCraft
                 
                 var offset = (ShowClose ? 45.5f : 0);
 
-                Width = (float)Math.Max(GetTextWidth(Text, Settings.DefaultFont) + 32, 100) + offset;
+                Width = (float)Math.Max(GetTextWidth(Text, "10pt Tahoma") + 32, 100) + offset;
                 Height = 30;
                 
                 Heading.ClassList.Add("form-heading-min");
