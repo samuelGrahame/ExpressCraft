@@ -43,7 +43,7 @@ namespace ExpressCraft
             DropDownButton = new SimpleButton() { Location = new Vector2("(100% - 17px)", 0), Size = new Vector2("17px", "100%")};
             DropDownButton.Content.OnMouseDown = (ev) =>
             {
-                if(!Readonly && !Enabled)
+                if(!Readonly && Enabled)
                     OnDropDownClicked(ev);
             };
             

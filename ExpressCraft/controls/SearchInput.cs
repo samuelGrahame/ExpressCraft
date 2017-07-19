@@ -74,7 +74,7 @@ namespace ExpressCraft
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)
         {
-            if(!Readonly && !Enabled)
+            if(!Readonly && Enabled)
                 (new SearchLookupForm(this)).
                 ShowPopup(FormPopup.
                     GetPopupDefaultLocation(DropDownButton, true));
