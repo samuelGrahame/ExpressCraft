@@ -118,7 +118,7 @@ namespace ExpressCraft
                         }
                         else if(previousOp == "-")
                         {
-                            previousValue = previousValue + tryDec;
+                            previousValue = previousValue - tryDec;
                         }
                         else if(previousOp == "/")
                         {

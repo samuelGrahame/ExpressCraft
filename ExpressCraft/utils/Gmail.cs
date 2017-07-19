@@ -192,7 +192,17 @@ namespace ExpressCraft
             builder.Append("Content-Type: text/" + (message.IsHTML ? "html" : "plain") + "; charset=\"UTF-8\"\r\n");
             builder.Append("MIME-Version: 1.0\r\n");
             builder.Append("Content-Transfer-Encoding: 7bit\r\n\r\n");
-            builder.Append(message.Body + "\r\n\r\n");
+
+            if(message.IsHTML)
+            {
+                builder.Append((message.Body + "").Replace("\r\n", "<br />") + "\r\n\r\n");
+            }
+            else
+            {
+                builder.Append(message.Body + "\r\n\r\n");
+            }            
+
+
             builder.Append("--_intelogy_8ab337ec2e38e1a8b82a01a5712a8bdb\r\n");
 
             if(message.Attachments != null)
@@ -235,7 +245,15 @@ namespace ExpressCraft
                 },
                 Error = (a, b, c) =>
                 {
-                    Global.Alert(b);
+                    
+                },
+                Complete = (jq, data) =>
+                {
+
+                },
+                Success = (obj, data, jq) =>
+                {
+
                 }
             };
             
