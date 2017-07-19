@@ -39,7 +39,7 @@ namespace ExpressCraft
 
             Content.OnKeyDown = DateControl.BlockTabEvent;
 
-            this.Content.AppendChild(DateControl);            
+            AppendChild(DateControl);            
         }
 
         protected override void OnClosed()

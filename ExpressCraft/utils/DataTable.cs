@@ -322,31 +322,86 @@ namespace ExpressCraft
 			}
 		}
 
+        public void SetValue(string fieldName, object value)
+        {
+            for(int i = 0; i < ParentTable.ColumnCount; i++)
+            {
+                if(ParentTable.Columns[i].FieldName == fieldName)
+                {
+                    if(RowIndex == -1)
+                    {
+                        if(batchData[i] != value)
+                        {
+                            batchData[i] = value;
+                            ParentTable.RequireOnDataChangeEvent();
+                        }
+
+                        return;
+                    }
+                    dynamic col = ParentTable.Columns[i];
+                    if(col.Cells.items[RowIndex] != value)
+                    {
+                        col.Cells.items[RowIndex] = value;
+                        ParentTable.RequireOnDataChangeEvent();
+                    }
+                    return;
+                }
+            }            
+        }
+
+        public object GetValue(string fieldName)
+        {
+            for(int i = 0; i < ParentTable.ColumnCount; i++)
+            {
+                if(ParentTable.Columns[i].FieldName  == fieldName)
+                {
+                    if(RowIndex == -1)
+                    {
+                        return batchData[i];
+                    }
+                    dynamic col = ParentTable.Columns[i];
+                    return col.Cells.items[RowIndex];
+                }
+            }
+            return null;            
+        }
+
+        public object GetValue(int columnIndex)
+        {
+            if(RowIndex == -1)
+            {
+                return batchData[columnIndex];
+            }
+            dynamic col = ParentTable.Columns[columnIndex];
+            return col.Cells.items[RowIndex];
+        }
+
+        public void SetValue(int columnIndex, object value)
+        {
+            if(RowIndex == -1)
+            {
+                if(batchData[columnIndex] != value)
+                {
+                    batchData[columnIndex] = value;
+                    ParentTable.RequireOnDataChangeEvent();
+                }
+
+                return;
+            }
+            dynamic col = ParentTable.Columns[columnIndex];
+            if(col.Cells.items[RowIndex] != value)
+            {
+                col.Cells.items[RowIndex] = value;
+                ParentTable.RequireOnDataChangeEvent();
+            }
+        }
+
 		public object this[int columnIndex] { get {
-				if(RowIndex == -1)
-				{
-					return batchData[columnIndex];
-				}
-				dynamic col = ParentTable.Columns[columnIndex];
-				return col.Cells.items[RowIndex];
-			} set {				
-				if(RowIndex == -1)
-				{
-					if(batchData[columnIndex] != value)
-					{
-						batchData[columnIndex] = value;
-						ParentTable.RequireOnDataChangeEvent();
-					}
-					
-					return;
-				}
-				dynamic col = ParentTable.Columns[columnIndex];
-				if(col.Cells.items[RowIndex] != value)
-				{
-					col.Cells.items[RowIndex] = value;
-					ParentTable.RequireOnDataChangeEvent();
-				}				
-			}
+                return GetValue(columnIndex);
+            } set {
+                SetValue(columnIndex, value);
+
+            }
 		}
 	}	
 

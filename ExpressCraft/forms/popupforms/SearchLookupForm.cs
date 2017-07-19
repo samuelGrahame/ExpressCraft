@@ -32,7 +32,7 @@ namespace ExpressCraft
             MinHeight = 100;
             MinWidth = 150;
 
-            var wid = (float)x.Width;
+            var wid = searchInput.GetDropdownWidth();
             if(wid < 150)
                 wid = 150;
 
@@ -52,7 +52,7 @@ namespace ExpressCraft
                     Bounds = new Vector4("(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
                         SearchInput.OnRequestSearch(SearchEdit.Text, View);
                     } },
-                View =  new GridView() { ColumnHeadersVisible = false, AllowMultiSelection = false,
+                View =  new GridView(true, true) { AllowMultiSelection = false, UseEditForm = false,
                     Bounds = new Vector4(4, 28, "(100% - 10px)", "(100% - 60px)") },
                 btnClose = new SimpleButton() { Text = "&times;" ,
                     Bounds = new Vector4(4, "(100% - 25px)", 20, 20), ItemClick = (s) => {
@@ -88,12 +88,43 @@ namespace ExpressCraft
                 }
             };
 
-            Content.AppendChild(frag);
+            View.OnFocusedRowChanged = (row, col) => {
+                if(View.FocusedDataHandle > -1)
+                {
+                    FocusedRow = View.DataSource[View.GetDataSourceRow(View.FocusedDataHandle)];
+                }else
+                {
+                    FocusedRow = null;
+                }
+                SearchInput.OnAcceptResult(FocusedRow);
+            };
+
+            View.OnRowDoubleClick = (row) => {
+                if(View.FocusedDataHandle > -1)
+                {
+                    FocusedRow = View.DataSource[View.GetDataSourceRow(View.FocusedDataHandle)];
+                }
+                else
+                {
+                    FocusedRow = null;
+                }
+                SearchInput.OnAcceptResult(FocusedRow);
+                this.Close();
+            };
+
+
+            this.Body.AppendChild(frag);
 
             SearchEdit.OnGotFocus = (obj) =>
             {
                 SearchEdit.GetInput().SelectionStart = SearchEdit.Text.Length;
             };
+
+            LinkchildToForm(View);
+
+            if(SearchInput.SearchOnLoad())
+                btnSearch.Content.Click();
+
         }
 
         protected override void OnClosed()

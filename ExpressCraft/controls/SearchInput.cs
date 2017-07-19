@@ -36,16 +36,30 @@ namespace ExpressCraft
                 OnSearch(searchValue, grid);
         }
 
+        public virtual bool SearchOnLoad()
+        {
+            return false;
+        }
+
         public virtual void OnAcceptResult(DataRow value)
         {
-            if(ValueMember != "")
+            if(value == null)
             {
-                EditValue = value[ValueMember];                
+                EditValue = null;
+                Text = "";
             }
-            if(DisplayMember != null)
+            else
             {
-                Text = (value[DisplayMember] + "");
+                if(ValueMember != "")
+                {
+                    EditValue = value.GetValue(ValueMember);
+                }
+                if(DisplayMember != null)
+                {
+                    Text = (value.GetValue(DisplayMember) + "");
+                }
             }
+            
         }
 
         public virtual void OnRequestNew(GridView grid)
@@ -60,9 +74,10 @@ namespace ExpressCraft
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)
         {
-            (new SearchLookupForm(this)).
+            if(!Readonly && !Enabled)
+                (new SearchLookupForm(this)).
                 ShowPopup(FormPopup.
                     GetPopupDefaultLocation(DropDownButton, true));
-        }
+        }        
     }
 }

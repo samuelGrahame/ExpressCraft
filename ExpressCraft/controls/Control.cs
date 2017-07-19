@@ -307,17 +307,11 @@ namespace ExpressCraft
 			return lbl;
 		}
 
-		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ignoreHtml = false, bool ac = true)
+		public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
 		{
 			var lbl = new HTMLSpanElement();
 			lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
-			if(!ignoreHtml)
-			{
-				lbl.TextContent = Caption.HtmlEscape();
-			}else
-			{
-				lbl.TextContent = Caption;
-			}						
+            lbl.TextContent = Caption;
             lbl.Style.Left = X.ToPx();
             lbl.Style.Top = Y.ToPx();
             lbl.Style.Width = width.ToPx();

@@ -17,6 +17,11 @@ namespace ExpressCraft
             return UsedEdit.GetDisplayFormat();
         }
 
+        public virtual float GetDropdownWidth()
+        {
+            return (float)this.Content.GetBoundingClientRect().Width;            
+        }
+
         public override void SetDisplayFormat(string value)
         {
             UsedEdit.SetDisplayFormat(value);
@@ -38,7 +43,8 @@ namespace ExpressCraft
             DropDownButton = new SimpleButton() { Location = new Vector2("(100% - 17px)", 0), Size = new Vector2("17px", "100%")};
             DropDownButton.Content.OnMouseDown = (ev) =>
             {
-                OnDropDownClicked(ev);
+                if(!Readonly && !Enabled)
+                    OnDropDownClicked(ev);
             };
             
             Style.Border = "0";

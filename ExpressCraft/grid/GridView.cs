@@ -415,7 +415,7 @@ namespace ExpressCraft
 			}
 		}
 
-		private List<GridViewColumn> Columns = new List<GridViewColumn>();
+		public List<GridViewColumn> Columns = new List<GridViewColumn>();
 
 		public GridViewColumn GetColumn(int i)
 		{
@@ -601,6 +601,34 @@ namespace ExpressCraft
 		}
 		private Stopwatch clickTimeDiff = null;
 
+        public DataRow GetFocusedRow()
+        {
+            if(FocusedDataHandle > -1)
+            {
+                return DataSource[GetDataSourceRow(FocusedDataHandle)];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        public int GetVisibleCount()
+        {
+            if(Columns == null || Columns.Count == 0)
+                return 0;
+            int length = Columns.Count;
+            int length1 = Columns.Count;
+            
+            for(int i = 0; i < length; i++)
+            {
+                if(!Columns[i].Visible)
+                    length1--;
+            }
+            return length1;
+        }
+
 		public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
 		{
 			this.Content.Style.Overflow = Overflow.Hidden;
@@ -636,11 +664,14 @@ namespace ExpressCraft
 				float _columnAutoWidthSingle = 0.0f;
 				if(_columnAutoWidth)
 				{
-					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / Columns.Count;
+					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / GetVisibleCount();
 				}
 
 				for(int x = 0; x < Columns.Count; x++)
 				{
+                    if(!Columns[x].Visible)
+                        continue;
+
 					Columns[x].CachedX = LeftLocation;
 					LeftLocation += _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
 					if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
@@ -670,6 +701,9 @@ namespace ExpressCraft
 					{						
 						if(x >= Columns.Count)
 							break;
+                        if(!Columns[x].Visible)
+                            continue;
+
 						var gcol = Columns[x];
 						var colIndex = x;
 						var apparence = gcol.HeadingApparence;
@@ -785,6 +819,9 @@ namespace ExpressCraft
 					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 					{
 						var col = Columns[x];
+                        if(!col.Visible)
+                            continue;
+
 						var apparence = col.BodyApparence;
 						bool useDefault = false;
 						HTMLElement cell;
@@ -868,8 +905,7 @@ namespace ExpressCraft
 					}
 					Rows.Add(dr);
 				}
-
-
+                
 				ClearGrid();
 
 				GridHeaderContainer.RemoveChild(GridHeader);

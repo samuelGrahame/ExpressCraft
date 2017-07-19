@@ -29,7 +29,7 @@ namespace ExpressCraft
                 InputControl.Text = value.ToString();
             };
 
-            this.Content.AppendChild(CalControl);
+            AppendChild(CalControl);
             
             Size = new Vector2(182, 157);
         }

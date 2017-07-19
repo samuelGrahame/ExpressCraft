@@ -15,7 +15,7 @@ namespace ExpressCraft
 		public static bool AutoRender = true;
 		public const string Font = "8.25pt Tahoma";
         public static decimal TaxPercent { get; set; } = 0.1m;
-
+        
         public static string DefaultFont = Font;
 
         /// <summary>

@@ -16,7 +16,8 @@ namespace ExpressCraft
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)
         {
-            (new DateForm(this.UsedEdit)).
+            if(!Readonly && !Enabled)
+                (new DateForm(this.UsedEdit)).
                 ShowPopup(FormPopup.
                     GetPopupDefaultLocation(DropDownButton, true));
         }
