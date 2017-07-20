@@ -692,7 +692,7 @@ namespace ExpressCraft
 					}
 				}
 
-				var Cols = new List<HTMLSpanElement>();
+                var colFragment = Document.CreateDocumentFragment();
 
 				int uboundRowCount = RawLeftCellCount - 1;
 				if(_columnHeadersVisible)
@@ -719,9 +719,9 @@ namespace ExpressCraft
 						}
 
 						SetupColumn(col, x, gcol);
-
-						Cols.Add(col);
-
+                        
+                        colFragment.AppendChild(col);
+                        
 						if(StartedWith != RenderTime)
 						{
 							return;
@@ -735,7 +735,7 @@ namespace ExpressCraft
 				if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
 				{
 					ClearGrid();
-					GridHeader.AppendChildren(Cols.ToArray());					
+                    GridHeader.AppendChild(colFragment);
 					return;
 				}
 
@@ -776,9 +776,9 @@ namespace ExpressCraft
 						SelectedRows.SL.RemoveAt(x);
 					}
 				}
-				#endregion
+                #endregion
 
-				var Rows = new List<HTMLDivElement>();
+                var rowFragment = Document.CreateDocumentFragment();
 
 				if(Settings.GridViewRowScrollPadding > 0)
 				{
@@ -853,8 +853,8 @@ namespace ExpressCraft
 						dr.OnDragStart = OnRowDragStart;
 					}
 
-					Rows.Add(dr);
-
+                    rowFragment.AppendChild(dr);
+                    
 					Y += UnitHeight;
 					
 					if(StartedWith != RenderTime)
@@ -862,99 +862,37 @@ namespace ExpressCraft
 						return;
 					}
 				}
-				
-				if(ShowAutoFilterRow)
-				{
-					var dr = Div("cellrow");
-
-					dr.SetBounds(0, 0, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
-					dr.Style.Position = Position.Sticky;
-					dr.Style.BorderBottomColor = "darkgray";
-					dr.Style.BorderBottomStyle = BorderStyle.Solid;
-					dr.Style.BorderBottomWidth = BorderWidth.Thin;
-
-					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-					{
-						var col = Columns[x];
-						var apparence = col.BodyApparence;
-
-						HTMLElement cell;
-						TextInput tx;
-						if(col.FilterEdit == null)
-						{
-							tx = new TextInput(col.Column.DataType == DataType.DateTime ? InputType.DateTime : InputType.Text); ;
-							tx.Content.ClassList.Add("cell");
-						}
-						else
-						{
-							tx = col.FilterEdit;
-						}
-
-						tx.Text = (col.FilterValue + "");
-
-						tx.OnTextChanged = FilterRowOnChange;
-
-						cell = tx.Content;
-
-						cell.SetLocation(col.CachedX, 0);
-						cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
-						
-						dr.AppendChild(cell);
-
-						cell.SetAttribute("i", x.ToString());
-					}
-					Rows.Add(dr);
-				}
                 
 				ClearGrid();
 
-				GridHeaderContainer.RemoveChild(GridHeader);
-				GridHeader.AppendChildren(Cols.ToArray());
-				GridHeaderContainer.AppendChild(GridHeader);
+                if(OnCustomRowStyle != null)
+                {
+                    var count = rowFragment.ChildElementCount;
+                    for(int i = 0; i < count; i++)
+                    {
+                        if(StartedWith != RenderTime)
+                        {
+                            return;
+                        }
 
-				if(Rows.Count > 0)
-				{
-					GridBodyContainer.RemoveChild(GridBody);
+                        try
+                        {
+                            var child = rowFragment.Children[i];
+                            OnCustomRowStyle(child, Global.ParseInt(child.GetAttribute("i")));
 
-					var rows = Rows.ToArray();
+                        }
+                        catch(Exception ex)
+                        {
+                            if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
+                                ConsoleForm.Log(ex.ToString(), ConsoleLogType.Error);
+                        }
+                    }
+                }
 
-					GridBody.AppendChildren(rows);
-					var rowLeng = rows.Length;
+                GridHeader.AppendChild(colFragment);                
+                GridBody.AppendChild(rowFragment);
 
-					for(int i = 0; i < rowLeng; i++)
-					{
-						if(StartedWith != RenderTime)
-						{
-							return;
-						}
-						GridBody.AppendChild(rows[i]);
-					}
-
-					if(OnCustomRowStyle != null)
-					{
-						for(int i = 0; i < rows.Length; i++)
-						{
-							if(StartedWith != RenderTime)
-							{
-								return;
-							}
-
-							try
-							{
-								OnCustomRowStyle(rows[i], Global.ParseInt(rows[i].GetAttribute("i")));
-
-							}
-							catch(Exception ex)
-							{
-								if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
-									ConsoleForm.Log(ex.ToString(), ConsoleLogType.Error);
-							}
-						}
-					}
-
-					GridBodyContainer.AppendChild(GridBody);
-				}
-				if(StartedWith != RenderTime)
+                if(StartedWith != RenderTime)
 				{
 					return;
 				}

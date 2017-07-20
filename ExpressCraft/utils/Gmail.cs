@@ -24,14 +24,19 @@ namespace ExpressCraft
 
             if(IsSignedIn())
                 return;
-
-            /*@			
+            try
+            {
+                /*@			
 			ExpressCraft.Gmail.GoogleAuth = gapi.auth2.getAuthInstance()
             gapi.auth2.getAuthInstance().signIn();            
 			*/
-            _hasRan = false;
-            PushEventsTimeCall();
-
+                _hasRan = false;
+                PushEventsTimeCall();
+            }
+            catch(Exception)
+            {
+                
+            }            
         }
 
         private static bool _hasRan = false;
@@ -287,7 +292,9 @@ namespace ExpressCraft
 
             ExternalGmail.OnReady = () =>
             {
-                /*@			
+                try
+                {
+                    /*@			
 			    gapi.load('client:auth2', function() {                
                     gapi.client.init({
                       discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
@@ -304,6 +311,12 @@ namespace ExpressCraft
                     });                
                 });
 			    */
+                }
+                catch(Exception)
+                {
+                    
+                }
+                
             };
             ExternalGmail.Setup(true, true);
         }

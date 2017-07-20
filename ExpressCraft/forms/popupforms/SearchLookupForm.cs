@@ -17,6 +17,8 @@ namespace ExpressCraft
         public SimpleButton btnSearch;
         public SimpleButton btnClose;
         public SimpleButton btnNew;
+        public SimpleButton btnUse;
+        public SimpleButton btnClear;
 
         protected override void OnShowed()
         {
@@ -46,7 +48,7 @@ namespace ExpressCraft
 
             frag.AppendChildren(
                 SearchEdit = new TextInput() { Text = SearchInput.Text, OnFocusDontSelectAll = true,
-                    Bounds = new Vector4(4, 4, "(100% - 68px)", 20)
+                    Bounds = new Vector4(4, 4, "(100% - 68px)", 20), ToolTip = new ToolTip("Help:", "[Enter] to Search, [CTRL] + [Enter] to Search and Use, [ESC] to close")
                 },
                 btnSearch = new SimpleButton() { Text = "Search",
                     Bounds = new Vector4("(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
@@ -65,6 +67,31 @@ namespace ExpressCraft
                     ItemClick = (s) => {
                         SearchInput.OnRequestNew(View);
                     }
+                }, btnUse = new SimpleButton()
+                {
+                    Text = "Use",
+                    Bounds = new Vector4("(100% - 132px)", "(100% - 25px)", 61, 20),
+                    ItemClick = (s) => {
+                        if(View.FocusedDataHandle == -1 && View.RowCount() > 0)
+                        {
+                            View.FocusedDataHandle = 0;
+                        }
+                        if(FocusedRow != null)
+                        {
+                            SearchInput.OnAcceptResult(FocusedRow);
+                            this.Close();
+                        }                        
+                    }
+                },
+                btnClear = new SimpleButton()
+                {
+                    Text = "Clear",
+                    Bounds = new Vector4("(100% - 199px)", "(100% - 25px)", 61, 20),
+                    ItemClick = (s) => {
+                        FocusedRow = null;
+                        SearchInput.OnAcceptResult(FocusedRow);
+                        this.Close();
+                    }
                 });
 
             btnClose.Style.Color = "red";
@@ -78,6 +105,10 @@ namespace ExpressCraft
                 }else if(ev.KeyCode == 13)
                 {
                     SearchInput.OnRequestSearch(SearchEdit.Text, View);
+                    if(ev.CtrlKey)
+                    {
+                        btnUse.Content.Click();
+                    }
                     ev.PreventDefault();
                 }
                 else if(ev.KeyCode == 27)
