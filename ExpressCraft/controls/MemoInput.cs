@@ -50,8 +50,7 @@ namespace ExpressCraft
 
                 Style.Resize = Resize.Both;
                 PrePreSize = Size;
-                PreZIndex = Content.Style.ZIndex;
-                Content.Style.ZIndex = "10000";
+                
                 if(_hasGotFocus)                
                     Size = PreSize;
                 else
@@ -65,8 +64,7 @@ namespace ExpressCraft
             {
                 Style.Resize = Resize.None;
                 PreSize = Size;
-                Size = PrePreSize;
-                Content.Style.ZIndex = PreZIndex;
+                Size = PrePreSize;                
             };
         }
 

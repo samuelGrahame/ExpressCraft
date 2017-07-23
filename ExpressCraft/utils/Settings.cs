@@ -238,7 +238,7 @@ namespace ExpressCraft
 		//ThemeForm
 		#region ThemeTemplateCode
 		private static string themefocusValue = @".{25}:focus:not(.grid){{
-outline: dashed 1px {0};
+border: solid 1px {0};
 }}";
 		private static string themeTemplate = @".{25}{{
     color:{22};
@@ -306,10 +306,11 @@ color:{23};
 }}
 .tab{25}page{{
 {26}:{3};
-{27}{30}:{1};
+{27}{30}:{0};
 {27}{29}:{1};
 {27}{31}:{1};
 {27}{32}:{1};
+border-top-width:2px;
 }}
 .tab{25}{35} {{
 {26}:{3};   
@@ -318,7 +319,7 @@ color:{23};
 {27}{30}:{3};
 {27}{29}:{3};
 {27}{31}:{3};
-{27}{32}:{1};
+{27}{32}:transparent;
 }}
 .tab{25}{35}-hidden:hover{{
 {26}:{7};
@@ -326,10 +327,13 @@ color:{23};
 {27}{31}:{7};
 }}
 .tab{25}{35}-active{{
-{27}{30}:{1};
+{27}{30}:{0};
 {27}{29}:{1};
 {27}{31}:{1};
 {27}{32}:{3};
+border-top-width:2px;
+line-height:18px;
+top:2px;
 }}
 .tab{25}{35}-close{33}{{
 color:{1};	
@@ -473,6 +477,9 @@ color:{23};
 	{26}:{12};
 {27}: 1px solid {20};
 }}
+.primary{{
+    {26}:{0};
+}}
 ";
 		#endregion
 
@@ -483,7 +490,7 @@ color:{23};
 	}
 	public class Theme
 	{
-		public object[] Colors { get; set; }
+		public string[] Colors { get; set; }
         //public string BackgroundColor1; // #0173C7 {0} form header color ribbon color etc, ribbon header hidden - not active..
         //public string BackgroundColor2; // #C5C5C5 {1} text selection back color, ribbon spliter
         //public string BackgroundColor3; // #CCCCCC {2} disabled backcolor

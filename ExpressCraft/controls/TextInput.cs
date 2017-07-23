@@ -164,7 +164,7 @@ namespace ExpressCraft
                 }
             }
         }
-
+        private string PreZIndex;
         private void addEvents()
         {
             if(!IsOverride)
@@ -183,6 +183,8 @@ namespace ExpressCraft
             
             this.Content.OnBlur = (ev) =>
             {
+                Content.Style.ZIndex = PreZIndex;
+
                 formatText();
 
                 if(OnLostFocus != null)
@@ -190,6 +192,9 @@ namespace ExpressCraft
             };
             this.Content.OnFocus = (ev) =>
             {
+                PreZIndex = Content.Style.ZIndex;
+                Content.Style.ZIndex = "10000";
+
                 OnFocus();
 
                 var input = GetInput();
@@ -426,7 +431,13 @@ namespace ExpressCraft
 			get { return enabled; }
 			set {
 				enabled = value;
-				this.Content.SetAttribute("disabled", (!enabled).ToString());								
+                if(enabled)
+                {
+                    this.Content.RemoveAttribute("disabled");
+                }else
+                {
+                    this.Content.SetAttribute("disabled", null);
+                }										
 			}
 		}
 

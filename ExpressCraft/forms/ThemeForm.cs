@@ -54,7 +54,7 @@ namespace ExpressCraft
 		public ThemeForm()
 		{
 			prevTheme = Settings.ActiveTheme;
-			currentTheme = JsonConvert.DeserializeObject<Theme>(JsonConvert.SerializeObject(prevTheme));
+			currentTheme = JsonConvert.DeserializeObject<Theme>(JsonConvert.SerializeObject(prevTheme, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects }), new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Objects });
 
 			Settings.ActiveTheme = currentTheme;
 			
