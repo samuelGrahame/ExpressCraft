@@ -74,6 +74,26 @@ namespace ExpressCraft
 			}
 		}
 
+        public static bool IsIPhone()
+        {
+            bool r = false;
+            /*@			
+           r = !!navigator.userAgent.match(/iPhone/i);       
+           */
+            return r;
+        }
+
+        public static bool IsIPad()
+        {
+            bool r = false;
+            /*@			
+           r = !!navigator.userAgent.match(/iPad/i);       
+           */
+            return r;
+        }
+
+        public static bool NotDesktop => (!Browser.IsDesktop || IsIPhone() || IsIPad());
+
         public static int IsTrue(this string value)
         {
             return ((value = value.ToLower()) == "true" || value == "1" || value == "on") ? 1 : 0;

@@ -666,14 +666,17 @@ namespace ExpressCraft
 				{
 					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / GetVisibleCount();
 				}
+                float MaxWidth;
+                float LastWidth;
 
-				for(int x = 0; x < Columns.Count; x++)
+                for(int x = 0; x < Columns.Count; x++)
 				{
                     if(!Columns[x].Visible)
                         continue;
 
 					Columns[x].CachedX = LeftLocation;
-					LeftLocation += _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
+                    LastWidth = _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
+                    LeftLocation += LastWidth;
 					if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
 					{
 						foundLeftLocation = true;
@@ -691,6 +694,8 @@ namespace ExpressCraft
 						return;
 					}
 				}
+
+                MaxWidth = LeftLocation;
 
                 var colFragment = Document.CreateDocumentFragment();
 
@@ -787,8 +792,7 @@ namespace ExpressCraft
 				}
 
 				float Y = (start * (ppr)) - RawTopRowScrollPadding;
-				var Last = Columns[RawLeftCellCount - 1];
-				var MaxWidth = (Last.CachedX + Last.Width);
+							
 
 				if(ShowAutoFilterRow)
 				{

@@ -59,6 +59,7 @@
     <Compile Include="forms\PdfPreviewForm.cs" />
     <Compile Include="forms\popupforms\SearchLookupForm.cs" />
     <Compile Include="forms\ThemeForm.cs" />
+    <Compile Include="utils\BarcodeQuaggaJS.cs" />
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />
     <Compile Include="utils\Firebase.cs" />

@@ -11,7 +11,7 @@ namespace ExpressCraft
 {
     public static class Gmail
     {
-        private static ExternalPlugin ExternalGmail = new ExternalPlugin("https://apis.google.com/js/api.js");
+        public static ExternalPlugin ExternalGmail = new ExternalPlugin("https://apis.google.com/js/api.js");
         public static string ClientId;
         public static object GoogleAuth;
 
@@ -26,12 +26,13 @@ namespace ExpressCraft
                 return;
             try
             {
-                /*@			
+            /*@			
 			ExpressCraft.Gmail.GoogleAuth = gapi.auth2.getAuthInstance()
             gapi.auth2.getAuthInstance().signIn();            
 			*/
                 _hasRan = false;
                 PushEventsTimeCall();
+                Window.Focus();
             }
             catch(Exception)
             {

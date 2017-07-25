@@ -11,7 +11,7 @@ namespace ExpressCraft
 	public class TabControl : Control
 	{
 		public List<TabControlPage> TabPages { get; set; } = new List<TabControlPage>();
-
+        private Control tabHeaders;
 		public TabControl() : base("tabcontrol")
 		{
             Content.OnContextMenu = (ev) => {
@@ -85,12 +85,25 @@ namespace ExpressCraft
 				page.TabPageHeader.ClassList.Remove("tabcontrolpageheader-hidden");
 				page.TabPageHeader.ClassList.Remove("tabcontrolpageheader-active");
 
-				page.TabPageHeader.ClassList.Add("tabcontrolpageheader-" + state);
+				page.TabPageHeader.ClassList.Add("tabcontrolpageheader-" + state);                
 			}else
 			{
-				page.TabPageHeader = Div("tabcontrolpageheader tabcontrolpageheader-" + state);				
+				page.TabPageHeader = Div("tabcontrolpageheader tabcontrolpageheader-" + state);	                
 			}
-			page.TabPageHeader.SetAttribute("i", i.ToString());
+            if(Helper.NotDesktop)
+            {
+                if(Isselected)
+                {
+                    page.TabPageHeader.Style.LineHeight = "44px";
+                }
+                else
+                {
+                    page.TabPageHeader.Style.LineHeight = "46px";
+                }
+                page.TabPageHeader.Style.Height = "45px";
+            }
+
+            page.TabPageHeader.SetAttribute("i", i.ToString());
 			if(showClosedButton)
 			{
 				if(page.TabPageHeaderClose == null)
@@ -135,6 +148,22 @@ namespace ExpressCraft
 
 		public void ResizeTabHeaders()
 		{
+            if(tabHeaders == null)
+            {
+                tabHeaders = new Control() { Location = new Vector2(0, 0) };
+                if(Helper.NotDesktop)
+                {
+                    tabHeaders.Height = 50;
+                    tabHeaders.Style.OverflowX = Overflow.Auto;                    
+                }
+                else
+                {
+                    tabHeaders.Height = 21;
+                }
+                tabHeaders.Width = "100%";
+                tabHeaders.Style.ZIndex = "25";
+                Content.AppendChild(tabHeaders);
+            }
 			if(TabPages != null && TabPages.Count > 0)
 			{
 				int width = 2;
@@ -147,24 +176,17 @@ namespace ExpressCraft
 
 					if(page.TabPageHeader == null)
 					{						
-						TabControlActiveStyleChange(i, ref page);						
-						if(Browser.IsAndroid || Browser.iOS)
-						{
-							page.TabPageHeader.OnTouchStart = (ev) =>
-							{
-								SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
-								ev.StopPropagation();
-							};
-						}else
-						{
-							page.TabPageHeader.OnMouseDown = (ev) =>
-							{
-								SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
-								ev.StopPropagation();
-							};
-						}
-
-						Content.AppendChildren(page.Content, page.TabPageHeader);
+						TabControlActiveStyleChange(i, ref page);
+                        page.TabPageHeader.OnMouseDown = (ev) =>
+                        {
+                            SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));                            
+                        };
+                        page.TabPageHeader.OnTouchStart = (ev) =>
+                        {
+                            SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));                            
+                        };
+                        tabHeaders.Content.AppendChild(page.TabPageHeader);                        
+                        Content.AppendChild(page.Content);
 					}
 					page.TabPageHeader.SetAttribute("i", i.ToString());
 
@@ -172,7 +194,14 @@ namespace ExpressCraft
 
 					if(!string.IsNullOrEmpty(page.Caption))
 					{
-						inwidth += (int)GetTextWidth(page.Caption, Settings.DefaultFont);
+                        if(Helper.NotDesktop)
+                        {                            
+                            inwidth += (int)GetTextWidth(page.Caption, "14px Tahoma");
+                        }
+                        else
+                        {
+                            inwidth += (int)GetTextWidth(page.Caption, Settings.DefaultFont);
+                        }						
 					}
 					
 					if(showClosedButton)
@@ -190,18 +219,35 @@ namespace ExpressCraft
 					}
 					if(span == null)
 					{
-						page.TabPageHeader.AppendChild(new HTMLSpanElement() { InnerHTML = page.Caption });
+                        span = new HTMLSpanElement() { InnerHTML = page.Caption };
+                        
+                        page.TabPageHeader.AppendChild(span);
 					}
+                    if(Helper.NotDesktop)
+                    {
+                        span.Style.FontSize = "14px";
+                    }
 
-					page.TabPageHeader.Style.Left = width.ToPx();
+
+                    page.TabPageHeader.Style.Left = width.ToPx();
 					page.TabPageHeader.Style.Width = inwidth.ToPx();
 
-					width += inwidth + 2;
+                    //                height: calc(100% - 26px);
+                    //top: 24px;
+
+                    if(Helper.NotDesktop)
+                    {
+                        page.Height = "(100% - 50px)";
+                        page.Top = 48;                        
+                    }
+
+                    width += inwidth + 2;
 
 					TabPages[i] = page;
-				}
-			}
-		}
+				}                
+            }
+                           
+        }
 
 		public override void Render()
 		{
