@@ -21,7 +21,7 @@ namespace ExpressCraft
 			if(!_themeVisible)
 			{
 				themeForm = new ThemeForm();
-				themeForm.Show(null, true);
+				themeForm.Show(true);
 
 				_themeVisible = true;				
 			}

@@ -92,7 +92,14 @@ namespace ExpressCraft
             return r;
         }
 
-        public static bool NotDesktop => (!Browser.IsDesktop || IsIPhone() || IsIPad());
+        private static bool _notDesktop;
+        public static bool _setupDesktop;
+        public static bool NotDesktop { get {
+                var result = _setupDesktop ? _notDesktop : _notDesktop = (!Browser.IsDesktop || IsIPhone() || IsIPad());
+                _setupDesktop = true;
+                return result;
+            } }
+            
 
         public static int IsTrue(this string value)
         {

@@ -12,6 +12,7 @@ namespace ExpressCraft
 	{
 		public List<TabControlPage> TabPages { get; set; } = new List<TabControlPage>();
         private Control tabHeaders;
+        private Control tabHeaderContainer;
 		public TabControl() : base("tabcontrol")
 		{
             Content.OnContextMenu = (ev) => {
@@ -150,19 +151,29 @@ namespace ExpressCraft
 		{
             if(tabHeaders == null)
             {
-                tabHeaders = new Control() { Location = new Vector2(0, 0) };
+                tabHeaders = new Control("tabheader-container") { Location = new Vector2(0, 0) };
                 if(Helper.NotDesktop)
                 {
-                    tabHeaders.Height = 50;
-                    tabHeaders.Style.OverflowX = Overflow.Auto;                    
+                    tabHeaders.Height = 47;
+                    tabHeaderContainer = new Control() { Location = new Vector2(0, 0) };
+                    tabHeaderContainer.Width = "100%";
+                    tabHeaderContainer.Height = 49;
+                    tabHeaderContainer.AppendChild(tabHeaders);
+                    tabHeaderContainer.Style.BackgroundColor = "transparent";
+                    tabHeaderContainer.Style.OverflowX = Overflow.Auto;
+
+                    tabHeaders.Style.MinWidth = "100%";
+
+                    Content.AppendChild(tabHeaderContainer);
                 }
                 else
                 {
-                    tabHeaders.Height = 21;
+                    tabHeaders.Height = 23;
+                    Content.AppendChild(tabHeaders);
+                    tabHeaders.Width = "100%";
                 }
-                tabHeaders.Width = "100%";
-                tabHeaders.Style.ZIndex = "25";
-                Content.AppendChild(tabHeaders);
+
+
             }
 			if(TabPages != null && TabPages.Count > 0)
 			{
@@ -237,14 +248,18 @@ namespace ExpressCraft
 
                     if(Helper.NotDesktop)
                     {
-                        page.Height = "(100% - 50px)";
-                        page.Top = 48;                        
+                        page.Height = "(100% - 49px)";
+                        page.Top = 49;                        
                     }
 
                     width += inwidth + 2;
 
 					TabPages[i] = page;
-				}                
+				}
+                if(Helper.NotDesktop)
+                {
+                    tabHeaders.Width = width;
+                }                
             }
                            
         }

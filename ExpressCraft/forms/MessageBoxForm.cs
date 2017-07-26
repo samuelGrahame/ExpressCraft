@@ -88,35 +88,35 @@ namespace ExpressCraft
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ui), ui, null);
             }
-
+            string heightCalc = Helper.NotDesktop ? "(100% - 60px)" : "(100% - 35px)";
             switch (_buttons)
             {
                 case MessageBoxButtons.Ok:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok", Location = new Vector2("(50% - 37.5px)", "(100% - 35px)")}
+                        new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok", Location = new Vector2("(50% - 37.5px)", heightCalc)}
                     };                    
                     break;
                 case MessageBoxButtons.YesNo:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 85px)", "(100% - 35px)")},
-                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 170px)", "(100% - 35px)")}
+                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 85px)", heightCalc)},
+                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 170px)", heightCalc)}
                     };                    
                     break;
                 case MessageBoxButtons.YesNoCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)") },
-                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 170px)", "(100% - 35px)") },
-                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 255px)", "(100% - 35px)") }
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", heightCalc) },
+                        new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 170px)", heightCalc) },
+                        new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 255px)", heightCalc) }
                     };                    
                     break;
                 case MessageBoxButtons.AbortSendCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)")},                        
-                        new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", Location = new Vector2("(100% - 170px)", "(100% - 35px)"), ItemClick = (ev) => {
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", heightCalc)},                        
+                        new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", Location = new Vector2("(100% - 170px)", heightCalc), ItemClick = (ev) => {
                             if(Settings.OnSendError != null)
                                 Settings.OnSendError(_prompt);
                         } },
-                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort", Location = new Vector2("(100% - 255px)", "(100% - 35px)"), ItemClick = (ev) => {
+                        new SimpleDialogButton(this, DialogResultEnum.Abort) { Text = "Abort", Location = new Vector2("(100% - 255px)", heightCalc), ItemClick = (ev) => {
                             bool pre =Settings.AllowCloseWithoutQuestion;
 
                             Settings.AllowCloseWithoutQuestion = false;
@@ -127,44 +127,90 @@ namespace ExpressCraft
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }            			
-			var tb = new TextBlock(prompt, 480 - 25);			
-			tb.ComputeString();
-
+            }
+            TextBlock tb = null;
+			
 			int width = 480;
-			if(!tb.ElelemtsOverMax)
-			{
-				width = (int)tb.MaxCalculatedWidth + 65 + 37;
-				if(width < Settings.MessageFormMinimumWidthInPx)
-					width = Settings.MessageFormMinimumWidthInPx;
-			}
-
-            if (_buttonCollection.Count > 2)
+			
+            if(!Helper.NotDesktop)
             {
-                if(width < 320)
-                    width = 320;
+                tb = new TextBlock(prompt, 480 - 25);
+                tb.ComputeString();
+                if(_buttonCollection.Count > 2)
+                {
+                    if(width < 320)
+                        width = 320;
+                }
+                if(!tb.ElelemtsOverMax)
+                {
+                    width = (int)tb.MaxCalculatedWidth + 65 + 37;
+                    if(width < Settings.MessageFormMinimumWidthInPx)
+                        width = Settings.MessageFormMinimumWidthInPx;
+                }
+            }
+            else
+            {
+                int count = _buttonCollection.Count;
+                for(int i = 0; i < count; i++)
+                {
+                    var but = _buttonCollection[i];
+                    but.Height = 45;
+                    but.Style.BorderRadius = "4px";
+                    but.Style.FontSize = "14px";
+                    if(but.DialogResult ==DialogResultEnum.OK || but.DialogResult == DialogResultEnum.Yes)
+                    {
+                        but.ClassList.Add("primary");
+                        but.Style.Color = "white";
+                        but.Style.Border = "0";
+                    }
+                }
             }
 
-			textContent.InnerHTML = prompt;
-
+			textContent.InnerHTML =  prompt;
+            
 			section.Style.OverflowY = Overflow.Auto;		
             section.Style.Height = "100%";
 			section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
             section.AppendChild(textContent);
 			section.Style.Top = "32px";
 			section.Style.Width = "90%";
-			
-			base.Body.AppendChildren(pic, section);		
-			
-			if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
-				tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-			if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
-				tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
             
+            base.Body.AppendChildren(pic, section);		
+			
 			ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
+            if(Helper.NotDesktop)
+            {
+                section.Style.TextAlign = TextAlign.Center;
+                section.Style.LineHeight = "100%";
 
-			base.Height = tb.ComputedHeight + 77 + 29 + 32 + "px";
-			base.Width = width.ToPx();
+                WindowState = WindowStateType.Maximized;
+                Heading.Style.Display = Display.None;
+                Body.SetLocation(0, 0);
+                Body.SetSize("100%", "100%");
+                StartPosition = FormStartPosition.Manual;
+                AllowSizeChange = false;
+                AllowMoveChange = false;
+
+                ShowMaximize = false;
+                ShowMinimize = false;
+                ShowClose = false;
+
+                textContent.Style.Display = Display.InlineBlock;
+                textContent.Style.FontSize = "14px";
+                textContent.Style.VerticalAlign = VerticalAlign.Middle;
+                textContent.Style.LineHeight = "normal";
+            }
+            else
+            {
+                if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
+                    tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
+                if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
+                    tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
+
+                base.Height = tb.ComputedHeight + 77 + 29 + 32 + "px";
+                base.Width = width.ToPx();
+            }
+			
 			base.AllowSizeChange = false;
         }
 		

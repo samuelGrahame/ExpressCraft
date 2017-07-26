@@ -59,6 +59,14 @@ namespace ExpressCraft
 			}
 		}
 
+        public void MenuClick()
+        {
+            if(Helper.NotDesktop)
+            {
+
+            }
+        }
+
 		public void SetSelectedIndex(int index)
 		{
 			if(RibbonPages != null && RibbonPages.Count > 0)
@@ -73,7 +81,7 @@ namespace ExpressCraft
 						if(i == index)
 						{
 							RibbonPages[i].RibbonHeader.ClassList.Add("ribbonpageheader-active");
-							RibbonPages[i].Content.Style.Visibility = Visibility.Visible;
+							RibbonPages[i].Content.Style.Visibility = Visibility.Inherit;
 						}else
 						{
 							RibbonPages[i].RibbonHeader.ClassList.Add("ribbonpageheader-hidden");

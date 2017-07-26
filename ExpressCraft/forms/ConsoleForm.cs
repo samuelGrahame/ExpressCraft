@@ -122,7 +122,7 @@ namespace ExpressCraft
 			if(!ConsoleVisible)
 			{
 				_consoleForm = new ConsoleForm();
-				_consoleForm.Show(null, true);
+				_consoleForm.Show(true);
 			}
 		}
 		public static void Log(string source, ConsoleLogType logType = ConsoleLogType.Log)

@@ -14,11 +14,9 @@ namespace ExpressCraft
 
 	public class Form : Control
 	{
-		public static HTMLDivElement WindowHolder { get; set; }
-		public static HTMLDivElement WindowManager { get; set; }
-		public static HTMLDivElement WindowManagerStart { get; set; }
-		public static TextInput WindowManagerSearch { get; set; }
+        public static HTMLDivElement WindowHolder;
         public static List<Form> MinimizedForms = new List<Form>();
+        
 
         private static ToolTip _activeToolTip;
 		private static int _toolTipTimerHandle = -1;
@@ -101,10 +99,11 @@ namespace ExpressCraft
 		
 		public bool InDesign = false;
 
-		public static int ResizeCorners { get; set; } = 2;
+		public static int ResizeCorners = 2;
 		public static Form MovingForm = null;
 		public static HTMLElement Parent = null;
-		public static bool Mouse_Down { get; set; } = false;		
+		public static bool Mouse_Down = false;
+        public static bool MenuOpen = false;
         public static HTMLElement FormOverLay;		
 
 		private static HTMLStyleElement WindowCursorManager = null;
@@ -117,8 +116,9 @@ namespace ExpressCraft
         private bool PreviousShowMax = true;
         private bool PreviousShowMin = true;
         private string PreviousOpacity = "";
+        protected bool HasRemovedPlaceHolder;
 
-		public bool AllowSizeChange = true;
+        public bool AllowSizeChange = true;
 		public bool AllowMoveChange = true;
 
 		public HTMLCollection Controls => Body.Children;
@@ -152,8 +152,17 @@ namespace ExpressCraft
 				ChangeHeadingButton(FormButtonType.Maximize, value);
 			}
 		}
-		
-		public bool ForReuse = false;
+
+        public bool ShowMenu
+        {
+            get { return ButtonMenu != null; }
+            set
+            {
+                ChangeHeadingButton(FormButtonType.Menu, value);
+            }
+        }
+
+        public bool ForReuse = false;
 
         protected static bool InErrorDialog = false;
 
@@ -220,10 +229,10 @@ namespace ExpressCraft
 
 		public FormStartPosition StartPosition = FormStartPosition.WindowsDefaultLocation;
 
-		public static bool ShowBodyOverLay { get; set; } = false;
+		public static bool ShowBodyOverLay = false;
 
-		public static int Window_DefaultHeight { get; set; } = 480;
-		public static int Window_DefaultWidth { get; set; } = 640;
+		public static int Window_DefaultHeight = 480;
+		public static int Window_DefaultWidth = 640;
 
 		private static Form _ActiveForm;
 		private static Form _PrevActiveForm;
@@ -238,16 +247,16 @@ namespace ExpressCraft
 
 		public static int WindowHolderSelectionBoxXOff;
 		public static int WindowHolderSelectionBoxYOff;
-		
-		protected HTMLDivElement Heading { get; set; }
-		protected HTMLDivElement ButtonClose { get; set; }
-		protected HTMLDivElement ButtonExpand { get; set; }
-		protected HTMLDivElement ButtonMinimize { get; set; }
-		protected HTMLSpanElement HeadingTitle { get; set; }
 
-		public HTMLDivElement Body { get; set; }
-		public HTMLDivElement BodyOverLay { get; set; }
-		public HTMLElement Owner { get; set; } = null;
+        protected HTMLDivElement Heading;
+        protected HTMLDivElement ButtonClose;
+        protected HTMLDivElement ButtonExpand;
+        protected HTMLDivElement ButtonMinimize;
+        protected HTMLDivElement ButtonMenu;
+        protected HTMLSpanElement HeadingTitle;
+
+        public HTMLDivElement Body;
+        public HTMLDivElement BodyOverLay;
 
 		public float prev_px;
 		public float prev_py;
@@ -258,8 +267,8 @@ namespace ExpressCraft
 		private int prev_top;
 		private int prev_left;
 
-		public int MinWidth { get; set; } = 200;
-		public int MinHeight { get; set; } = 50;        
+		public int MinWidth = 200;
+		public int MinHeight = 50;        
         
         public void ResizeChildren(HTMLElement parent)
 		{
@@ -356,15 +365,26 @@ namespace ExpressCraft
 				case FormButtonType.Close:
 					if(ButtonClose != null)
 					{
-						ButtonClose.Delete();
-						ButtonClose = null;
+                        ButtonClose.Delete();
+                        ButtonClose = null;
 					}
 					if(visible)
-					{						
-						ButtonClose = CreateFormButton(button);
+					{
+                        ButtonClose = CreateFormButton(button);
 					}
 					break;
-				default:
+                case FormButtonType.Menu:
+                    if(ButtonMenu != null)
+                    {
+                        ButtonMenu.Delete();
+                        ButtonMenu = null;
+                    }
+                    if(visible)
+                    {
+                        ButtonMenu = CreateFormButton(button);
+                    }
+                    break;
+                default:
 					break;
 			}
 
@@ -517,14 +537,7 @@ namespace ExpressCraft
 		
 		public static void ChangeStateTextSelection(HTMLElement element, bool state)
 		{
-			if(state)
-			{
-				jQuery.Select(element).Css("user-select", "text");
-			}
-			else
-			{
-				jQuery.Select(element).Css("user-select", "none");
-			}
+            jQuery.Select(element).Css("user-select", state ? "text" : "none");            
 		}
 
         public static void PerformFocusShake()
@@ -569,25 +582,6 @@ namespace ExpressCraft
 					Document.Body.AppendChild(WindowHolder);
 			};
 		}
-
-        public static void SetupWindowManager()
-		{
-			if(Parent == null || WindowHolder == null)
-				return;
-
-			if(Settings.WindowManagerVisible)
-			{
-				WindowHolder.Style.Height = "calc(100% - 40px)";
-				if(!Parent.Children.Contains(WindowManager))
-					Parent.AppendChild(WindowManager);
-			}
-			else
-			{
-				WindowHolder.Style.Height = "100%";
-				if(Parent.Children.Contains(WindowManager))
-					Parent.RemoveChild(WindowManager);
-			}			
-		}
         
         public static void CloseFormPopups()
         {            
@@ -629,11 +623,6 @@ namespace ExpressCraft
 			WindowCursorManager = new HTMLStyleElement();
 			
 			WindowHolder = Div("form-container");
-			WindowManager = Div("form-manager");
-			WindowManagerStart = Div("form-manager-start");
-
-			WindowManagerSearch = new TextInput();
-			WindowManagerSearch.ClassList.Add("form-manager-search");
 
             FormOverLay = Div("system-form-collection-overlay");			
 			FormOverLay.OnMouseDown = (ev) =>
@@ -934,11 +923,8 @@ namespace ExpressCraft
             });
 
             WindowHolder.AppendChild(FormOverLay);
-			WindowManager.AppendChildren(WindowManagerStart, WindowManagerSearch);
 
 			Parent.AppendChildren(WindowHolder, WindowCursorManager);
-			
-			SetupWindowManager();			
 		}		
 		public static void SetCursor(Cursor cursor)
 		{			
@@ -1242,7 +1228,24 @@ namespace ExpressCraft
 						Mouse_Down = false;
 					};
 					break;
-			}
+                case FormButtonType.Menu:
+                    butt.InnerHTML = "&#9633;";
+
+                    butt.OnMouseUp = (ev) =>
+                    {
+                        if(MovingForm != null) //  || WindowHolderSelectionBox != null
+                            return;
+
+                        ev.StopPropagation();
+                        ev.PreventDefault();
+
+                        Mouse_Down = false;
+
+                        OnMenuClick();                        
+                    };
+
+                    break;
+            }
 
             butt.OnMouseEnter = (ev) =>
             {
@@ -1283,6 +1286,11 @@ namespace ExpressCraft
 			return butt;
 		}
         
+        public virtual void OnMenuClick()
+        {
+
+        }
+
 		public Form() : base("form-base")
 		{				
 			Heading = Div("form-heading");
@@ -1311,10 +1319,13 @@ namespace ExpressCraft
 			BodyOverLay.Style.Opacity = ShowBodyOverLay ? "0.5" : "0";
 
 			ChangeHeadingButton(FormButtonType.Close);
-			ChangeHeadingButton(FormButtonType.Maximize);
-			ChangeHeadingButton(FormButtonType.Minimize);			
+            if(!Helper.NotDesktop)
+            {
+                ChangeHeadingButton(FormButtonType.Maximize);
+                ChangeHeadingButton(FormButtonType.Minimize);
+            }
 
-			BodyOverLay.Style.Visibility = Visibility.Collapse;
+            BodyOverLay.Style.Visibility = Visibility.Collapse;
 
             Self = jQuery.Select(Content);
 			
@@ -1719,7 +1730,7 @@ namespace ExpressCraft
             return GetFormCollectionFromForm(this) != null;            
         }
 
-        public void ShowStartNewLevel(HTMLElement owner = null)
+        public void ShowStartNewLevel()
         {
 			if(!HasSetup)
 				Setup();
@@ -1728,22 +1739,20 @@ namespace ExpressCraft
             {
                 // Already Open???
                 throw new Exception("Invalid request to open form as a dialog that is already visible!");
-            }
-			
-            AddFormToParentElement(owner);
+            }		
+
+            FormCollections.Add(new FormCollection(this));
+
+            CalculateZOrder();
 
             if(StartPosition == FormStartPosition.Center)
             {
                 CentreForm();
             }
 
-            Body.Focus();
-
-            FormCollections.Add(new FormCollection(this));
-
-            CalculateZOrder();
-
             OnShowed();
+
+            Body.Focus();
 
             ActiveForm = this;
         }		
@@ -1761,18 +1770,16 @@ namespace ExpressCraft
                 ButtonExpand.Delete();
             if (ButtonClose != null)
                 ButtonClose.Delete();
-
+ 
+            _IsDialog = true;
             if(StartPosition != FormStartPosition.Manual)
             {
-                if(!(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad))
+                if(!Helper.NotDesktop)
                     StartPosition = FormStartPosition.Center;
             }
-            
-            _IsDialog = true;                        
+            ShowStartNewLevel();
 
-            ShowStartNewLevel(null);						
-			
-			if(dialogResults != null && dialogResults.Length > 0)
+            if(dialogResults != null && dialogResults.Length > 0)
 			{
 				DialogResults.AddRange(dialogResults);				
 			}
@@ -1790,34 +1797,22 @@ namespace ExpressCraft
 
 		public void CentreForm()
         {
-            if (Owner == null)
+            if (WindowHolder == null)
                 return;
 		
 			Self
-            .Css("left", MinZero((Owner.ClientWidth / 2) - (Global.ParseInt(this.Width.ToHtmlValue()) / 2)))
-            .Css("top", MinZero((Owner.ClientHeight / 2) - (Global.ParseInt(this.Height.ToHtmlValue()) / 2)));
+            .Css("left", MinZero((WindowHolder.ClientWidth / 2) - (Global.ParseInt(this.Width.ToHtmlValue()) / 2)))
+            .Css("top", MinZero((WindowHolder.ClientHeight / 2) - (Global.ParseInt(this.Height.ToHtmlValue()) / 2)));
         }
 
-        protected void AddFormToParentElement(HTMLElement owner = null)
+        public override void Render()
         {
-            if (!HasRendered)
+            if(!HasRendered)
             {
-                Render();
-                HasRendered = true;
+                OnShowing();
+                base.Render();
+                Shown();
             }
-
-            OnShowing();
-
-			if(owner == null)
-			{
-				WindowHolder.AppendChild(Content);
-				owner = WindowHolder;				
-			}
-			else
-				owner.AppendChild(Content);				
-			Shown();
-
-			Owner = owner;
         }
 
 		public void Shown()
@@ -1836,7 +1831,7 @@ namespace ExpressCraft
 			Children.Remove(null);
 		}
 		protected bool _seperateInstance = false;
-		public void Show(HTMLElement owner = null, bool seperateInstance = false)
+		public void Show(bool seperateInstance = false)
 		{
 			if(!HasSetup)
 				Setup();
@@ -1846,7 +1841,7 @@ namespace ExpressCraft
 			_seperateInstance = seperateInstance;
 			if(!seperateInstance && (FormCollections == null || FormCollections.Count == 0))
 			{
-				ShowStartNewLevel(owner);
+				ShowStartNewLevel();
 				return;
 			}
 
@@ -1854,11 +1849,14 @@ namespace ExpressCraft
             var visbileForms = activeCollect.VisibleForms;
             
 			if(!visbileForms.Contains(this))
-			{				
-                AddFormToParentElement(owner);
+			{
+                visbileForms.Add(this);
 
                 Content.Style.Visibility = Visibility.Visible;
-				if(StartPosition != FormStartPosition.Manual && windowState == WindowStateType.Normal)
+                
+                CalculateZOrder();
+
+                if(StartPosition != FormStartPosition.Manual && windowState == WindowStateType.Normal)
 				{
                     if (StartPosition == FormStartPosition.Center || (activeCollect == null || visbileForms == null || visbileForms.Count == 0 || visbileForms[visbileForms.Count - 1].windowState != WindowStateType.Normal || visbileForms[visbileForms.Count - 1].Content == null))
 					{
@@ -1872,11 +1870,11 @@ namespace ExpressCraft
 						int x = Global.ParseInt(obj.Left.ToHtmlValue());
 						int y = Global.ParseInt(obj.Top.ToHtmlValue());
 
-						double pw25 = Owner.ClientWidth * 0.15;
-						double ph25 = Owner.ClientHeight * 0.15;
+						double pw25 = WindowHolder.ClientWidth * 0.15;
+						double ph25 = WindowHolder.ClientHeight * 0.15;
 
-						double pw75 = Owner.ClientWidth * 0.55;
-						double ph75 = Owner.ClientHeight * 0.55;						
+						double pw75 = WindowHolder.ClientWidth * 0.55;
+						double ph75 = WindowHolder.ClientHeight * 0.55;						
 
 						if(x < pw25)						
 							x = (int)pw25;						
@@ -1896,11 +1894,7 @@ namespace ExpressCraft
 				}				
 
 				Body.Focus();
-
-                visbileForms.Add(this);
-
-				CalculateZOrder();
-
+                
 				OnShowed();
 			}
 
@@ -1922,14 +1916,12 @@ namespace ExpressCraft
 				}
 
 				CalculateZOrder();
-            }            
+            }
 		}
 
         public void SetZIndex(ref int zIndex)
         {
 			this.Content.Style.ZIndex = (zIndex++).ToString();
-
-			//Self.Css("zIndex", zIndex++);
         }
 
 		private static void ClearZIndex()
@@ -1948,8 +1940,7 @@ namespace ExpressCraft
 				else
 				{
 					WindowHolder.Children[i].Style.ZIndex = (i - WindowHolder.ChildElementCount - 1).ToString();
-				}
-				
+				}				
 			}
 		}
 
@@ -1962,63 +1953,131 @@ namespace ExpressCraft
 			}
 		}
 
-		private static int CalculateZOrder(FormCollection formCollection, int zIndex)
+		private static int CalculateZOrder(FormCollection formCollection, int zIndex, DocumentFragment frag)
 		{
 			List<Form> TopMostForms = new List<Form>();
 
 			var VisibleForms = formCollection.VisibleForms;
+            if(VisibleForms != null)
+            {
+                for(int i = 0; i < VisibleForms.Count; i++)
+                {
+                    if(VisibleForms[i].Content == null)
+                    {
+                        ToClean.Add(VisibleForms[i]);
+                    }
+                    else
+                    {
+                        if(VisibleForms[i].TopMost)
+                            TopMostForms.Add(VisibleForms[i]);
+                    }
+                }
+                for(int i = 0; i < ToClean.Count; i++)
+                {
+                    if(VisibleForms.Contains(ToClean[i]))
+                    {
+                        VisibleForms.Remove(ToClean[i]);
+                        ToClean[i] = null;
+                    }
+                }
 
-			if(formCollection.FormOwner != null)
-			{
-				//formCollection.FormOwner.Content.Delete();
+                ToClean.Remove(null);
 
-				WindowHolder.AppendChild(formCollection.FormOwner);
-				//formCollection.FormOwner.SetZIndex(ref zIndex);
-			}
+                if(formCollection.FormOwner != null)
+                {
+                    if(Helper.NotDesktop)
+                    {
+                        if(VisibleForms.Count == 0)
+                        {
+                            formCollection.FormOwner.ManagePlaceHolders();
+                            frag.AppendChild(formCollection.FormOwner);
+                            return zIndex;
+                        }
+                    }
+                    else
+                    {
+                        formCollection.FormOwner.ManagePlaceHolders();
+                        frag.AppendChild(formCollection.FormOwner);
+                    }                    
+                }
 
-			for(int i = 0; i < VisibleForms.Count; i++)
-			{
-				if(VisibleForms[i].Content == null)
-				{
-					ToClean.Add(VisibleForms[i]);
-				}
-				else
-				{
-					if(VisibleForms[i].TopMost)
-						TopMostForms.Add(VisibleForms[i]);
-				}
-			}
-			for(int i = 0; i < ToClean.Count; i++)
-			{
-				if(VisibleForms.Contains(ToClean[i]))
-				{
-					VisibleForms.Remove(ToClean[i]);
-					ToClean[i] = null;
-				}
-
-			}
-			ToClean.Remove(null); // Removes all nulls..
-
-			for(int i = 0; i < TopMostForms.Count; i++)
-			{
-				var form = TopMostForms[i];
-				VisibleForms.Remove(form);
-				VisibleForms.Add(form);
-			}
-			for(int i = 0; i < VisibleForms.Count; i++)
-			{
-				if(VisibleForms[i] != null &&
-					VisibleForms[i].Content != null)
-				{
-					//VisibleForms[i].Content.Delete();
-					WindowHolder.AppendChild(VisibleForms[i].Content);
-
-					//VisibleForms[i].SetZIndex(ref zIndex);
-				}
-			}
-
+                for(int i = 0; i < TopMostForms.Count; i++)
+                {
+                    var form = TopMostForms[i];
+                    VisibleForms.Remove(form);
+                    VisibleForms.Add(form);
+                }
+                int length = VisibleForms.Count;
+                for(int i = 0; i < length; i++)
+                {
+                    if(VisibleForms[i] != null &&
+                        VisibleForms[i].Content != null)
+                    {
+                        if(Helper.NotDesktop)
+                        {
+                            if(length - 1 == i)
+                            {
+                                VisibleForms[i].ManagePlaceHolders();
+                                frag.AppendChild(VisibleForms[i]);
+                                return zIndex;
+                            }
+                        }else
+                        {
+                            VisibleForms[i].ManagePlaceHolders();
+                            frag.AppendChild(VisibleForms[i]);
+                        }                        
+                    }
+                }
+            }
+            
 			return zIndex;
 		}
+
+        protected void ManagePlaceHolders()
+        {
+            if(!Settings.RemoveAttributesOffElementsWhenLoseFocus)
+                return;
+
+            bool shouldHidePlaceholders = ActiveForm != this;
+
+            if(shouldHidePlaceholders != HasRemovedPlaceHolder)
+            {
+                HasRemovedPlaceHolder = shouldHidePlaceholders;
+                var que = new Queue<HTMLElement>();
+                que.Enqueue(Body);
+
+                while(que.Count > 0)
+                {
+                    var element = que.Dequeue();
+                    if(shouldHidePlaceholders)
+                    {
+                        var a = element.GetAttribute("placeholder");
+                        if(!string.IsNullOrWhiteSpace(a))
+                        {
+                            element.RemoveAttribute("placeholder");
+                            element.SetAttribute("data-placeholder", a);
+                        }
+                    }
+                    else
+                    {
+                        var a = element.GetAttribute("data-placeholder");
+                        if(!string.IsNullOrWhiteSpace(a))
+                        {
+                            element.RemoveAttribute("data-placeholder");
+                            element.SetAttribute("placeholder", a);
+                        }
+                    }
+                    int length = element.ChildElementCount;
+                    if(length > 0)
+                    {
+                        for(int i = 0; i < length; i++)
+                        {
+                            que.Enqueue(element.Children[i]);
+                        }
+                    }
+                }                
+            }
+        }
 
 		public static void CalculateZOrder()
 		{			
@@ -2027,33 +2086,42 @@ namespace ExpressCraft
 			if(FormCollections == null && standAloneForms.VisibleForms.Count == 0)
 				return;
 			FormCollections.Remove(null);
-
+            var count = FormCollections.Count;
             int zIndex = 1;
-			if (FormCollections.Count == 0)
-                FormOverLay.Style.ZIndex = "";
-            else if(FormCollections.Count == 1)
-                FormOverLay.Style.Opacity = "0";            
-            else
-                FormOverLay.Style.Opacity = "0.4";
 
-			//			FormOverLay.Delete();
-				WindowHolder.Empty();
+            var frag = Document.CreateDocumentFragment();
 
-			for (int x = 0; x < FormCollections.Count; x++)
-            {                
-                if(x == FormCollections.Count - 1)
+            FormOverLay.Style.ZIndex = count == 0 ? "" : count == 1 ? "0" : "0.4";
+
+			for (int x = 0; x < count; x++)
+            {    
+                if(Helper.NotDesktop)
                 {
-					//FormOverLay.Style.ZIndex = (zIndex++).ToString();
-					WindowHolder.AppendChild(FormOverLay);
-				}
-				zIndex = CalculateZOrder(FormCollections[x], zIndex);
+                    if(x == count - 1)
+                    {
+                        frag.AppendChild(FormOverLay);
+                        zIndex = CalculateZOrder(FormCollections[x], zIndex, frag);
+                    }                    
+                }
+                else
+                {
+                    if(x == count - 1)
+                    {
+                        frag.AppendChild(FormOverLay);
+                    }
+                    zIndex = CalculateZOrder(FormCollections[x], zIndex, frag);
+                }
+                
 			}
-			zIndex = CalculateZOrder(standAloneForms, zIndex);
-						
+			zIndex = CalculateZOrder(standAloneForms, zIndex, frag);
+
+            WindowHolder.Empty();
+            WindowHolder.AppendChild(frag);
+            	
 			if(ActiveForm != null)
 			{
 				ActiveForm.Body.Focus();
-			}			
+			}
 		}
 
 		public static List<Form> ToClean = new List<Form>();

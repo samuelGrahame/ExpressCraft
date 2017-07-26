@@ -20,7 +20,7 @@ namespace ExpressCraft
 
 		public void Show(MouseEvent ev)
 		{
-			if(Browser.IsPhone || Browser.IsTablet || Browser.IsiPhone || Browser.IsAndroid || Browser.IsiPad)
+			if(Helper.NotDesktop)
 				return;
 
 			this.Content.Empty();
@@ -55,7 +55,9 @@ namespace ExpressCraft
 			{
 				if(this.Content != null)
 				{
-					jQuery.Select(this.Content).FadeOut();					
+					jQuery.Select(this.Content).FadeOut(100, () => {
+                        this.Content.Delete();
+                    });					
 				}
 				visible = false;
 				ContextMenu.TotalContextHandles--;				

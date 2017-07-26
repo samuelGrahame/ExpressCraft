@@ -41,7 +41,8 @@ namespace ExpressCraft
 		Maximize,
 		Minimize,
 		Restore,
-		Help
+		Help,
+        Menu
 	}
 
 	public enum GoogleCloudPrintingMimeType

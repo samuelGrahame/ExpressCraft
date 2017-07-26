@@ -60,22 +60,8 @@ namespace ExpressCraft
 		public static bool MessageFormBeep = false;
 
 		public static int MaximumPixelScrollingRows = 500000;
-
-		private static bool _WindowManagerVisible;
-
+        
         public static Action<string> OnSendError = null;
-
-		public static bool WindowManagerVisible
-		{
-			get { return _WindowManagerVisible; }
-			set {
-				if(value != _WindowManagerVisible)
-				{
-					_WindowManagerVisible = value;
-					Form.SetupWindowManager();
-				}				
-			}
-		}		
 
 		public static bool IsChrome = Browser.IsChrome;
 
@@ -84,6 +70,11 @@ namespace ExpressCraft
 		public static bool ShowExceptionDialog = true;
 
 		public static int FormFadeDuration = 100;
+
+        /// <summary>
+        /// Increase Render Speed
+        /// </summary>
+        public static bool RemoveAttributesOffElementsWhenLoseFocus;
 
 		public static void Setup()
 		{
@@ -306,11 +297,9 @@ color:{23};
 }}
 .tab{25}page{{
 {26}:{3};
-{27}{30}:{0};
 {27}{29}:{1};
 {27}{31}:{1};
 {27}{32}:{1};
-border-top-width:2px;
 }}
 .tab{25}{35} {{
 {26}:{3};   
@@ -479,6 +468,9 @@ color:{23};
 }}
 .primary{{
     {26}:{0};
+}}
+.tabheader-container{{
+    border-bottom: 2px {0} solid;
 }}
 ";
 		#endregion

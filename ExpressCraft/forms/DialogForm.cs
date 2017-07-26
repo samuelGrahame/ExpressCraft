@@ -9,14 +9,25 @@ namespace ExpressCraft
 	{
 		protected List<SimpleDialogButton> _buttonCollection;
 
-		public HTMLDivElement ButtonSection;
+		public Control ButtonSection;
 		
 		public DialogForm(string text = "") : base()
 		{
 			this.Text = text;
 			base.Body.Style.BackgroundColor = "white";
 
-			ButtonSection = Div("dialogbuttonsection");			
+    //           top:calc(100% - 70px);
+    //width:100%;
+    //height:70px;
+            
+    
+			ButtonSection = new Control("dialogbuttonsection");			
+
+            if(Helper.NotDesktop)
+            {
+                ButtonSection.Top = "(100% - 70px)";
+                ButtonSection.Size = new Vector2("100%", 70);
+            }
 		}
 
 		protected override void OnShowing()

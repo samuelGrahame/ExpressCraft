@@ -16,8 +16,8 @@ namespace ExpressCraft
 	public class Control
 	{		
 		public HTMLElement Content;
-		public string Name { get; set; }
-		public bool HasRendered { get; set; } = false;
+        public string Name;
+		public bool HasRendered = false;
 		public const string ControlClass = "control";
 
 		private ToolTip _toolTip = null;
@@ -216,19 +216,16 @@ namespace ExpressCraft
 
 		public static string GetImageString(string s)
         {
-			//url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
 			return string.Format("url('data:image/png;base64,{0}') no-repeat", s);
         }
 
 		public static string GetPdfString(string s)
 		{
-			//url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat
 			return string.Format("data:application/pdf;base64,{0}", s);
 		}
 
 		public static string GetImageStringURI(string s, bool useResourceURL = true)
         {
-            //"./Images/"
             return string.Format("url('{0}{1}') no-repeat", useResourceURL ? Settings.ResourceURL : "", s);
         }		
 
