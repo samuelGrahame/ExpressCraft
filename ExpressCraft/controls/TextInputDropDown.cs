@@ -39,8 +39,15 @@ namespace ExpressCraft
 
         public TextInputDropDown(InputType inputType = InputType.Text) : base(new HTMLDivElement(), true, false)
         {
-            UsedEdit = new TextInput(inputType) { Location = new Vector2(0, 0), Size = new Vector2("(100% - 16px)", "100%") };
-            DropDownButton = new SimpleButton() { Location = new Vector2("(100% - 17px)", 0), Size = new Vector2("17px", "100%")};
+            int dropDownWidth = 17;
+
+            if(Helper.NotDesktop)
+            {
+                dropDownWidth = 45;
+            }
+
+            UsedEdit = new TextInput(inputType) { Location = new Vector2(0, 0), Size = new Vector2("(100% - " + (dropDownWidth - 1) + "px)", "100%") };
+            DropDownButton = new SimpleButton() { Location = new Vector2("(100% - " + dropDownWidth + "px)", 0), Size = new Vector2(dropDownWidth, "100%")};
             DropDownButton.Content.OnMouseDown = (ev) =>
             {
                 if(!Readonly && Enabled)
@@ -50,6 +57,12 @@ namespace ExpressCraft
             Style.Border = "0";
 
             DropDownButton.ClassList.Add("dropdown");
+
+            if(Helper.NotDesktop)
+            {
+                DropDownButton.Style.BackgroundPosition = "right 16px center";
+            }
+
             Content.AppendChildren(UsedEdit, DropDownButton);            
         }
 

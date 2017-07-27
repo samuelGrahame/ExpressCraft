@@ -17,7 +17,6 @@ namespace ExpressCraft
         public static HTMLDivElement WindowHolder;
         public static List<Form> MinimizedForms = new List<Form>();
         
-
         private static ToolTip _activeToolTip;
 		private static int _toolTipTimerHandle = -1;
 		private static Action<MouseEvent> _activeToolTipMouseMove;
@@ -1106,27 +1105,44 @@ namespace ExpressCraft
         public void CalculateButtonLocations()
         {            
             float RightOffset = 0;
+            float append = 45.5f;
+
+            if(Helper.NotDesktop)
+            {
+                append = 65.5f;
+            }
 
             if(ShowClose)
             {
-                RightOffset += 45.5f;
+                if(Helper.NotDesktop)
+                {
+                    ButtonClose.Style.Left = "calc(100% - " + append + "px)";                    
+                }
+                RightOffset += append;
                 if(!Heading.Children.Contains(ButtonClose))
                     Heading.AppendChild(ButtonClose);
             }
             
             if(ShowMaximize)
             {
-                RightOffset += 45.5f;
+                RightOffset += append;
                 ButtonExpand.Style.Left = "calc(100% - " + RightOffset + "px)";
                 if(!Heading.Children.Contains(ButtonExpand))
                     Heading.AppendChild(ButtonExpand);
             }
             if(ShowMinimize)
             {
-                RightOffset += 45.5f;
+                RightOffset += append;
                 ButtonMinimize.Style.Left = "calc(100% - " + RightOffset + "px)";
                 if(!Heading.Children.Contains(ButtonMinimize))
                     Heading.AppendChild(ButtonMinimize);
+            }
+
+            if(ShowMenu)
+            {
+                ButtonMenu.Style.Left = "0";
+                if(!Heading.Children.Contains(ButtonMenu))
+                    Heading.AppendChild(ButtonMenu);
             }
         }
 
@@ -1229,7 +1245,7 @@ namespace ExpressCraft
 					};
 					break;
                 case FormButtonType.Menu:
-                    butt.InnerHTML = "&#9633;";
+                    butt.InnerHTML = "&#9776;";
 
                     butt.OnMouseUp = (ev) =>
                     {
@@ -1240,7 +1256,7 @@ namespace ExpressCraft
                         ev.PreventDefault();
 
                         Mouse_Down = false;
-
+                        
                         OnMenuClick();                        
                     };
 
@@ -1283,6 +1299,16 @@ namespace ExpressCraft
 				};
 			}
 
+            if(Helper.NotDesktop)
+            {
+                butt.Style.Width = "65px";
+                butt.Style.Height = "49px";
+                butt.Style.FontSize = "16pt";
+                butt.Style.LineHeight = "49px";
+                butt.ExchangeClass("primary", "primary");
+                butt.Style.Filter = "brightness(110%)";
+            }
+
 			return butt;
 		}
         
@@ -1295,14 +1321,16 @@ namespace ExpressCraft
 		{				
 			Heading = Div("form-heading");
 
+            
+
 			Heading.OnContextMenu = (ev) => {
                 ev.StopPropagation();
                 ev.PreventDefault();
             };
 			
-			HeadingTitle = Span("form-heading-title");		
-				
-			Body = Div("form-body");
+			HeadingTitle = Span("form-heading-title");
+            
+            Body = Div("form-body");
 
 			Body.OnContextMenu = (ev) => {
 				if(ev.Target == Body)
@@ -1323,6 +1351,18 @@ namespace ExpressCraft
             {
                 ChangeHeadingButton(FormButtonType.Maximize);
                 ChangeHeadingButton(FormButtonType.Minimize);
+            }
+
+            if(Helper.NotDesktop)
+            {
+                Heading.Style.Height = "50px";
+                HeadingTitle.Style.FontSize = "14px";
+
+                Body.Style.Top = "50px";
+                Body.Style.Height = "calc(100% - 50px)";
+
+                BodyOverLay.Style.Top = "50px";
+                BodyOverLay.Style.Height = "calc(100% - 50px)";
             }
 
             BodyOverLay.Style.Visibility = Visibility.Collapse;

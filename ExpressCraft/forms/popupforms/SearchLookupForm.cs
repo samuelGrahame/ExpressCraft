@@ -96,6 +96,36 @@ namespace ExpressCraft
 
             btnClose.Style.Color = "red";
 
+            if(Helper.NotDesktop)
+            {
+                SearchEdit.Style.FontSize = "14px";
+                SearchEdit.Height = "45px";
+
+                btnSearch.Style.FontSize = "14px";
+                btnSearch.Height = 45;
+                
+                View.Top = 55;
+                View.Height = "(100% - 112px)";
+
+                btnClear.Style.FontSize = "14px";
+                btnClear.Height = 45;
+                btnClear.Top = "(100% - 51px)";
+
+                btnUse.Style.FontSize = "14px";
+                btnUse.Height = 45;
+                btnUse.Top = "(100% - 51px)";
+
+                btnNew.Style.FontSize = "14px";
+                btnNew.Height = 45;
+                btnNew.Top = "(100% - 51px)";
+
+                btnClose.Style.FontSize = "26px";
+                btnClose.Style.FontWeight = "bold";
+                btnClose.Height = 45;
+                btnClose.Width = 61;
+                btnClose.Top = "(100% - 51px)";
+            }
+
             SearchEdit.OnKeyDown = (obj, ev) =>
             {
                 if(ev.KeyCode == 9)

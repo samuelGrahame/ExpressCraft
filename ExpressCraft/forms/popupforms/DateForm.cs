@@ -20,6 +20,7 @@ namespace ExpressCraft
 
             InputControl = inputControl;
             DateControl = new DateControl(inputControl.GetDateTime());
+            DateControl.SetBoundsFull();
 
             DateControl.OnDateChanged = (date) =>
             {

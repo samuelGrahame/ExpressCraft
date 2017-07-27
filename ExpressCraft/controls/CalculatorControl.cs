@@ -352,197 +352,223 @@ namespace ExpressCraft
 
             current_command = Value.ToString();
 
-            int offset = 25;
-
-            Size = new Vector2(182, 132 + offset);
-
             var doc = Document.CreateDocumentFragment();
 
+            int AddHeight = (Helper.NotDesktop ? 45 : 22);
+            
+            //27.77778
 
-            doc.AppendChildren(
-                DisplayInput = new MemoInput()
+            doc.AppendChild(
+                (DisplayInput = new MemoInput()
                 {
                     Readonly = true,
-                    Bounds = new Vector4(4, 3, "(100% - 8px)", 22)
-                },
-                btnClose = new SimpleButton()
-                {
-                    Text = "&times;",
-                    Bounds = new Vector4(4, 3 + offset, 26, 22),
-                    ItemClick = (ev) =>
-                    {
-                        if(OnClose != null)
-                            OnClose();                        
-                    }
-                },
-                btnBack = new SimpleButton()
-                {
-                    Text = "Back",
-                    Bounds = new Vector4(35, 3 + offset, 45, 22),
-                    ItemClick = Back
-                },
-                btnCE = new SimpleButton()
-                {
-                    Text = "CE",
-                    Bounds = new Vector4(83, 3 + offset, 45, 22),
-                    ItemClick = (ev) => {
-                        current_command = "";
-                        RefreshValue();
-                    }
-                },
-                btnC = new SimpleButton()
-                {
-                    Text = "C",
-                    Bounds = new Vector4(131, 3 + offset, 45, 22),
-                    ItemClick = (ev) => {
-                        _commands = new List<string>(); current_command = "";
-                        RefreshValue();
-                    }
-                },
+                    Bounds = new Vector4(4, 4, "(100% - 8px)", AddHeight)
+                }).Content
+                );
+
+            if(Helper.NotDesktop)
+            {
+                DisplayInput.Style.FontSize = "14px";
+                DisplayInput.Height = 45;
+            }
+
+            List<SimpleButton> buttons = new List<SimpleButton>();
+
+            buttons.AddRange(
+                new SimpleButton[] {
                 btnPTAX = new SimpleButton()
                 {
-                    Text = "+TAX",
-                    Bounds = new Vector4(4, 28 + offset, 26, 22),
+                    Text = "+TAX",                    
+                    ItemClick = AddOperator
+                },                                                
+                btn7 = new SimpleButton()
+                {
+                    Text = "7",
+                    ItemClick = AddTextToCommand
+                },
+                btn8 = new SimpleButton()
+                {
+                    Text = "8",                    
+                    ItemClick = AddTextToCommand
+                },
+                btn9 = new SimpleButton()
+                {
+                    Text = "9",                    
+                    ItemClick = AddTextToCommand
+                },
+                btnDiv = new SimpleButton()
+                {
+                    Text = "/",                    
+                    ItemClick = AddOperator
+                },
+                btnSqrt = new SimpleButton()
+                {
+                    Text = "sqrt",                    
                     ItemClick = AddOperator
                 },
                 btnMTAX = new SimpleButton()
                 {
                     Text = "-TAX",
-                    Bounds = new Vector4(4, 54 + offset, 26, 22),
-                    ItemClick = AddOperator
-                },
-                btnTAX = new SimpleButton()
-                {
-                    Text = "TAX",
-                    Bounds = new Vector4(4, 78 + offset, 26, 22),
-                    ItemClick = AddOperator
-                },
-                btnDbl = new SimpleButton()
-                {
-                    Text = "Dbl",
-                    Bounds = new Vector4(4, 104 + offset, 26, 22),
-                    ItemClick = AddOperator
-                },
-                btn7 = new SimpleButton()
-                {
-                    Text = "7",
-                    Bounds = new Vector4(36, 28 + offset, 26, 22),
-                    ItemClick = AddTextToCommand
-                },
-                btn8 = new SimpleButton()
-                {
-                    Text = "8",
-                    Bounds = new Vector4(64, 28 + offset, 26, 22),
-                    ItemClick = AddTextToCommand
-                },
-                btn9 = new SimpleButton()
-                {
-                    Text = "9",
-                    Bounds = new Vector4(93, 28 + offset, 26, 22),
-                    ItemClick = AddTextToCommand
-                },
-                btnDiv = new SimpleButton()
-                {
-                    Text = "/",
-                    Bounds = new Vector4(122, 28 + offset, 26, 22),
-                    ItemClick = AddOperator
-                },
-                btnSqrt = new SimpleButton()
-                {
-                    Text = "sqrt",
-                    Bounds = new Vector4(151, 28 + offset, 26, 22),
                     ItemClick = AddOperator
                 },
                 btn4 = new SimpleButton()
                 {
                     Text = "4",
-                    Bounds = new Vector4(36, 54 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btn5 = new SimpleButton()
                 {
                     Text = "5",
-                    Bounds = new Vector4(64, 54 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btn6 = new SimpleButton()
                 {
                     Text = "6",
-                    Bounds = new Vector4(93, 54 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btnMul = new SimpleButton()
                 {
                     Text = "*",
-                    Bounds = new Vector4(122, 54 + offset, 26, 22),
                     ItemClick = AddOperator
                 },
                 btnPer = new SimpleButton()
                 {
                     Text = "%",
-                    Bounds = new Vector4(151, 54 + offset, 26, 22),
+                    ItemClick = AddOperator
+                },
+                btnTAX = new SimpleButton()
+                {
+                    Text = "TAX",
                     ItemClick = AddOperator
                 },
                 btn1 = new SimpleButton()
                 {
                     Text = "1",
-                    Bounds = new Vector4(36, 78 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btn2 = new SimpleButton()
                 {
                     Text = "2",
-                    Bounds = new Vector4(64, 78 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btn3 = new SimpleButton()
                 {
                     Text = "3",
-                    Bounds = new Vector4(93, 78 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btnMinus = new SimpleButton()
                 {
                     Text = "-",
-                    Bounds = new Vector4(122, 78 + offset, 26, 22),
                     ItemClick = AddOperator
                 },
                 btn1OverX = new SimpleButton()
                 {
                     Text = "1/x",
-                    Bounds = new Vector4(151, 78 + offset, 26, 22),
+                    ItemClick = AddOperator
+                },
+                btnDbl = new SimpleButton()
+                {
+                    Text = "Dbl",
                     ItemClick = AddOperator
                 },
                 btn0 = new SimpleButton()
                 {
                     Text = "0",
-                    Bounds = new Vector4(36, 104 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btnplusOrNeg = new SimpleButton()
                 {
                     Text = "+/-",
-                    Bounds = new Vector4(64, 104 + offset, 26, 22),
                     ItemClick = AddOperator
                 },
                 btnDot = new SimpleButton()
                 {
                     Text = ".",
-                    Bounds = new Vector4(93, 104 + offset, 26, 22),
                     ItemClick = AddTextToCommand
                 },
                 btnPlus = new SimpleButton()
                 {
                     Text = "+",
-                    Bounds = new Vector4(122, 104 + offset, 26, 22),
                     ItemClick = AddOperator
                 },
                 btnEq = new SimpleButton()
                 {
                     Text = "=",
-                    Bounds = new Vector4(151, 104 + offset, 26, 22),
                     ItemClick = AddOperator
-                });
+                }}                
+                );
+            int index = 0;
+            int y = 0;
+            int yOffset = 28 + AddHeight;
+            btnClose = new SimpleButton()
+            {
+                Text = "&times;",
+                Size = new Vector2("((100% - 28px) * 0.1666666666666667)", "((100% - " + yOffset + "px) * 0.2)"),
+                Location = new Vector2("(((100% - 28px) * " + (5 * 0.1666666666666667m) + ") + " + ((5 * 4) + 4) + "px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
+            ItemClick = (ev) =>
+                {
+                    if(OnClose != null)
+                        OnClose();
+                }
+            };
+            if(Helper.NotDesktop)
+            {
+                btnClose.Style.FontSize = "26px";
+                btnClose.Style.FontWeight = "bold";
+            }
+            btnBack = new SimpleButton()
+            {
+                Text = "Back",
+                Size = new Vector2("(((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333)", "((100% - " + yOffset + "px) * 0.2)"),
+                Location = new Vector2("(((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) * 0) + 4px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
+                ItemClick = Back
+            };
+            if(Helper.NotDesktop)
+                btnBack.Style.FontSize = "14px";
+            btnCE = new SimpleButton()
+            {
+                Text = "CE",
+                Size = new Vector2("(((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333)", "((100% - " + yOffset + "px) * 0.2)"),
+                Location = new Vector2("(((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) * 1) + 8px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
+                ItemClick = (ev) => {
+                    current_command = "";
+                    RefreshValue();
+                }
+            };
+            if(Helper.NotDesktop)
+                btnCE.Style.FontSize = "14px";
+            btnC = new SimpleButton()
+            {
+                Text = "C",
+                Size = new Vector2("((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) + 4px)", "((100% - " + yOffset + "px) * 0.2)"),
+                Location = new Vector2("(((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) * 2) + 12px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
+                ItemClick = (ev) => {
+                    _commands = new List<string>(); current_command = "";
+                    RefreshValue();
+                }
+            };
+            if(Helper.NotDesktop)
+                btnC.Style.FontSize = "14px";
+
+            doc.AppendChildren(btnClose.Content, btnBack.Content, btnCE.Content, btnC.Content);
+
+            y++;
+            
+            for(int i = 0; i < buttons.Count; i++)
+            {
+                buttons[i].Size = new Vector2("((100% - 28px) * 0.1666666666666667)", "((100% - " + yOffset + "px) * 0.2)");
+                buttons[i].Location = new Vector2("(((100% - 28px) * " + (index * 0.1666666666666667m) + ") + " + ((index * 4) + 4) + "px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)");
+                if(Helper.NotDesktop)
+                    buttons[i].Style.FontSize = "14px";
+
+                doc.AppendChild(buttons[i].Content);
+                index++;
+                if(index == 6)
+                {
+                    index = 0;
+                    y++;
+                }
+            }
 
             btnDbl.Style.FontSize = "6.5pt";
             btnTAX.Style.FontSize = "6.5pt";

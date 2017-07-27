@@ -634,7 +634,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 		/// </summary>
 		/// <returns></returns>
 		public static string HtmlUnescape(this string input) {
-			return !string.IsNullOrEmpty(input) ?
+			return !IsEmpty(input) ?
 				HtmlUrlUnescape(input).Replace("&#x2F", @"\/").Replace("&quot", "\"") :
 				string.Empty;
         }
@@ -646,9 +646,9 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 		}
 		public static void ExchangeClass(this HTMLElement control, string oldClass, string newClass)
 		{
-			if(control.ClassList.Contains(oldClass))
+			if(!IsEmpty(oldClass) && control.ClassList.Contains(oldClass))
 				control.ClassList.Remove(oldClass);
-			if(!control.ClassList.Contains(newClass))
+			if(!IsEmpty(newClass) && !control.ClassList.Contains(newClass))
 				control.ClassList.Add(newClass);
 		}
 		

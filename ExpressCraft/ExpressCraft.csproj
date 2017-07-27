@@ -46,10 +46,12 @@
     <Compile Include="controls\DateInput.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
     <Compile Include="controls\ImageEdit.cs" />
+    <Compile Include="controls\IPages.cs" />
     <Compile Include="controls\MemoInput.cs" />
     <Compile Include="controls\NumberInput.cs" />
     <Compile Include="controls\SearchInput.cs" />
     <Compile Include="controls\TextInputDropDown.cs" />
+    <Compile Include="controls\TileControl.cs" />
     <Compile Include="controls\ToolTipControl.cs" />
     <Compile Include="forms\popupforms\DateForm.cs" />
     <Compile Include="forms\popupforms\CalcForm.cs" />

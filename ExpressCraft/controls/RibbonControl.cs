@@ -10,8 +10,8 @@ using Bridge.jQuery2;
 namespace ExpressCraft
 {
 	[Namespace(true)]
-	public class RibbonControl : Control
-	{
+	public class RibbonControl : Control, IPages
+    {
 		public List<RibbonPage> RibbonPages { get; set; } = new List<RibbonPage>();
 		public string IconURL = "fav.ico";
 		public readonly RibbonType Type;

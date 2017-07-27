@@ -108,7 +108,7 @@ namespace ExpressCraft
                         var btn = new SimpleButton()
                         {
                             Text = curDate.Day.ToString(),
-                            Bounds = new Vector4(offsetStart * 30, (22 * row) - 6, 30, 22),
+                            Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "(((100% - " + (Helper.NotDesktop ? 26 : 13) + "px) * " + ((row - 1) * 0.1666) + ") + " + (Helper.NotDesktop ? 26 : 13) + "px)", "(100% * 0.1428)", "((100% - " + (Helper.NotDesktop ? 26 : 13) + "px) * " + 0.1666 + ")"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
                             ItemClick = (ev) =>
                             {
                                 if(GetViewDateTime() == curDate)
@@ -118,7 +118,12 @@ namespace ExpressCraft
                                 }
                                 SetViewDateTime(curDate);
                             }
-                        };
+                        };                        
+                        if(Helper.NotDesktop)
+                        {
+                            btn.Style.FontSize = "14px";
+                            btn.Style.FontWeight = "bold";
+                        }
                         if(curDate == date)
                         {
                             btn.ClassList.Add("simplebutton-active");
@@ -127,10 +132,15 @@ namespace ExpressCraft
 
                         if(curDate < startDate || curDate > endDate)
                         {
-                            btn.Style.Color = "rgb(211, 211, 211)";
+                            //btn.Style.Color = "rgb(211, 211, 211)";
                         }else if (curDate.DayOfWeek == DayOfWeek.Saturday || curDate.DayOfWeek == DayOfWeek.Sunday)
                         {
                             btn.Style.Color = "rgb(191, 11, 11)";
+                            btn.Style.Filter = "brightness(110%)";
+                        }
+                        else
+                        {
+                            btn.Style.Filter = "brightness(110%)";
                         }
                         btn.Content.OnKeyDown = BlockTabEvent;
 
@@ -153,7 +163,16 @@ namespace ExpressCraft
                     
                     for(int x = 0; x < 7; x++)
                     {
-                        doc.AppendChild(Label(Days[x], 6 + (x * 30), 0));
+                        var label = Label(Days[x], 0, 0);
+                        label.SetLocation("(100% * " + (x * 0.1428) + " + ((100% * 0.1428) * 0.45) - 6px)", 0);
+                            //Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "((100% * " + (row * 0.1666) + ") + (100% * 0.1666))", "(100% * 0.1428)", "((100% * " + 0.1666 + ") + (100% * 0.1666))"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
+                        if(Helper.NotDesktop)
+                        {
+                            label.Style.FontSize = "14px";
+                        }
+
+                        doc.AppendChild(label);
+
                     }
 
                     break;
@@ -223,7 +242,32 @@ namespace ExpressCraft
             btnLeft.Style.LineHeight = "0";
             btnRight.Style.LineHeight = "0";
 
-            ContentRange = new Control() { Size = new Vector2(211, 143), Location = new Vector2(11, 60) };
+            if(Helper.NotDesktop)
+            {
+                btnSelectedRange.Style.FontSize = "14px";
+                btnSelectedRange.Height = 36;
+                btnSelectedRange.Top = 42;
+
+                btnTop.Style.FontSize = "14px";
+                btnTop.Height = 36;
+
+                btnLeft.Size = new Vector2(36, 36);
+                btnLeft.Style.FontSize = "14px";
+                btnLeft.Top = 20;
+
+                btnRight.Size = new Vector2(36, 36);                
+                btnRight.Style.FontSize = "14px";
+                btnRight.Top = 20;
+                btnRight.Left = "(100% - 50px)";
+
+                ContentRange = new Control() { Size = new Vector2("(100% - 20px)", "(100% - 147px)"), Location = new Vector2(11, 90) };
+            }
+            else
+            {
+                ContentRange = new Control() { Size = new Vector2("(100% - 20px)", "(100% - 92px)"), Location = new Vector2(11, 60) };
+            }
+
+            
             ContentRange.Content.OnKeyDown = BlockTabEvent;
 
             btnToday = new SimpleButton()
@@ -249,7 +293,21 @@ namespace ExpressCraft
             btnToday.Style.Transform = "translate(-50%, 0)";
             btnToday.Style.Left = "50%";
             btnToday.Style.MarginRight = "50%";
-            btnToday.Top = 217;
+
+            if(Helper.NotDesktop)
+            {
+                btnToday.Top = "(100% - 51px)";
+                btnToday.Style.FontSize = "14px";
+                btnToday.Height = 45;
+                btnToday.Style.MinWidth = "60px";
+                btnToday.Width = "(100% * 0.1428)";
+            }
+            else
+            {
+                btnToday.Top = "(100% - 26px)";
+            }
+
+            
             btnToday.Content.OnKeyDown = BlockTabEvent;
 
             doc.AppendChildren(btnTop, btnLeft, btnSelectedRange, btnRight, ContentRange, btnToday);

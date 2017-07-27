@@ -17,7 +17,7 @@ namespace ExpressCraft
         {
             InputControl = inputControl;
             CalControl = new CalculatorControl(InputControl.GetNumberValue(), true);
-
+            CalControl.SetBoundsFull();
             CalControl.OnClose = () =>
             {
                 ClickedClose = true;

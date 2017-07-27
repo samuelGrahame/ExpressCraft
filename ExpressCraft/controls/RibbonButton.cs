@@ -56,14 +56,14 @@ namespace ExpressCraft
 		}
 		
 		public bool BeginGroup = false;
-		public readonly bool IsSmallCaption = false;		
+		public bool IsSmallCaption = false;		
 
 		public Action<RibbonButton> OnItemClick;
 
 		private bool enabled = true;
 
-		private HTMLDivElement captionDiv = null;
-		private HTMLDivElement imageDiv = null;
+        public HTMLDivElement captionDiv = null;
+		public HTMLDivElement imageDiv = null;
 		
 		public void setEnabled(bool value)
 		{
@@ -106,14 +106,21 @@ namespace ExpressCraft
 			IsSmallCaption = _isSmallCaption;
 		}
 
+        public Action<RibbonButton> AfterItemClick;
+
 		public override void Render()
 		{
 			HasRendered = true;
 			
 			Content.OnClick = (ev) => {
-				if(enabled && OnItemClick != null)
+                bool wasEnabled = enabled;
+
+                if(enabled && OnItemClick != null)
 					OnItemClick(this);
-				ev.StopPropagation();				
+                if(wasEnabled && AfterItemClick != null)
+                    AfterItemClick(this);
+
+                ev.StopPropagation();				
 			};
 
             ProcessCaption();

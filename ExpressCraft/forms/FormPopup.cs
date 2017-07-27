@@ -10,7 +10,10 @@ namespace ExpressCraft
     public class FormPopup : Form
     {
         public static Vector2 GetPopupDefaultLocation(Control control, bool isControlChild = false)
-        {                        
+        {
+            if(Helper.NotDesktop)
+                return new Vector2(0, 0);
+
             if(isControlChild)
             {
                 var rec = control.Content.ParentElement.GetBoundingClientRect();
@@ -37,7 +40,7 @@ namespace ExpressCraft
             ShowMaximize = false;
             ShowMinimize = false;
             AllowMoveChange = false;
-            AllowSizeChange = false;
+            AllowSizeChange = false;            
         }
 
         public void ShowPopup(Vector2 location)
@@ -55,21 +58,28 @@ namespace ExpressCraft
         {
             base.OnShowed();
 
-            var rect = Content.GetBoundingClientRect();
-           
-            try
+            if(Helper.NotDesktop)
             {
-                if(rect.Bottom > Window.InnerHeight || rect.Bottom > Document.DocumentElement.ClientHeight)
+                AllowSizeChange = true;
+                WindowState = WindowStateType.Maximized;
+                AllowSizeChange = false;
+            }
+            else
+            {
+                var rect = Content.GetBoundingClientRect();
+
+                try
                 {
-                    MoveFormUp();                    
+                    if(rect.Bottom > Window.InnerHeight || rect.Bottom > Document.DocumentElement.ClientHeight)
+                    {
+                        MoveFormUp();
+                    }
                 }
-            }
-            catch(Exception)
-            {
+                catch(Exception)
+                {
 
-            }
-
-
+                }                
+            }            
         }
 
         protected override void OnClosed()
