@@ -49,7 +49,7 @@ namespace ExpressCraft
 
             if(newSelectedYear != SelectedYear || 
                 newSelectedMonth != SelectedMonth || 
-                newSelectedDay != SelectedDay)
+                newSelectedDay != SelectedDay || date == DateTime.Today)
             {
                 SelectedYear = newSelectedYear;
                 SelectedMonth = newSelectedMonth;
