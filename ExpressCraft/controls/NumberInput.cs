@@ -11,7 +11,7 @@ namespace ExpressCraft
     {        
         public NumberInput() : base(InputType.Number)
         {
-            UsedEdit.SetAttribute("step", "any");
+            UsedEdit.SetAttribute("step", "any");            
         }
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)

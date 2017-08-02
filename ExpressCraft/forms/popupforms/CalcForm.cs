@@ -37,7 +37,12 @@ namespace ExpressCraft
         protected override void OnClosed()
         {
             base.OnClosed();
-            InputControl.Focus();
+            if(!Helper.NotDesktop)
+                InputControl.Focus();
+            else
+            {
+                InputControl.ScrollIntoView();
+            }
         }
 
         protected override void OnClosing()

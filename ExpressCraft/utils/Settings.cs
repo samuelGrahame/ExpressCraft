@@ -46,6 +46,8 @@ namespace ExpressCraft
         public static DatePosition MonthPosition = DatePosition.Second;
         public static DatePosition YearPosition = DatePosition.Third;
 
+        public static bool DisableTextPopupEditor = false;
+
         public static char DateSeperator = '/';
         
         public enum DatePosition

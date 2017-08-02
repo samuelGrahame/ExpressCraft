@@ -169,11 +169,14 @@ namespace ExpressCraft
 				GridHeaderContainer.SetBounds("0", "0", "100%", "29px");				
 				GridBodyContainer.SetBounds("0px", "31px", "100%", "(100% - 31px)");
 				GridHeader.Style.Visibility = Visibility.Inherit;
-			}
+                GridHeaderContainer.Style.Visibility = Visibility.Inherit;
+            }
 			else
 			{
 				GridHeader.Style.Visibility = Visibility.Hidden;
-				GridBodyContainer.SetBounds("0px", "1px", "100%", "(100% - 1px)");
+                GridHeaderContainer.Style.Visibility = Visibility.Hidden;
+
+                GridBodyContainer.SetBounds("0px", "1px", "100%", "(100% - 1px)");
 			}
 		}
 

@@ -30,6 +30,11 @@ namespace ExpressCraft
 
         public Action<string, GridView> OnSearch;
 
+        public virtual bool ClearOnOpen()
+        {
+            return false;
+        }
+
         public virtual void OnRequestSearch(string searchValue, GridView grid)
         {
             if(OnSearch != null)

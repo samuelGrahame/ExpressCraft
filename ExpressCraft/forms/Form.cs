@@ -1848,9 +1848,9 @@ namespace ExpressCraft
         public override void Render()
         {
             if(!HasRendered)
-            {
-                OnShowing();
+            {                
                 base.Render();
+                OnShowing();
                 Shown();
             }
         }
@@ -1907,29 +1907,40 @@ namespace ExpressCraft
 					{
 						var obj = visbileForms[visbileForms.Count - 1];
 
-						int x = Global.ParseInt(obj.Left.ToHtmlValue());
-						int y = Global.ParseInt(obj.Top.ToHtmlValue());
+                        object x = Global.ParseInt(obj.Left.ToHtmlValue());
+						object y = Global.ParseInt(obj.Top.ToHtmlValue());
 
-						double pw25 = WindowHolder.ClientWidth * 0.15;
-						double ph25 = WindowHolder.ClientHeight * 0.15;
+                        if(Global.IsNaN(x))
+                        {
+                            x = 0;
+                        }
+                        if(Global.IsNaN(y))
+                        {
+                            y = 0;
+                        }
 
-						double pw75 = WindowHolder.ClientWidth * 0.55;
-						double ph75 = WindowHolder.ClientHeight * 0.55;						
+                        var rec = WindowHolder.GetBoundingClientRect();
 
-						if(x < pw25)						
+						double pw25 = rec.Width * 0.15;
+						double ph25 = rec.Height * 0.15;
+
+						double pw75 = rec.Width * 0.55;
+						double ph75 = rec.Height * 0.55;						
+
+						if((int)x < pw25)						
 							x = (int)pw25;						
-						if(y < ph25)						
+						if((int)y < ph25)						
 							y = (int)ph25;						
 
-						if(x > pw75)
+						if((int)x > pw75)
 							x = (int)pw25;
-						if(y > ph75)
+						if((int)y > ph75)
 							y = (int)ph25;
-						x += 10;
-						y += 10;
+						x = (int)x + 10;
+						y = (int)y + 10;
 
-						Self.Css("left", MinZero(x))
-							.Css("top", MinZero(y));
+						Self.Css("left", MinZero((int)x))
+							.Css("top", MinZero((int)y));
 					}
 				}				
 

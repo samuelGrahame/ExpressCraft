@@ -19,6 +19,9 @@ namespace ExpressCraft
         public Action<TextInput> OnGotFocus = null;
         public Action<TextInput> OnLostFocus = null;
 
+        public bool IsSubmit { get; set; }
+        public bool GoNext { get; set; }
+
         public bool OnFocusDontSelectAll { get; set; }
 
         private string _displayFormat = "";
@@ -44,7 +47,8 @@ namespace ExpressCraft
         
         public Control Controller = null;
         
-        public readonly InputType Type;
+        public InputType Type;
+        public bool DisableFocusPopup;
         private bool IsOverride = false;
 
         public virtual string GetValue()
@@ -97,6 +101,36 @@ namespace ExpressCraft
             {
                 return Text;
             }
+        }
+
+        public void ScrollIntoView()
+        {
+            Global.SetTimeout(() => {
+                this.Content.ScrollIntoView(true);
+                Global.SetTimeout(() =>
+                {
+                    if(this.Content.ParentElement == null || this.Content.ParentElement.ParentElement == null)
+                        return;
+                    int toTake;
+                    if(Helper.NotDesktop)
+                    {
+                        toTake = 22;
+
+                    }
+                    else
+                    {
+                        toTake = 10;
+                    }
+                    if(this.Content.ParentElement.ParentElement.ScrollTop - toTake < 0)
+                    {
+                        this.Content.ParentElement.ParentElement.ScrollTop = 0;
+                    }
+                    else
+                    {
+                        this.Content.ParentElement.ParentElement.ScrollTop -= toTake;
+                    }
+                }, 0);                
+            }, 0);            
         }
 
         public string GetDisplayValue()
@@ -195,8 +229,7 @@ namespace ExpressCraft
                 PreZIndex = Content.Style.ZIndex;
                 Content.Style.ZIndex = "10000";
 
-                OnFocus();
-
+                OnFocus();                
                 var input = GetInput();
                 if(input != null)
                 {
@@ -212,24 +245,6 @@ namespace ExpressCraft
                             {
                                 Text = "0.00";
                             }
-                        }else if(Type == InputType.Date)
-                        {
-                            //try
-                            //{
-                            //    var date = GetDateTime();
-                            //    if(date != DateTime.MinValue)
-                            //    {
-                            //        Text = string.Format  date.ToString(DisplayFormat);
-                            //    }
-                            //    else
-                            //    {
-                            //        Text = "";
-                            //    }                                
-                            //}
-                            //catch(Exception)
-                            //{
-                            //    Text = "";
-                            //}
                         }
 
                         if(!Helper.IsFireFox() && !Readonly && Type != InputType.Date)
@@ -244,6 +259,12 @@ namespace ExpressCraft
                 
                 if(OnGotFocus != null)
                     OnGotFocus(this);
+
+                if(!DisableFocusPopup && !Readonly && Enabled && Helper.NotDesktop && !(this is TextInputDropDown) && Controller == null)
+                {
+                    if(!Settings.DisableTextPopupEditor)
+                    new TextForm(this).ShowPopup(new Vector2(0, 0));
+                }
             };
             this.Content.OnChange = (ev) => {
                 CheckTextChanged();
@@ -423,6 +444,16 @@ namespace ExpressCraft
         public DateTime GetDateTime()
         {
             return Text.StripNonDateString();
+        }
+
+        public bool IsNumericType()
+        {
+            return Type == InputType.Number;
+        }
+
+        public bool IsDateType()
+        {
+            return Type == InputType.Date;
         }
 
         private bool enabled = true;

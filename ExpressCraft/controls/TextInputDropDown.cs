@@ -46,7 +46,9 @@ namespace ExpressCraft
                 dropDownWidth = 45;
             }
 
-            UsedEdit = new TextInput(inputType) { Location = new Vector2(0, 0), Size = new Vector2("(100% - " + (dropDownWidth - 1) + "px)", "100%") };
+            Type = inputType;
+
+            UsedEdit = new TextInput(inputType) { DisableFocusPopup = true, Location = new Vector2(0, 0), Size = new Vector2("(100% - " + (dropDownWidth - 1) + "px)", "100%") };
             DropDownButton = new SimpleButton() { Location = new Vector2("(100% - " + dropDownWidth + "px)", 0), Size = new Vector2(dropDownWidth, "100%")};
             DropDownButton.Content.OnMouseDown = (ev) =>
             {

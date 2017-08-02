@@ -25,6 +25,9 @@ namespace ExpressCraft
             base.OnShowed();
 
             SearchEdit.Focus();
+
+            if(SearchInput.SearchOnLoad())
+                btnSearch.Content.Click();
         }
 
         public SearchLookupForm(SearchInput searchInput) : base()
@@ -47,8 +50,8 @@ namespace ExpressCraft
             var frag = Document.CreateDocumentFragment();
 
             frag.AppendChildren(
-                SearchEdit = new TextInput() { Text = SearchInput.Text, OnFocusDontSelectAll = true,
-                    Bounds = new Vector4(4, 4, "(100% - 68px)", 20), ToolTip = new ToolTip("Help:", "[Enter] to Search, [CTRL] + [Enter] to Search and Use, [ESC] to close")
+                SearchEdit = new TextInput() { Text = searchInput.ClearOnOpen() ? "" :  SearchInput.Text, OnFocusDontSelectAll = true,
+                    DisableFocusPopup = true, Bounds = new Vector4(4, 4, "(100% - 68px)", 20), ToolTip = new ToolTip("Help:", "[Enter] to Search, [CTRL] + [Enter] to Search and Use, [ESC] to close")
                 },
                 btnSearch = new SimpleButton() { Text = "Search",
                     Bounds = new Vector4("(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
@@ -181,11 +184,7 @@ namespace ExpressCraft
                 SearchEdit.GetInput().SelectionStart = SearchEdit.Text.Length;
             };
 
-            LinkchildToForm(View);
-
-            if(SearchInput.SearchOnLoad())
-                btnSearch.Content.Click();
-
+            LinkchildToForm(View);            
         }
 
         protected override void OnClosed()
@@ -193,8 +192,11 @@ namespace ExpressCraft
             base.OnClosed();
 
             SearchInput.OnClosed(FocusedRow);
-
-            SearchInput.GetInput().Focus();
+            if(!Helper.NotDesktop)
+                SearchInput.GetInput().Focus();else
+            {
+                SearchInput.ScrollIntoView();
+            }
         }
     }
 }
