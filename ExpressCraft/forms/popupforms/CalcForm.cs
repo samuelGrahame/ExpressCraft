@@ -13,8 +13,15 @@ namespace ExpressCraft
 
         public CalculatorControl CalControl;
         public bool ClickedClose = false;
+        
         public CalcForm(TextInput inputControl)
         {
+            if(inputControl.Content.ParentElement != null && inputControl.Content.ParentElement.ParentElement != null && inputControl.Content.ParentElement.ParentElement.ParentElement != null)
+            {
+                PreviousScrollTop = inputControl.Content.ParentElement.ParentElement.ParentElement.ScrollTop;
+                ParentContainer = inputControl.Content.ParentElement.ParentElement.ParentElement;
+            }
+
             InputControl = inputControl;
             CalControl = new CalculatorControl(InputControl.GetNumberValue(), true);
             CalControl.SetBoundsFull();
@@ -41,7 +48,7 @@ namespace ExpressCraft
                 InputControl.Focus();
             else
             {
-                InputControl.ScrollIntoView();
+                InputControl.Scroll(PreviousScrollTop, ParentContainer);
             }
         }
 

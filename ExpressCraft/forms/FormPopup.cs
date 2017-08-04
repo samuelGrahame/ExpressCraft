@@ -9,6 +9,8 @@ namespace ExpressCraft
 {
     public class FormPopup : Form
     {
+        public int PreviousScrollTop;
+        public HTMLElement ParentContainer;
         public static Vector2 GetPopupDefaultLocation(Control control, bool isControlChild = false)
         {
             if(Helper.NotDesktop)

@@ -121,7 +121,7 @@ namespace ExpressCraft
 			RenderGrid();
 		}
 		
-		public const float UnitHeight = 28.0f;
+		public float UnitHeight = 28.0f;
 		private bool _columnAutoWidth = false;
 
         private int _focusedcolumn = -1;
@@ -166,8 +166,8 @@ namespace ExpressCraft
 		{
 			if(_columnHeadersVisible)
 			{
-				GridHeaderContainer.SetBounds("0", "0", "100%", "29px");				
-				GridBodyContainer.SetBounds("0px", "31px", "100%", "(100% - 31px)");
+				GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);				
+				GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");
 				GridHeader.Style.Visibility = Visibility.Inherit;
                 GridHeaderContainer.Style.Visibility = Visibility.Inherit;
             }
@@ -176,7 +176,7 @@ namespace ExpressCraft
 				GridHeader.Style.Visibility = Visibility.Hidden;
                 GridHeaderContainer.Style.Visibility = Visibility.Hidden;
 
-                GridBodyContainer.SetBounds("0px", "1px", "100%", "(100% - 1px)");
+                GridBodyContainer.SetBounds(0, 1, "100%", "(100% - 1px)");
 			}
 		}
 
@@ -631,10 +631,25 @@ namespace ExpressCraft
             }
             return length1;
         }
-
-		public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
-		{
-			this.Content.Style.Overflow = Overflow.Hidden;
+        string headingClass;
+        string cellClass;
+        public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
+		{            
+            if(Helper.NotDesktop)
+            {
+                UnitHeight = 53;
+                headingClass = "heading heading-responsive";
+                
+                cellClass = "cell cell-responsive";
+            }
+            else
+            {
+                UnitHeight = 28;
+                headingClass = "heading";
+                cellClass = "cell";
+            }
+                       
+            this.Content.Style.Overflow = Overflow.Hidden;
 
 			renderGridInternal = () =>
 			{
@@ -703,7 +718,8 @@ namespace ExpressCraft
                 var colFragment = Document.CreateDocumentFragment();
 
 				int uboundRowCount = RawLeftCellCount - 1;
-				if(_columnHeadersVisible)
+                
+                if(_columnHeadersVisible)
 				{
 					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
 					{						
@@ -718,7 +734,7 @@ namespace ExpressCraft
 
 						var col = Label(gcol.Caption,
 							(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
-							apparence.IsBold, false, "heading", apparence.Alignment, apparence.Forecolor);
+							apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
 						if(gcol.SortedMode != GridViewSortMode.None)
 						{                            
                             var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");                        
@@ -835,7 +851,7 @@ namespace ExpressCraft
 						if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
 						{
 							cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
-							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, "cell", apparence.Alignment, apparence.Forecolor);
+							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
 
 							dr.AppendChild(useDefault ?
 								col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :

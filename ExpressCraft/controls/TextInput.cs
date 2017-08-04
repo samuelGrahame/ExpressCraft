@@ -103,34 +103,17 @@ namespace ExpressCraft
             }
         }
 
-        public void ScrollIntoView()
+        public void Scroll(int value, HTMLElement parent)
         {
-            Global.SetTimeout(() => {
-                this.Content.ScrollIntoView(true);
-                Global.SetTimeout(() =>
-                {
-                    if(this.Content.ParentElement == null || this.Content.ParentElement.ParentElement == null)
-                        return;
-                    int toTake;
-                    if(Helper.NotDesktop)
-                    {
-                        toTake = 22;
-
-                    }
-                    else
-                    {
-                        toTake = 10;
-                    }
-                    if(this.Content.ParentElement.ParentElement.ScrollTop - toTake < 0)
-                    {
-                        this.Content.ParentElement.ParentElement.ScrollTop = 0;
-                    }
-                    else
-                    {
-                        this.Content.ParentElement.ParentElement.ScrollTop -= toTake;
-                    }
-                }, 0);                
-            }, 0);            
+            if(parent == null)
+                return;
+            parent.ScrollTop = value;
+            //Global.SetTimeout(() =>
+            //{
+            //    if(this.Content.ParentElement == null || this.Content.ParentElement.ParentElement == null)
+            //        return;
+            //    this.Content.ParentElement.ParentElement.ScrollTop = value;
+            //}, 0);             
         }
 
         public string GetDisplayValue()
@@ -445,7 +428,7 @@ namespace ExpressCraft
         {
             return Text.StripNonDateString();
         }
-
+        
         public bool IsNumericType()
         {
             return Type == InputType.Number;

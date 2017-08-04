@@ -16,6 +16,12 @@ namespace ExpressCraft
 
         public DateForm(TextInput inputControl)
         {
+            if(inputControl.Content.ParentElement != null && inputControl.Content.ParentElement.ParentElement != null && inputControl.Content.ParentElement.ParentElement.ParentElement != null)
+            {
+                PreviousScrollTop = inputControl.Content.ParentElement.ParentElement.ParentElement.ScrollTop;
+                ParentContainer = inputControl.Content.ParentElement.ParentElement.ParentElement;
+            }
+
             Size = new Vector2(232, 247);
 
             InputControl = inputControl;
@@ -50,7 +56,7 @@ namespace ExpressCraft
                 InputControl.Focus();
             else
             {
-                InputControl.ScrollIntoView();
+                InputControl.Scroll(PreviousScrollTop, ParentContainer);
             }
         }
         

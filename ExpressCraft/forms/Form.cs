@@ -881,6 +881,11 @@ namespace ExpressCraft
 					Script.Write("return 'Would you like to close this application?'");
 				}
             };
+            Window.OnUnload = (ev) =>
+            {
+                if(Settings.OnApplicationClose != null)
+                    Settings.OnApplicationClose();
+            };
             Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) => {				
                 if(InErrorDialog)
                 {

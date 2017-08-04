@@ -50,6 +50,7 @@
     <Compile Include="controls\MemoInput.cs" />
     <Compile Include="controls\NumberInput.cs" />
     <Compile Include="controls\SearchInput.cs" />
+    <Compile Include="controls\SplitHideControlContainer.cs" />
     <Compile Include="controls\TextInputDropDown.cs" />
     <Compile Include="controls\TileControl.cs" />
     <Compile Include="controls\ToolTipControl.cs" />

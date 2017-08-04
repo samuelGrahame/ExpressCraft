@@ -32,6 +32,11 @@ namespace ExpressCraft
 
         public SearchLookupForm(SearchInput searchInput) : base()
         {
+            if(searchInput.Content.ParentElement != null && searchInput.Content.ParentElement.ParentElement != null)
+            {
+                PreviousScrollTop = searchInput.Content.ParentElement.ParentElement.ScrollTop;
+                ParentContainer = searchInput.Content.ParentElement.ParentElement;
+            }
             var x = searchInput.Content.GetBoundingClientRect();
 
             MinHeight = 100;
@@ -195,7 +200,7 @@ namespace ExpressCraft
             if(!Helper.NotDesktop)
                 SearchInput.GetInput().Focus();else
             {
-                SearchInput.ScrollIntoView();
+                SearchInput.Scroll(PreviousScrollTop, ParentContainer);
             }
         }
     }

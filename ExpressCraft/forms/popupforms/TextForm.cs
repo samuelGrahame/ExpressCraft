@@ -33,7 +33,13 @@ namespace ExpressCraft
         }
 
         public TextForm(TextInput input) : base()
-        {            
+        {
+            if(input.Content.ParentElement != null && input.Content.ParentElement.ParentElement != null)
+            {
+                PreviousScrollTop = input.Content.ParentElement.ParentElement.ScrollTop;
+                ParentContainer = input.Content.ParentElement.ParentElement;
+            }
+
             WindowState = WindowStateType.Maximized;
 
             ReadInput = input;
@@ -123,7 +129,7 @@ namespace ExpressCraft
 
         protected override void OnClosed()
         {
-            ReadInput.ScrollIntoView();
+            ReadInput.Scroll(PreviousScrollTop, ParentContainer);
             base.OnClosed();
         }
     }

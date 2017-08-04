@@ -69,6 +69,8 @@ namespace ExpressCraft
 
 		public static bool AllowCloseWithoutQuestion = false;
 
+        public static Action OnApplicationClose = null;
+
 		public static bool ShowExceptionDialog = true;
 
 		public static int FormFadeDuration = 100;

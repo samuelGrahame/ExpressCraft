@@ -445,6 +445,11 @@
     text-overflow:ellipsis;
     white-space: nowrap;
 }
+.cell-responsive {
+    line-height:53px;
+    height: 53px !important;
+    font-size: 14px;
+}
 .cellrow{
 	transition: background-color 0.25s ease;
 }
@@ -481,6 +486,11 @@
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;  
+}
+.heading-responsive {
+    line-height:53px;
+    height: 53px !important;
+    font-size: 14px;
 }
 .heading:hover{
 
