@@ -157,7 +157,7 @@ namespace ExpressCraft
                     tabHeaders.Height = 47;
                     tabHeaderContainer = new Control() { Location = new Vector2(0, 0) };
                     tabHeaderContainer.Width = "100%";
-                    tabHeaderContainer.Height = 49;
+                    tabHeaderContainer.Height = 50;
                     tabHeaderContainer.AppendChild(tabHeaders);
                     tabHeaderContainer.Style.BackgroundColor = "transparent";
                     tabHeaderContainer.Style.OverflowX = Overflow.Auto;

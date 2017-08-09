@@ -55,7 +55,7 @@ namespace ExpressCraft
             var div = new Control();
             div.Width = "100%";
             div.SetLocation(0, 0);
-            div.Style.ZIndex = "2";
+            div.Style.ZIndex = "10";
 
             var div2 = new Control("primary");            
             div2.Width = "100%";
@@ -64,7 +64,7 @@ namespace ExpressCraft
             div2.Style.Filter = "brightness(50%)";
 
             div2.Style.Opacity = "0.9";
-            div2.Style.ZIndex = "1";
+            div2.Style.ZIndex = "9";
 
             foreach(var page in RibbonPages)
             {

@@ -479,7 +479,19 @@ namespace ExpressCraft
 			return GetRowCellValue(Datahandle, Columns[columnIndex]);
 		}
 
-		public DataColumn GetColumnByFieldName(string fieldName, bool IgnoreCase = false)
+        public GridViewColumn GetGridViewColumnByFieldName(string fieldName, bool IgnoreCase = false)
+        {            
+            for(int i = 0; i < ColumnCount(); i++)
+            {
+                if(Columns[i] != null && Columns[i].Column  != null &&
+                    string.Compare(Columns[i].Column.FieldName, fieldName, IgnoreCase) == 0)
+                    return Columns[i];
+            }
+
+            return null;
+        }
+
+        public DataColumn GetColumnByFieldName(string fieldName, bool IgnoreCase = false)
 		{
 			if(DataSource == null)
 				return null;
@@ -680,10 +692,12 @@ namespace ExpressCraft
 				#region "Columns"
 				float ViewWidth = GridBodyContainer.ScrollLeft + ClientWidth;
 				float _columnAutoWidthSingle = 0.0f;
-				if(_columnAutoWidth)
+                
+                if(_columnAutoWidth)
 				{
 					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / GetVisibleCount();
 				}
+                
                 float MaxWidth;
                 float LastWidth;
 

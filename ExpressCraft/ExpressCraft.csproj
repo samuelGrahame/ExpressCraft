@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="components\LayoutContainer.cs" />
     <Compile Include="controls\AceCodeEditor.cs" />
     <Compile Include="controls\CalculatorControl.cs" />
     <Compile Include="controls\CheckEdit.cs" />
