@@ -16,6 +16,7 @@ namespace ExpressCraft
 	{
         public static HTMLDivElement WindowHolder;
         public static List<Form> MinimizedForms = new List<Form>();
+        public static HTMLDivElement WindowLoader;
         
         private static ToolTip _activeToolTip;
 		private static int _toolTipTimerHandle = -1;
@@ -606,8 +607,25 @@ namespace ExpressCraft
                                 
             }
         }
+        private static int LoadingCount = 0;
+        public static void BeginLoading()
+        {
+            LoadingCount++;
+            WindowLoader.Style.Visibility = Visibility.Visible;
+            WindowLoader.Style.Opacity = "0.4";            
+        }
 
-		public static void Setup(HTMLElement parent = null)
+        public static void EndLoading()
+        {
+            LoadingCount--;
+            if(LoadingCount == 0)
+            {
+                WindowLoader.Style.Visibility = Visibility.Hidden;
+                WindowLoader.Style.Opacity = "0";                
+            }
+        }
+
+        public static void Setup(HTMLElement parent = null)
 		{
 			//Settings.Setup();
 			if(_hasSetup)
@@ -623,8 +641,30 @@ namespace ExpressCraft
 			
 			WindowHolder = Div("form-container");
 
-            FormOverLay = Div("system-form-collection-overlay");			
-			FormOverLay.OnMouseDown = (ev) =>
+            FormOverLay = Div("system-form-collection-overlay");
+            
+            WindowLoader = new HTMLDivElement();
+            WindowLoader.ClassName = "ajax-loading-screen";
+            WindowLoader.Style.Visibility = Visibility.Hidden;
+            WindowLoader.Style.Opacity = "0";
+            WindowLoader.Style.BackgroundColor = "white";
+            WindowLoader.SetBoundsFull();
+            WindowLoader.Style.Position = Position.Fixed;
+            WindowLoader.Style.ZIndex = "100000";
+            WindowLoader.OnContextMenu = (ev) =>
+            {
+                ev.PreventDefault();
+            };
+            WindowLoader.OnMouseDown = (ev) =>
+            {
+                ev.PreventDefault();
+                ev.StopPropagation();
+            };
+            WindowLoader.Style.Transition = "opacity 1s ease";
+                        
+            Document.Body.AppendChild(WindowLoader);
+
+            FormOverLay.OnMouseDown = (ev) =>
 			{
                 if(ActiveForm is FormPopup)
                 {

@@ -13,13 +13,22 @@ namespace ExpressCraft
         public List<RibbonPage> RibbonPages { get; set; } = new List<RibbonPage>();
         private TileViewState _viewState = TileViewState.Hidden;
         private Union<string, Overflow> prevOverFlow = null;
+        private int ClearTimeOut = -1;
         public TileViewState ViewState { get { return _viewState; } set {
+                if(ClearTimeOut != -1)
+                {
+                    Global.ClearTimeout(ClearTimeOut);
+                    ClearTimeOut = -1;
+                }
                 if(value != _viewState)
                 {
                     _viewState = value;
                     if(_viewState == TileViewState.Hidden)
                     {
-                        Content.Style.Visibility = Visibility.Hidden;
+                        ClearTimeOut = Global.SetTimeout(() => {
+                            Content.Style.Visibility = Visibility.Hidden;
+                        }, 1000);                        
+                        Location = new Vector2("(100% * -1)", 0);
 
                         if(Content.ParentElement != null && prevOverFlow != null)
                         {
@@ -28,19 +37,14 @@ namespace ExpressCraft
                     }
                     else
                     {
-                        Content.Style.Visibility = Visibility.Inherit;
-                        if(Document.ActiveElement != null)
-                        {
-                            Document.ActiveElement.Blur();
-                        }
+                        Location = new Vector2(0, 0);
+                        Content.Style.Visibility = Visibility.Inherit;                        
                         RenderTiles();
                         if(Content.ParentElement != null)
                         {
                             prevOverFlow = Content.ParentElement.Style.Overflow;
                             Content.ParentElement.Style.Overflow = Overflow.Hidden;
                         }
-
-                        Focus();
                     }                    
                 }
             }
@@ -162,8 +166,16 @@ namespace ExpressCraft
 
             Content.Empty();
             div.Content.AppendChild(doc);
+
+            div2.Content.OnMouseDown = (ev) =>
+            {
+                ev.StopPropagation();
+            };
+            
             Content.AppendChild(div2);
             Content.AppendChild(div);
+
+            div.Content.Click();
         }
 
         public override void Render()
@@ -175,11 +187,13 @@ namespace ExpressCraft
         public TileControl() : base()
         {
             Style.OverflowY = Overflow.Auto;
-            Location = new Vector2(0, 0);
+            Location = new Vector2("(100% * -1)", 0);
             Size = new Vector2("100%", "100%");
 
+            
             Content.Style.BackgroundColor = "transparent";
             Content.Style.Visibility = Visibility.Hidden;
+            Content.Style.Transition = "left 1s ease";
         }
 
         public void AddRibbonPages(params RibbonPage[] pages)

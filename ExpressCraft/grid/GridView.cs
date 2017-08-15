@@ -1098,12 +1098,22 @@ namespace ExpressCraft
             });
 
 			Content.OnContextMenu = (ev) => {
-				if(ContextMenu != null)
-				{
-					ContextMenu.Show(Helper.GetClientMouseLocation(ev));
-					ev.PreventDefault();
-					ev.StopPropagation();
-				}
+                if(Helper.NotDesktop)
+                {
+                    ev.PreventDefault();
+                    ev.StopPropagation();
+
+                    OnDoubleClick(ev.As<MouseEvent<HTMLDivElement>>());
+                }else
+                {
+                    if(ContextMenu != null)
+                    {
+                        ContextMenu.Show(Helper.GetClientMouseLocation(ev));
+                        ev.PreventDefault();
+                        ev.StopPropagation();
+                    }
+                }
+				
 			};
 
 			OnColumnOnClick = (ev) => {
