@@ -1,18 +1,14 @@
 ﻿using Bridge.Html5;
 using Bridge.jQuery2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
     public class TextForm : FormPopup
     {
-        TextInput ReadInput;
-        TextInput EditInput;
-        SimpleButton btnDone;
+        private TextInput ReadInput;
+        private TextInput EditInput;
+        private SimpleButton btnDone;
 
         protected override void OnShowed()
         {
@@ -51,14 +47,15 @@ namespace ExpressCraft
             else
             {
                 EditInput = new TextInput(input.Type) { DisplayFormat = ReadInput.DisplayFormat };
-                EditInput.OnKeyDown = (s, ev) => {
+                EditInput.OnKeyDown = (s, ev) =>
+                {
                     if(ev.KeyCode == 13)
                     {
                         btnDone.Content.Click();
                     }
                 };
             }
-            
+
             EditInput.Text = input.Text;
             EditInput.Style.FontSize = "14px";
 
@@ -66,9 +63,12 @@ namespace ExpressCraft
             EditInput.Size = new Vector2("(100% - 112px)", "100%");
             EditInput.Location = new Vector2(0, 0);
 
-            btnDone = new SimpleButton() {
-                Text = "&times;", Bounds = new Vector4("(100% - 106px)", "(50% - 22.5px)", 100, 45),
-                ItemClick = (sender) => {                    
+            btnDone = new SimpleButton()
+            {
+                Text = "&times;",
+                Bounds = new Vector4("(100% - 106px)", "(50% - 22.5px)", 100, 45),
+                ItemClick = (sender) =>
+                {
                     this.Close();
                     if(EditInput.GetEditValue() != ReadInput.GetEditValue())
                     {
@@ -95,7 +95,6 @@ namespace ExpressCraft
                             }
                         }
                     }
-                    
                 }
             };
 
@@ -113,23 +112,24 @@ namespace ExpressCraft
                 if(EditInput.GetEditValue() == ReadInput.GetEditValue())
                 {
                     btnDone.Text = "&times;";
-                    btnDone.Style.FontSize = "26px";                    
+                    btnDone.Style.FontSize = "26px";
                     btnDone.Style.FontWeight = "bold";
                 }
                 else
                 {
                     btnDone.Text = ReadInput.IsSubmit ? "Submit" : ReadInput.GoNext ? "Next" : "Done";
-                    btnDone.Style.FontSize = "14px";                    
+                    btnDone.Style.FontSize = "14px";
                     btnDone.Style.FontWeight = "";
                 }
             };
 
-            AppendChildren(EditInput, btnDone);                        
+            AppendChildren(EditInput, btnDone);
         }
 
         protected override void OnClosed()
         {
             ReadInput.Scroll(PreviousScrollTop, ParentContainer);
+            ReadInput.ValidateData();
             base.OnClosed();
         }
     }

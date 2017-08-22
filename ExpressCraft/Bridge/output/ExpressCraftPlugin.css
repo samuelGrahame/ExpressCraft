@@ -3,7 +3,7 @@
     to {background-color: darkslategrey;}
 }
 .form-heading{
-    background-color:darkslategrey;      
+    background-color:darkslategrey;
 }
 .form-heading-button:hover:not(.form-heading-button-close){
     background-color:slategray;

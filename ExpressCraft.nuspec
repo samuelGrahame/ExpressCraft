@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.3.6</version>
+    <version>0.0.4.1</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -15,18 +15,17 @@ Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-bac
     <copyright>Copyright 2017</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>
-		<dependency id="Bridge" version="[15.7.0]"/>
-		<dependency id="Bridge.Core" version="[15.7.0]"/>
-		<dependency id="Bridge.Html5" version="[15.7.0]"/>
-		<dependency id="Bridge.jQuery" version="[2.9.2]"/>
-		<dependency id="Bridge.Min" version="[15.7.0]"/>
+		<dependency id="Bridge" version="[16.0.1]"/>
+		<dependency id="Bridge.Core" version="[16.0.1]"/>
+		<dependency id="Bridge.Html5" version="[16.0.1]"/>
+		<dependency id="Bridge.jQuery" version="[2.9.4]"/>
+		<dependency id="Bridge.Min" version="[16.0.1]"/>
+		<dependency id="Bridge.Newtonsoft.Json" version="[1.0.0]"/>
 	  </dependencies>
   </metadata>
   <files>
 	<file src="ExpressCraft\bin\Release\ExpressCraft.dll" target="lib\ExpressCraft.dll" />
-	<file src="ExpressCraft\Bridge\output\ExpressCraft.css" target="content\Bridge\output" />
-	<file src="ExpressCraft\Bridge\output\jquery-1.12.0.min.js" target="content\Bridge\output" />
-	<file src="ExpressCraft\Bridge\www\Template.html" target="content\Bridge\www" />
+	<file src="ExpressCraft\Bridge\ExpressCraft.css" target="content\Bridge" />	
   </files>
  
 </package>

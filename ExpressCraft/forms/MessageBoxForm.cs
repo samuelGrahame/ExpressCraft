@@ -1,34 +1,31 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bridge.Html5;
 
 namespace ExpressCraft
 {
     public class MessageBoxForm : DialogForm
-	{        		
-		private static HTMLAudioElement snd = null;
+    {
+        private static HTMLAudioElement snd = null;
         private string _prompt;
 
-		public static void Beep()
-		{
-			if(!Settings.MessageFormBeep)
-				return;
-			if(snd == null)
-				snd = new HTMLAudioElement(ResourceManager.GetResourceString("beepSound"));
-			snd.Play();													
-		}
+        public static void Beep()
+        {
+            if(!Settings.MessageFormBeep)
+                return;
+            if(snd == null)
+                snd = new HTMLAudioElement(ResourceManager.GetResourceString("beepSound"));
+            snd.Play();
+        }
 
         private readonly MessageBoxButtons _buttons;
-        
+
         /// <summary>
         /// Create a new Message Dialog
         /// </summary>
         /// <param name="prompt">The text to be displayed in the message box</param>
         /// <param name="ui">The UI settings to be applied to the form</param>
-        public MessageBoxForm(string prompt, MessageBoxLayout ui) : this(prompt, ui, MessageBoxButtons.Auto, ui.ToString()) {}
+        public MessageBoxForm(string prompt, MessageBoxLayout ui) : this(prompt, ui, MessageBoxButtons.Auto, ui.ToString()) { }
 
         /// <summary>
         /// Create a new Message Dialog
@@ -36,7 +33,7 @@ namespace ExpressCraft
         /// <param name="prompt">The text to be displayed in the message box</param>
         /// <param name="ui">The UI settings to be applied to the form</param>
         /// <param name="title">The title of the message box</param>
-        public MessageBoxForm(string prompt, MessageBoxLayout ui, string title) : this(prompt, ui, MessageBoxButtons.Auto, title) {}
+        public MessageBoxForm(string prompt, MessageBoxLayout ui, string title) : this(prompt, ui, MessageBoxButtons.Auto, title) { }
 
         /// <summary>
         /// Create a new Message Dialog
@@ -44,7 +41,7 @@ namespace ExpressCraft
         /// <param name="prompt">The text to be displayed in the message box</param>
         /// <param name="ui">The UI settings to be applied to the form</param>
         /// <param name="buttons">The Type of button to be displayed with this message</param>
-        public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons) : this(prompt, ui, buttons, ui.ToString()) {}
+        public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons) : this(prompt, ui, buttons, ui.ToString()) { }
 
         /// <summary>
         /// Create a new Message Dialog
@@ -53,65 +50,78 @@ namespace ExpressCraft
         /// <param name="ui">The UI settings  to be applied to the form</param>
         /// <param name="buttons">The Type of button to be displayed with this message</param>
         /// <param name="title">The title of the message box</param>
-        public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons, string title) : base(title) {            		
+        public MessageBoxForm(string prompt, MessageBoxLayout ui, MessageBoxButtons buttons, string title) : base(title)
+        {
             var section = Div();
-			var pic = Div("image32");
-			var textContent = Div("messag-box-content");
+            var pic = Div("image32");
+            var textContent = Div("messag-box-content");
             _prompt = prompt;
             _buttons = buttons;
-			
-			switch( ui ) {
+
+            switch(ui)
+            {
                 case MessageBoxLayout.Exclamation:
-                    if(_buttons == MessageBoxButtons.Auto ) {
+                    if(_buttons == MessageBoxButtons.Auto)
+                    {
                         _buttons = MessageBoxButtons.Ok;
                     }
-					pic.ClassList.Add("imagewarning");
+                    pic.ClassList.Add("imagewarning");
                     break;
+
                 case MessageBoxLayout.Information:
-                    if(_buttons == MessageBoxButtons.Auto ) {
+                    if(_buttons == MessageBoxButtons.Auto)
+                    {
                         _buttons = MessageBoxButtons.Ok;
                     }
-					pic.ClassList.Add("imageinfo");
-					break;
+                    pic.ClassList.Add("imageinfo");
+                    break;
+
                 case MessageBoxLayout.Question:
-                    if(_buttons == MessageBoxButtons.Auto ) {
+                    if(_buttons == MessageBoxButtons.Auto)
+                    {
                         _buttons = MessageBoxButtons.YesNo;
                     }
-					pic.ClassList.Add("imageindex");
-					break;
+                    pic.ClassList.Add("imageindex");
+                    break;
+
                 case MessageBoxLayout.Error:
-                    if(_buttons == MessageBoxButtons.Auto ) {
+                    if(_buttons == MessageBoxButtons.Auto)
+                    {
                         _buttons = MessageBoxButtons.AbortSendCancel;
                     }
-					pic.ClassList.Add("imageerror");
-					break;
+                    pic.ClassList.Add("imageerror");
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(ui), ui, null);
             }
             string heightCalc = Helper.NotDesktop ? "(100% - 60px)" : "(100% - 35px)";
-            switch (_buttons)
+            switch(_buttons)
             {
                 case MessageBoxButtons.Ok:
                     _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.OK) { Text = "Ok", Location = new Vector2("(50% - 37.5px)", heightCalc)}
-                    };                    
+                    };
                     break;
+
                 case MessageBoxButtons.YesNo:
                     _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 85px)", heightCalc)},
                         new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 170px)", heightCalc)}
-                    };                    
+                    };
                     break;
+
                 case MessageBoxButtons.YesNoCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", heightCalc) },
                         new SimpleDialogButton(this, DialogResultEnum.No) { Text = "No", Location = new Vector2("(100% - 170px)", heightCalc) },
                         new SimpleDialogButton(this, DialogResultEnum.Yes) { Text = "Yes", Location = new Vector2("(100% - 255px)", heightCalc) }
-                    };                    
+                    };
                     break;
+
                 case MessageBoxButtons.AbortSendCancel:
                     _buttonCollection = new List<SimpleDialogButton>() {
-                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", heightCalc)},                        
+                        new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", heightCalc)},
                         new SimpleDialogButton(this, DialogResultEnum.Send) { Text = "Send", Location = new Vector2("(100% - 170px)", heightCalc), ItemClick = (ev) => {
                             if(Settings.OnSendError != null)
                                 Settings.OnSendError(_prompt);
@@ -125,13 +135,14 @@ namespace ExpressCraft
                         }}
                     };
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             TextBlock tb = null;
-			
-			int width = 480;
-			
+
+            int width = 480;
+
             if(!Helper.NotDesktop)
             {
                 tb = new TextBlock(prompt, 480 - 25);
@@ -157,7 +168,7 @@ namespace ExpressCraft
                     but.Height = 45;
                     but.Style.BorderRadius = "4px";
                     but.Style.FontSize = "14px";
-                    if(but.DialogResult ==DialogResultEnum.OK || but.DialogResult == DialogResultEnum.Yes)
+                    if(but.DialogResult == DialogResultEnum.OK || but.DialogResult == DialogResultEnum.Yes)
                     {
                         but.ClassList.Add("primary");
                         but.Style.Color = "white";
@@ -166,18 +177,18 @@ namespace ExpressCraft
                 }
             }
 
-			textContent.InnerHTML =  prompt;
-            
-			section.Style.OverflowY = Overflow.Auto;		
+            textContent.InnerHTML = prompt;
+
+            section.Style.OverflowY = Overflow.Auto;
             section.Style.Height = "100%";
-			section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
+            section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
             section.AppendChild(textContent);
-			section.Style.Top = "32px";
-			section.Style.Width = "90%";
-            
-            base.Body.AppendChildren(pic, section);		
-			
-			ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
+            section.Style.Top = "32px";
+            section.Style.Width = "90%";
+
+            base.Body.AppendChildren(pic, section);
+
+            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
             if(Helper.NotDesktop)
             {
                 section.Style.TextAlign = TextAlign.Center;
@@ -210,14 +221,15 @@ namespace ExpressCraft
                 base.Height = tb.ComputedHeight + 77 + 29 + 32 + "px";
                 base.Width = width.ToPx();
             }
-			
-			base.AllowSizeChange = false;
-        }
-		
-        protected override void OnShowed() {
-			Beep();
 
-			base.OnShowed();
+            base.AllowSizeChange = false;
+        }
+
+        protected override void OnShowed()
+        {
+            Beep();
+
+            base.OnShowed();
             _buttonCollection[0].Content.Focus();
         }
     }
@@ -237,5 +249,5 @@ namespace ExpressCraft
         YesNo,
         YesNoCancel,
         AbortSendCancel
-    }    
+    }
 }

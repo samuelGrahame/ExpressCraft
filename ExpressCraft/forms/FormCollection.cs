@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ExpressCraft
 {
@@ -13,7 +9,7 @@ namespace ExpressCraft
 
         public FormCollection(Form formOwner)
         {
-            FormOwner = formOwner;			
-		}
+            FormOwner = formOwner;
+        }
     }
 }

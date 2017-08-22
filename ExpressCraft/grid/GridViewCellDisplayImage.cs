@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bridge.Html5;
+﻿using Bridge.Html5;
 
 namespace ExpressCraft
 {
-	public class GridViewCellDisplayImage : GridViewCellDisplay
-	{
-		public bool UseBase64Resource;
-		public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
-		{
-			var src = (gridView.GetRowCellValue(dataRowIndex, columnIndex) + "").HtmlUrlEscape();
-			var imgDiv = Control.Div("cell");
+    public class GridViewCellDisplayImage : GridViewCellDisplay
+    {
+        public bool UseBase64Resource;
 
-			imgDiv.SetImage(src, !UseBase64Resource);
+        public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
+        {
+            var src = (gridView.GetRowCellValue(dataRowIndex, columnIndex) + "").HtmlUrlEscape();
+            var imgDiv = Control.Div("cell");
 
-			return imgDiv;
-		}
-	}
+            imgDiv.SetImage(src, !UseBase64Resource);
+
+            return imgDiv;
+        }
+    }
 }

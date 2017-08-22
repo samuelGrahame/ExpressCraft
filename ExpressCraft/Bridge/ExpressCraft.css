@@ -4,7 +4,7 @@
 /*Default-Header-Hover=#2A8AD0*/
 /*Default-Form-Button-Hover=#2A8AD4*/
 /*Default-Form-Button-Active=#015C9F*/
-*{          
+*{
     font:8.25pt Tahoma;
     color:#404040;
 }
@@ -12,18 +12,18 @@
     outline: dashed 1px #0173C7;
 }*/
 .control{
-    position:absolute;  
+    position:absolute;
     -ms-user-select:none;
     -moz-user-select:none;
     -webkit-user-select:none;
-    user-select:none;    
+    user-select:none;
     cursor:default;
 }
-.selection{    
+.selection{
     -ms-user-select:text;
     -moz-user-select:text;
     -webkit-user-select:text;
-    user-select:text;        
+    user-select:text;
 }
 .control:focus:not(.grid){
     box-shadow:0px 0px 10px -2px rgba(0,0,0,0.25);
@@ -38,10 +38,8 @@
     cursor:default;
 }
 .control::selection{
-
 }
 .control::-moz-selection{
-
 }
 .control:disabled{
     cursor:not-allowed;
@@ -85,7 +83,7 @@
     top:8px;
     left:8px;
     width:32px;
-    height:32px;    
+    height:32px;
 	z-index: 10000;
 }
 
@@ -119,20 +117,18 @@
 }
 
 .ribbongroup{
-    height: 100%;                
+    height: 100%;
     left: 0;
 }
-.ribbonbutton{  
-	transition: background-color 0.25s ease;     
+.ribbonbutton{
+	transition: background-color 0.25s ease;
     height: 68px;
     top: 3px;
 }
 .ribbonbutton:hover:not(:active):not(.disabled)
 {
-
 }
 .ribbonbutton:active:not(.disabled){
-
 }
 .ribbonbuttoncaption{
     text-align: center;
@@ -147,20 +143,18 @@
     height: 32px;
     top: 3px;
 }
-.ribbonbuttonsmall{                      
-    height: 22px;    
+.ribbonbuttonsmall{
+    height: 22px;
 	transition: background-color 0.25s ease;
 }
 .ribbonbuttonsmall:hover:not(:active):not(.disabled)
 {
-
 }
 .ribbonbuttonsmall:active:not(.disabled){
-
 }
 .ribbonbuttonsmallcaption{
     text-align: left;
-    bottom: 0;    
+    bottom: 0;
     height: calc(100% - 6px);
     line-height:19px;
     top: 0;
@@ -172,8 +166,8 @@
     top: 3px;
 }
 .ribbonseperator{
-    width:1px;           
-    top:8px; 
+    width:1px;
+    top:8px;
     height:58px;
 }
 .ribbongroupcaption{
@@ -183,28 +177,25 @@
     width: 100%;
     top: 77px;
 }
-.ribbonpageheader {  
-	transition: background-color 0.25s ease;              
+.ribbonpageheader {
+	transition: background-color 0.25s ease;
     line-height:22px;
-    text-align: center;                        
+    text-align: center;
     top: 29px;
     height: 23px;
 }
-.ribbonpageheader-compact {                                       
-    top: 5px !important;    
+.ribbonpageheader-compact {
+    top: 5px !important;
 }
 .ribbonpageheader-hidden{
 	transition: background-color 0.25s ease;
 }
 .ribbonpageheader-hidden:hover{
-
 }
 .ribbonpageheader-active{
-
 }
 /****************TabControl****************/
 .tabcontrol{
-
 }
 .tabcontrolpage{
     border-left-width: thin;
@@ -214,7 +205,7 @@
     border-left-style: solid;
     border-right-style: solid;
     border-bottom-style: solid;
-    
+
     width: calc(100% - 2px);
     height: calc(100% - 26px);
     top: 25px;
@@ -224,11 +215,11 @@
 .tabcontrolpageheader {
 	transition: background-color 0.25s ease;
     line-height:22px;
-    text-align: center;                        
+    text-align: center;
     top: 0px;
     height: 21px;
 }
-.tabcontrolpageheader-hidden{   
+.tabcontrolpageheader-hidden{
 	transition: background-color 0.25s ease;
     border-top-width: thin;
     border-left-width: thin;
@@ -238,12 +229,11 @@
     border-top-style: solid;
     border-left-style: solid;
     border-right-style: solid;
-    border-bottom-style: solid;   
+    border-bottom-style: solid;
 }
 .tabcontrolpageheader-hidden:hover{
-
 }
-.tabcontrolpageheader-active{    
+.tabcontrolpageheader-active{
 	transition: background-color 0.25s ease;
     border-top-width: thin;
     border-left-width: thin;
@@ -261,15 +251,14 @@
     right:3px;
     top:4px;
     width:12px;
-    height:12px;        
-    line-height:12px;    
+    height:12px;
+    line-height:12px;
     border:1px solid transparent;
 }
-.tabcontrolpageheader-closebutton:after{    
-    content:'X';    
+.tabcontrolpageheader-closebutton:after{
+    content:'X';
 }
-.tabcontrolpageheader-closebutton:hover{    
-
+.tabcontrolpageheader-closebutton:hover{
 }
 /****************InputControl****************/
 .inputcontrol {
@@ -278,7 +267,7 @@
     padding:0;
     line-height:18px;
     text-indent:3px;
-    height:20px;    
+    height:20px;
     cursor:text;
     -ms-user-select:none;
     -moz-user-select:text;
@@ -298,14 +287,11 @@
     padding:0;
 }
 .simplebutton:hover:not(.disabled){
-
 }
 .simplebutton:active:not(.disabled){
-
 }
 /****************Form****************/
 @keyframes ColorFlash {
-
 }
 
 .form-manager-start{
@@ -316,10 +302,10 @@
     font-size:12pt;
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat;
 }
-.form-manager-start:hover{    
+.form-manager-start:hover{
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVFhH7dYxCoQwEIVhb5NasNBGZCstBUFkL7Dg9ttq6QG8gJ2FB/I2DkS2EOUlghjkfUwVCfODhXrKMQxCGIQwCGEQwiDkuUF+GEdp8arq7NOU7fDupu84y6yPjZ0JCpJMdsvi/NfLYjnRu3dHXzFnHbTZJ7N7+B99yxyDEAYh1kFX4ytDGIQwCLEOEm59XI/c+ftxKQYhDEIYhDAIYRDiWJBSC3edj/DGIv8/AAAAAElFTkSuQmCC') no-repeat;
 }
-.form-manager-start:active{    
+.form-manager-start:active{
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACnSURBVFhHY5AZZGDUQYTAqIMIgVEHEQKjDiIERh1ECAxfBynrGGvbehv6JFnGVrmUznWvXRE27zoQQaWJBuQ4SN3UHmg30GLHvIlAi4EiELuxIogW4gHJDkKzD4iwCsIRRBfxYNRBhMCogwgBkh1EazAaZYTAqIMIgVEHEQIkOwgIBlfligsMZPODpmDUQYTAqIMIgVEHEQKjDiIERh1ECAwyB8nIAADHEJbDMY47rQAAAABJRU5ErkJggg==') no-repeat;
 }
 
@@ -330,7 +316,7 @@
     top:0;
     font:11pt Segoe UI;
     text-indent:13px;
-    background-color:#3F3F3F; 
+    background-color:#3F3F3F;
     margin:0;
     padding:0;
     border:none;
@@ -352,20 +338,20 @@
     height: 40px;
     top: calc(100% - 40px);
     left:0;
-    background-color:#101010;    
+    background-color:#101010;
 }
 .form-container{
-    width:100%;   
-    height:100%;   
+    width:100%;
+    height:100%;
     top:0;
     left:0;
     overflow:auto;
     z-index:0;
 }
 .form-base{
-    box-shadow:0px 5px 25px -4px rgba(0,0,0,0.75);       
+    box-shadow:0px 5px 25px -4px rgba(0,0,0,0.75);
     border-width:1px;
-    border-style:solid;	
+    border-style:solid;
 }
 
 .form-heading-flash{
@@ -380,19 +366,19 @@
     height:30px;
     width:100%;
     vertical-align:top;
-    margin: 0;    
+    margin: 0;
 }
 
 .form-heading-min{
 	transition: background-color 0.25s ease;
 }
 
-.form-heading-title{     
+.form-heading-title{
     top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    font-size:10pt;        
+    font-size:10pt;
 }
 .form-heading-button{
 	transition: background-color 0.25s ease;
@@ -414,33 +400,29 @@
 }
 .form-body-overlay{
     top:30px;
-    height:calc(100% - 30px);   
+    height:calc(100% - 30px);
     width:100%;
     z-index:65553;
 }
 .form-heading-button:hover:not(.form-heading-button-close){
-
 }
 .form-heading-button:active:not(.form-heading-button-close){
-
 }
 .form-heading-button-close{
 	transition: background-color 0.25s ease;
     left:calc(100% - 45px);
 }
 .form-heading-button-close:hover{
-
 }
 .form-heading-button-close:active{
-
 }
 /****************GridView****************/
-.cell{      
+.cell{
     line-height:27px;
-    text-indent:4px;             
-    height: 27px !important;  
-    margin: 0 !important;  
-    
+    text-indent:4px;
+    height: 27px !important;
+    margin: 0 !important;
+
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
@@ -454,38 +436,34 @@
 	transition: background-color 0.25s ease;
 }
 .cellrow:hover{
-
 }
 .cellrow:active{
-
 }
 .even{
-
 }
 .cellrow-selected{
     transition: background-color 0.25s ease;
 }
 .cellrow-selected:hover{
- 
 }
 .focusedrow {
 	transition: background-color 0.25s ease;
-    outline: dotted 1px black !important;    
+    outline: dotted 1px black !important;
     outline-offset: -2px;
     outline-width: -2px;
 }
-.heading{    
+.heading{
 	transition: background-color 0.25s ease;
     line-height:29px;
     height: 29px !important;
-    border-top:none !important;  
-    border-left:none !important;  
+    border-top:none !important;
+    border-left:none !important;
     border-bottom:none !important;
-    text-indent:4px;           
-    
+    text-indent:4px;
+
     overflow:hidden;
     text-overflow:ellipsis;
-    white-space: nowrap;  
+    white-space: nowrap;
 }
 .heading-responsive {
     line-height:53px;
@@ -493,17 +471,14 @@
     font-size: 14px;
 }
 .heading:hover{
-
 }
 .heading:active{
-
 }
 .heading-container{
-
 }
 .grid{
     background-color:white;
-    border-top:none;  
+    border-top:none;
 }
 .grid:focus{
     outline: 0 !important;
@@ -521,7 +496,7 @@
 
 .progressbarbody{
     top:1px;
-    left:1px;    
+    left:1px;
     height:calc(100% - 2px);
     text-align:center;
     color:white;
@@ -529,7 +504,7 @@
 /****************ContextMenu****************/
 .contextmenu{
     background-color:white;
-    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);        
+    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);
 }
 
 .contextitem{
@@ -539,11 +514,10 @@
     text-indent:34px;
     overflow:hidden;
     text-overflow:ellipsis;
-    white-space: nowrap;    
+    white-space: nowrap;
 }
 
 .contextitem:hover{
-
 }
 
 .contextitemseperator{
@@ -552,7 +526,7 @@
     height:1px;
 }
 /****************DialogForm****************/
-.dialogbuttonsection{    
+.dialogbuttonsection{
     left:0;
     top:calc(100% - 48px);
     width:100%;
@@ -586,12 +560,11 @@
     word-wrap: break-word;
     left:65px;
     height:auto;
-    right:0;               
+    right:0;
 }
 /****************SplitControlContainer****************/
 .splitcontrol
 {
-    
 }
 .splitvertical {
     height:100%;
@@ -603,8 +576,8 @@
 
 .splittervertical {
 	transition: background-color 0.25s ease;
-    width:10px;    
-    height:100%;    
+    width:10px;
+    height:100%;
 }
 
 .splitterhorizontal {
@@ -613,18 +586,18 @@
     width:100%;
 }
 
-.splitterhorizontal:hover {    
+.splitterhorizontal:hover {
     cursor:ns-resize;
 }
-.splittervertical:hover {    
+.splittervertical:hover {
     cursor:ew-resize;
 }
 /****************Console****************/
 .console-body{
-    word-wrap: break-word;    
+    word-wrap: break-word;
     color:white !important;
     height:auto;
-    width:100%;   
+    width:100%;
 }
 .console-para{
     margin-top:4px;
@@ -634,7 +607,7 @@
     -ms-user-select:text;
     -moz-user-select:text;
     -webkit-user-select:text;
-    user-select:text;        
+    user-select:text;
 }
 
 .console-para::selection{
@@ -654,8 +627,8 @@
     font-weight:bold;
     margin:4px;
 }
-.tool-tip-body{    
-    margin:4px;    
+.tool-tip-body{
+    margin:4px;
 }
 .ajax-loading-screen{
     background: url('data:image/svg+xml;utf8,<svg class="lds-spinner" width="200px"  height="200px"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none;"><g transform="rotate(0 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.9166666666666666s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(30 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.8333333333333334s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(60 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.75s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(90 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.6666666666666666s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(120 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.5833333333333334s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(150 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.5s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(180 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.4166666666666667s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(210 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.3333333333333333s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(240 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.25s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(270 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.16666666666666666s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(300 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="-0.08333333333333333s" repeatCount="indefinite"></animate>  </rect></g><g transform="rotate(330 50 50)">  <rect x="47" y="24" rx="9.4" ry="4.8" width="6" height="12" fill="#0055a5">    <animate attributeName="opacity" values="1;0" times="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animate>  </rect></g></svg>') no-repeat center;

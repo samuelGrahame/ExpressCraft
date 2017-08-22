@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -23,6 +22,31 @@ namespace ExpressCraft
         public bool AppliedLayout()
         {
             return appliedLayout;
+        }
+
+        public LayoutControl GetControl(string name)
+        {
+            name = name.ToLower();
+            for(int i = 0; i < ControlEditable.Count; i++)
+            {
+                if(ControlEditable[i].LinkFieldName.ToLower() == name)
+                {
+                    return ControlEditable[i];
+                }
+            }
+            return null;
+        }
+
+        public string GetText(string name)
+        {
+            return GetControl(name)?.Input?.Text;
+        }
+
+        public void SetText(string name, string value)
+        {
+            var input = GetControl(name)?.Input;
+            if(input != null)
+                input.Text = value;
         }
 
         public void Focus()
@@ -61,7 +85,7 @@ namespace ExpressCraft
             if(columns != null && columns.Length > 0)
                 Columns.AddRange(columns);
         }
-        
+
         public string CreateLoadSQL()
         {
             var builderSQL = new StringBuilder();
@@ -123,22 +147,19 @@ namespace ExpressCraft
                 else
                 {
                     //documentTransaction.AddString(control.LinkFieldName,
-                    //control.Input.Text);                
+                    //control.Input.Text);
                 }
-
             }
 
             return builderSQL.ToString();
         }
 
-       
         public void ApplyReadOnly(bool documentreadonly)
         {
             int length = ControlEditable.Count;
             for(int i = 0; i < length; i++)
             {
                 ApplyReadOnlyOnControl(documentreadonly, ControlEditable[i].Input);
-
             }
         }
 
@@ -163,7 +184,6 @@ namespace ExpressCraft
 
         public virtual void OnControlCreated(LayoutControl Control)
         {
-
         }
 
         public void Apply(Control parent, bool documentreadonly = false)
@@ -369,7 +389,7 @@ namespace ExpressCraft
                                     }
                                 }
 
-                                OnControlCreated(control);                                
+                                OnControlCreated(control);
 
                                 if(!row.NoGap && !row.HideTinyLabel && !string.IsNullOrWhiteSpace(control.TinyLabel))
                                 {
@@ -489,6 +509,7 @@ namespace ExpressCraft
         /// Calculated
         /// </summary>
         public string Width { get; set; }
+
         /// <summary>
         /// Calculated
         /// </summary>
@@ -504,12 +525,10 @@ namespace ExpressCraft
 
         public LayoutControl(string linkFieldName, TextInput input, decimal percent = 1) : this(linkFieldName, input, "", percent)
         {
-
         }
 
         public LayoutControl(string linkFieldName, TextInput input) : this(linkFieldName, input, "")
         {
-
         }
     }
 
@@ -565,6 +584,7 @@ namespace ExpressCraft
         /// If this is true - tiny labels are ignored
         /// </summary>
         public bool NoGap { get; set; } = false;
+
         public bool UsePlaceholder { get; set; } = false;
         public bool HideTinyLabel { get; set; } = false;
         public decimal Offset { get; set; } = 0;
@@ -578,7 +598,6 @@ namespace ExpressCraft
 
         public LayoutRow(params LayoutControl[] controls) : this("", controls)
         {
-
         }
 
         public LayoutRow(decimal offset, params LayoutControl[] controls) : this("", controls)

@@ -1,46 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bridge;
+﻿using Bridge;
 using Bridge.Html5;
+using System;
+using System.Collections.Generic;
 
 namespace ExpressCraft
 {
-	public static class Settings
-	{
-		public static string NetworkURL = "Host.ashx";
-		public static string ResourceURL = "./images/";
-		public static bool AutoRender = true;
-		public const string Font = "8.25pt Tahoma";
+    public static class Settings
+    {
+        public static string NetworkURL = "Host.ashx";
+        public static string ResourceURL = "./images/";
+        public static bool AutoRender = true;
+        public const string Font = "8.25pt Tahoma";
         public static decimal TaxPercent { get; set; } = 0.1m;
-        
+
         public static string DefaultFont = Font;
 
         /// <summary>
         /// Only for firefox - as no error with number input
         /// </summary>
         public static bool OnFocusSelectAll = true;
-		
-		public static StyleSheet DefaultStyleSheet;
-		public static StyleSheet PluginStyleSheet;
+
+        public static StyleSheet DefaultStyleSheet;
+        public static StyleSheet PluginStyleSheet;
         internal static List<StyleSheet> resourceManangerSheets = new List<StyleSheet>();
 
         public static bool GridViewAutoColumnGenerateFormatAsDate = false;
-		public static bool GridViewAutoColumnFormatDates = true;
-		public static bool GridViewBlurOnScroll = false;
+        public static bool GridViewAutoColumnFormatDates = true;
+        public static bool GridViewBlurOnScroll = false;
         public static int GridViewRowScrollPadding = 0;
 
-		public static bool GridViewScrollDelayed = false;
-		public static int GridViewScrollDelayMS = 25;
+        public static bool GridViewScrollDelayed = false;
+        public static int GridViewScrollDelayMS = 25;
 
-		public static int ContextMenuStartingZIndex = 500;
-		public static int ContextMenuMinWidth = 200;
+        public static int ContextMenuStartingZIndex = 500;
+        public static int ContextMenuMinWidth = 200;
 
-		public static int MessageFormTextMaximumHeightInPx = 500;
-		public static int MessageFormTextMinimumHeightInPx = 32;
-		public static int MessageFormMinimumWidthInPx = 195;
+        public static int MessageFormTextMaximumHeightInPx = 500;
+        public static int MessageFormTextMinimumHeightInPx = 32;
+        public static int MessageFormMinimumWidthInPx = 195;
 
         public static DatePosition DayPosition = DatePosition.First;
         public static DatePosition MonthPosition = DatePosition.Second;
@@ -49,45 +46,45 @@ namespace ExpressCraft
         public static bool DisableTextPopupEditor = false;
 
         public static char DateSeperator = '/';
-        
+
         public enum DatePosition
         {
             First,
             Second,
             Third
-        }        
+        }
 
-		public static Vector2 ConsoleDefaultSize = new Vector2(540, 240);
+        public static Vector2 ConsoleDefaultSize = new Vector2(540, 240);
 
-		public static bool MessageFormBeep = false;
+        public static bool MessageFormBeep = false;
 
-		public static int MaximumPixelScrollingRows = 500000;
-        
+        public static int MaximumPixelScrollingRows = 500000;
+
         public static Action<string> OnSendError = null;
 
-		public static bool IsChrome = Browser.IsChrome;
+        public static bool IsChrome = Browser.IsChrome;
 
-		public static bool AllowCloseWithoutQuestion = false;
+        public static bool AllowCloseWithoutQuestion = false;
 
         public static Action OnApplicationClose = null;
 
-		public static bool ShowExceptionDialog = true;
+        public static bool ShowExceptionDialog = true;
 
-		public static int FormFadeDuration = 100;
+        public static int FormFadeDuration = 100;
 
         /// <summary>
         /// Increase Render Speed
         /// </summary>
         public static bool RemoveAttributesOffElementsWhenLoseFocus;
 
-		public static void Setup()
-		{
+        public static void Setup()
+        {
             ActiveTheme = Theme.Theme1;
-            SetupStyleDefaults();		
-		}
-		
-		public static void SetupStyleDefaults()
-		{
+            SetupStyleDefaults();
+        }
+
+        public static void SetupStyleDefaults()
+        {
             try
             {
                 StyleSheetList sheets = Document.StyleSheets;
@@ -117,30 +114,27 @@ namespace ExpressCraft
             }
             catch(Exception)
             {
-                                
             }
-			
         }
 
         public static dynamic GetStyleRuleValue(List<StyleSheet> cssFile, string style, string className)
         {
             try
             {
-                if (cssFile != null)
+                if(cssFile != null)
                 {
-                    foreach (var item in cssFile)
+                    foreach(var item in cssFile)
                     {
                         dynamic value = GetStyleRuleValue(item, style, className);
                         if(value != null)
                         {
                             return value;
                         }
-                    }                    
+                    }
                 }
             }
-            catch (Exception)
+            catch(Exception)
             {
-
             }
             return null;
         }
@@ -149,15 +143,15 @@ namespace ExpressCraft
         {
             try
             {
-                if (cssFile != null)
+                if(cssFile != null)
                 {
                     dynamic pStyles = cssFile;
-                    if (pStyles.cssRules)
+                    if(pStyles.cssRules)
                     {
-                        for (int i = 0; i < pStyles.cssRules.length; i++)
+                        for(int i = 0; i < pStyles.cssRules.length; i++)
                         {
                             dynamic rule = pStyles.cssRules[i];
-                            if (rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
+                            if(rule.selectorText && rule.selectorText.split(',').indexOf(className) != -1)
                             {
                                 return rule.style[style];
                             }
@@ -165,77 +159,87 @@ namespace ExpressCraft
                     }
                 }
             }
-            catch (Exception)
+            catch(Exception)
             {
-
             }
             return null;
         }
 
-		public static dynamic GetExpressStyleRuleValue(string style, string className)
-		{
+        public static dynamic GetExpressStyleRuleValue(string style, string className)
+        {
             dynamic value = GetStyleRuleValue(PluginStyleSheet, style, className);
             if(value == null)
             {
                 value = GetStyleRuleValue(DefaultStyleSheet, style, className);
             }
-            return value;            
-		}
-		
-		private static HTMLStyleElement themeElement = null;
-		public static void ApplyActiveTheme()
-		{
-			if(themeElement != null)
-			{
-				themeElement.ParentElement.RemoveChild(themeElement);
-			}
-			if(_activeTheme == null)
-				_activeTheme = Theme.Theme1;            
+            return value;
+        }
+
+        private static HTMLStyleElement themeElement = null;
+
+        public static void ApplyActiveTheme()
+        {
+            if(themeElement != null)
+            {
+                themeElement.ParentElement.RemoveChild(themeElement);
+            }
+            if(_activeTheme == null)
+                _activeTheme = Theme.Theme1;
             var objList = new List<object>();
             objList.AddRange(_activeTheme.Colors);
-            objList.AddRange(new object[] { "control", "background-color", "border", "ribbon", "-left-color" , "-top-color", "-right-color", "-bottom-color", "button", "form-heading", "pageheader", "heading" });
-
+            objList.AddRange(new object[] { "control", "background-color", "border", "ribbon", "-left-color", "-top-color", "-right-color", "-bottom-color", "button", "form-heading", "pageheader", "heading" });
 
             themeElement = new HTMLStyleElement()
-			{                
-				InnerHTML = string.Format(themeTemplate.Replace("#focusLine;", _includeFocusRegion ? themefocusValue : string.Empty),
-				objList.ToArray())
-			};            
+            {
+                InnerHTML = string.Format(themeTemplate.Replace("#focusLine;", _includeFocusRegion ? themefocusValue : string.Empty),
+                objList.ToArray())
+            };
 
-			Document.Body.AppendChild(themeElement);
-		}
-		private static bool _includeFocusRegion = true;
-		public static bool IncludeFocusRegion { get
-			{
-				return _includeFocusRegion;
-			}
-			set
-			{
-				if(_includeFocusRegion != value)
-				{
-					_includeFocusRegion = value;
-					ApplyActiveTheme();
-				}
-			}
-		}
+            Document.Body.AppendChild(themeElement);
+        }
 
-		private static Theme _activeTheme = null;
-		public static Theme ActiveTheme {
-			get { return _activeTheme; }
-			set {
-				if(_activeTheme != value)
-				{
-					_activeTheme = value;
-					ApplyActiveTheme();
-				}
-			}
-		}
-		//ThemeForm
-		#region ThemeTemplateCode
-		private static string themefocusValue = @".{25}:focus:not(.grid){{
+        private static bool _includeFocusRegion = true;
+
+        public static bool IncludeFocusRegion
+        {
+            get
+            {
+                return _includeFocusRegion;
+            }
+            set
+            {
+                if(_includeFocusRegion != value)
+                {
+                    _includeFocusRegion = value;
+                    ApplyActiveTheme();
+                }
+            }
+        }
+
+        private static Theme _activeTheme = null;
+
+        public static Theme ActiveTheme
+        {
+            get { return _activeTheme; }
+            set
+            {
+                if(_activeTheme != value)
+                {
+                    _activeTheme = value;
+                    ApplyActiveTheme();
+                }
+            }
+        }
+
+        //ThemeForm
+
+        #region ThemeTemplateCode
+
+        private static string themefocusValue = @".{25}:focus:not(.grid){{
 border: solid 1px {0};
 }}";
-		private static string themeTemplate = @".{25}{{
+
+        private static string themeTemplate = @".{25}{{
     color:{22};
 }}
 #focusLine;
@@ -274,7 +278,7 @@ border: solid 1px {0};
 {26}:{5};
 }}
 .{28}{33}small{{
-{26}:{3}; 
+{26}:{3};
 }}
 .{28}{33}small:hover:not(:active):not(.disabled)
 {{
@@ -306,7 +310,7 @@ color:{23};
 {27}{32}:{1};
 }}
 .tab{25}{35} {{
-{26}:{3};   
+{26}:{3};
 }}
 .tab{25}{35}-hidden{{
 {27}{30}:{3};
@@ -329,7 +333,7 @@ line-height:18px;
 top:2px;
 }}
 .tab{25}{35}-close{33}{{
-color:{1};	
+color:{1};
 }}
 .tab{25}{35}-close{33}:hover{{
 color:{24};
@@ -337,7 +341,7 @@ color:{24};
 	{27}:1px solid {19};
 }}
 .input{25} {{
-{27}:1px solid {1};   
+{27}:1px solid {1};
 {26}:{14};
 }}
 .simple{33}{{
@@ -361,10 +365,10 @@ to {{ {26}: {0};}}
 {27}-color:{0};
 }}
 .{34}{{
-{26}:{0};  
+{26}:{0};
 }}
 .{34}-title{{
-color:{23}; 
+color:{23};
 }}
 .{34}-{33}{{
 color:{23};
@@ -382,7 +386,7 @@ color:{23};
 {26}:{11};
 }}
 .cell{{
-{27}: 1px solid {3};   
+{27}: 1px solid {3};
 }}
 .cellrow{{
 {26}:{14};
@@ -414,11 +418,11 @@ color:{23};
 }}
 .{36}-container{{
 {26}:{3};
-{27}-bottom:1px solid {19} !important;	
+{27}-bottom:1px solid {19} !important;
 }}
 .grid{{
 {26}:{14};
-{27}:1px solid {19}; 
+{27}:1px solid {19};
 }}
 .progressbar{{
 {27}:1px solid {19};
@@ -428,7 +432,7 @@ color:{23};
 {26}:{0};
 }}
 .contextmenu{{
-{26}:{14}; 
+{26}:{14};
 {27}: solid 1px {21};
 }}
 .contextitem:hover{{
@@ -477,22 +481,24 @@ color:{23};
     border-bottom: 2px {0} solid;
 }}
 ";
-		#endregion
 
-		public static bool OnF2ShowThemeForm = true;
+        #endregion ThemeTemplateCode
 
-		public static int ToolTipPopupDelayMs = 1000;
-		public static int ToolTipPopupStayOpenDelayPerWordMs = 250;
-	}
-	public class Theme
-	{
-		public string[] Colors { get; set; }
+        public static bool OnF2ShowThemeForm = true;
+
+        public static int ToolTipPopupDelayMs = 1000;
+        public static int ToolTipPopupStayOpenDelayPerWordMs = 250;
+    }
+
+    public class Theme
+    {
+        public string[] Colors { get; set; }
         //public string BackgroundColor1; // #0173C7 {0} form header color ribbon color etc, ribbon header hidden - not active..
         //public string BackgroundColor2; // #C5C5C5 {1} text selection back color, ribbon spliter
         //public string BackgroundColor3; // #CCCCCC {2} disabled backcolor
         //public string BackgroundColor4; // #F0F0F0 {3} input backcolor... - ribbon page back, ribbon group, ribbon button, ribbonsmall, ribbon header active colro
         //public string BackgroundColor5; // #C3C3C3 {4}ribbon items disabled, ribbon hover
-        //public string BackgroundColor6; // #ADADAD {5} ribbon button Active		
+        //public string BackgroundColor6; // #ADADAD {5} ribbon button Active
 
         //public string BackgroundColor7; // #2A8AD0 {6} ribbon header hidden hover
         //public string BackgroundColor8; // #D3D3D3 {7} tabcontrol header hidden
@@ -501,7 +507,7 @@ color:{23};
         //public string BackgroundColor11; // #E81123 {10} Form Heading Button close Hover.
         //public string BackgroundColor12; // #F1707A {11} Form Heading Button close Active.
         //public string BackgroundColor13; // #AEAEAE {12} CellRow Active
-        //public string BackgroundColor14; // #FAFAFA {13}; Row Even			
+        //public string BackgroundColor14; // #FAFAFA {13}; Row Even
         //public string BackgroundColor15; // white {14} Context Menu Back Color
         //public string BackgroundColor16; // #CFCFCF {15} Context Menu Item Hover
         //public string BackgroundColor17; // #B9B9B9 {16} Context Menu Item Splitter
@@ -529,48 +535,48 @@ color:{23};
         // heading {36}
 
         public Theme(params string[] colors)
-		{
-			if(colors != null && colors.Length == 25)
-			{
-				Colors = colors;				
-			}
-			
-			//BackgroundColor1 = bgc1;
-			//BackgroundColor2 = bgc2;
-			//BackgroundColor3 = bgc3;
-			//BackgroundColor4 = bgc4;
-			//BackgroundColor5 = bgc5;
-			//BackgroundColor6 = bgc6;
-			//BackgroundColor7 = bgc7;
-			//BackgroundColor8 = bgc8;
-			//BackgroundColor9 = bgc9;
-			//BackgroundColor10 = bgc10;
-			//BackgroundColor11 = bgc11;
-			//BackgroundColor12 = bgc12;
-			//BackgroundColor13 = bgc13;
-			//BackgroundColor14 = bgc14;		
-			//BackgroundColor15 = bgc15;
-			//BackgroundColor16 = bgc16;
-			//BackgroundColor17 = bgc17;
-			//BackgroundColor18 = bgc18;
-			//BackgroundColor19 = bgc19;
-			//BorderColor1 = bc1;
-			//BorderColor2 = bc2;
-			//BorderColor3 = bc3;
-			//ForeColor1 = fc1;
-			//ForeColor2 = fc2;
-			//ForeColor3 = fc3;
-		}
+        {
+            if(colors != null && colors.Length == 25)
+            {
+                Colors = colors;
+            }
 
-		public static Theme Theme1 = new Theme(
-			"#0173C7", "#C5C5C5", "#CCCCCC",
-			"#F0F0F0", "#C3C3C3", "#ADADAD",
-			"#2A8AD0", "#D3D3D3", "#2A8AD4",
-			"#015C9F", "#E81123", "#F1707A",
-			"#AEAEAE", "#FAFAFA", "#ffffff",
-			"#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
-			"rgba(1, 115, 199, 0.5)", "#A6A6A6",
-			"#777777", "#80868A", "#404040",
-			"#ffffff", "#000000");		
-	}
+            //BackgroundColor1 = bgc1;
+            //BackgroundColor2 = bgc2;
+            //BackgroundColor3 = bgc3;
+            //BackgroundColor4 = bgc4;
+            //BackgroundColor5 = bgc5;
+            //BackgroundColor6 = bgc6;
+            //BackgroundColor7 = bgc7;
+            //BackgroundColor8 = bgc8;
+            //BackgroundColor9 = bgc9;
+            //BackgroundColor10 = bgc10;
+            //BackgroundColor11 = bgc11;
+            //BackgroundColor12 = bgc12;
+            //BackgroundColor13 = bgc13;
+            //BackgroundColor14 = bgc14;
+            //BackgroundColor15 = bgc15;
+            //BackgroundColor16 = bgc16;
+            //BackgroundColor17 = bgc17;
+            //BackgroundColor18 = bgc18;
+            //BackgroundColor19 = bgc19;
+            //BorderColor1 = bc1;
+            //BorderColor2 = bc2;
+            //BorderColor3 = bc3;
+            //ForeColor1 = fc1;
+            //ForeColor2 = fc2;
+            //ForeColor3 = fc3;
+        }
+
+        public static Theme Theme1 = new Theme(
+            "#0173C7", "#C5C5C5", "#CCCCCC",
+            "#F0F0F0", "#C3C3C3", "#ADADAD",
+            "#2A8AD0", "#D3D3D3", "#2A8AD4",
+            "#015C9F", "#E81123", "#F1707A",
+            "#AEAEAE", "#FAFAFA", "#ffffff",
+            "#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
+            "rgba(1, 115, 199, 0.5)", "#A6A6A6",
+            "#777777", "#80868A", "#404040",
+            "#ffffff", "#000000");
+    }
 }

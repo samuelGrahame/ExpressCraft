@@ -1,130 +1,133 @@
-﻿using System.Collections.Generic;
+﻿using Bridge;
 using Bridge.Html5;
-using Bridge.jQuery2;
-using Bridge;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ExpressCraft
 {
-	public class GridView : Control
-	{
-		public HTMLDivElement GridHeader;
-		public HTMLDivElement GridHeaderContainer;
-		public HTMLDivElement GridBodyContainer;
-		public HTMLDivElement GridBody;
+    public class GridView : Control
+    {
+        public HTMLDivElement GridHeader;
+        public HTMLDivElement GridHeaderContainer;
+        public HTMLDivElement GridBodyContainer;
+        public HTMLDivElement GridBody;
 
-		private HTMLDivElement BottonOfTable;
-		private HTMLDivElement RightOfTable;
-		private HTMLDivElement RightOfTableHeader;
+        private HTMLDivElement BottonOfTable;
+        private HTMLDivElement RightOfTable;
+        private HTMLDivElement RightOfTableHeader;
 
-		private DataTable _dataSource = null;
-				
-		public Action<int, int> OnFocusedRowChanged = null;
-		public Action<int> OnRowDoubleClick = null;
-		public Action<HTMLElement, int> OnCustomRowStyle = null;
+        private DataTable _dataSource = null;
 
-		protected Action<MouseEvent<HTMLDivElement>> OnRowClick;
-		protected Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
-		protected Action<MouseEvent> OnCellRowMouseDown;
+        public Action<int, int> OnFocusedRowChanged = null;
+        public Action<int> OnRowDoubleClick = null;
+        public Action<HTMLElement, int> OnCustomRowStyle = null;
 
-		public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
-		public List<int> VisibleRowHandles = null;
-		
-		public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
-		{
-			if(asc)
-			{
-				var sorted = Cells
-					.Select((x, i) => new KeyValuePair<int, T>(i, x))
-					.OrderBy(x => x.Value)
-					.ToList();
+        protected Action<MouseEvent<HTMLDivElement>> OnRowClick;
+        protected Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
+        protected Action<MouseEvent> OnCellRowMouseDown;
 
-				VisibleRowHandles = sorted.Select(x => x.Key).ToList();
-			}
-			else
-			{
-				var sorted = Cells
-					.Select((x, i) => new KeyValuePair<int, T>(i, x))
-					.OrderByDescending(x => x.Value)
-					.ToList();
+        public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
+        public List<int> VisibleRowHandles = null;
 
-				VisibleRowHandles = sorted.Select(x => x.Key).ToList();
-			}
-		}
-		public bool _allowRowDrag = false;
-		
-		public bool AllowRowDrag
-		{
-			get { return _allowRowDrag; }
-			set
-			{
-				if(_allowRowDrag != value)
-				{
-					_allowRowDrag = value;					
-					RenderGrid();
-				}
-			}
-		}
-		public bool AutoGenerateColumnsFromSource = true;
-		public bool AllowMultiSelection = true;
+        public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
+        {
+            if(asc)
+            {
+                var sorted = Cells
+                    .Select((x, i) => new KeyValuePair<int, T>(i, x))
+                    .OrderBy(x => x.Value)
+                    .ToList();
 
-		private bool showAutoFilterRow = false;
+                VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+            }
+            else
+            {
+                var sorted = Cells
+                    .Select((x, i) => new KeyValuePair<int, T>(i, x))
+                    .OrderByDescending(x => x.Value)
+                    .ToList();
 
-		public bool ShowAutoFilterRow
-		{
-			get { return showAutoFilterRow; }
-			set {
-				if(showAutoFilterRow != value)
-				{
-					showAutoFilterRow = value;
-					if(!showAutoFilterRow)
-					{
-						// Remove Filter.						
-						for(int i = 0; i < ColumnCount(); i++)
-						{
-							//FilterEdit = null;
-							Columns[i].FilterEdit = null;
-							Columns[i].FilterValue = null;
-						}
-						CalculateVisibleRows();
-					}					
-					RenderGrid();
-				}
-			}
-		}
+                VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+            }
+        }
 
-		public void CalculateVisibleRows()
-		{
-			List<int> calcVisibleRows = new List<int>();
+        public bool _allowRowDrag = false;
 
-			for(int y = 0; y < RowCount(); y++)
-			{
-				bool AddIndex = true;
+        public bool AllowRowDrag
+        {
+            get { return _allowRowDrag; }
+            set
+            {
+                if(_allowRowDrag != value)
+                {
+                    _allowRowDrag = value;
+                    RenderGrid();
+                }
+            }
+        }
 
-				for(int x = 0; x < ColumnCount(); x++)
-				{
-					if(!Columns[x].ValueMatchFilter(y))
-					{
-						AddIndex = false;
-						break;
-					}
-				}
-				if(AddIndex)
-				{
-					calcVisibleRows.Add(y);
-				}
-			}
+        public bool AutoGenerateColumnsFromSource = true;
+        public bool AllowMultiSelection = true;
 
-			VisibleRowHandles = calcVisibleRows;
-			RenderGrid();
-		}
-		
-		public float UnitHeight = 28.0f;
-		private bool _columnAutoWidth = false;
+        private bool showAutoFilterRow = false;
+
+        public bool ShowAutoFilterRow
+        {
+            get { return showAutoFilterRow; }
+            set
+            {
+                if(showAutoFilterRow != value)
+                {
+                    showAutoFilterRow = value;
+                    if(!showAutoFilterRow)
+                    {
+                        // Remove Filter.
+                        for(int i = 0; i < ColumnCount(); i++)
+                        {
+                            //FilterEdit = null;
+                            Columns[i].FilterEdit = null;
+                            Columns[i].FilterValue = null;
+                        }
+                        CalculateVisibleRows();
+                    }
+                    RenderGrid();
+                }
+            }
+        }
+
+        public void CalculateVisibleRows()
+        {
+            List<int> calcVisibleRows = new List<int>();
+
+            for(int y = 0; y < RowCount(); y++)
+            {
+                bool AddIndex = true;
+
+                for(int x = 0; x < ColumnCount(); x++)
+                {
+                    if(!Columns[x].ValueMatchFilter(y))
+                    {
+                        AddIndex = false;
+                        break;
+                    }
+                }
+                if(AddIndex)
+                {
+                    calcVisibleRows.Add(y);
+                }
+            }
+
+            VisibleRowHandles = calcVisibleRows;
+            RenderGrid();
+        }
+
+        public float UnitHeight = 28.0f;
+        private bool _columnAutoWidth = false;
 
         private int _focusedcolumn = -1;
+
         public int FocusedColumn
         {
             get
@@ -133,7 +136,7 @@ namespace ExpressCraft
             }
             set
             {
-                if (value != FocusedColumn)
+                if(value != FocusedColumn)
                 {
                     var prev = _focusedcolumn;
                     _focusedcolumn = value;
@@ -143,121 +146,125 @@ namespace ExpressCraft
         }
 
         private int _focusedDataHandle = -1;
-		public int FocusedDataHandle
-		{
-			get
-			{
-				return _focusedDataHandle;
-			}
-			set
-			{
-				if(value != _focusedDataHandle)
-				{
-					var prev = _focusedDataHandle;
-					_focusedDataHandle = value;
-					RenderGrid();
-					if(OnFocusedRowChanged != null)
-						OnFocusedRowChanged(_focusedDataHandle, prev);
-				}
-			}
-		}
 
-		public void SetDefaultSizes()
-		{
-			if(_columnHeadersVisible)
-			{
-				GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);				
-				GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");
-				GridHeader.Style.Visibility = Visibility.Inherit;
+        public int FocusedDataHandle
+        {
+            get
+            {
+                return _focusedDataHandle;
+            }
+            set
+            {
+                if(value != _focusedDataHandle)
+                {
+                    var prev = _focusedDataHandle;
+                    _focusedDataHandle = value;
+                    RenderGrid();
+                    if(OnFocusedRowChanged != null)
+                        OnFocusedRowChanged(_focusedDataHandle, prev);
+                }
+            }
+        }
+
+        public void SetDefaultSizes()
+        {
+            if(_columnHeadersVisible)
+            {
+                GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);
+                GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");
+                GridHeader.Style.Visibility = Visibility.Inherit;
                 GridHeaderContainer.Style.Visibility = Visibility.Inherit;
             }
-			else
-			{
-				GridHeader.Style.Visibility = Visibility.Hidden;
+            else
+            {
+                GridHeader.Style.Visibility = Visibility.Hidden;
                 GridHeaderContainer.Style.Visibility = Visibility.Hidden;
 
                 GridBodyContainer.SetBounds(0, 1, "100%", "(100% - 1px)");
-			}
-		}
+            }
+        }
 
-		private bool _columnHeadersVisible = true;
-		public bool ColumnHeadersVisible
-		{
-			get
-			{
-				return _columnHeadersVisible;
-			}
-			set
-			{
-				if(value != _columnHeadersVisible)
-				{
-					_columnHeadersVisible = value;
+        private bool _columnHeadersVisible = true;
 
-					SetDefaultSizes();
+        public bool ColumnHeadersVisible
+        {
+            get
+            {
+                return _columnHeadersVisible;
+            }
+            set
+            {
+                if(value != _columnHeadersVisible)
+                {
+                    _columnHeadersVisible = value;
 
-					RenderGrid();
-				}
-			}
-		}
+                    SetDefaultSizes();
 
-		public bool ColumnAutoWidth
-		{
-			get
-			{
-				return _columnAutoWidth;
-			}
-			set
-			{
-				if(value)
-					GridBodyContainer.Style.OverflowX = Overflow.Hidden;
-				else
-					GridBodyContainer.Style.OverflowX = Overflow.Auto;
+                    RenderGrid();
+                }
+            }
+        }
 
-				if(_columnAutoWidth != value)
-				{
-					_columnAutoWidth = value;
-					RenderGrid();
-				}
-			}
-		}
+        public bool ColumnAutoWidth
+        {
+            get
+            {
+                return _columnAutoWidth;
+            }
+            set
+            {
+                if(value)
+                    GridBodyContainer.Style.OverflowX = Overflow.Hidden;
+                else
+                    GridBodyContainer.Style.OverflowX = Overflow.Auto;
 
-		private bool _useEditForm = true;
-		public bool UseEditForm
-		{
-			get
-			{
-				return _useEditForm;
-			}
-			set
-			{
-				if(value != _useEditForm)
-				{
-					_useEditForm = value;
-					RenderGrid();
-				}
-			}
-		}
+                if(_columnAutoWidth != value)
+                {
+                    _columnAutoWidth = value;
+                    RenderGrid();
+                }
+            }
+        }
 
-	    private SortSetting SortSettings;
+        private bool _useEditForm = true;
 
-	    public void SortColumn()
-	    {
-	        if ( SortSettings != null ) {
+        public bool UseEditForm
+        {
+            get
+            {
+                return _useEditForm;
+            }
+            set
+            {
+                if(value != _useEditForm)
+                {
+                    _useEditForm = value;
+                    RenderGrid();
+                }
+            }
+        }
+
+        private SortSetting SortSettings;
+
+        public void SortColumn()
+        {
+            if(SortSettings != null)
+            {
                 SortColumn(SortSettings.Column, SortSettings.SortMode);
-            }	        
-	    }
+            }
+        }
 
         public void ClearSortColumn()
         {
-            if (SortSettings != null)
+            if(SortSettings != null)
             {
                 SortColumn(SortSettings.Column, GridViewSortMode.None);
             }
         }
 
-		public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc)
-		{
-			column.SortedMode = sort;
+        public void SortColumn(GridViewColumn column, GridViewSortMode sort = GridViewSortMode.Asc)
+        {
+            column.SortedMode = sort;
 
             if(SortSettings != null && SortSettings.Column != column)
             {
@@ -265,225 +272,237 @@ namespace ExpressCraft
                 VisibleRowHandles = null;
             }
 
-			if(sort == GridViewSortMode.None)
-			{
-				VisibleRowHandles = null;
-			}
-			else
-			{
-				bool sort1 = sort == GridViewSortMode.Asc;
+            if(sort == GridViewSortMode.None)
+            {
+                VisibleRowHandles = null;
+            }
+            else
+            {
+                bool sort1 = sort == GridViewSortMode.Asc;
 
-				switch(column.Column.DataType)
-				{
-					default:
-					case DataType.Object:
-						SetVisibleRowHandles((column.Column as DataColumnObject).Cells, sort1);
-						break;
+                switch(column.Column.DataType)
+                {
+                    default:
+                    case DataType.Object:
+                        SetVisibleRowHandles((column.Column as DataColumnObject).Cells, sort1);
+                        break;
+
                     case DataType.Bool:
                         SetVisibleRowHandles((column.Column as DataColumnBool).Cells, sort1);
                         break;
+
                     case DataType.DateTime:
-						SetVisibleRowHandles((column.Column as DataColumnDateTime).Cells, sort1);
-						break;
-					case DataType.String:
-						SetVisibleRowHandles((column.Column as DataColumnString).Cells, sort1);
-						break;
+                        SetVisibleRowHandles((column.Column as DataColumnDateTime).Cells, sort1);
+                        break;
+
+                    case DataType.String:
+                        SetVisibleRowHandles((column.Column as DataColumnString).Cells, sort1);
+                        break;
+
                     case DataType.Byte:
                         SetVisibleRowHandles((column.Column as DataColumnByte).Cells, sort1);
                         break;
+
                     case DataType.Short:
                         SetVisibleRowHandles((column.Column as DataColumnShort).Cells, sort1);
                         break;
+
                     case DataType.Integer:
-						SetVisibleRowHandles((column.Column as DataColumnInteger).Cells, sort1);
-						break;
-					case DataType.Long:
-						SetVisibleRowHandles((column.Column as DataColumnLong).Cells, sort1);
-						break;
-					case DataType.Float:
-						SetVisibleRowHandles((column.Column as DataColumnFloat).Cells, sort1);
-						break;
-					case DataType.Double:
-						SetVisibleRowHandles((column.Column as DataColumnDouble).Cells, sort1);
-						break;
-					case DataType.Decimal:
-						SetVisibleRowHandles((column.Column as DataColumnDecimal).Cells, sort1);
-						break;
-				}
-			}
+                        SetVisibleRowHandles((column.Column as DataColumnInteger).Cells, sort1);
+                        break;
 
-			RenderGrid();
-		    SortSettings = new SortSetting() {
-		        Column = column,
-                SortMode = sort
-		    };
-		}
+                    case DataType.Long:
+                        SetVisibleRowHandles((column.Column as DataColumnLong).Cells, sort1);
+                        break;
 
-		public int ColumnCount()
-		{
-			return Columns.Count;
-		}
+                    case DataType.Float:
+                        SetVisibleRowHandles((column.Column as DataColumnFloat).Cells, sort1);
+                        break;
 
-		public int RowCount()
-		{
-			if(_dataSource == null)
-				return 0;
-			return _dataSource.RowCount;
-		}
+                    case DataType.Double:
+                        SetVisibleRowHandles((column.Column as DataColumnDouble).Cells, sort1);
+                        break;
 
-		public void ScrollToBottom()
-		{
-			GridBodyContainer.ScrollTop = GridBody.ClientHeight - GridBodyContainer.ClientHeight;
-		}
-
-		public void ScrollToTop()
-		{
-			GridBodyContainer.ScrollTop = 0;
-		}
-
-		public DataTable DataSource
-		{
-			get
-			{
-				return _dataSource;
-			}
-			set
-			{
-				FocusedDataHandle = -1;
-				SelectedRows = new HardSoftList<bool>(false);
-				VisibleRowHandles = new List<int>();
-
-				if(_dataSource != null)
-				{
-					_dataSource.OnDataSourceChanged -= DataSource_OnDataSourceChanged;
-				}
-
-				_dataSource = value;
-
-				if(_dataSource != null)
-				{
-					_dataSource.OnDataSourceChanged += DataSource_OnDataSourceChanged;
-
-					if(Columns.Count == 0 && AutoGenerateColumnsFromSource)
-					{
-						var sw = Stopwatch.StartNew();
-
-						for(int i = 0; i < _dataSource.ColumnCount; i++)
-						{
-							var sw1 = Stopwatch.StartNew();
-
-							var gvc = new GridViewColumn(this);
-							gvc.Caption = _dataSource.Columns[i].FieldName;
-							gvc.Column = _dataSource.Columns[i];
-							gvc.Visible = true;
-
-							switch(_dataSource.Columns[i].DataType)
-							{
-								case DataType.Byte:
-								case DataType.Short:
-								case DataType.Integer:
-								case DataType.Long:
-								case DataType.Float:
-								case DataType.Double:
-								case DataType.Decimal:
-									gvc.BodyApparence.Alignment = TextAlign.Right;
-									break;
-								case DataType.DateTime:
-									if(Settings.GridViewAutoColumnFormatDates)
-									{
-										if(Settings.GridViewAutoColumnGenerateFormatAsDate)
-											gvc.FormatString = "{0:d}";
-										else
-											gvc.FormatString = "{0:yyyy-MM-dd}";
-									}
-									
-
-									break;
-								case DataType.Bool:
-									gvc.CellDisplay = new GridViewCellDisplayCheckBox();
-									break;
-							}
-
-							Columns.Add(gvc);
-
-							sw.Stop();
-							Console.WriteLine("DataSource AddColumn Auto: " + sw1.ElapsedMilliseconds);
-						}
-
-						sw.Stop();
-						Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
-					}
-					RenderGrid();
+                    case DataType.Decimal:
+                        SetVisibleRowHandles((column.Column as DataColumnDecimal).Cells, sort1);
+                        break;
                 }
-			}
-		}
+            }
 
-		public List<GridViewColumn> Columns = new List<GridViewColumn>();
+            RenderGrid();
+            SortSettings = new SortSetting()
+            {
+                Column = column,
+                SortMode = sort
+            };
+        }
 
-		public GridViewColumn GetColumn(int i)
-		{
-			return Columns[i];
-		}
+        public int ColumnCount()
+        {
+            return Columns.Count;
+        }
 
-		public object GetFocusedRowCellValue(int columnIndex)
-		{
-			return GetFocusedRowCellValue(Columns[columnIndex]);
-		}
+        public int RowCount()
+        {
+            if(_dataSource == null)
+                return 0;
+            return _dataSource.RowCount;
+        }
 
-		public GridViewColumn GetGridViewColumnByFieldName(string FieldName)
-		{
-			for(int i = 0; i < ColumnCount(); i++)
-			{
-				if(Columns[i].Column.FieldName == FieldName)
-				{
-					return Columns[i];
-				}
-			}
-			return null;
-		}
+        public void ScrollToBottom()
+        {
+            GridBodyContainer.ScrollTop = GridBody.ClientHeight - GridBodyContainer.ClientHeight;
+        }
 
-		public object GetFocusedRowCellValue(string FieldName)
-		{
-			return GetFocusedRowCellValue(GetColumnByFieldName(FieldName));
-		}
+        public void ScrollToTop()
+        {
+            GridBodyContainer.ScrollTop = 0;
+        }
 
-		public object GetFocusedRowCellValue(GridViewColumn column)
-		{
-			return GetRowCellValue(FocusedDataHandle, column);
-		}
+        public DataTable DataSource
+        {
+            get
+            {
+                return _dataSource;
+            }
+            set
+            {
+                FocusedDataHandle = -1;
+                SelectedRows = new HardSoftList<bool>(false);
+                VisibleRowHandles = new List<int>();
 
-		public object GetFocusedRowCellValue(DataColumn column)
-		{
-			return GetRowCellValue(FocusedDataHandle, column);
-		}
+                if(_dataSource != null)
+                {
+                    _dataSource.OnDataSourceChanged -= DataSource_OnDataSourceChanged;
+                }
 
-		public object GetRowCellValue(int Datahandle, GridViewColumn column)
-		{
-			return GetRowCellValue(Datahandle, column.Column);
-		}
+                _dataSource = value;
 
-		public object GetRowCellValue(int Datahandle, DataColumn column)
-		{
-			if(Datahandle == -1)
-				return null;
-			return column.GetCellValue(Datahandle);
-		}
+                if(_dataSource != null)
+                {
+                    _dataSource.OnDataSourceChanged += DataSource_OnDataSourceChanged;
 
-		public object GetRowCellValue(int Datahandle, string FieldName)
-		{
-			return GetRowCellValue(Datahandle, GetColumnByFieldName(FieldName));
-		}
+                    if(Columns.Count == 0 && AutoGenerateColumnsFromSource)
+                    {
+                        var sw = Stopwatch.StartNew();
 
-		public object GetRowCellValue(int Datahandle, int columnIndex)
-		{
-			return GetRowCellValue(Datahandle, Columns[columnIndex]);
-		}
+                        for(int i = 0; i < _dataSource.ColumnCount; i++)
+                        {
+                            var sw1 = Stopwatch.StartNew();
 
-        public GridViewColumn GetGridViewColumnByFieldName(string fieldName, bool IgnoreCase = false)
-        {            
+                            var gvc = new GridViewColumn(this);
+                            gvc.Caption = _dataSource.Columns[i].FieldName;
+                            gvc.Column = _dataSource.Columns[i];
+                            gvc.Visible = true;
+
+                            switch(_dataSource.Columns[i].DataType)
+                            {
+                                case DataType.Byte:
+                                case DataType.Short:
+                                case DataType.Integer:
+                                case DataType.Long:
+                                case DataType.Float:
+                                case DataType.Double:
+                                case DataType.Decimal:
+                                    gvc.BodyApparence.Alignment = TextAlign.Right;
+                                    break;
+
+                                case DataType.DateTime:
+                                    if(Settings.GridViewAutoColumnFormatDates)
+                                    {
+                                        if(Settings.GridViewAutoColumnGenerateFormatAsDate)
+                                            gvc.FormatString = "{0:d}";
+                                        else
+                                            gvc.FormatString = "{0:yyyy-MM-dd}";
+                                    }
+
+                                    break;
+
+                                case DataType.Bool:
+                                    gvc.CellDisplay = new GridViewCellDisplayCheckBox();
+                                    break;
+                            }
+
+                            Columns.Add(gvc);
+
+                            sw.Stop();
+                            Console.WriteLine("DataSource AddColumn Auto: " + sw1.ElapsedMilliseconds);
+                        }
+
+                        sw.Stop();
+                        Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
+                    }
+                    RenderGrid();
+                }
+            }
+        }
+
+        public List<GridViewColumn> Columns = new List<GridViewColumn>();
+
+        public GridViewColumn GetColumn(int i)
+        {
+            return Columns[i];
+        }
+
+        public object GetFocusedRowCellValue(int columnIndex)
+        {
+            return GetFocusedRowCellValue(Columns[columnIndex]);
+        }
+
+        public GridViewColumn GetGridViewColumnByFieldName(string FieldName)
+        {
             for(int i = 0; i < ColumnCount(); i++)
             {
-                if(Columns[i] != null && Columns[i].Column  != null &&
+                if(Columns[i].Column.FieldName == FieldName)
+                {
+                    return Columns[i];
+                }
+            }
+            return null;
+        }
+
+        public object GetFocusedRowCellValue(string FieldName)
+        {
+            return GetFocusedRowCellValue(GetColumnByFieldName(FieldName));
+        }
+
+        public object GetFocusedRowCellValue(GridViewColumn column)
+        {
+            return GetRowCellValue(FocusedDataHandle, column);
+        }
+
+        public object GetFocusedRowCellValue(DataColumn column)
+        {
+            return GetRowCellValue(FocusedDataHandle, column);
+        }
+
+        public object GetRowCellValue(int Datahandle, GridViewColumn column)
+        {
+            return GetRowCellValue(Datahandle, column.Column);
+        }
+
+        public object GetRowCellValue(int Datahandle, DataColumn column)
+        {
+            if(Datahandle == -1)
+                return null;
+            return column.GetCellValue(Datahandle);
+        }
+
+        public object GetRowCellValue(int Datahandle, string FieldName)
+        {
+            return GetRowCellValue(Datahandle, GetColumnByFieldName(FieldName));
+        }
+
+        public object GetRowCellValue(int Datahandle, int columnIndex)
+        {
+            return GetRowCellValue(Datahandle, Columns[columnIndex]);
+        }
+
+        public GridViewColumn GetGridViewColumnByFieldName(string fieldName, bool IgnoreCase = false)
+        {
+            for(int i = 0; i < ColumnCount(); i++)
+            {
+                if(Columns[i] != null && Columns[i].Column != null &&
                     string.Compare(Columns[i].Column.FieldName, fieldName, IgnoreCase) == 0)
                     return Columns[i];
             }
@@ -492,83 +511,83 @@ namespace ExpressCraft
         }
 
         public DataColumn GetColumnByFieldName(string fieldName, bool IgnoreCase = false)
-		{
-			if(DataSource == null)
-				return null;
+        {
+            if(DataSource == null)
+                return null;
 
-			for(int i = 0; i < DataSource.ColumnCount; i++)
-			{
-				if(DataSource.Columns[i] != null &&
-					string.Compare(DataSource.Columns[i].FieldName, fieldName, IgnoreCase) == 0)
-					return DataSource.Columns[i];
-			}
+            for(int i = 0; i < DataSource.ColumnCount; i++)
+            {
+                if(DataSource.Columns[i] != null &&
+                    string.Compare(DataSource.Columns[i].FieldName, fieldName, IgnoreCase) == 0)
+                    return DataSource.Columns[i];
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public void AddColumn(string caption, string fieldname, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false)
-		{
-			var col = GetColumnByFieldName(fieldname);
-			if(col == null)
-				return;
-			AddColumn(caption, col, width, formatstring, alignment, forecolor, isBold);
-		}
+        public void AddColumn(string caption, string fieldname, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false)
+        {
+            var col = GetColumnByFieldName(fieldname);
+            if(col == null)
+                return;
+            AddColumn(caption, col, width, formatstring, alignment, forecolor, isBold);
+        }
 
-		public void AddColumn(string caption, DataColumn column, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false)
-		{
-			AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new GridViewCellApparence(isBold, alignment, forecolor), FormatString = formatstring, Column = column });
-		}
+        public void AddColumn(string caption, DataColumn column, int width = 100, string formatstring = "", TextAlign alignment = TextAlign.Left, string forecolor = null, bool isBold = false)
+        {
+            AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new GridViewCellApparence(isBold, alignment, forecolor), FormatString = formatstring, Column = column });
+        }
 
-		public void AddColumn(GridViewColumn column)
-		{
-			if(column == null)
-				return;
+        public void AddColumn(GridViewColumn column)
+        {
+            if(column == null)
+                return;
 
-			Columns.Add(column);
+            Columns.Add(column);
 
-			RenderGrid();
-		}
+            RenderGrid();
+        }
 
-		public void AddColumns(params GridViewColumn[] columns)
-		{
-			if(columns == null || columns.Length == 0)
-				return;
+        public void AddColumns(params GridViewColumn[] columns)
+        {
+            if(columns == null || columns.Length == 0)
+                return;
 
-			Columns.AddRange(columns);
+            Columns.AddRange(columns);
 
-			RenderGrid();
-		}
+            RenderGrid();
+        }
 
-		public void RemoveColumn(GridViewColumn column)
-		{
-			Columns.Remove(column);
+        public void RemoveColumn(GridViewColumn column)
+        {
+            Columns.Remove(column);
 
-			RenderGrid();
-		}
+            RenderGrid();
+        }
 
-		public int GetDataSourceRow(int i)
-		{
-			if(VisibleRowHandles == null || VisibleRowHandles.Count == 0)
-				return i;
-			return VisibleRowHandles[i];
-		}
+        public int GetDataSourceRow(int i)
+        {
+            if(VisibleRowHandles == null || VisibleRowHandles.Count == 0)
+                return i;
+            return VisibleRowHandles[i];
+        }
 
-		public float GetColumnWidths()
-		{
-			if(_columnAutoWidth)
-			{
-				return GridBodyContainer.ClientWidth;
-			}
-			else
-			{
-				float width = 0.0f;
-				for(int i = 0; i < Columns.Count; i++)
-				{
-					width += Columns[i].Width;
-				}
-				return width;
-			}
-		}
+        public float GetColumnWidths()
+        {
+            if(_columnAutoWidth)
+            {
+                return GridBodyContainer.ClientWidth;
+            }
+            else
+            {
+                float width = 0.0f;
+                for(int i = 0; i < Columns.Count; i++)
+                {
+                    width += Columns[i].Width;
+                }
+                return width;
+            }
+        }
 
         public void ClearSelection()
         {
@@ -576,45 +595,48 @@ namespace ExpressCraft
             RenderGrid();
         }
 
-		public void SelectAllRows()
-		{
-			int length = RowCount();
-			if(length == 0)
-			{
-				SelectedRows.ClearAll();
-			}
-			else
-			{
-				int[] index = new int[length];
-				for(int i = 0; i < length; i++)
-				{
-					index[i] = GetDataSourceRow(i);
-				}
-				SelectedRows.ClearAllSetHardRange(true, index);
-			}
-			RenderGrid();
-		}
-		private int PrevRenderGridScrollId = -1;
+        public void SelectAllRows()
+        {
+            int length = RowCount();
+            if(length == 0)
+            {
+                SelectedRows.ClearAll();
+            }
+            else
+            {
+                int[] index = new int[length];
+                for(int i = 0; i < length; i++)
+                {
+                    index[i] = GetDataSourceRow(i);
+                }
+                SelectedRows.ClearAllSetHardRange(true, index);
+            }
+            RenderGrid();
+        }
 
-		public void DelayedRenderGrid()
-		{
-			if(Settings.GridViewScrollDelayed)
-			{
-				if(PrevRenderGridScrollId != -1)
-				{
-					Global.ClearTimeout(PrevRenderGridScrollId);
-					PrevRenderGridScrollId = -1;
-				}
-				PrevRenderGridScrollId = Global.SetTimeout(() => {
-					RenderGrid();
-				}, Math.Max(1, Settings.GridViewScrollDelayMS));
-			}
-			else
-			{
-				RenderGrid();
-			}
-		}
-		private Stopwatch clickTimeDiff = null;
+        private int PrevRenderGridScrollId = -1;
+
+        public void DelayedRenderGrid()
+        {
+            if(Settings.GridViewScrollDelayed)
+            {
+                if(PrevRenderGridScrollId != -1)
+                {
+                    Global.ClearTimeout(PrevRenderGridScrollId);
+                    PrevRenderGridScrollId = -1;
+                }
+                PrevRenderGridScrollId = Global.SetTimeout(() =>
+                {
+                    RenderGrid();
+                }, Math.Max(1, Settings.GridViewScrollDelayMS));
+            }
+            else
+            {
+                RenderGrid();
+            }
+        }
+
+        private Stopwatch clickTimeDiff = null;
 
         public DataRow GetFocusedRow()
         {
@@ -628,14 +650,13 @@ namespace ExpressCraft
             }
         }
 
-
         public int GetVisibleCount()
         {
             if(Columns == null || Columns.Count == 0)
                 return 0;
             int length = Columns.Count;
             int length1 = Columns.Count;
-            
+
             for(int i = 0; i < length; i++)
             {
                 if(!Columns[i].Visible)
@@ -643,15 +664,17 @@ namespace ExpressCraft
             }
             return length1;
         }
-        string headingClass;
-        string cellClass;
+
+        private string headingClass;
+        private string cellClass;
+
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
-		{            
+        {
             if(Helper.NotDesktop)
             {
                 UnitHeight = 53;
                 headingClass = "heading heading-responsive";
-                
+
                 cellClass = "cell cell-responsive";
             }
             else
@@ -660,247 +683,250 @@ namespace ExpressCraft
                 headingClass = "heading";
                 cellClass = "cell";
             }
-                       
+
             this.Content.Style.Overflow = Overflow.Hidden;
 
-			renderGridInternal = () =>
-			{
-				int StartedWith = RenderTime;
-				
-				GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
-				if(Settings.GridViewBlurOnScroll)
-					ProcessBlur();
+            renderGridInternal = () =>
+            {
+                int StartedWith = RenderTime;
 
-				ValidateGridSize();
+                GridHeaderContainer.ScrollLeft = GridBodyContainer.ScrollLeft;
+                if(Settings.GridViewBlurOnScroll)
+                    ProcessBlur();
 
-				if(ColumnCount() == 0)
-				{
-					ClearGrid();					
-					return;
-				}
+                ValidateGridSize();
 
-				int RawLeftCellIndex = 0;
-				float RawLeftCellScrollPadding = 0;
+                if(ColumnCount() == 0)
+                {
+                    ClearGrid();
+                    return;
+                }
 
-				int RawLeftCellCount = Columns.Count;
+                int RawLeftCellIndex = 0;
+                float RawLeftCellScrollPadding = 0;
 
-				float LeftLocation = 0;
-				bool foundLeftLocation = false;
-				bool foundRightLocation = false;
+                int RawLeftCellCount = Columns.Count;
 
-				int ClientWidth = GridBodyContainer.ClientWidth;
-				#region "Columns"
-				float ViewWidth = GridBodyContainer.ScrollLeft + ClientWidth;
-				float _columnAutoWidthSingle = 0.0f;
-                
+                float LeftLocation = 0;
+                bool foundLeftLocation = false;
+                bool foundRightLocation = false;
+
+                int ClientWidth = GridBodyContainer.ClientWidth;
+
+                #region "Columns"
+
+                float ViewWidth = GridBodyContainer.ScrollLeft + ClientWidth;
+                float _columnAutoWidthSingle = 0.0f;
+
                 if(_columnAutoWidth)
-				{
-					_columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / GetVisibleCount();
-				}
-                
+                {
+                    _columnAutoWidthSingle = ClientWidth == 0 ? 0.0f : ClientWidth / GetVisibleCount();
+                }
+
                 float MaxWidth;
                 float LastWidth;
 
                 for(int x = 0; x < Columns.Count; x++)
-				{
+                {
                     if(!Columns[x].Visible)
                         continue;
 
-					Columns[x].CachedX = LeftLocation;
+                    Columns[x].CachedX = LeftLocation;
                     LastWidth = _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
                     LeftLocation += LastWidth;
-					if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
-					{
-						foundLeftLocation = true;
-						RawLeftCellIndex = x;
-						RawLeftCellScrollPadding = LeftLocation - GridBodyContainer.ScrollLeft;
-					}
-					if(foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth)
-					{
-						foundRightLocation = true;
-						RawLeftCellCount = x + 1;
-						break;
-					}
-					if(StartedWith != RenderTime)
-					{
-						return;
-					}
-				}
+                    if(!foundLeftLocation && LeftLocation >= GridBodyContainer.ScrollLeft)
+                    {
+                        foundLeftLocation = true;
+                        RawLeftCellIndex = x;
+                        RawLeftCellScrollPadding = LeftLocation - GridBodyContainer.ScrollLeft;
+                    }
+                    if(foundLeftLocation && !foundRightLocation && LeftLocation >= ViewWidth)
+                    {
+                        foundRightLocation = true;
+                        RawLeftCellCount = x + 1;
+                        break;
+                    }
+                    if(StartedWith != RenderTime)
+                    {
+                        return;
+                    }
+                }
 
                 MaxWidth = LeftLocation;
 
                 var colFragment = Document.CreateDocumentFragment();
 
-				int uboundRowCount = RawLeftCellCount - 1;
-                
+                int uboundRowCount = RawLeftCellCount - 1;
+
                 if(_columnHeadersVisible)
-				{
-					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-					{						
-						if(x >= Columns.Count)
-							break;
+                {
+                    for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+                    {
+                        if(x >= Columns.Count)
+                            break;
                         if(!Columns[x].Visible)
                             continue;
 
-						var gcol = Columns[x];
-						var colIndex = x;
-						var apparence = gcol.HeadingApparence;
+                        var gcol = Columns[x];
+                        var colIndex = x;
+                        var apparence = gcol.HeadingApparence;
 
-						var col = Label(gcol.Caption,
-							(_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
-							apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
-						if(gcol.SortedMode != GridViewSortMode.None)
-						{                            
-                            var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");                        
+                        var col = Label(gcol.Caption,
+                            (_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
+                            apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
+                        if(gcol.SortedMode != GridViewSortMode.None)
+                        {
+                            var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");
                             sortImage.SetBounds("(100% - 13px)", 11, 9, 5);
-							col.AppendChild(sortImage);
-						}
+                            col.AppendChild(sortImage);
+                        }
 
-						SetupColumn(col, x, gcol);
-                        
+                        SetupColumn(col, x, gcol);
+
                         colFragment.AppendChild(col);
-                        
-						if(StartedWith != RenderTime)
-						{
-							return;
-						}
-					}
-				}
 
-				#endregion
+                        if(StartedWith != RenderTime)
+                        {
+                            return;
+                        }
+                    }
+                }
 
+                #endregion "Columns"
 
-				if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
-				{
-					ClearGrid();
+                if(_dataSource == null || _dataSource.RowCount == 0 || _dataSource.ColumnCount == 0)
+                {
+                    ClearGrid();
                     GridHeader.AppendChild(colFragment);
-					return;
-				}
+                    return;
+                }
 
-				var ppr = PixelsPerRow(_dataSource.RowCount);
+                var ppr = PixelsPerRow(_dataSource.RowCount);
 
-				float RawTopRowIndex = GetRawTopRowIndex();
-				float RawTopRowScrollPadding = RawTopRowIndex % 1.0f;
-				float RawVisibleRowCount = GetRawVisibleRowCount();
+                float RawTopRowIndex = GetRawTopRowIndex();
+                float RawTopRowScrollPadding = RawTopRowIndex % 1.0f;
+                float RawVisibleRowCount = GetRawVisibleRowCount();
 
-				int Length = (int)(RawVisibleRowCount + RawTopRowIndex) + 1;
-				int start = (int)RawTopRowIndex;
-				#region "Selection"
-				for(int x = SelectedRows.SL.Count - 1; x >= 0; x--)
-				{
-					bool Found = false;
-					for(int i = start; i < Length; i++)
-					{
-						if(i < DataSource.RowCount)
-						{
-							var DataRowhandle = GetDataSourceRow(i);
-							if(SelectedRows.GetIndexValueByHardListIndex(SelectedRows.SL[x]).Index == DataRowhandle)
-							{
-								Found = true;
-								break;
-							}
-						}
-						if(StartedWith != RenderTime)
-						{
-							return;
-						}
-					}
-					if(StartedWith != RenderTime)
-					{
-						return;
-					}
-					if(!Found)
-					{
-						SelectedRows.SL.RemoveAt(x);
-					}
-				}
-                #endregion
+                int Length = (int)(RawVisibleRowCount + RawTopRowIndex) + 1;
+                int start = (int)RawTopRowIndex;
+
+                #region "Selection"
+
+                for(int x = SelectedRows.SL.Count - 1; x >= 0; x--)
+                {
+                    bool Found = false;
+                    for(int i = start; i < Length; i++)
+                    {
+                        if(i < DataSource.RowCount)
+                        {
+                            var DataRowhandle = GetDataSourceRow(i);
+                            if(SelectedRows.GetIndexValueByHardListIndex(SelectedRows.SL[x]).Index == DataRowhandle)
+                            {
+                                Found = true;
+                                break;
+                            }
+                        }
+                        if(StartedWith != RenderTime)
+                        {
+                            return;
+                        }
+                    }
+                    if(StartedWith != RenderTime)
+                    {
+                        return;
+                    }
+                    if(!Found)
+                    {
+                        SelectedRows.SL.RemoveAt(x);
+                    }
+                }
+
+                #endregion "Selection"
 
                 var rowFragment = Document.CreateDocumentFragment();
 
-				if(Settings.GridViewRowScrollPadding > 0)
-				{
-					start -= Settings.GridViewRowScrollPadding;
-					Length += Settings.GridViewRowScrollPadding;
-				}
+                if(Settings.GridViewRowScrollPadding > 0)
+                {
+                    start -= Settings.GridViewRowScrollPadding;
+                    Length += Settings.GridViewRowScrollPadding;
+                }
 
-				float Y = (start * (ppr)) - RawTopRowScrollPadding;
-							
+                float Y = (start * (ppr)) - RawTopRowScrollPadding;
 
-				if(ShowAutoFilterRow)
-				{
-					Length -= 1;
-					Y += UnitHeight;
-				}
+                if(ShowAutoFilterRow)
+                {
+                    Length -= 1;
+                    Y += UnitHeight;
+                }
 
-				// #TODO - CLEAN...
-				if(start < 0)
-					start = 0;
-				if(Length > DataSource.RowCount)
-					Length = DataSource.RowCount;
-				
-				for(int i = start; i < Length; i++)
-				{					
-					var DataRowhandle = GetDataSourceRow(i);
-					var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
+                // #TODO - CLEAN...
+                if(start < 0)
+                    start = 0;
+                if(Length > DataSource.RowCount)
+                    Length = DataSource.RowCount;
 
-					dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
-					dr.SetAttribute("i", Convert.ToString(DataRowhandle));
+                for(int i = start; i < Length; i++)
+                {
+                    var DataRowhandle = GetDataSourceRow(i);
+                    var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
 
-					dr.OnClick = OnRowClick;
-					if(Settings.IsChrome)
-					{
-						dr.OnDblClick = OnDoubleClick;
-					}
+                    dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+                    dr.SetAttribute("i", Convert.ToString(DataRowhandle));
 
-					for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
-					{
-						var col = Columns[x];
+                    dr.OnClick = OnRowClick;
+                    if(Settings.IsChrome)
+                    {
+                        dr.OnDblClick = OnDoubleClick;
+                    }
+
+                    for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
+                    {
+                        var col = Columns[x];
                         if(!col.Visible)
                             continue;
 
-						var apparence = col.BodyApparence;
-						bool useDefault = false;
-						HTMLElement cell;
-						if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
-						{
-							cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
-							col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
+                        var apparence = col.BodyApparence;
+                        bool useDefault = false;
+                        HTMLElement cell;
+                        if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
+                        {
+                            cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
+                            col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
 
-							dr.AppendChild(useDefault ?
-								col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
-								cell);
-						}
-						else
-						{
-							cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
-							cell.SetLocation(col.CachedX, 0);
-							cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+                            dr.AppendChild(useDefault ?
+                                col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
+                                cell);
+                        }
+                        else
+                        {
+                            cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
+                            cell.SetLocation(col.CachedX, 0);
+                            cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
 
-							dr.AppendChild(cell);
-						}
-						cell.SetAttribute("i", x.ToString());
-						cell.OnMouseDown = OnCellRowMouseDown;
-					}
+                            dr.AppendChild(cell);
+                        }
+                        cell.SetAttribute("i", x.ToString());
+                        cell.OnMouseDown = OnCellRowMouseDown;
+                    }
 
-					if(AllowRowDrag)
-					{
-						dr.SetAttribute("draggable", "true");
+                    if(AllowRowDrag)
+                    {
+                        dr.SetAttribute("draggable", "true");
 
-						dr.OnDragStart = OnRowDragStart;
-					}
+                        dr.OnDragStart = OnRowDragStart;
+                    }
 
                     rowFragment.AppendChild(dr);
-                    
-					Y += UnitHeight;
-					
-					if(StartedWith != RenderTime)
-					{
-						return;
-					}
-				}
-                
-				ClearGrid();
+
+                    Y += UnitHeight;
+
+                    if(StartedWith != RenderTime)
+                    {
+                        return;
+                    }
+                }
+
+                ClearGrid();
 
                 if(OnCustomRowStyle != null)
                 {
@@ -916,7 +942,6 @@ namespace ExpressCraft
                         {
                             var child = rowFragment.Children[i];
                             OnCustomRowStyle(child, Global.ParseInt(child.GetAttribute("i")));
-
                         }
                         catch(Exception ex)
                         {
@@ -926,185 +951,193 @@ namespace ExpressCraft
                     }
                 }
 
-                GridHeader.AppendChild(colFragment);                
+                GridHeader.AppendChild(colFragment);
                 GridBody.AppendChild(rowFragment);
 
                 if(StartedWith != RenderTime)
-				{
-					return;
-				}
+                {
+                    return;
+                }
 
-				RenderTime = -1;
-			};
+                RenderTime = -1;
+            };
 
-			GridHeaderContainer = Div("heading-container");
-			
-			GridHeader = Div();
-			GridHeader.SetBounds("0", "0", "0", "29px");
-			GridBodyContainer = Div();
-			
-			GridBodyContainer.Style.OverflowX = Overflow.Auto;
-			GridBodyContainer.Style.OverflowY = Overflow.Auto;
+            GridHeaderContainer = Div("heading-container");
 
-			GridHeaderContainer.Style.Overflow = Overflow.Hidden;
+            GridHeader = Div();
+            GridHeader.SetBounds("0", "0", "0", "29px");
+            GridBodyContainer = Div();
 
-			GridBody = Div();
-			GridBody.SetBounds("0", "0", "0", "0");
+            GridBodyContainer.Style.OverflowX = Overflow.Auto;
+            GridBodyContainer.Style.OverflowY = Overflow.Auto;
 
-			GridBodyContainer.AppendChild(GridBody);
-			GridHeaderContainer.AppendChild(GridHeader);
+            GridHeaderContainer.Style.Overflow = Overflow.Hidden;
 
-			SetDefaultSizes();
+            GridBody = Div();
+            GridBody.SetBounds("0", "0", "0", "0");
 
-			Content.OnMouseUp = (ev) => {
-				if(ResizeIndex == -1)
-					return;
-				int x = Script.Write<int>("ev.pageX");
-				x = Columns[ResizeIndex].Width + (x - ResizePageX);
-				if(x < 24)
-					x = 24;
-				Columns[ResizeIndex].Width = x;
+            GridBodyContainer.AppendChild(GridBody);
+            GridHeaderContainer.AppendChild(GridHeader);
 
-				Form.SetCursor(Cursor.Default);
+            SetDefaultSizes();
 
-				ev.PreventDefault();
-				ev.StopImmediatePropagation();
-				ev.StopPropagation();
+            Content.OnMouseUp = (ev) =>
+            {
+                if(ResizeIndex == -1)
+                    return;
+                int x = Script.Write<int>("ev.pageX");
+                x = Columns[ResizeIndex].Width + (x - ResizePageX);
+                if(x < 24)
+                    x = 24;
+                Columns[ResizeIndex].Width = x;
 
-				ResizeIndex = -1;
-				ResizeSpan = null;
-			};			
+                Form.SetCursor(Cursor.Default);
 
-			OnResize = (ev) => {
-				DelayedRenderGrid();
-			};
-			GridBodyContainer.OnScroll = (ev) => {
-				DelayedRenderGrid();
-			};
-			OnLoaded = (ev) => {
-				RenderGrid();
-			};
-			OnCellRowMouseDown = (ev) =>
-			{				
-				FocusedColumn = Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"));
-			};
-			OnRowClick = (ev) => {
-				if(!Settings.IsChrome)
-				{
-					if(clickTimeDiff == null)
-					{
-						clickTimeDiff = Stopwatch.StartNew();
-					}
-					else
-					{
-						clickTimeDiff.Stop();
-						var ems = clickTimeDiff.ElapsedMilliseconds;
-						clickTimeDiff = null;
+                ev.PreventDefault();
+                ev.StopImmediatePropagation();
+                ev.StopPropagation();
 
-						if(ems < 200)
-						{
-							OnDoubleClick(ev);
-						}
-					}
-				}
+                ResizeIndex = -1;
+                ResizeSpan = null;
+            };
 
-				var DataRowHandle = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+            OnResize = (ev) =>
+            {
+                DelayedRenderGrid();
+            };
+            GridBodyContainer.OnScroll = (ev) =>
+            {
+                DelayedRenderGrid();
+            };
+            OnLoaded = (ev) =>
+            {
+                RenderGrid();
+            };
+            OnCellRowMouseDown = (ev) =>
+            {
+                FocusedColumn = Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"));
+            };
+            OnRowClick = (ev) =>
+            {
+                if(!Settings.IsChrome)
+                {
+                    if(clickTimeDiff == null)
+                    {
+                        clickTimeDiff = Stopwatch.StartNew();
+                    }
+                    else
+                    {
+                        clickTimeDiff.Stop();
+                        var ems = clickTimeDiff.ElapsedMilliseconds;
+                        clickTimeDiff = null;
 
-				var mev = ev.As<MouseEvent>();
-				if(AllowMultiSelection)
-				{
-					if(mev.CtrlKey)
-					{
-						SelectedRows.AddOrSet(true, DataRowHandle, true);
-						RenderGrid();
-						return;
-					}
-					else if(mev.ShiftKey)
-					{
-						return;
-					}
-				}
-				SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
-				if(DataRowHandle != _focusedDataHandle)
-				{
-					FocusedDataHandle = DataRowHandle;
-				}
-				else
-				{
-					RenderGrid();
-				}
-			};
-			Content.TabIndex = 0;
-			OnDoubleClick = (ev) => {
-				int drh = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
-				if(OnRowDoubleClick != null)
-					OnRowDoubleClick(drh);
+                        if(ems < 200)
+                        {
+                            OnDoubleClick(ev);
+                        }
+                    }
+                }
 
-				if(_useEditForm)
-				{
-					var idr = DataSource[drh];
+                var DataRowHandle = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
 
-					var fdre = new DataRowEditForm(idr, this, true);
-					fdre.ShowDialog();
+                var mev = ev.As<MouseEvent>();
+                if(AllowMultiSelection)
+                {
+                    if(mev.CtrlKey)
+                    {
+                        SelectedRows.AddOrSet(true, DataRowHandle, true);
+                        RenderGrid();
+                        return;
+                    }
+                    else if(mev.ShiftKey)
+                    {
+                        return;
+                    }
+                }
+                SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
+                if(DataRowHandle != _focusedDataHandle)
+                {
+                    FocusedDataHandle = DataRowHandle;
+                }
+                else
+                {
+                    RenderGrid();
+                }
+            };
+            Content.TabIndex = 0;
+            OnDoubleClick = (ev) =>
+            {
+                int drh = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+                if(OnRowDoubleClick != null)
+                    OnRowDoubleClick(drh);
 
-				}
-			};
+                if(_useEditForm)
+                {
+                    var idr = DataSource[drh];
 
-			Content.OnKeyDown = (ev) => {
-				var kev = ev.As<KeyboardEvent>();
-				//Global.Alert("CONTROL + A");
-				if(AllowMultiSelection && kev.CtrlKey && (kev.KeyCode == 65 || kev.KeyCode == 97))
-				{
-					// keyCode == 65 || keyCode == 97
-					//Global.Alert("AllowMultiSelection = TRUE");
-					SelectAllRows();
-				}
-				else
-				{
-					//Global.Alert("AllowMultiSelection = FALSE");
-				}
-			};
+                    var fdre = new DataRowEditForm(idr, this, true);
+                    fdre.ShowDialog();
+                }
+            };
 
-			ContextMenu = new ContextMenu();
+            Content.OnKeyDown = (ev) =>
+            {
+                var kev = ev.As<KeyboardEvent>();
+                //Global.Alert("CONTROL + A");
+                if(AllowMultiSelection && kev.CtrlKey && (kev.KeyCode == 65 || kev.KeyCode == 97))
+                {
+                    // keyCode == 65 || keyCode == 97
+                    //Global.Alert("AllowMultiSelection = TRUE");
+                    SelectAllRows();
+                }
+                else
+                {
+                    //Global.Alert("AllowMultiSelection = FALSE");
+                }
+            };
 
-			ContextMenu.ContextItems.AddRange(new ContextItem[] {
-				new ContextItem("Sort Ascending", (cm) => {
+            ContextMenu = new ContextMenu();
+
+            ContextMenu.ContextItems.AddRange(new ContextItem[] {
+                new ContextItem("Sort Ascending", (cm) => {
                     if(FocusedColumn > -1)
                     {
                         SortColumn(Columns[FocusedColumn], GridViewSortMode.Asc);
                     }
                 }),
-				new ContextItem("Sort Descending", (cm) => {
+                new ContextItem("Sort Descending", (cm) => {
                     if(FocusedColumn > -1)
                     {
                         SortColumn(Columns[FocusedColumn], GridViewSortMode.Desc);
                     }
                 }),
-				new ContextItem("Clear All Sorting", (cm) => {
+                new ContextItem("Clear All Sorting", (cm) => {
                     ClearSortColumn();
                 },  true),
-				new ContextItem("Group By This Column"),
-				new ContextItem("Hide Group By Box", true),
-				new ContextItem("Hide This Column"),
-				new ContextItem("View Columns"),
-				new ContextItem("Save Column Layout"),
-				new ContextItem("Best Fit"),
-				new ContextItem("Best Fit (all columns)", true),
-				new ContextItem("Filter Editor..."),
-				new ContextItem("Show Find Panel"),
-				new ContextItem("Show Auto Filter Row"),
-				new ContextItem("Select All", (cm) => { SelectAllRows(); }),
+                new ContextItem("Group By This Column"),
+                new ContextItem("Hide Group By Box", true),
+                new ContextItem("Hide This Column"),
+                new ContextItem("View Columns"),
+                new ContextItem("Save Column Layout"),
+                new ContextItem("Best Fit"),
+                new ContextItem("Best Fit (all columns)", true),
+                new ContextItem("Filter Editor..."),
+                new ContextItem("Show Find Panel"),
+                new ContextItem("Show Auto Filter Row"),
+                new ContextItem("Select All", (cm) => { SelectAllRows(); }),
                 new ContextItem("Unselect All", (cm) => { ClearSelection(); })
             });
 
-			Content.OnContextMenu = (ev) => {
+            Content.OnContextMenu = (ev) =>
+            {
                 if(Helper.NotDesktop)
                 {
                     ev.PreventDefault();
                     ev.StopPropagation();
 
                     OnDoubleClick(ev.As<MouseEvent<HTMLDivElement>>());
-                }else
+                }
+                else
                 {
                     if(ContextMenu != null)
                     {
@@ -1113,336 +1146,347 @@ namespace ExpressCraft
                         ev.StopPropagation();
                     }
                 }
-				
-			};
+            };
 
-			OnColumnOnClick = (ev) => {
-				if(ResizeIndex >= 0)
-					return;
+            OnColumnOnClick = (ev) =>
+            {
+                if(ResizeIndex >= 0)
+                    return;
 
-				var gcol = Columns[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))];
+                var gcol = Columns[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))];
 
-				for(int i = 0; i < ColumnCount(); i++)
-				{
-					if(Columns[i] != gcol)
-					{
-						Columns[i].SortedMode = GridViewSortMode.None;
-					}
-				}
-				switch(gcol.SortedMode)
-				{
-					default:
-					case GridViewSortMode.None:
-						SortColumn(gcol, GridViewSortMode.Asc);
-						break;
-					case GridViewSortMode.Asc:
-						SortColumn(gcol, GridViewSortMode.Desc);
-						break;
-					case GridViewSortMode.Desc:
-						SortColumn(gcol, GridViewSortMode.None);
-						break;
-				}
-			};
-			OnColumnDragStart = (ev) => {
-				Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", ev.CurrentTarget.GetAttribute("i"));
-			};			
-			OnColumnDragOver = (ev) => {
-				ev.PreventDefault();
-			};
-			OnColumnDrop = (ev) => {
-				if(ev.Target == null || !(ev.Target is HTMLSpanElement))
-					return;
+                for(int i = 0; i < ColumnCount(); i++)
+                {
+                    if(Columns[i] != gcol)
+                    {
+                        Columns[i].SortedMode = GridViewSortMode.None;
+                    }
+                }
+                switch(gcol.SortedMode)
+                {
+                    default:
+                    case GridViewSortMode.None:
+                        SortColumn(gcol, GridViewSortMode.Asc);
+                        break;
 
-				var target = ev.Target.As<HTMLSpanElement>();
+                    case GridViewSortMode.Asc:
+                        SortColumn(gcol, GridViewSortMode.Desc);
+                        break;
 
-				if(target.ParentElement != GridHeader)
-					return;
+                    case GridViewSortMode.Desc:
+                        SortColumn(gcol, GridViewSortMode.None);
+                        break;
+                }
+            };
+            OnColumnDragStart = (ev) =>
+            {
+                Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", ev.CurrentTarget.GetAttribute("i"));
+            };
+            OnColumnDragOver = (ev) =>
+            {
+                ev.PreventDefault();
+            };
+            OnColumnDrop = (ev) =>
+            {
+                if(ev.Target == null || !(ev.Target is HTMLSpanElement))
+                    return;
 
-				var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
-				var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
-				if(SelectedIndex == HoverIndex)
-					return;
+                var target = ev.Target.As<HTMLSpanElement>();
 
-				if(HoverIndex < 0)
-					return;
+                if(target.ParentElement != GridHeader)
+                    return;
 
-				int x = Script.Write<int>("ev.layerX");
-				x -= target.ClientLeft;
-				int w = target.ClientWidth / 2;
+                var HoverIndex = Global.ParseInt(target.GetAttribute("i"));
+                var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
+                if(SelectedIndex == HoverIndex)
+                    return;
 
-				if(HoverIndex == SelectedIndex - 1 && x > w)
-					return;
-				if(HoverIndex == SelectedIndex + 1 && x < w)
-					return;
+                if(HoverIndex < 0)
+                    return;
 
-				if(x < w)
-				{
-					DragIndex = HoverIndex;
-				}
-				else
-				{
-					DragIndex = HoverIndex + 1;
-				}
+                int x = Script.Write<int>("ev.layerX");
+                x -= target.ClientLeft;
+                int w = target.ClientWidth / 2;
 
-				if(DragIndex < 0 || SelectedIndex < 0)
-					return;
-				var col = Columns[SelectedIndex];
-				if(DragIndex == Columns.Count)
-				{
-					Columns.Remove(col);
-					Columns.Add(col);
-				}
-				else
-				{
-					var col1 = Columns[DragIndex];
-					Columns.Remove(col);
-					Columns.Insert(Columns.IndexOf(col1), col);
-				}
+                if(HoverIndex == SelectedIndex - 1 && x > w)
+                    return;
+                if(HoverIndex == SelectedIndex + 1 && x < w)
+                    return;
 
-				RenderGrid();
-			};
-			OnColumnMouseDown = (ev) => {
-				int x = Script.Write<int>("ev.layerX");
-				var target = ev.Target.As<HTMLSpanElement>();
-				x -= target.ClientLeft;
-				ResizePageX = Script.Write<int>("ev.pageX");
+                if(x < w)
+                {
+                    DragIndex = HoverIndex;
+                }
+                else
+                {
+                    DragIndex = HoverIndex + 1;
+                }
 
-				FocusedColumn = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+                if(DragIndex < 0 || SelectedIndex < 0)
+                    return;
+                var col = Columns[SelectedIndex];
+                if(DragIndex == Columns.Count)
+                {
+                    Columns.Remove(col);
+                    Columns.Add(col);
+                }
+                else
+                {
+                    var col1 = Columns[DragIndex];
+                    Columns.Remove(col);
+                    Columns.Insert(Columns.IndexOf(col1), col);
+                }
 
-				if(x >= target.ClientWidth - 2)
-				{
-					ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
-					ResizeSpan = target;
-					Form.SetCursor(Cursor.EastWestResize);
+                RenderGrid();
+            };
+            OnColumnMouseDown = (ev) =>
+            {
+                int x = Script.Write<int>("ev.layerX");
+                var target = ev.Target.As<HTMLSpanElement>();
+                x -= target.ClientLeft;
+                ResizePageX = Script.Write<int>("ev.pageX");
 
-					ev.PreventDefault();
-				}
-				else
-				{
-					ResizeSpan = null;
-					ResizeIndex = -1;
-				}
-			};
-			OnColumnMouseMove = (ev) => {
-				if(ResizeIndex == -1)
-				{
-					int x = Script.Write<int>("ev.layerX");
-					var target = ev.Target.As<HTMLSpanElement>();
-					x -= target.ClientLeft;
+                FocusedColumn = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
 
-					if(x >= target.ClientWidth - 2)
-					{
-						Form.SetCursor(Cursor.EastWestResize);
-						return;
-					}
-					Form.SetCursor(Cursor.Default);
-				}
-			};
+                if(x >= target.ClientWidth - 2)
+                {
+                    ResizeIndex = Global.ParseInt(target.GetAttribute("i"));
+                    ResizeSpan = target;
+                    Form.SetCursor(Cursor.EastWestResize);
 
-			OnColumnMouseLeave = (ev) => {
-				if(ResizeIndex == -1)
-				{
-					Form.SetCursor(Cursor.Default);
-				}
-			};
+                    ev.PreventDefault();
+                }
+                else
+                {
+                    ResizeSpan = null;
+                    ResizeIndex = -1;
+                }
+            };
+            OnColumnMouseMove = (ev) =>
+            {
+                if(ResizeIndex == -1)
+                {
+                    int x = Script.Write<int>("ev.layerX");
+                    var target = ev.Target.As<HTMLSpanElement>();
+                    x -= target.ClientLeft;
 
-			OnRowDragStart = (ev) => {
-				Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
-			};
+                    if(x >= target.ClientWidth - 2)
+                    {
+                        Form.SetCursor(Cursor.EastWestResize);
+                        return;
+                    }
+                    Form.SetCursor(Cursor.Default);
+                }
+            };
 
-			Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
+            OnColumnMouseLeave = (ev) =>
+            {
+                if(ResizeIndex == -1)
+                {
+                    Form.SetCursor(Cursor.Default);
+                }
+            };
 
-			FilterRowOnChange = (te) =>
-			{
-				Columns[Global.ParseInt(te.Content.GetAttribute("i"))].FilterValue = te.Text;
-			};
+            OnRowDragStart = (ev) =>
+            {
+                Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
+            };
 
-			AutoGenerateColumnsFromSource = autoGenerateColumns;
-			ColumnAutoWidth = columnAutoWidth;
-		}
+            Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
 
-		private void DataSource_OnDataSourceChanged(object sender, EventArgs e)
-		{
-			SortColumn();
-			RenderGrid();			
-		}
+            FilterRowOnChange = (te) =>
+            {
+                Columns[Global.ParseInt(te.Content.GetAttribute("i"))].FilterValue = te.Text;
+            };
 
-		public override void Render()
-		{
-			base.Render();
-			HasRendered = true;
-			RenderGrid();
+            AutoGenerateColumnsFromSource = autoGenerateColumns;
+            ColumnAutoWidth = columnAutoWidth;
+        }
 
-			if(Content.ParentElement != null)
-			{
-				
-			}
-		}
+        private void DataSource_OnDataSourceChanged(object sender, EventArgs e)
+        {
+            SortColumn();
+            RenderGrid();
+        }
 
-		public float GetRawVisibleRowCount()
-		{
-			return GridBodyContainer.ClientHeight == 0 ? 0.0f : GridBodyContainer.ClientHeight / UnitHeight;
-		}
+        public override void Render()
+        {
+            base.Render();
+            HasRendered = true;
+            RenderGrid();
 
-		public float GetRawTopRowIndex()
-		{
-			return GridBodyContainer.ScrollTop == 0 ? 0.0f : GridBodyContainer.ScrollTop / PixelsPerRow(RowCount());
-		}
+            if(Content.ParentElement != null)
+            {
+            }
+        }
 
-		public void ValidateGridWidth()
-		{
-			var width = GetColumnWidths();
-			GridBody.Style.Width = (width).ToPx();
-			GridHeader.Style.Width = ((width) + 24).ToPx(); // (width).ToPx();
-			if(RightOfTable == null)
-			{
-				RightOfTable = Div();
-				GridBody.AppendChild(RightOfTable);
-			}
-			if(RightOfTableHeader == null)
-			{
-				RightOfTableHeader = Div();
-				GridHeader.AppendChild(RightOfTableHeader);
-			}
-			RightOfTable.SetBounds(width - 1, 0, 1, 1);
-			RightOfTableHeader.SetBounds(width - 1, 0, 1, 1);
-		}
+        public float GetRawVisibleRowCount()
+        {
+            return GridBodyContainer.ClientHeight == 0 ? 0.0f : GridBodyContainer.ClientHeight / UnitHeight;
+        }
 
-		public float PixelsPerRow(int rowCount)
-		{
-			if(rowCount > Settings.MaximumPixelScrollingRows)
-			{
-				return 3.0f;
-			}
-			else
-			{
-				return UnitHeight;
-			}
-		}
+        public float GetRawTopRowIndex()
+        {
+            return GridBodyContainer.ScrollTop == 0 ? 0.0f : GridBodyContainer.ScrollTop / PixelsPerRow(RowCount());
+        }
 
-		public void ValidateGridHeight()
-		{
-			var i = RowCount();
-			var ppr = PixelsPerRow(i);
-			var height = ppr * i;
+        public void ValidateGridWidth()
+        {
+            var width = GetColumnWidths();
+            GridBody.Style.Width = (width).ToPx();
+            GridHeader.Style.Width = ((width) + 24).ToPx(); // (width).ToPx();
+            if(RightOfTable == null)
+            {
+                RightOfTable = Div();
+                GridBody.AppendChild(RightOfTable);
+            }
+            if(RightOfTableHeader == null)
+            {
+                RightOfTableHeader = Div();
+                GridHeader.AppendChild(RightOfTableHeader);
+            }
+            RightOfTable.SetBounds(width - 1, 0, 1, 1);
+            RightOfTableHeader.SetBounds(width - 1, 0, 1, 1);
+        }
 
-			if(i > Settings.MaximumPixelScrollingRows && GridBodyContainer.ClientHeight > 0)
-			{
-				height += ((GridBodyContainer.ClientHeight / UnitHeight) * ppr);
-			}
+        public float PixelsPerRow(int rowCount)
+        {
+            if(rowCount > Settings.MaximumPixelScrollingRows)
+            {
+                return 3.0f;
+            }
+            else
+            {
+                return UnitHeight;
+            }
+        }
 
-			GridBody.Style.Height = height.ToPx();
-			if(BottonOfTable == null)
-			{
-				BottonOfTable = Div();
-				GridBody.AppendChild(BottonOfTable);
-			}
-			BottonOfTable.SetBounds(0, height - 1, 1, 1);
-		}
+        public void ValidateGridHeight()
+        {
+            var i = RowCount();
+            var ppr = PixelsPerRow(i);
+            var height = ppr * i;
 
-		public void ValidateGridSize()
-		{
-			ValidateGridHeight();
-			ValidateGridWidth();
-		}
+            if(i > Settings.MaximumPixelScrollingRows && GridBodyContainer.ClientHeight > 0)
+            {
+                height += ((GridBodyContainer.ClientHeight / UnitHeight) * ppr);
+            }
 
-		public void ClearHeader()
-		{
-			GridHeader.Empty();
-			GridHeader.AppendChild(RightOfTableHeader);
-		}
+            GridBody.Style.Height = height.ToPx();
+            if(BottonOfTable == null)
+            {
+                BottonOfTable = Div();
+                GridBody.AppendChild(BottonOfTable);
+            }
+            BottonOfTable.SetBounds(0, height - 1, 1, 1);
+        }
 
-		public void ClearColumns()
-		{
-			Columns = new List<GridViewColumn>();
-		}
+        public void ValidateGridSize()
+        {
+            ValidateGridHeight();
+            ValidateGridWidth();
+        }
 
-		public void ClearView()
-		{
-			Columns = new List<GridViewColumn>();
-			VisibleRowHandles = new List<int>();
-			SelectedRows = new HardSoftList<bool>(false);
-			_dataSource = null;
-		}
+        public void ClearHeader()
+        {
+            GridHeader.Empty();
+            GridHeader.AppendChild(RightOfTableHeader);
+        }
 
-		public void ClearBody()
-		{
-			GridBody.Empty();			
-			GridBody.AppendChildren(RightOfTable, BottonOfTable);
-		}
+        public void ClearColumns()
+        {
+            Columns = new List<GridViewColumn>();
+        }
 
-		public void ClearGrid()
-		{
-			ClearHeader();
-			ClearBody();
-		}
-		private int DragIndex = -1;
-		private int ResizeIndex = -1;
-		private int ResizePageX = 0;
-		private HTMLSpanElement ResizeSpan = null;
-		
-		private Action<MouseEvent<HTMLSpanElement>> OnColumnOnClick;
-		private Action<Event<HTMLSpanElement>> OnColumnDragStart;
-		private Action<Event<HTMLSpanElement>> OnColumnDragOver;
-		private Action<Event<HTMLSpanElement>> OnColumnDrop;
-		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseDown;
-		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
-		private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseLeave;
+        public void ClearView()
+        {
+            Columns = new List<GridViewColumn>();
+            VisibleRowHandles = new List<int>();
+            SelectedRows = new HardSoftList<bool>(false);
+            _dataSource = null;
+        }
 
-		private Action<Event<HTMLDivElement>> OnRowDragStart;
+        public void ClearBody()
+        {
+            GridBody.Empty();
+            GridBody.AppendChildren(RightOfTable, BottonOfTable);
+        }
 
-		private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
-		{
-			se.SetAttribute("i", Convert.ToString(index));
-			se.SetAttribute("draggable", "true");
-			se.OnClick = OnColumnOnClick;
-			se.OnDragStart = OnColumnDragStart;
-			se.OnDragOver = OnColumnDragOver;
-			se.OnDrop = OnColumnDrop;		
-			se.OnMouseDown = OnColumnMouseDown;
-			se.OnMouseMove = OnColumnMouseMove;
-			se.OnMouseLeave = OnColumnMouseLeave;
-		}
-		int lastId = -1;
+        public void ClearGrid()
+        {
+            ClearHeader();
+            ClearBody();
+        }
 
-		int PrevScroll = -1;
+        private int DragIndex = -1;
+        private int ResizeIndex = -1;
+        private int ResizePageX = 0;
+        private HTMLSpanElement ResizeSpan = null;
 
-		private void ProcessBlur()
-		{
-			if(PrevScroll != GridBodyContainer.ScrollTop)
-			{
-				GridBody.ClassList.Add("blur");
-				if(lastId != -1)
-				{
-					Global.ClearTimeout(lastId);
-					lastId = -1;
-				}
+        private Action<MouseEvent<HTMLSpanElement>> OnColumnOnClick;
+        private Action<Event<HTMLSpanElement>> OnColumnDragStart;
+        private Action<Event<HTMLSpanElement>> OnColumnDragOver;
+        private Action<Event<HTMLSpanElement>> OnColumnDrop;
+        private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseDown;
+        private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
+        private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseLeave;
 
-				lastId = Global.SetTimeout(() => {
-					GridBody.ClassList.Remove("blur");
-				}, 100);
-			}
-			PrevScroll = GridBodyContainer.ScrollTop;
-		}
+        private Action<Event<HTMLDivElement>> OnRowDragStart;
 
-		private Action<TextInput> FilterRowOnChange;
+        private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
+        {
+            se.SetAttribute("i", Convert.ToString(index));
+            se.SetAttribute("draggable", "true");
+            se.OnClick = OnColumnOnClick;
+            se.OnDragStart = OnColumnDragStart;
+            se.OnDragOver = OnColumnDragOver;
+            se.OnDrop = OnColumnDrop;
+            se.OnMouseDown = OnColumnMouseDown;
+            se.OnMouseMove = OnColumnMouseMove;
+            se.OnMouseLeave = OnColumnMouseLeave;
+        }
 
-		private int RenderTime = -1;
-		private Action renderGridInternal;
+        private int lastId = -1;
 
-		public void RenderGrid()
-		{									
-			if(RenderTime > -1)
-			{
-				Global.ClearTimeout(RenderTime);
-				RenderTime = Global.SetTimeout(renderGridInternal, 1);				
-			}
-			else
-			{
-				renderGridInternal();
-			}		
-		}
-	}
+        private int PrevScroll = -1;
+
+        private void ProcessBlur()
+        {
+            if(PrevScroll != GridBodyContainer.ScrollTop)
+            {
+                GridBody.ClassList.Add("blur");
+                if(lastId != -1)
+                {
+                    Global.ClearTimeout(lastId);
+                    lastId = -1;
+                }
+
+                lastId = Global.SetTimeout(() =>
+                {
+                    GridBody.ClassList.Remove("blur");
+                }, 100);
+            }
+            PrevScroll = GridBodyContainer.ScrollTop;
+        }
+
+        private Action<TextInput> FilterRowOnChange;
+
+        private int RenderTime = -1;
+        private Action renderGridInternal;
+
+        public void RenderGrid()
+        {
+            if(RenderTime > -1)
+            {
+                Global.ClearTimeout(RenderTime);
+                RenderTime = Global.SetTimeout(renderGridInternal, 1);
+            }
+            else
+            {
+                renderGridInternal();
+            }
+        }
+    }
 
     public class SortSetting
     {

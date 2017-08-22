@@ -1,11 +1,4 @@
-﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExpressCraft
+﻿namespace ExpressCraft
 {
     public class CalcForm : FormPopup
     {
@@ -13,7 +6,7 @@ namespace ExpressCraft
 
         public CalculatorControl CalControl;
         public bool ClickedClose = false;
-        
+
         public CalcForm(TextInput inputControl)
         {
             if(inputControl.Content.ParentElement != null && inputControl.Content.ParentElement.ParentElement != null && inputControl.Content.ParentElement.ParentElement.ParentElement != null)
@@ -37,13 +30,14 @@ namespace ExpressCraft
             };
 
             AppendChild(CalControl);
-            
+
             Size = new Vector2(182, 157);
         }
 
         protected override void OnClosed()
         {
             base.OnClosed();
+            InputControl.ValidateData();
             if(!Helper.NotDesktop)
                 InputControl.Focus();
             else
@@ -59,7 +53,7 @@ namespace ExpressCraft
             if(!ClickedClose)
             {
                 CalControl.DontRefresh = true;
-                CalControl.AddOperator(CalControl.btnEq);                
+                CalControl.AddOperator(CalControl.btnEq);
             }
         }
 

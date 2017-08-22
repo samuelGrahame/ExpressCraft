@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
     public class CalculatorControl : Control
-    {        
+    {
         public MemoInput DisplayInput;
 
         public SimpleButton btnClose;
@@ -74,7 +73,7 @@ namespace ExpressCraft
             {
                 if(OnClose != null)
                     OnClose();
-            }            
+            }
         }
 
         public Action OnClose;
@@ -85,7 +84,7 @@ namespace ExpressCraft
 
             string previousOp = "";
             var length = _commands.Count;
-            
+
             for(int i = 0; i < length; i++)
             {
                 var command = _commands[i];
@@ -109,7 +108,7 @@ namespace ExpressCraft
                             catch(Exception)
                             {
                                 tryDec = 0;
-                            }                            
+                            }
                         }
 
                         if(previousOp == "+")
@@ -257,9 +256,11 @@ namespace ExpressCraft
 
         public bool IsSingleOperator(string x)
         {
-            return (x.Contains("TAX") || x == "Dbl" || x == "1/x" || x == "+/-" || x == "sqrt");            
+            return (x.Contains("TAX") || x == "Dbl" || x == "1/x" || x == "+/-" || x == "sqrt");
         }
+
         public bool DontRefresh = false;
+
         public void AddOperator(SimpleButton button)
         {
             if(IsSingleOperator(button.Text))
@@ -283,7 +284,7 @@ namespace ExpressCraft
                 }
 
                 _commands.Add(button.Text);
-                
+
                 RefreshValue();
             }
             else
@@ -294,7 +295,8 @@ namespace ExpressCraft
                     {
                         CalculateAndClose();
                         return;
-                    }else
+                    }
+                    else
                     {
                         if(_commands.Count > 0)
                         {
@@ -308,7 +310,7 @@ namespace ExpressCraft
                         {
                             return;
                         }
-                    }   
+                    }
                 }
 
                 if(button.Text == "%")
@@ -322,11 +324,12 @@ namespace ExpressCraft
                             current_command += "%";
                             _commands.Add(current_command);
                             current_command = "";
-                        }else
+                        }
+                        else
                         {
                             return;
-                        }                        
-                    }                    
+                        }
+                    }
                 }
                 else
                 {
@@ -345,9 +348,9 @@ namespace ExpressCraft
                 RefreshValue();
             }
         }
-        
+
         public CalculatorControl(decimal startingValue, bool CloseButtonVisible = false) : base()
-        {            
+        {
             Value = startingValue;
 
             current_command = Value.ToString();
@@ -355,7 +358,7 @@ namespace ExpressCraft
             var doc = Document.CreateDocumentFragment();
 
             int AddHeight = (Helper.NotDesktop ? 45 : 22);
-            
+
             //27.77778
 
             doc.AppendChild(
@@ -378,9 +381,9 @@ namespace ExpressCraft
                 new SimpleButton[] {
                 btnPTAX = new SimpleButton()
                 {
-                    Text = "+TAX",                    
+                    Text = "+TAX",
                     ItemClick = AddOperator
-                },                                                
+                },
                 btn7 = new SimpleButton()
                 {
                     Text = "7",
@@ -388,22 +391,22 @@ namespace ExpressCraft
                 },
                 btn8 = new SimpleButton()
                 {
-                    Text = "8",                    
+                    Text = "8",
                     ItemClick = AddTextToCommand
                 },
                 btn9 = new SimpleButton()
                 {
-                    Text = "9",                    
+                    Text = "9",
                     ItemClick = AddTextToCommand
                 },
                 btnDiv = new SimpleButton()
                 {
-                    Text = "/",                    
+                    Text = "/",
                     ItemClick = AddOperator
                 },
                 btnSqrt = new SimpleButton()
                 {
-                    Text = "sqrt",                    
+                    Text = "sqrt",
                     ItemClick = AddOperator
                 },
                 btnMTAX = new SimpleButton()
@@ -495,7 +498,7 @@ namespace ExpressCraft
                 {
                     Text = "=",
                     ItemClick = AddOperator
-                }}                
+                }}
                 );
             int index = 0;
             int y = 0;
@@ -505,11 +508,11 @@ namespace ExpressCraft
                 Text = "&times;",
                 Size = new Vector2("((100% - 28px) * 0.1666666666666667)", "((100% - " + yOffset + "px) * 0.2)"),
                 Location = new Vector2("(((100% - 28px) * " + (5 * 0.1666666666666667m) + ") + " + ((5 * 4) + 4) + "px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
-            ItemClick = (ev) =>
-                {
-                    if(OnClose != null)
-                        OnClose();
-                }
+                ItemClick = (ev) =>
+                    {
+                        if(OnClose != null)
+                            OnClose();
+                    }
             };
             if(Helper.NotDesktop)
             {
@@ -530,7 +533,8 @@ namespace ExpressCraft
                 Text = "CE",
                 Size = new Vector2("(((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333)", "((100% - " + yOffset + "px) * 0.2)"),
                 Location = new Vector2("(((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) * 1) + 8px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
-                ItemClick = (ev) => {
+                ItemClick = (ev) =>
+                {
                     current_command = "";
                     RefreshValue();
                 }
@@ -542,7 +546,8 @@ namespace ExpressCraft
                 Text = "C",
                 Size = new Vector2("((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) + 4px)", "((100% - " + yOffset + "px) * 0.2)"),
                 Location = new Vector2("(((((100% - 24px) - ((100% - 28px) * 0.1666666666666667)) * 0.333) * 2) + 12px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)"),
-                ItemClick = (ev) => {
+                ItemClick = (ev) =>
+                {
                     _commands = new List<string>(); current_command = "";
                     RefreshValue();
                 }
@@ -553,7 +558,7 @@ namespace ExpressCraft
             doc.AppendChildren(btnClose.Content, btnBack.Content, btnCE.Content, btnC.Content);
 
             y++;
-            
+
             for(int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Size = new Vector2("((100% - 28px) * 0.1666666666666667)", "((100% - " + yOffset + "px) * 0.2)");
@@ -588,6 +593,4 @@ namespace ExpressCraft
             Content.AppendChild(doc);
         }
     }
-
-
 }

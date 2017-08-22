@@ -1,9 +1,5 @@
 ﻿using Bridge.Html5;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -17,17 +13,18 @@ namespace ExpressCraft
         public SimpleButton btnRight;
 
         public Control ContentRange;
-        
+
         private int SelectedYear;
         private int SelectedMonth;
-        private int SelectedDay;        
+        private int SelectedDay;
 
         private DisplayMode _activeDisplayMode = DisplayMode.Day;
 
         public DisplayMode ActiveDisplayMode
         {
             get { return _activeDisplayMode; }
-            set {
+            set
+            {
                 if(_activeDisplayMode != value)
                 {
                     _activeDisplayMode = value;
@@ -47,8 +44,8 @@ namespace ExpressCraft
             var newSelectedMonth = date.Month;
             var newSelectedDay = date.Day;
 
-            if(newSelectedYear != SelectedYear || 
-                newSelectedMonth != SelectedMonth || 
+            if(newSelectedYear != SelectedYear ||
+                newSelectedMonth != SelectedMonth ||
                 newSelectedDay != SelectedDay || date == DateTime.Today)
             {
                 SelectedYear = newSelectedYear;
@@ -78,7 +75,7 @@ namespace ExpressCraft
         {
             var date = GetViewDateTime();
             btnTop.Text = date.ToString("ddd, dd MMM yyyy");
-            
+
             var doc = Document.CreateDocumentFragment();
 
             switch(_activeDisplayMode)
@@ -88,7 +85,6 @@ namespace ExpressCraft
 
                     DateTime startDate = new DateTime(date.Year, date.Month, 1);
                     DateTime endDate = startDate.AddMonths(1).AddDays(-1);
-
 
                     int TotalDays = (endDate - startDate).Days;
 
@@ -100,11 +96,11 @@ namespace ExpressCraft
                         startDate : startDate.AddDays(-startDayIndex);
 
                     var endDayIndex = (endDate.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)endDate.DayOfWeek) - 1;
-                    
+
                     for(int i = 0; i < 42; i++)
                     {
                         DateTime curDate = startOutside;
-                         
+
                         var btn = new SimpleButton()
                         {
                             Text = curDate.Day.ToString(),
@@ -118,7 +114,7 @@ namespace ExpressCraft
                                 }
                                 SetViewDateTime(curDate);
                             }
-                        };                        
+                        };
                         if(Helper.NotDesktop)
                         {
                             btn.Style.FontSize = "14px";
@@ -133,7 +129,8 @@ namespace ExpressCraft
                         if(curDate < startDate || curDate > endDate)
                         {
                             //btn.Style.Color = "rgb(211, 211, 211)";
-                        }else if (curDate.DayOfWeek == DayOfWeek.Saturday || curDate.DayOfWeek == DayOfWeek.Sunday)
+                        }
+                        else if(curDate.DayOfWeek == DayOfWeek.Saturday || curDate.DayOfWeek == DayOfWeek.Sunday)
                         {
                             btn.Style.Color = "rgb(191, 11, 11)";
                             btn.Style.Filter = "brightness(110%)";
@@ -157,29 +154,31 @@ namespace ExpressCraft
                         startOutside = startOutside.Date.AddDays(1);
                         if(startOutside.Hour == 23)
                         {
-                            startOutside = startOutside.AddHours(1);                            
+                            startOutside = startOutside.AddHours(1);
                         }
                     }
-                    
+
                     for(int x = 0; x < 7; x++)
                     {
                         var label = Label(Days[x], 0, 0);
                         label.SetLocation("(100% * " + (x * 0.1428) + " + ((100% * 0.1428) * 0.45) - 6px)", 0);
-                            //Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "((100% * " + (row * 0.1666) + ") + (100% * 0.1666))", "(100% * 0.1428)", "((100% * " + 0.1666 + ") + (100% * 0.1666))"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
+                        //Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "((100% * " + (row * 0.1666) + ") + (100% * 0.1666))", "(100% * 0.1428)", "((100% * " + 0.1666 + ") + (100% * 0.1666))"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
                         if(Helper.NotDesktop)
                         {
                             label.Style.FontSize = "14px";
                         }
 
                         doc.AppendChild(label);
-
                     }
 
                     break;
+
                 case DisplayMode.Month:
                     break;
+
                 case DisplayMode.Year:
                     break;
+
                 default:
                     break;
             }
@@ -217,15 +216,18 @@ namespace ExpressCraft
             btnTop.Style.BorderColor = "transparent";
             btnTop.Content.OnKeyDown = BlockTabEvent;
 
-
-            btnSelectedRange = new SimpleButton() { ItemClick = (ev) => {
-                MoveUp();
-            } };
+            btnSelectedRange = new SimpleButton()
+            {
+                ItemClick = (ev) =>
+                {
+                    MoveUp();
+                }
+            };
 
             btnSelectedRange.Style.Transform = "translate(-50%, 0)";
             btnSelectedRange.Style.Left = "50%";
             btnSelectedRange.Style.MarginRight = "50%";
-            btnSelectedRange.Top =  30;
+            btnSelectedRange.Top = 30;
             btnSelectedRange.Width = "auto";
             btnSelectedRange.Style.BorderColor = "transparent";
             btnSelectedRange.Content.OnKeyDown = BlockTabEvent;
@@ -236,7 +238,7 @@ namespace ExpressCraft
             btnRight = new SimpleButton() { Text = ">", Location = new Vector2("(100% - 26px)", 36), Size = new Vector2(13, 13), ItemClick = (ev) => { MoveRight(); } };
             btnRight.Content.OnKeyDown = BlockTabEvent;
 
-            btnLeft.Style.BorderRadius = "50%";            
+            btnLeft.Style.BorderRadius = "50%";
             btnRight.Style.BorderRadius = "50%";
 
             btnLeft.Style.LineHeight = "0";
@@ -255,7 +257,7 @@ namespace ExpressCraft
                 btnLeft.Style.FontSize = "14px";
                 btnLeft.Top = 20;
 
-                btnRight.Size = new Vector2(36, 36);                
+                btnRight.Size = new Vector2(36, 36);
                 btnRight.Style.FontSize = "14px";
                 btnRight.Top = 20;
                 btnRight.Left = "(100% - 50px)";
@@ -267,7 +269,6 @@ namespace ExpressCraft
                 ContentRange = new Control() { Size = new Vector2("(100% - 20px)", "(100% - 92px)"), Location = new Vector2(11, 60) };
             }
 
-            
             ContentRange.Content.OnKeyDown = BlockTabEvent;
 
             btnToday = new SimpleButton()
@@ -275,10 +276,10 @@ namespace ExpressCraft
                 Text = "Today",
                 Width = 50,
                 ItemClick = (ev) =>
-                {                    
-                    ActiveDisplayMode = DisplayMode.Day;                    
+                {
+                    ActiveDisplayMode = DisplayMode.Day;
                     SetViewDateTime(DateTime.Today);
-                    
+
                     if(OnDateChanged != null)
                         OnDateChanged(DateTime.Today);
 
@@ -307,7 +308,6 @@ namespace ExpressCraft
                 btnToday.Top = "(100% - 26px)";
             }
 
-            
             btnToday.Content.OnKeyDown = BlockTabEvent;
 
             doc.AppendChildren(btnTop, btnLeft, btnSelectedRange, btnRight, ContentRange, btnToday);
@@ -322,7 +322,6 @@ namespace ExpressCraft
         public void MoveLeft()
         {
             MoveLeftOrRight(-1);
-
         }
 
         public void MoveUp()
@@ -333,27 +332,29 @@ namespace ExpressCraft
                 _activeDisplayMode++;
                 RefreshView();
             }
-        }   
-        
+        }
+
         public void MoveLeftOrRight(int timesValue)
         {
             var date = GetViewDateTime();
 
             switch(_activeDisplayMode)
             {
-                default:                    
+                default:
                 case DisplayMode.Day:
-                    date = date.AddMonths((1 * timesValue));                     
+                    date = date.AddMonths((1 * timesValue));
                     break;
+
                 case DisplayMode.Month:
                     date = date.AddMonths((12 * timesValue));
                     break;
+
                 case DisplayMode.Year:
                     date = date.AddYears((120 * timesValue));
-                    break;                
+                    break;
             }
 
-            SetViewDateTime(date);                   
+            SetViewDateTime(date);
         }
 
         public void MoveRight()
@@ -368,6 +369,4 @@ namespace ExpressCraft
             Year
         }
     }
-
-
 }

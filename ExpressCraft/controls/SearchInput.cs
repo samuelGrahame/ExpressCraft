@@ -1,9 +1,5 @@
 ﻿using Bridge.Html5;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -12,20 +8,20 @@ namespace ExpressCraft
         public object EditValue { get; set; }
         public string DisplayMember { get; set; }
         public string ValueMember { get; set; }
-                
+
         public SearchInput() : base(InputType.Text)
-        {            
+        {
             UsedEdit.OnKeyDown = (obj, ev) =>
-            {                              
+            {
                 if(ev.KeyCode == 13 || ev.KeyCode == 40)
                 {
                     OnDropDownClicked(new MouseEvent("onmousedown"));
-                }    
+                }
             };
             UsedEdit.Content.OnMouseDown = (ev) =>
             {
                 OnDropDownClicked(new MouseEvent("onmousedown"));
-            };            
+            };
         }
 
         public Action<string, GridView> OnSearch;
@@ -64,17 +60,14 @@ namespace ExpressCraft
                     Text = (value.GetValue(DisplayMember) + "");
                 }
             }
-            
         }
 
         public virtual void OnRequestNew(GridView grid)
         {
-
         }
 
         public virtual void OnClosed(DataRow value)
         {
-
         }
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)
@@ -83,6 +76,6 @@ namespace ExpressCraft
                 (new SearchLookupForm(this)).
                 ShowPopup(FormPopup.
                     GetPopupDefaultLocation(DropDownButton, true));
-        }        
+        }
     }
 }

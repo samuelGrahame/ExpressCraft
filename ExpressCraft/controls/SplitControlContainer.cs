@@ -1,257 +1,257 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bridge.Html5;
+﻿using Bridge.Html5;
 
 namespace ExpressCraft
 {
-	public class SplitControlContainer : Control
-	{
-		public Control Panel1;
-		public Control Panel2;
-		public Control Splitter;
+    public class SplitControlContainer : Control
+    {
+        public Control Panel1;
+        public Control Panel2;
+        public Control Splitter;
 
-		private ClientRect _prevClientRect = null;
-		private bool IsMouseDown = false;
-		private Vector2 _mouseDownVector;
-		private Vector2 _currentMouseDownVector;
-		private int _startingSplitterPos;		
-		private int _splitterPosition = -1;		
+        private ClientRect _prevClientRect = null;
+        private bool IsMouseDown = false;
+        private Vector2 _mouseDownVector;
+        private Vector2 _currentMouseDownVector;
+        private int _startingSplitterPos;
+        private int _splitterPosition = -1;
 
-		private FixedSplitterPosition fixedSplitterPostion = FixedSplitterPosition.Panel1;
-		public FixedSplitterPosition FixedSplitterPostion
-		{
-			get { return fixedSplitterPostion; }
-			set {
-				fixedSplitterPostion = value;
-				RenderControls();
-			}
-		}
+        private FixedSplitterPosition fixedSplitterPostion = FixedSplitterPosition.Panel1;
 
-		public bool SplitterResizable = true;
+        public FixedSplitterPosition FixedSplitterPostion
+        {
+            get { return fixedSplitterPostion; }
+            set
+            {
+                fixedSplitterPostion = value;
+                RenderControls();
+            }
+        }
 
-		public int SplitterPosition
-		{
-			get { return _splitterPosition; }
-			set {
-				if(value < 0)
-					value = 0;				
-				_splitterPosition = value;
-				RenderControls();
-			}
-		}		
+        public bool SplitterResizable = true;
 
-		private bool horizontal;
-		public bool Horizontal
-		{
-			get { return horizontal; }
-			set {
-				if(value != horizontal)
-				{
-					RenderControls();
-					horizontal = value;
-				}				
-			}
-		}
+        public int SplitterPosition
+        {
+            get { return _splitterPosition; }
+            set
+            {
+                if(value < 0)
+                    value = 0;
+                _splitterPosition = value;
+                RenderControls();
+            }
+        }
 
-		public override void Render()
-		{
-			base.Render();
-			
-			RenderControls();
-		}
+        private bool horizontal;
 
-		private void ResizeChildren()
-		{			
-			if(this.LinkedForm != null && this.Content != null)
-			{
-				this.LinkedForm.ResizeChildren(this.Content);				
-			}
-		}
-		
-		public SplitControlContainer() : base("splitcontrol")
-		{
-			Panel1 = new Control() { Location = new Vector2(0, 0) };
-			Panel2 = new Control();
+        public bool Horizontal
+        {
+            get { return horizontal; }
+            set
+            {
+                if(value != horizontal)
+                {
+                    RenderControls();
+                    horizontal = value;
+                }
+            }
+        }
+
+        public override void Render()
+        {
+            base.Render();
+
+            RenderControls();
+        }
+
+        private void ResizeChildren()
+        {
+            if(this.LinkedForm != null && this.Content != null)
+            {
+                this.LinkedForm.ResizeChildren(this.Content);
+            }
+        }
+
+        public SplitControlContainer() : base("splitcontrol")
+        {
+            Panel1 = new Control() { Location = new Vector2(0, 0) };
+            Panel2 = new Control();
             Panel1.Style.Overflow = Overflow.Auto;
             Panel2.Style.Overflow = Overflow.Auto;
 
             Splitter = new Control();
-			
-			Splitter.Content.OnMouseDown = (ev) =>
-			{
-				if(!SplitterResizable)
-					return;
-				IsMouseDown = true;
-				_mouseDownVector = Helper.GetClientMouseLocation(ev);
-				var maxSize = GetMaxSplitterSize();
-				_startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;				
-				ev.StopImmediatePropagation();
-			};								
 
-			OnResize = (ev) =>
-			{
-				if(this.LinkedForm != null)
-				{
-					if(!this.LinkedForm.IsVisible())
-					{
-						return;
-					}
-				}
-				var clientRec = this.Content.GetBoundingClientRect();
+            Splitter.Content.OnMouseDown = (ev) =>
+            {
+                if(!SplitterResizable)
+                    return;
+                IsMouseDown = true;
+                _mouseDownVector = Helper.GetClientMouseLocation(ev);
+                var maxSize = GetMaxSplitterSize();
+                _startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;
+                ev.StopImmediatePropagation();
+            };
 
-				if(_prevClientRect == null)
-				{
-					_prevClientRect = clientRec;
-				}
+            OnResize = (ev) =>
+            {
+                if(this.LinkedForm != null)
+                {
+                    if(!this.LinkedForm.IsVisible())
+                    {
+                        return;
+                    }
+                }
+                var clientRec = this.Content.GetBoundingClientRect();
 
-				if(fixedSplitterPostion == FixedSplitterPosition.None)
-				{
-					double V1 = 0;
-					double V2 = 0;
-					bool dirty = false;
+                if(_prevClientRect == null)
+                {
+                    _prevClientRect = clientRec;
+                }
 
-					if(Horizontal)
-					{
-						if(clientRec.Height != _prevClientRect.Height)
-						{
-							V1 = clientRec.Height;
-							V2 = _prevClientRect.Height;
-							dirty = true;
-						}
-					}
-					else
-					{
-						if(clientRec.Width != _prevClientRect.Width)
-						{
-							V1 = clientRec.Width;
-							V2 = _prevClientRect.Width;
-							dirty = true;
-						}
-					}
-					if(dirty)
-					{						
-						SplitterPosition = V1 == 0 || V2 == 0 ? 0 : (int)(SplitterPosition * (V1 / V2));
-					}
-				}
+                if(fixedSplitterPostion == FixedSplitterPosition.None)
+                {
+                    double V1 = 0;
+                    double V2 = 0;
+                    bool dirty = false;
 
-				_prevClientRect = clientRec;
-				
-				RenderControls();
+                    if(Horizontal)
+                    {
+                        if(clientRec.Height != _prevClientRect.Height)
+                        {
+                            V1 = clientRec.Height;
+                            V2 = _prevClientRect.Height;
+                            dirty = true;
+                        }
+                    }
+                    else
+                    {
+                        if(clientRec.Width != _prevClientRect.Width)
+                        {
+                            V1 = clientRec.Width;
+                            V2 = _prevClientRect.Width;
+                            dirty = true;
+                        }
+                    }
+                    if(dirty)
+                    {
+                        SplitterPosition = V1 == 0 || V2 == 0 ? 0 : (int)(SplitterPosition * (V1 / V2));
+                    }
+                }
 
-				ResizeChildren();
-			};
+                _prevClientRect = clientRec;
 
-			Content.OnMouseMove = (ev) =>
-			{
-				if(IsMouseDown)
-				{					
-					_currentMouseDownVector = Helper.GetClientMouseLocation(ev);
-					int x;
-					int m = horizontal ? (_mouseDownVector.Yi - _currentMouseDownVector.Yi) : (_mouseDownVector.Xi - _currentMouseDownVector.Xi);					
-					
-					var y = GetMaxSplitterSize();
-					if((x = fixedSplitterPostion == FixedSplitterPosition.Panel2 ? _startingSplitterPos + m : _startingSplitterPos - m)
-						> y)
-					{
-						x = y;
-					}
-					SplitterPosition = x;
-					_currentMouseDownVector = _mouseDownVector;
+                RenderControls();
 
-					ResizeChildren();
-				}
-			};
+                ResizeChildren();
+            };
 
-			Content.OnMouseUp = (ev) =>
-			{
-				IsMouseDown = false;
-				RenderControls();
-			};
+            Content.OnMouseMove = (ev) =>
+            {
+                if(IsMouseDown)
+                {
+                    _currentMouseDownVector = Helper.GetClientMouseLocation(ev);
+                    int x;
+                    int m = horizontal ? (_mouseDownVector.Yi - _currentMouseDownVector.Yi) : (_mouseDownVector.Xi - _currentMouseDownVector.Xi);
 
-			this.AppendChildren(Panel1, Splitter, Panel2);
-		}		
+                    var y = GetMaxSplitterSize();
+                    if((x = fixedSplitterPostion == FixedSplitterPosition.Panel2 ? _startingSplitterPos + m : _startingSplitterPos - m)
+                        > y)
+                    {
+                        x = y;
+                    }
+                    SplitterPosition = x;
+                    _currentMouseDownVector = _mouseDownVector;
 
-		private int GetMaxSplitterSize()
-		{
-			var maxSize = (int)(Horizontal ? this.Content.GetBoundingClientRect().Height : this.Content.GetBoundingClientRect().Width) - 12;
-			if(maxSize < 0)
-				maxSize = 0;
-			return maxSize;
-		}
+                    ResizeChildren();
+                }
+            };
 
-		private void RenderControls()
-		{
-			var sp = SplitterPosition;
-			var maxSize = GetMaxSplitterSize();
+            Content.OnMouseUp = (ev) =>
+            {
+                IsMouseDown = false;
+                RenderControls();
+            };
 
-			if(_prevClientRect != null)
-			{
-				if(sp > maxSize)
-				{
-					sp = maxSize;
-				}
-			}			
+            this.AppendChildren(Panel1, Splitter, Panel2);
+        }
 
-			if(Horizontal)
-			{
-				Panel1.ExchangeClass("splitvertical", "splithorizontal");
-				Panel2.ExchangeClass("splitvertical", "splithorizontal");
-				Splitter.ExchangeClass("splittervertical", "splitterhorizontal");
+        private int GetMaxSplitterSize()
+        {
+            var maxSize = (int)(Horizontal ? this.Content.GetBoundingClientRect().Height : this.Content.GetBoundingClientRect().Width) - 12;
+            if(maxSize < 0)
+                maxSize = 0;
+            return maxSize;
+        }
 
-				Panel1.Width = "";
-				Splitter.Width = "";
-				Panel2.Width = "";
-				
-				if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
-				{
-					Splitter.Location = new Vector2(0, sp);
+        private void RenderControls()
+        {
+            var sp = SplitterPosition;
+            var maxSize = GetMaxSplitterSize();
 
-					Panel1.Height = sp;				
-					Panel2.Location = new Vector2(0, sp + 12);
-					Panel2.Height = "(100% - " + (sp + 12) + "px)"; ;
-				}
-				else
-				{					
-					Splitter.Location = new Vector2(0, "(100% - " + (sp) + "px)");
+            if(_prevClientRect != null)
+            {
+                if(sp > maxSize)
+                {
+                    sp = maxSize;
+                }
+            }
 
-					Panel1.Height = "(100% - " + sp + "px)";
+            if(Horizontal)
+            {
+                Panel1.ExchangeClass("splitvertical", "splithorizontal");
+                Panel2.ExchangeClass("splitvertical", "splithorizontal");
+                Splitter.ExchangeClass("splittervertical", "splitterhorizontal");
 
-					Panel2.Height = sp - 12;
-					Panel2.Location = new Vector2(0, "(100% - " + (sp - 12) + "px)");
-				}
-			}
-			else
-			{
-				Panel1.ExchangeClass("splithorizontal", "splitvertical");
-				Panel2.ExchangeClass("splithorizontal", "splitvertical");
-				Splitter.ExchangeClass("splitterhorizontal", "splittervertical");
-				
-				Panel1.Height = "";
-				Splitter.Height = "";
-				Panel2.Height = "";
+                Panel1.Width = "";
+                Splitter.Width = "";
+                Panel2.Width = "";
 
-				if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
-				{
-					Splitter.Location = new Vector2(sp, 0);
+                if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
+                {
+                    Splitter.Location = new Vector2(0, sp);
 
-					Panel1.Width = sp;
+                    Panel1.Height = sp;
+                    Panel2.Location = new Vector2(0, sp + 12);
+                    Panel2.Height = "(100% - " + (sp + 12) + "px)"; ;
+                }
+                else
+                {
+                    Splitter.Location = new Vector2(0, "(100% - " + (sp) + "px)");
 
-					Panel2.Width = "(100% - " + (sp + 12) + "px)";
-					Panel2.Location = new Vector2(sp + 12, 0);
-				}
-				else
-				{
-					Splitter.Location = new Vector2("(100% - " + sp + "px)", 0);
+                    Panel1.Height = "(100% - " + sp + "px)";
 
-					Panel1.Width = "(100% - " + sp + "px)";
+                    Panel2.Height = sp - 12;
+                    Panel2.Location = new Vector2(0, "(100% - " + (sp - 12) + "px)");
+                }
+            }
+            else
+            {
+                Panel1.ExchangeClass("splithorizontal", "splitvertical");
+                Panel2.ExchangeClass("splithorizontal", "splitvertical");
+                Splitter.ExchangeClass("splitterhorizontal", "splittervertical");
 
-					Panel2.Width = sp;
-					Panel2.Location = new Vector2("(100% - " + (sp + 12) + "px)", 0);
-				}				
-			}
-		}
-	}
+                Panel1.Height = "";
+                Splitter.Height = "";
+                Panel2.Height = "";
+
+                if(fixedSplitterPostion != FixedSplitterPosition.Panel2)
+                {
+                    Splitter.Location = new Vector2(sp, 0);
+
+                    Panel1.Width = sp;
+
+                    Panel2.Width = "(100% - " + (sp + 12) + "px)";
+                    Panel2.Location = new Vector2(sp + 12, 0);
+                }
+                else
+                {
+                    Splitter.Location = new Vector2("(100% - " + sp + "px)", 0);
+
+                    Panel1.Width = "(100% - " + sp + "px)";
+
+                    Panel2.Width = sp;
+                    Panel2.Location = new Vector2("(100% - " + (sp + 12) + "px)", 0);
+                }
+            }
+        }
+    }
 }

@@ -114,7 +114,7 @@
   <ItemGroup>
     <Content Include="Bridge\output\ExpressCraftResourceManager.css" />
     <Content Include="Bridge\output\ExpressCraft_backup.css" />
-    <Content Include="Bridge\output\ExpressCraft.css" />
+    <Content Include="Bridge\ExpressCraft.css" />
     <Content Include="Bridge\output\ExpressCraftPlugin.css" />
     <Content Include="Bridge\output\jquery-1.12.0.min.js" />
     <Content Include="License.txt" />

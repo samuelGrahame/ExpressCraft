@@ -1,9 +1,5 @@
 ﻿using Bridge.Html5;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -11,6 +7,7 @@ namespace ExpressCraft
     {
         public int PreviousScrollTop;
         public HTMLElement ParentContainer;
+
         public static Vector2 GetPopupDefaultLocation(Control control, bool isControlChild = false)
         {
             if(Helper.NotDesktop)
@@ -19,8 +16,9 @@ namespace ExpressCraft
             if(isControlChild)
             {
                 var rec = control.Content.ParentElement.GetBoundingClientRect();
-                return new Vector2((float)rec.Left, (float)(rec.Top + rec.Height));                
-            }else
+                return new Vector2((float)rec.Left, (float)(rec.Top + rec.Height));
+            }
+            else
             {
                 var rec = control.Content.GetBoundingClientRect();
                 return new Vector2((float)rec.Left, (float)(rec.Top + rec.Height));
@@ -42,11 +40,11 @@ namespace ExpressCraft
             ShowMaximize = false;
             ShowMinimize = false;
             AllowMoveChange = false;
-            AllowSizeChange = false;            
+            AllowSizeChange = false;
         }
 
         public void ShowPopup(Vector2 location)
-        {            
+        {
             this.Location = location;
             ShowDialog();
         }
@@ -79,14 +77,13 @@ namespace ExpressCraft
                 }
                 catch(Exception)
                 {
-
-                }                
-            }            
+                }
+            }
         }
 
         protected override void OnClosed()
         {
-            base.OnClosed();            
+            base.OnClosed();
         }
     }
 }

@@ -1,9 +1,4 @@
 ﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -51,35 +46,56 @@ namespace ExpressCraft
             AllowSizeChange = true;
 
             SearchInput = searchInput;
-            
+
             var frag = Document.CreateDocumentFragment();
 
             frag.AppendChildren(
-                SearchEdit = new TextInput() { Text = searchInput.ClearOnOpen() ? "" :  SearchInput.Text, OnFocusDontSelectAll = true,
-                    DisableFocusPopup = true, Bounds = new Vector4(4, 4, "(100% - 68px)", 20), ToolTip = new ToolTip("Help:", "[Enter] to Search, [CTRL] + [Enter] to Search and Use, [ESC] to close")
+                SearchEdit = new TextInput()
+                {
+                    Text = searchInput.ClearOnOpen() ? "" : SearchInput.Text,
+                    OnFocusDontSelectAll = true,
+                    DisableFocusPopup = true,
+                    Bounds = new Vector4(4, 4, "(100% - 68px)", 20),
+                    ToolTip = new ToolTip("Help:", "[Enter] to Search, [CTRL] + [Enter] to Search and Use, [ESC] to close")
                 },
-                btnSearch = new SimpleButton() { Text = "Search",
-                    Bounds = new Vector4("(100% - 65px)", 4, 61, 20), ItemClick = (s) => {
+                btnSearch = new SimpleButton()
+                {
+                    Text = "Search",
+                    Bounds = new Vector4("(100% - 65px)", 4, 61, 20),
+                    ItemClick = (s) =>
+                    {
                         SearchInput.OnRequestSearch(SearchEdit.Text, View);
-                    } },
-                View =  new GridView(true, true) { AllowMultiSelection = false, UseEditForm = false,
-                    Bounds = new Vector4(4, 28, "(100% - 10px)", "(100% - 60px)") },
-                btnClose = new SimpleButton() { Text = "&times;" ,
-                    Bounds = new Vector4(4, "(100% - 25px)", 20, 20), ItemClick = (s) => {
+                    }
+                },
+                View = new GridView(true, true)
+                {
+                    AllowMultiSelection = false,
+                    UseEditForm = false,
+                    Bounds = new Vector4(4, 28, "(100% - 10px)", "(100% - 60px)")
+                },
+                btnClose = new SimpleButton()
+                {
+                    Text = "&times;",
+                    Bounds = new Vector4(4, "(100% - 25px)", 20, 20),
+                    ItemClick = (s) =>
+                    {
                         Close();
-                    } },
+                    }
+                },
                 btnNew = new SimpleButton()
                 {
                     Text = "New",
                     Bounds = new Vector4("(100% - 65px)", "(100% - 25px)", 61, 20),
-                    ItemClick = (s) => {
+                    ItemClick = (s) =>
+                    {
                         SearchInput.OnRequestNew(View);
                     }
                 }, btnUse = new SimpleButton()
                 {
                     Text = "Use",
                     Bounds = new Vector4("(100% - 132px)", "(100% - 25px)", 61, 20),
-                    ItemClick = (s) => {
+                    ItemClick = (s) =>
+                    {
                         if(View.FocusedDataHandle == -1 && View.RowCount() > 0)
                         {
                             View.FocusedDataHandle = 0;
@@ -88,14 +104,15 @@ namespace ExpressCraft
                         {
                             SearchInput.OnAcceptResult(FocusedRow);
                             this.Close();
-                        }                        
+                        }
                     }
                 },
                 btnClear = new SimpleButton()
                 {
                     Text = "Clear",
                     Bounds = new Vector4("(100% - 199px)", "(100% - 25px)", 61, 20),
-                    ItemClick = (s) => {
+                    ItemClick = (s) =>
+                    {
                         FocusedRow = null;
                         SearchInput.OnAcceptResult(FocusedRow);
                         this.Close();
@@ -111,7 +128,7 @@ namespace ExpressCraft
 
                 btnSearch.Style.FontSize = "14px";
                 btnSearch.Height = 45;
-                
+
                 View.Top = 55;
                 View.Height = "(100% - 112px)";
 
@@ -140,7 +157,8 @@ namespace ExpressCraft
                 {
                     Close();
                     ev.PreventDefault();
-                }else if(ev.KeyCode == 13)
+                }
+                else if(ev.KeyCode == 13)
                 {
                     SearchInput.OnRequestSearch(SearchEdit.Text, View);
                     if(ev.CtrlKey)
@@ -157,18 +175,21 @@ namespace ExpressCraft
                 }
             };
 
-            View.OnFocusedRowChanged = (row, col) => {
+            View.OnFocusedRowChanged = (row, col) =>
+            {
                 if(View.FocusedDataHandle > -1)
                 {
                     FocusedRow = View.DataSource[View.GetDataSourceRow(View.FocusedDataHandle)];
-                }else
+                }
+                else
                 {
                     FocusedRow = null;
                 }
                 SearchInput.OnAcceptResult(FocusedRow);
             };
 
-            View.OnRowDoubleClick = (row) => {
+            View.OnRowDoubleClick = (row) =>
+            {
                 if(View.FocusedDataHandle > -1)
                 {
                     FocusedRow = View.DataSource[View.GetDataSourceRow(View.FocusedDataHandle)];
@@ -181,7 +202,6 @@ namespace ExpressCraft
                 this.Close();
             };
 
-
             this.Body.AppendChild(frag);
 
             SearchEdit.OnGotFocus = (obj) =>
@@ -189,7 +209,7 @@ namespace ExpressCraft
                 SearchEdit.GetInput().SelectionStart = SearchEdit.Text.Length;
             };
 
-            LinkchildToForm(View);            
+            LinkchildToForm(View);
         }
 
         protected override void OnClosed()
@@ -197,8 +217,10 @@ namespace ExpressCraft
             base.OnClosed();
 
             SearchInput.OnClosed(FocusedRow);
+            SearchInput.ValidateData();
             if(!Helper.NotDesktop)
-                SearchInput.GetInput().Focus();else
+                SearchInput.GetInput().Focus();
+            else
             {
                 SearchInput.Scroll(PreviousScrollTop, ParentContainer);
             }

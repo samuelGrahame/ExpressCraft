@@ -1,9 +1,4 @@
 ﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -16,15 +11,16 @@ namespace ExpressCraft
         public bool isUrl
         {
             get { return _isURL; }
-            set {
+            set
+            {
                 if(_isURL != value)
                 {
                     _isURL = value;
                     RefreshImage();
-                }                
+                }
             }
         }
-        
+
         public ImageEdit() : base("inputcontrol")
         {
             _noImageDataText = new Control("form-heading-title");
@@ -42,11 +38,11 @@ namespace ExpressCraft
             if(string.IsNullOrWhiteSpace(_image))
             {
                 _image = "";
-                _noImageDataText.Content.Style.Visibility = Visibility.Hidden;                
+                _noImageDataText.Content.Style.Visibility = Visibility.Hidden;
             }
             else
             {
-                _noImageDataText.Content.Style.Visibility = Visibility.Inherit;                
+                _noImageDataText.Content.Style.Visibility = Visibility.Inherit;
             }
             this.SetImage(_image, _isURL);
         }
@@ -54,13 +50,13 @@ namespace ExpressCraft
         public string Image
         {
             get { return _image; }
-            set {
-                
+            set
+            {
                 if(_image == value)
                     return;
                 _image = value;
-                RefreshImage();                
+                RefreshImage();
             }
-        }        
+        }
     }
 }

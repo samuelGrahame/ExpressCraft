@@ -1,15 +1,10 @@
-﻿using Bridge;
-using Bridge.Html5;
+﻿using Bridge.Html5;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
     public class MemoInput : TextInput
-    {        
+    {
         public int Rows
         {
             get { return Content.As<HTMLTextAreaElement>().Rows; }
@@ -42,7 +37,7 @@ namespace ExpressCraft
         public MemoInput() : base(new HTMLTextAreaElement())
         {
             Style.Resize = Resize.None;
-            
+
             OnGotFocus = (memo) =>
             {
                 if(DisableResize)
@@ -50,24 +45,21 @@ namespace ExpressCraft
 
                 Style.Resize = Resize.Both;
                 PrePreSize = Size;
-                
-                if(_hasGotFocus)                
+
+                if(_hasGotFocus)
                     Size = PreSize;
                 else
                 {
                     _hasGotFocus = true;
                     PreSize = Size;
                 }
-                
             };
             OnLostFocus = (memo) =>
             {
                 Style.Resize = Resize.None;
                 PreSize = Size;
-                Size = PrePreSize;                
+                Size = PrePreSize;
             };
         }
-
-
     }
 }

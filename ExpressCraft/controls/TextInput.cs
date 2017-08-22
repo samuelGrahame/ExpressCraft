@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Bridge.Html5;
+using System;
 using System.Text;
-using System.Threading.Tasks;
-using Bridge.Html5;
-using Bridge;
 
 namespace ExpressCraft
 {
-	public class TextInput : Control
-	{
+    public class TextInput : Control
+    {
         private string prevText = "";
 
         public Action<TextInput> OnTextChanged = null;
@@ -18,13 +14,20 @@ namespace ExpressCraft
         public Action<TextInput, KeyboardEvent> OnKeyPress = null;
         public Action<TextInput> OnGotFocus = null;
         public Action<TextInput> OnLostFocus = null;
+        public Action<TextInput> OnValidateData = null;
+
+        public virtual void ValidateData()
+        {
+            if(OnValidateData != null)
+                OnValidateData(this);
+        }
 
         public bool IsSubmit { get; set; }
         public bool GoNext { get; set; }
 
         public bool OnFocusDontSelectAll { get; set; }
 
-        private string _displayFormat = "";
+        protected string _displayFormat = "";
 
         public virtual void SetDisplayFormat(string value)
         {
@@ -40,13 +43,14 @@ namespace ExpressCraft
         public string DisplayFormat
         {
             get { return _displayFormat; }
-            set {
+            set
+            {
                 SetDisplayFormat(value);
             }
         }
-        
+
         public Control Controller = null;
-        
+
         public InputType Type;
         public bool DisableFocusPopup;
         private bool IsOverride = false;
@@ -61,28 +65,33 @@ namespace ExpressCraft
             Content.InnerHTML = value;
         }
 
+        public void SetDateTime(DateTime date)
+        {
+            SetDate(string.Format("{0:" + GetDisplayFormat() + "}", date));
+        }
+
         public TextInput(HTMLElement overrideElement, bool addInputControl = true, bool addEventsOnControl = true) : base(overrideElement)
         {
             overrideElement.ClassName = (addInputControl ? "inputcontrol" : "") + BaseClass(addInputControl);
             IsOverride = true;
             if(addEventsOnControl)
-                addEvents();            
+                addEvents();
         }
 
         public virtual void OnFocus()
         {
-
         }
-        
+
         public virtual HTMLInputElement GetInput()
         {
             if(Content.Is<HTMLInputElement>())
             {
                 return Content.As<HTMLInputElement>();
-            }else
+            }
+            else
             {
                 return Content.As<HTMLInputElement>();
-            }            
+            }
         }
 
         public decimal GetNumberValue()
@@ -97,7 +106,8 @@ namespace ExpressCraft
             {
                 decimal value = Text.StripNonNumberString();
                 return value;
-            }else
+            }
+            else
             {
                 return Text;
             }
@@ -113,7 +123,7 @@ namespace ExpressCraft
             //    if(this.Content.ParentElement == null || this.Content.ParentElement.ParentElement == null)
             //        return;
             //    this.Content.ParentElement.ParentElement.ScrollTop = value;
-            //}, 0);             
+            //}, 0);
         }
 
         public string GetDisplayValue()
@@ -121,10 +131,11 @@ namespace ExpressCraft
             if(string.IsNullOrWhiteSpace(DisplayFormat))
             {
                 return Text;
-            }else
+            }
+            else
             {
                 if(Type == InputType.Number)
-                {                    
+                {
                     decimal value = Text.StripNonNumberString();
                     if(DisplayFormat.ToLower().StartsWith("c"))
                     {
@@ -134,46 +145,48 @@ namespace ExpressCraft
                             wasNeg = true;
                             value = -value;
                         }
-                            
-                        return (wasNeg ? "-" : "") + 
+
+                        return (wasNeg ? "-" : "") +
                             string.Format("${0:" + DisplayFormat.Replace("c", "n").Replace("C", "N") + "}", value);
-                    }                    
+                    }
                     else if(DisplayFormat.ToLower().StartsWith("p"))
-                    {                                              
+                    {
                         return string.Format("{0:" + DisplayFormat + "}", value == 0 ? 0 : value / 100.0m);
                     }
                     else
                     {
                         return string.Format("{0:" + DisplayFormat + "}", value);
                     }
-                }else if (Type == InputType.Date)
+                }
+                else if(Type == InputType.Date)
                 {
                     DateTime value = Text.StripNonDateString();
                     if(value == DateTime.MinValue)
                     {
                         return "";
-                    }else
+                    }
+                    else
                     {
                         return string.Format("{0:" + DisplayFormat + "}", value);
-                    }                    
+                    }
                 }
                 else
                 {
                     return string.Format("{0:" + DisplayFormat + "}", Text);
                 }
-            }            
+            }
         }
 
         private void formatText()
         {
             var input = GetInput();
             if(input != null && input != Document.ActiveElement) // Is Active
-            {                
+            {
                 if(!string.IsNullOrWhiteSpace(DisplayFormat))
                 {
                     input.Type = InputType.Text;
-                    string newText = GetDisplayValue();     
-                                   
+                    string newText = GetDisplayValue();
+
                     if(newText != Text)
                     {
                         Text = newText;
@@ -181,14 +194,16 @@ namespace ExpressCraft
                 }
             }
         }
+
         private string PreZIndex;
+
         private void addEvents()
         {
             if(!IsOverride)
             {
                 var input = GetInput();
                 if(input != null)
-                {                
+                {
                     if(!string.IsNullOrWhiteSpace(DisplayFormat))
                     {
                         if(Type == InputType.Password)
@@ -197,7 +212,7 @@ namespace ExpressCraft
                     }
                 }
             }
-            
+
             this.Content.OnBlur = (ev) =>
             {
                 Content.Style.ZIndex = PreZIndex;
@@ -212,7 +227,7 @@ namespace ExpressCraft
                 PreZIndex = Content.Style.ZIndex;
                 Content.Style.ZIndex = "10000";
 
-                OnFocus();                
+                OnFocus();
                 var input = GetInput();
                 if(input != null)
                 {
@@ -231,28 +246,30 @@ namespace ExpressCraft
                         }
 
                         if(!Helper.IsFireFox() && !Readonly && Type != InputType.Date)
-                        {                            
+                        {
                             input.Type = Type;
                         }
                     }
                     if(Type != InputType.Checkbox &&
                     Settings.OnFocusSelectAll && !OnFocusDontSelectAll) // && Helper.IsFireFox() && Browser.IsIE
                         input.Select();
-                }                
-                
+                }
+
                 if(OnGotFocus != null)
                     OnGotFocus(this);
 
                 if(!DisableFocusPopup && !Readonly && Enabled && Helper.NotDesktop && !(this is TextInputDropDown) && Controller == null)
                 {
                     if(!Settings.DisableTextPopupEditor)
-                    new TextForm(this).ShowPopup(new Vector2(0, 0));
+                        new TextForm(this).ShowPopup(new Vector2(0, 0));
                 }
             };
-            this.Content.OnChange = (ev) => {
+            this.Content.OnChange = (ev) =>
+            {
                 CheckTextChanged();
             };
-            this.Content.OnContextMenu = (ev) => {
+            this.Content.OnContextMenu = (ev) =>
+            {
                 ev.StopPropagation();
             };
             this.Content.OnKeyPress = (ev) =>
@@ -277,7 +294,8 @@ namespace ExpressCraft
             {
                 CheckTextChanged();
             });
-            this.Content.AddEventListener(EventType.Cut, () => {
+            this.Content.AddEventListener(EventType.Cut, () =>
+            {
                 CheckTextChanged();
             });
         }
@@ -287,24 +305,26 @@ namespace ExpressCraft
             if(type == InputType.Date || (Helper.IsFireFox() && type != InputType.Password && type != InputType.Checkbox))
             {
                 return InputType.Text;
-            }else
+            }
+            else
             {
                 return type;
-            }            
+            }
         }
 
         public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", FixInput(type), ac)
-		{			
+        {
             Type = type;
 
             if(Type == InputType.Number)
             {
                 Content.Style.TextAlign = TextAlign.Right;
-                Content.Style.TextIndent = "3px";                                                
+                Content.Style.TextIndent = "3px";
                 Content.Style.PaddingRight = "3px";
 
-                DisplayFormat = "n2";                
-            }else if(Type == InputType.Date)
+                DisplayFormat = "n2";
+            }
+            else if(Type == InputType.Date)
             {
                 var str = new string[3];
                 str[(int)Settings.DayPosition] = "dd";
@@ -316,20 +336,20 @@ namespace ExpressCraft
                 {
                     builder.Append(str[i] + Settings.DateSeperator);
                 }
-                builder.Length--;                
+                builder.Length--;
                 DisplayFormat = builder.ToString();
             }
 
-            addEvents();            
+            addEvents();
 
             formatText();
         }
 
         private void CheckTextChanged()
-        {            
-            if (Text != prevText)
+        {
+            if(Text != prevText)
             {
-                if (OnTextChanged != null)
+                if(OnTextChanged != null)
                     OnTextChanged(this);
                 prevText = Text;
             }
@@ -342,8 +362,8 @@ namespace ExpressCraft
         }
 
         public string Text
-		{
-			get
+        {
+            get
             {
                 if(IsOverride)
                 {
@@ -359,10 +379,10 @@ namespace ExpressCraft
                     {
                         return this.Content.As<HTMLInputElement>().Value;
                     }
-                }                
+                }
             }
-			set
-			{
+            set
+            {
                 if(IsOverride)
                 {
                     SetValue(value);
@@ -380,32 +400,33 @@ namespace ExpressCraft
                         formatText();
                     }
                 }
-                                
+
                 CheckTextChanged();
             }
-		}
+        }
 
-		public void SetDate(string date)
-		{			
-			if(!string.IsNullOrWhiteSpace(date))
-			{
+        public void SetDate(string date)
+        {
+            if(!string.IsNullOrWhiteSpace(date))
+            {
                 var dd = date.StripNonDateString();
                 if(dd == DateTime.MinValue)
                 {
                     Text = "";
-                }else
+                }
+                else
                 {
                     Text = string.Format("{0:" + DisplayFormat + "}", dd);
-                }                
-			}
-			else
-			{
+                }
+            }
+            else
+            {
                 Text = "";
-            }			
-		}
+            }
+        }
 
-		public string GetDate()
-		{
+        public string GetDate()
+        {
             if(!string.IsNullOrWhiteSpace(Text))
             {
                 var dd = Text.StripNonDateString();
@@ -428,7 +449,7 @@ namespace ExpressCraft
         {
             return Text.StripNonDateString();
         }
-        
+
         public bool IsNumericType()
         {
             return Type == InputType.Number;
@@ -440,37 +461,41 @@ namespace ExpressCraft
         }
 
         private bool enabled = true;
-		public bool Enabled
-		{
-			get { return enabled; }
-			set {
-				enabled = value;
+
+        public bool Enabled
+        {
+            get { return enabled; }
+            set
+            {
+                enabled = value;
                 if(enabled)
                 {
                     this.Content.RemoveAttribute("disabled");
-                }else
+                }
+                else
                 {
                     this.Content.SetAttribute("disabled", null);
-                }										
-			}
-		}
+                }
+            }
+        }
 
-		private bool _readonly = false;
-		public bool Readonly
-		{
-			get { return _readonly; }
-			set
-			{
-				_readonly = value;
-				if(_readonly)
-				{
-					this.Content.SetAttribute("readonly", (_readonly).ToString());
-				}
-				else
-				{
-					this.Content.RemoveAttribute("readonly");
-				}
-			}
-		}		
-	}
+        private bool _readonly = false;
+
+        public bool Readonly
+        {
+            get { return _readonly; }
+            set
+            {
+                _readonly = value;
+                if(_readonly)
+                {
+                    this.Content.SetAttribute("readonly", (_readonly).ToString());
+                }
+                else
+                {
+                    this.Content.RemoveAttribute("readonly");
+                }
+            }
+        }
+    }
 }

@@ -1,9 +1,4 @@
-﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace ExpressCraft
 {
@@ -34,9 +29,10 @@ namespace ExpressCraft
                 {
                     inputControl.SetDate("");
                 }
-                else {                     
+                else
+                {
                     inputControl.SetDate(string.Format("{0:" + inputControl.DisplayFormat + "}", date));
-                }                
+                }
             };
 
             DateControl.OnRequestToClose = () =>
@@ -46,12 +42,13 @@ namespace ExpressCraft
 
             Content.OnKeyDown = DateControl.BlockTabEvent;
 
-            AppendChild(DateControl);            
+            AppendChild(DateControl);
         }
 
         protected override void OnClosed()
         {
             base.OnClosed();
+            InputControl.ValidateData();
             if(!Helper.NotDesktop)
                 InputControl.Focus();
             else
@@ -59,7 +56,7 @@ namespace ExpressCraft
                 InputControl.Scroll(PreviousScrollTop, ParentContainer);
             }
         }
-        
+
         protected override void OnShowed()
         {
             base.OnShowed();

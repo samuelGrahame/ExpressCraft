@@ -1,10 +1,6 @@
 ﻿using Bridge;
 using Bridge.Html5;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -14,7 +10,12 @@ namespace ExpressCraft
         private TileViewState _viewState = TileViewState.Hidden;
         private Union<string, Overflow> prevOverFlow = null;
         private int ClearTimeOut = -1;
-        public TileViewState ViewState { get { return _viewState; } set {
+
+        public TileViewState ViewState
+        {
+            get { return _viewState; }
+            set
+            {
                 if(ClearTimeOut != -1)
                 {
                     Global.ClearTimeout(ClearTimeOut);
@@ -25,9 +26,10 @@ namespace ExpressCraft
                     _viewState = value;
                     if(_viewState == TileViewState.Hidden)
                     {
-                        ClearTimeOut = Global.SetTimeout(() => {
+                        ClearTimeOut = Global.SetTimeout(() =>
+                        {
                             Content.Style.Visibility = Visibility.Hidden;
-                        }, 1000);                        
+                        }, 1000);
                         Location = new Vector2("(100% * -1)", 0);
 
                         if(Content.ParentElement != null && prevOverFlow != null)
@@ -38,18 +40,18 @@ namespace ExpressCraft
                     else
                     {
                         Location = new Vector2(0, 0);
-                        Content.Style.Visibility = Visibility.Inherit;                        
+                        Content.Style.Visibility = Visibility.Inherit;
                         RenderTiles();
                         if(Content.ParentElement != null)
                         {
                             prevOverFlow = Content.ParentElement.Style.Overflow;
                             Content.ParentElement.Style.Overflow = Overflow.Hidden;
                         }
-                    }                    
+                    }
                 }
             }
         }
-        
+
         public void RenderTiles()
         {
             int x = 0;
@@ -61,7 +63,7 @@ namespace ExpressCraft
             div.SetLocation(0, 0);
             div.Style.ZIndex = "10";
 
-            var div2 = new Control("primary");            
+            var div2 = new Control("primary");
             div2.Width = "100%";
             div2.Style.MinHeight = "100%";
             div2.SetLocation(0, 0);
@@ -80,9 +82,9 @@ namespace ExpressCraft
                     doc.AppendChild(llb);
                     y += 26;
                 }
-                
+
                 foreach(var group in page.RibbonGroups)
-                {                    
+                {
                     foreach(var button in group.Buttons)
                     {
                         button.ExchangeClass("ribbonbuttonsmall", "ribbonbutton");
@@ -97,7 +99,8 @@ namespace ExpressCraft
                             button.Style.Border = "0";
                             button.Style.Filter = "brightness(110%)";
                         }
-                        else {
+                        else
+                        {
                             button.ExchangeClass("primary", "");
                             button.Style.Border = "1px";
                             button.Style.Filter = "";
@@ -117,10 +120,10 @@ namespace ExpressCraft
                                 button.captionDiv.Style.Color = "white";
                             }
                             else
-                            { 
+                            {
                                 button.captionDiv.Style.Color = "grey";
                             }
-                            
+
                             button.captionDiv.Style.FontSize = "14px";
                             button.captionDiv.Style.Top = "65px";
                         }
@@ -132,14 +135,14 @@ namespace ExpressCraft
                             button.imageDiv.Style.Top = "27px";
                             if(button.Enabled)
                             {
-                              //  button.imageDiv.Style.Filter = "brightness(90%) grayscale(100%) contrast(60%) brightness(180%)";
+                                //  button.imageDiv.Style.Filter = "brightness(90%) grayscale(100%) contrast(60%) brightness(180%)";
                             }
                             else
                             {
-                              //  button.imageDiv.Style.Filter = "";
+                                //  button.imageDiv.Style.Filter = "";
                             }
                         }
-                        
+
                         if(x == 2)
                         {
                             x = 0;
@@ -171,7 +174,7 @@ namespace ExpressCraft
             {
                 ev.StopPropagation();
             };
-            
+
             Content.AppendChild(div2);
             Content.AppendChild(div);
 
@@ -190,7 +193,6 @@ namespace ExpressCraft
             Location = new Vector2("(100% * -1)", 0);
             Size = new Vector2("100%", "100%");
 
-            
             Content.Style.BackgroundColor = "transparent";
             Content.Style.Visibility = Visibility.Hidden;
             Content.Style.Transition = "left 1s ease";

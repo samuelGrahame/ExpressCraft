@@ -1,16 +1,11 @@
 ﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
     public class TextInputDropDown : TextInput
     {
-        protected SimpleButton DropDownButton;
-        protected TextInput UsedEdit;
+        public SimpleButton DropDownButton;
+        public TextInput UsedEdit;
 
         public override string GetDisplayFormat()
         {
@@ -19,7 +14,7 @@ namespace ExpressCraft
 
         public virtual float GetDropdownWidth()
         {
-            return (float)this.Content.GetBoundingClientRect().Width;            
+            return (float)this.Content.GetBoundingClientRect().Width;
         }
 
         public override void SetDisplayFormat(string value)
@@ -30,7 +25,7 @@ namespace ExpressCraft
         public override void OnFocus()
         {
             UsedEdit.Focus();
-        }        
+        }
 
         public override HTMLInputElement GetInput()
         {
@@ -49,13 +44,21 @@ namespace ExpressCraft
             Type = inputType;
 
             UsedEdit = new TextInput(inputType) { DisableFocusPopup = true, Location = new Vector2(0, 0), Size = new Vector2("(100% - " + (dropDownWidth - 1) + "px)", "100%") };
-            DropDownButton = new SimpleButton() { Location = new Vector2("(100% - " + dropDownWidth + "px)", 0), Size = new Vector2(dropDownWidth, "100%")};
+            UsedEdit.OnTextChanged = (sender) =>
+            {
+                if(OnTextChanged != null)
+                    OnTextChanged(sender);
+            };
+
+            _displayFormat = UsedEdit.DisplayFormat;
+
+            DropDownButton = new SimpleButton() { Location = new Vector2("(100% - " + dropDownWidth + "px)", 0), Size = new Vector2(dropDownWidth, "100%") };
             DropDownButton.Content.OnMouseDown = (ev) =>
             {
                 if(!Readonly && Enabled)
                     OnDropDownClicked(ev);
             };
-            
+
             Style.Border = "0";
 
             DropDownButton.ClassList.Add("dropdown");
@@ -65,7 +68,7 @@ namespace ExpressCraft
                 DropDownButton.Style.BackgroundPosition = "right 16px center";
             }
 
-            Content.AppendChildren(UsedEdit, DropDownButton);            
+            Content.AppendChildren(UsedEdit, DropDownButton);
         }
 
         public override string GetValue()
@@ -80,7 +83,6 @@ namespace ExpressCraft
 
         public virtual void OnDropDownClicked(MouseEvent mouseEvent)
         {
-
-        }        
+        }
     }
 }

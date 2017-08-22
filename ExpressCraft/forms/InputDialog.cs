@@ -1,14 +1,12 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Bridge;
-using Bridge.Html5;
 
 namespace ExpressCraft
 {
     public class InputDialogCheckbox : InputDialogBase
     {
-
         /// <summary>
         ///     Creates a Question Dialog with a checkbox
         ///     The Result Property contains a boolean value of the checkbox state
@@ -17,7 +15,6 @@ namespace ExpressCraft
         /// <param name="question">The message that will appear about the input box on the dialog</param>
         public InputDialogCheckbox(string title, string question) : this(title, question, 360)
         {
-            
         }
 
         /// <summary>
@@ -32,7 +29,8 @@ namespace ExpressCraft
             var input = Input("inputcontrol", InputType.Checkbox);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "40px");
-            input.OnChange = ev => {
+            input.OnChange = ev =>
+            {
                 Result = input.Checked;
             };
             AnswerDiv.AppendChild(input);
@@ -106,15 +104,16 @@ namespace ExpressCraft
         public string Result { get; private set; }
     }
 
-
-    public class InputDialogDateTimeLocal : InputDialogBase {
+    public class InputDialogDateTimeLocal : InputDialogBase
+    {
         /// <summary>
         ///     Creates a Question Dialog with a Date Selector
         ///     The Result Property contains the selected Date
         /// </summary>
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
-        public InputDialogDateTimeLocal(string title, string question) : this(title, question, 360) {
+        public InputDialogDateTimeLocal(string title, string question) : this(title, question, 360)
+        {
         }
 
         /// <summary>
@@ -144,14 +143,16 @@ namespace ExpressCraft
         }
     }
 
-    public class InputDialogEmail : InputDialogBase {
+    public class InputDialogEmail : InputDialogBase
+    {
         /// <summary>
         ///     Creates a Question Dialog with an email input
         ///     The Result Property contains the Entered email address
         /// </summary>
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
-        public InputDialogEmail(string title, string question) : this(title, question, 360) {
+        public InputDialogEmail(string title, string question) : this(title, question, 360)
+        {
         }
 
         /// <summary>
@@ -161,11 +162,13 @@ namespace ExpressCraft
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
         /// <param name="size">The width of this dialog. The default size is 360</param>
-        public InputDialogEmail(string title, string question, int size) : base(title, size, question) {
+        public InputDialogEmail(string title, string question, int size) : base(title, size, question)
+        {
             var input = Input("inputcontrol", InputType.Email);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => {
+            input.OnChange = ev =>
+            {
                 //todo css for email input not showing up
                 //todo could always validate email here
                 Result = input.Value;
@@ -180,14 +183,16 @@ namespace ExpressCraft
         }
     }
 
-    public class InputDialogWeek : InputDialogBase {
+    public class InputDialogWeek : InputDialogBase
+    {
         /// <summary>
         ///     Creates a Question Dialog with a Week input
         ///     The Result Property contains the Entered week
         /// </summary>
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
-        public InputDialogWeek(string title, string question) : this(title, question, 360) {
+        public InputDialogWeek(string title, string question) : this(title, question, 360)
+        {
         }
 
         /// <summary>
@@ -197,11 +202,13 @@ namespace ExpressCraft
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
         /// <param name="size">The width of this dialog. The default size is 360</param>
-        public InputDialogWeek(string title, string question, int size) : base(title, size, question) {
+        public InputDialogWeek(string title, string question, int size) : base(title, size, question)
+        {
             var input = Input("inputcontrol", InputType.Week);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => {
+            input.OnChange = ev =>
+            {
                 Result = input.Value;
             };
             AnswerDiv.AppendChild(input);
@@ -214,14 +221,16 @@ namespace ExpressCraft
         }
     }
 
-    public class InputDialogMonth : InputDialogBase {
+    public class InputDialogMonth : InputDialogBase
+    {
         /// <summary>
         ///     Creates a Question Dialog with a Month input
         ///     The Result Property contains the Entered Month
         /// </summary>
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
-        public InputDialogMonth(string title, string question) : this(title, question, 360) {
+        public InputDialogMonth(string title, string question) : this(title, question, 360)
+        {
         }
 
         /// <summary>
@@ -231,11 +240,13 @@ namespace ExpressCraft
         /// <param name="title">The message that will appear in the title bar of the dialog</param>
         /// <param name="question">The message that will appear about the input box on the dialog</param>
         /// <param name="size">The width of this dialog. The default size is 360</param>
-        public InputDialogMonth(string title, string question, int size) : base(title, size, question) {
+        public InputDialogMonth(string title, string question, int size) : base(title, size, question)
+        {
             var input = Input("inputcontrol", InputType.Month);
             input.Id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => {
+            input.OnChange = ev =>
+            {
                 Result = input.Value;
             };
             AnswerDiv.AppendChild(input);
@@ -247,7 +258,6 @@ namespace ExpressCraft
             get; private set;
         }
     }
-
 
     public class InputDialogNumber : InputDialogBase
     {
@@ -281,7 +291,6 @@ namespace ExpressCraft
         public double Result { get; private set; }
     }
 
-
     public class InputDialogText : InputDialogBase
     {
         /// <summary>
@@ -314,7 +323,6 @@ namespace ExpressCraft
         public string Result { get; private set; }
     }
 
-
     public class InputDialogBase : DialogForm
     {
         protected InputDialogBase(string title, int width, string question) : base(title)
@@ -344,15 +352,15 @@ namespace ExpressCraft
             var tb = new TextBlock(question, width - 25);
             tb.ComputeString();
 
-            if (!tb.ElelemtsOverMax)
+            if(!tb.ElelemtsOverMax)
             {
-                width = (int) tb.MaxCalculatedWidth + 65 + 37;
-                if (width < Settings.MessageFormMinimumWidthInPx)
+                width = (int)tb.MaxCalculatedWidth + 65 + 37;
+                if(width < Settings.MessageFormMinimumWidthInPx)
                     width = Settings.MessageFormMinimumWidthInPx;
             }
-            if (tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
+            if(tb.ComputedHeight > Settings.MessageFormTextMaximumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMaximumHeightInPx;
-            if (tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
+            if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
 
             QuestionDiv.InnerHTML = question;

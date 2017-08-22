@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -19,7 +15,7 @@ namespace ExpressCraft
         {
             if(!ExternalQuaggaJS.SetupCompleted)
                 return;
-            
+
             if(onDetect == null)
                 return;
 
@@ -30,14 +26,14 @@ namespace ExpressCraft
             {
                 source = "data:image/jpg;base64," + source;
             }
-            /*@			
+            /*@
             Quagga.decodeSingle({
                 decoder: {
                     readers: [codeName] // List of active readers
                 },
                 locate: locate,
                 src: source
-            }, function(ond, onnd) { 
+            }, function(ond, onnd) {
                 return function(result){
                     if(result.codeResult) {
                         ond(result.codeResult.code);
@@ -45,13 +41,11 @@ namespace ExpressCraft
                         if(onnd != null)
                         {
                             onnd();
-                        }                        
+                        }
                     }
-                }            
-            }(onDetect, onNoDetect));        
+                }
+            }(onDetect, onNoDetect));
             */
-
-
         }
 
         public enum Readers
@@ -68,20 +62,19 @@ namespace ExpressCraft
             _2of5_Reader,
             Code_93_Reader,
         }
-//        Quagga.decodeSingle({
-//    decoder: {
-//        readers: ["code_128_reader"] // List of active readers
-//    },
-//    locate: true, // try to locate the barcode in the image
-//    src: '/test/fixtures/code_128/image-001.jpg' // or 'data:image/jpg;base64,' + data
-//}, function(result){
-//    if(result.codeResult) {
-//        console.log("result", result.codeResult.code);
-//    } else {
-//        console.log("not detected");
-//    }
-//});
 
-        
+        //        Quagga.decodeSingle({
+        //    decoder: {
+        //        readers: ["code_128_reader"] // List of active readers
+        //    },
+        //    locate: true, // try to locate the barcode in the image
+        //    src: '/test/fixtures/code_128/image-001.jpg' // or 'data:image/jpg;base64,' + data
+        //}, function(result){
+        //    if(result.codeResult) {
+        //        console.log("result", result.codeResult.code);
+        //    } else {
+        //        console.log("not detected");
+        //    }
+        //});
     }
 }

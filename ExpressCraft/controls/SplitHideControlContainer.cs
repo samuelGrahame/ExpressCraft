@@ -1,9 +1,4 @@
 ﻿using Bridge.Html5;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -15,7 +10,11 @@ namespace ExpressCraft
         private HTMLSpanElement span;
 
         private int _slideWidth;
-        public int SlideWidth { get { return _slideWidth; } set
+
+        public int SlideWidth
+        {
+            get { return _slideWidth; }
+            set
             {
                 if(_slideWidth != value)
                 {
@@ -27,18 +26,27 @@ namespace ExpressCraft
         }
 
         private SliderLocation _sliderLocation = SliderLocation.Left;
-        public SliderLocation SliderLocation { get { return _sliderLocation; } set
+
+        public SliderLocation SliderLocation
+        {
+            get { return _sliderLocation; }
+            set
             {
                 if(_sliderLocation != value)
                 {
                     _sliderLocation = value;
                     RenderControl();
                     ResizeChildren();
-                }                
-            } }
+                }
+            }
+        }
 
         private bool _sliderVisible = false;
-        public bool SliderVisible { get { return _sliderVisible; } set
+
+        public bool SliderVisible
+        {
+            get { return _sliderVisible; }
+            set
             {
                 if(_sliderVisible != value)
                 {
@@ -46,10 +54,13 @@ namespace ExpressCraft
                     RenderControl();
                     ResizeChildren();
                 }
-            } }
+            }
+        }
+
         private int refreshId = -1;
+
         private void ResizeChildren()
-        {            
+        {
             if(this.LinkedForm != null && this.Content != null)
             {
                 if(refreshId != -1)
@@ -60,7 +71,7 @@ namespace ExpressCraft
                 {
                     this.LinkedForm.ResizeChildren(this.Content);
                     refreshId = -1;
-                }, 1000);                                
+                }, 1000);
             }
         }
 
@@ -71,7 +82,7 @@ namespace ExpressCraft
             Panel = new Control();
             span = Span("form-heading-title");
             span.TextContent = ">";
-            
+
             span.Style.FontWeight = "bold";
             span.Style.Color = "white";
 
@@ -127,12 +138,12 @@ namespace ExpressCraft
             {
                 width = 30;
             }
-            
+
             if(SliderLocation == SliderLocation.Left)
             {
                 if(SliderVisible)
                 {
-                    span.TextContent = "<";                    
+                    span.TextContent = "<";
                     Panel.Width = SlideWidth;
                     Slider.Left = SlideWidth;
                     Body.Location = new Vector2(width + SlideWidth, 0);
@@ -148,14 +159,12 @@ namespace ExpressCraft
                 }
 
                 Panel.Location = new Vector2(0, 0);
-                Panel.Height = "100%";                
+                Panel.Height = "100%";
             }
             else
             {
-
             }
         }
-
     }
 
     public enum SliderLocation

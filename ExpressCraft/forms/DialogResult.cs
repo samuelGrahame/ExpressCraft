@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -17,22 +12,23 @@ namespace ExpressCraft
             ResultEnum = resultEnum;
             CallBack = callBack;
         }
+
         public void InvokeIfResult(DialogResultEnum resultEnum)
         {
-            if (resultEnum == ResultEnum && CallBack != null)
+            if(resultEnum == ResultEnum && CallBack != null)
                 CallBack.Invoke();
         }
     }
 
     public enum DialogResultEnum
-    {            
-            None,
-            OK,
-            Cancel,
-            Abort,
-            Send,
-            Ignore,
-            Yes,
-            No
-    }    
+    {
+        None,
+        OK,
+        Cancel,
+        Abort,
+        Send,
+        Ignore,
+        Yes,
+        No
+    }
 }

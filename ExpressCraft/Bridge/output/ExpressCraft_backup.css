@@ -4,7 +4,7 @@
 /*Default-Header-Hover=#2A8AD0*/
 /*Default-Form-Button-Hover=#2A8AD4*/
 /*Default-Form-Button-Active=#015C9F*/
-/**{          
+/**{
     font:8.25pt Tahoma;
     color:#404040;
 }*/
@@ -12,12 +12,12 @@
     outline: dashed 1px #0173C7;
 }*/
 .control{
-    position:absolute;  
+    position:absolute;
     -ms-user-select:none;
     -moz-user-select:none;
     -webkit-user-select:none;
-    user-select:none;    
-    cursor:default;    
+    user-select:none;
+    cursor:default;
     font:8.25pt Tahoma;
     color:#404040;
 }
@@ -62,7 +62,7 @@
 .system-form-collection-overlay{
     width:100%;
     height:100%;
-    background-color:white;      
+    background-color:white;
     opacity:0.5;
 }
 .blur{
@@ -87,7 +87,7 @@
     top:8px;
     left:8px;
     width:32px;
-    height:32px;    
+    height:32px;
 }
 .ribboncontrol{
     background-color:#0173C7;
@@ -126,11 +126,11 @@
 
 .ribbongroup{
     background-color:#F0F0F0;
-    height: 100%;                
+    height: 100%;
     left: 0;
 }
 .ribbonbutton{
-    background-color:#F0F0F0;            
+    background-color:#F0F0F0;
     height: 68px;
     top: 3px;
 }
@@ -154,9 +154,9 @@
     height: 32px;
     top: 3px;
 }
-.ribbonbuttonsmall{            
-    background-color:#F0F0F0;            
-    height: 22px;    
+.ribbonbuttonsmall{
+    background-color:#F0F0F0;
+    height: 22px;
 }
 .ribbonbuttonsmall:hover:not(:active):not(.disabled)
 {
@@ -167,7 +167,7 @@
 }
 .ribbonbuttonsmallcaption{
     text-align: left;
-    bottom: 0;    
+    bottom: 0;
     height: calc(100% - 6px);
     line-height:19px;
     top: 0;
@@ -180,8 +180,8 @@
 }
 .ribbonseperator{
     background-color:#C5C5C5;
-    width:1px;           
-    top:8px; 
+    width:1px;
+    top:8px;
     height:58px;
 }
 .ribbongroupcaption{
@@ -191,14 +191,14 @@
     width: 100%;
     top: 77px;
 }
-.ribbonpageheader {                
+.ribbonpageheader {
     line-height:22px;
-    text-align: center;                        
+    text-align: center;
     top: 29px;
     height: 23px;
 }
-.ribbonpageheader-compact {                                       
-    top: 5px !important;    
+.ribbonpageheader-compact {
+    top: 5px !important;
 }
 .ribbonpageheader-hidden{
     background-color:#0173C7;
@@ -216,7 +216,7 @@
 }
 .tabcontrolpage{
     background-color:#F0F0F0;
-    
+
     border-top-color:#C5C5C5;
     border-left-color:#C5C5C5;
     border-right-color:#C5C5C5;
@@ -231,21 +231,21 @@
     border-left-style: solid;
     border-right-style: solid;
     border-bottom-style: solid;
-    
+
     width: calc(100% - 2px);
     height: calc(100% - 26px);
     top: 24px;
     left: 0;
     overflow:auto;
 }
-.tabcontrolpageheader { 
-    background-color:#F0F0F0;           
+.tabcontrolpageheader {
+    background-color:#F0F0F0;
     line-height:22px;
-    text-align: center;                        
+    text-align: center;
     top: 2px;
     height: 21px;
 }
-.tabcontrolpageheader-hidden{   
+.tabcontrolpageheader-hidden{
     border-top-color:#F0F0F0;
     border-left-color:#F0F0F0;
     border-right-color:#F0F0F0;
@@ -259,14 +259,14 @@
     border-top-style: solid;
     border-left-style: solid;
     border-right-style: solid;
-    border-bottom-style: solid;   
+    border-bottom-style: solid;
 }
 .tabcontrolpageheader-hidden:hover{
     background-color:#D3D3D3;
     border-left-color:#D3D3D3;
     border-right-color:#D3D3D3;
 }
-.tabcontrolpageheader-active{    
+.tabcontrolpageheader-active{
     border-top-color:#C5C5C5;
     border-left-color:#C5C5C5;
     border-right-color:#C5C5C5;
@@ -290,7 +290,7 @@
     content:"X";
     color:#C5C5C5;
 }
-.tabcontrolpageheader-closebutton:hover{    
+.tabcontrolpageheader-closebutton:hover{
     color:black;
 }
 /****************InputControl****************/
@@ -300,10 +300,10 @@
     margin:0;
     padding:0;
     color:black;
-    background-color:#FFFFFF;    
+    background-color:#FFFFFF;
     line-height:18px;
     text-indent:3px;
-    height:20px;    
+    height:20px;
     cursor:text;
     -ms-user-select:none;
     -moz-user-select:text;
@@ -315,7 +315,7 @@
     box-sizing:border-box;
     border:1px solid #A6A6A6;
     background-color:#F0F0F0;
-        
+
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
@@ -342,10 +342,10 @@
     font-size:12pt;
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACSSURBVFhH7dbRCYAgFIXhRnASN3ADJ3GSu4gbuIGD1SUlejCOBpLE+R4NOT/0UJtZDIMQBiEMQhiEMAj5b5C11nsfQhCRlFLOeT/Vx93eBDnndFuHY4w6rCdlu6lc6TccVHdumoeXcqsfgxAGIcNBs/GVIQxCGIQMB6m1Pq5Pvvz9mIpBCIMQBiEMQhiELBZkzAGoRY/1a8YOvQAAAABJRU5ErkJggg==') no-repeat;
 }
-.form-manager-start:hover{    
+.form-manager-start:hover{
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACmSURBVFhH7dYxCoQwEIVhb5NasNBGZCstBUFkL7Dg9ttq6QG8gJ2FB/I2DkS2EOUlghjkfUwVCfODhXrKMQxCGIQwCGEQwiDkuUF+GEdp8arq7NOU7fDupu84y6yPjZ0JCpJMdsvi/NfLYjnRu3dHXzFnHbTZJ7N7+B99yxyDEAYh1kFX4ytDGIQwCLEOEm59XI/c+ftxKQYhDEIYhDAIYRDiWJBSC3edj/DGIv8/AAAAAElFTkSuQmCC') no-repeat;
 }
-.form-manager-start:active{    
+.form-manager-start:active{
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAoCAIAAAA35e4mAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACnSURBVFhHY5AZZGDUQYTAqIMIgVEHEQKjDiIERh1ECAxfBynrGGvbehv6JFnGVrmUznWvXRE27zoQQaWJBuQ4SN3UHmg30GLHvIlAi4EiELuxIogW4gHJDkKzD4iwCsIRRBfxYNRBhMCogwgBkh1EazAaZYTAqIMIgVEHEQIkOwgIBlfligsMZPODpmDUQYTAqIMIgVEHEQKjDiIERh1ECAwyB8nIAADHEJbDMY47rQAAAABJRU5ErkJggg==') no-repeat;
 }
 
@@ -356,7 +356,7 @@
     top:0;
     font:11pt Segoe UI;
     text-indent:13px;
-    background-color:#3F3F3F; 
+    background-color:#3F3F3F;
     margin:0;
     padding:0;
     border:none;
@@ -378,10 +378,10 @@
     height: 40px;
     top: calc(100% - 40px);
     left:0;
-    background-color:#101010;    
+    background-color:#101010;
 }
 .form-container{
-    width:100%;      
+    width:100%;
     top:0;
     left:0;
     background-color:white;
@@ -389,7 +389,7 @@
     z-index:0;
 }
 .form-base{
-    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);        
+    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);
     border-width:1px;
     border-style:solid;
     border-color:#0173C7;
@@ -408,15 +408,15 @@
     vertical-align:top;
     background-color:#0173C7;
     margin: 0;
-    padding-bottom:1px;        
+    padding-bottom:1px;
 }
-.form-heading-title{    
-    color:white;    
+.form-heading-title{
+    color:white;
     top: 50%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    font-size:10pt;        
+    font-size:10pt;
 }
 .form-heading-button{
     width:45px;
@@ -438,7 +438,7 @@
 }
 .form-body-overlay{
     top:30px;
-    height:calc(100% - 30px);   
+    height:calc(100% - 30px);
     width:100%;
     background-color:black;
     z-index:65553;
@@ -459,13 +459,13 @@
     background-color:#F1707A;
 }
 /****************GridView****************/
-.cell{    
-    border: 1px solid #F0F0F0;       
+.cell{
+    border: 1px solid #F0F0F0;
     line-height:27px;
-    text-indent:4px;             
-    height: 27px !important;  
-    margin: 0 !important;  
-    
+    text-indent:4px;
+    height: 27px !important;
+    margin: 0 !important;
+
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
@@ -474,7 +474,7 @@
     background-color:white;
 }
 .cellrow:hover{
-    background-color:#F0F0F0 !important;    
+    background-color:#F0F0F0 !important;
 }
 .cellrow:active{
     background-color:#AEAEAE !important;
@@ -483,29 +483,29 @@
    background-color:#FAFAFA !important;
 }
 .cellrow-selected{
-    background-color:rgba(1, 115, 199, 0.3) !important;    
+    background-color:rgba(1, 115, 199, 0.3) !important;
 }
 .cellrow-selected:hover{
-    background-color:rgba(1, 115, 199, 0.5) !important;    
+    background-color:rgba(1, 115, 199, 0.5) !important;
 }
 .focusedrow {
-    outline: dotted 1px black !important;    
+    outline: dotted 1px black !important;
     outline-offset: -2px;
     outline-width: -2px;
 }
-.heading{    
+.heading{
     line-height:29px;
     background-color:#F0F0F0;
     height: 29px !important;
     border:1px solid #A6A6A6 !important;
-    border-top:none !important;  
-    border-left:none !important;  
+    border-top:none !important;
+    border-left:none !important;
     border-bottom:none !important;
-    text-indent:4px;           
-    
+    text-indent:4px;
+
     overflow:hidden;
     text-overflow:ellipsis;
-    white-space: nowrap;  
+    white-space: nowrap;
 }
 .heading:hover{
     background-color:#C5C5C5;
@@ -520,7 +520,7 @@
 .grid{
     background-color:white;
     border:1px solid #A6A6A6;
-    border-top:none;  
+    border-top:none;
 }
 .grid:focus{
     outline: 0 !important;
@@ -533,7 +533,7 @@
 
 .progressbarbody{
     top:1px;
-    left:1px;    
+    left:1px;
     height:calc(100% - 2px);
     background-color:#0173C7;
     text-align:center;
@@ -542,7 +542,7 @@
 /****************ContextMenu****************/
 .contextmenu{
     background-color:white;
-    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);        
+    box-shadow:0 0 63px -17px rgba(0,0,0,0.75);
     border: solid 1px #80868A;
 }
 
@@ -552,7 +552,7 @@
     text-indent:34px;
     overflow:hidden;
     text-overflow:ellipsis;
-    white-space: nowrap;    
+    white-space: nowrap;
 }
 
 .contextitem:hover{
@@ -602,7 +602,7 @@
     word-wrap: break-word;
     left:65px;
     height:auto;
-    right:0px;               
+    right:0px;
 }
 /****************SplitControlContainer****************/
 .splitcontrol
@@ -618,7 +618,7 @@
 }
 
 .splittervertical {
-    width:10px;    
+    width:10px;
     height:100%;
     border-left: 1px #C3C3C3 solid;
     border-right: 1px #C3C3C3 solid;
@@ -633,7 +633,7 @@
 }
 
 .splitterhorizontal:hover {
-    background-color:#C3C3C3;    
+    background-color:#C3C3C3;
     cursor:ns-resize;
 }
 .splittervertical:hover {
@@ -642,10 +642,10 @@
 }
 /****************Console****************/
 .console-body{
-    word-wrap: break-word;    
+    word-wrap: break-word;
     color:white;
     height:auto;
-    width:100%;   
+    width:100%;
 }
 .console-para{
     margin-top:4px;
@@ -655,7 +655,7 @@
     -ms-user-select:text;
     -moz-user-select:text;
     -webkit-user-select:text;
-    user-select:text;        
+    user-select:text;
 }
 
 .console-para::selection{

@@ -1,11 +1,8 @@
-﻿using Bridge;
-using Bridge.Html5;
+﻿using Bridge.Html5;
 using Bridge.jQuery2;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
@@ -26,21 +23,21 @@ namespace ExpressCraft
                 return;
             try
             {
-            /*@			
-			ExpressCraft.Gmail.GoogleAuth = gapi.auth2.getAuthInstance()
-            gapi.auth2.getAuthInstance().signIn();            
-			*/
+                /*@
+                ExpressCraft.Gmail.GoogleAuth = gapi.auth2.getAuthInstance()
+                gapi.auth2.getAuthInstance().signIn();
+                */
                 _hasRan = false;
                 PushEventsTimeCall();
                 Window.Focus();
             }
             catch(Exception)
             {
-                
-            }            
+            }
         }
 
         private static bool _hasRan = false;
+
         public static void PushEventsTimeCall()
         {
             if(_hasRan)
@@ -57,12 +54,11 @@ namespace ExpressCraft
             }
             catch(Exception)
             {
-                
-            }            
+            }
             _oneTimeCall = new List<Action>();
         }
 
-        public static void OnSignedIn(Action method)            
+        public static void OnSignedIn(Action method)
         {
             if(method == null)
                 return;
@@ -75,16 +71,14 @@ namespace ExpressCraft
                 }
                 catch(Exception)
                 {
-
                 }
-                
             }
             else
             {
                 _oneTimeCall.Add(method);
             }
         }
-        
+
         public static bool IsSignedIn()
         {
             if(!ExternalGmail.SetupCompleted)
@@ -97,7 +91,7 @@ namespace ExpressCraft
             }
             bool signedIn = false;
 
-            /*@			
+            /*@
 			signedIn = ExpressCraft.Gmail.GoogleAuth.isSignedIn.get();
 			*/
 
@@ -117,7 +111,7 @@ namespace ExpressCraft
 
             string access_token = "";
 
-            /*@			
+            /*@
 			access_token = ExpressCraft.Gmail.GoogleAuth.currentUser.Ab.Zi.access_token;
 			*/
 
@@ -137,7 +131,7 @@ namespace ExpressCraft
 
             string fullname = "";
 
-            /*@			
+            /*@
 			fullname = ExpressCraft.Gmail.GoogleAuth.currentUser.Ab.w3.ig;
 			*/
 
@@ -157,7 +151,7 @@ namespace ExpressCraft
 
             string email = "";
 
-            /*@			
+            /*@
 			email = ExpressCraft.Gmail.GoogleAuth.currentUser.Ab.w3.U3;
 			*/
 
@@ -206,8 +200,7 @@ namespace ExpressCraft
             else
             {
                 builder.Append(message.Body + "\r\n\r\n");
-            }            
-
+            }
 
             builder.Append("--_intelogy_8ab337ec2e38e1a8b82a01a5712a8bdb\r\n");
 
@@ -231,40 +224,36 @@ namespace ExpressCraft
                         {
                             builder.Append(Global.Btoa(attachment.Data));
                         }
-                        
 
                         builder.Append("\r\n\r\n");
 
                         builder.Append("--_intelogy_8ab337ec2e38e1a8b82a01a5712a8bdb\r\n");
-                    }                    
+                    }
                 }
             }
-            
+
             var settings = new AjaxOptions()
             {
                 Type = "POST",
                 Url = "https://www.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=multipart",
-                ContentType = "message/rfc822"   ,
+                ContentType = "message/rfc822",
                 Data = builder.ToString(),
-                Headers = new {
+                Headers = new
+                {
                     Authorization = "Bearer " + AccessToken()
                 },
                 Error = (a, b, c) =>
                 {
-                    
                 },
                 Complete = (jq, data) =>
                 {
-
                 },
                 Success = (obj, data, jq) =>
                 {
-
                 }
             };
-            
-            jQuery.Ajax(settings);
 
+            jQuery.Ajax(settings);
         }
 
         public static string IconURL()
@@ -280,7 +269,7 @@ namespace ExpressCraft
 
             string iconUrl = "";
 
-            /*@			
+            /*@
 			iconUrl = ExpressCraft.Gmail.GoogleAuth.currentUser.Ab.w3.Paa;
 			*/
 
@@ -295,8 +284,8 @@ namespace ExpressCraft
             {
                 try
                 {
-                    /*@			
-			    gapi.load('client:auth2', function() {                
+                    /*@
+			    gapi.load('client:auth2', function() {
                     gapi.client.init({
                       discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
                       clientId: ExpressCraft.Gmail.ClientId,
@@ -307,17 +296,13 @@ namespace ExpressCraft
                       gapi.auth2.getAuthInstance().signIn();
 
                       ExpressCraft.Gmail.PushEventsTimeCall();
-
-                        
-                    });                
+                    });
                 });
 			    */
                 }
                 catch(Exception)
                 {
-                    
                 }
-                
             };
             ExternalGmail.Setup(true, true);
         }
