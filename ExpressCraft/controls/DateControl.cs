@@ -104,7 +104,7 @@ namespace ExpressCraft
                         var btn = new SimpleButton()
                         {
                             Text = curDate.Day.ToString(),
-                            Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "(((100% - " + (Helper.NotDesktop ? 26 : 13) + "px) * " + ((row - 1) * 0.1666) + ") + " + (Helper.NotDesktop ? 26 : 13) + "px)", "(100% * 0.1428)", "((100% - " + (Helper.NotDesktop ? 26 : 13) + "px) * " + 0.1666 + ")"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
+                            Bounds = new Vector4("(100% * " + (offsetStart * 0.1428) + ")", "(((100% - " + (Helper.NotDesktop ? 29 : 16) + "px) * " + ((row - 1) * 0.1666) + ") + " + (Helper.NotDesktop ? 29 : 16) + "px)", "(100% * 0.1428)", "((100% - " + (Helper.NotDesktop ? 29 : 16) + "px) * " + 0.1666 + ")"), //  offsetStart * 30,  (22 * row) - 6, 30, 22
                             ItemClick = (ev) =>
                             {
                                 if(GetViewDateTime() == curDate)

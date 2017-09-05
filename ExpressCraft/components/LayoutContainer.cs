@@ -9,13 +9,23 @@ namespace ExpressCraft
 {
     public class LayoutContainer
     {
-        public List<LayoutColumn> Columns { get; set; } = new List<LayoutColumn>();
-        public int ColumnWidth { get; set; }
-        public int ControlMargin { get; set; }
-        private bool appliedLayout { get; set; } = false;
-
+        public List<LayoutColumn> Columns = new List<LayoutColumn>();
+        public int ColumnWidth;
+        public int ControlMargin;
+        private bool appliedLayout = false;
+        public int ButtinWidth = 73;
         public List<LayoutControl> Controls = new List<LayoutControl>();
         public List<LayoutControl> ControlEditable = new List<LayoutControl>();
+
+        public void AddInput(string linkField, TextInput input)
+        {
+            var cl = new LayoutControl(linkField, input);
+            Controls.Add(cl);
+            if(!input.Readonly)
+            {
+                ControlEditable.Add(cl);
+            }
+        }
 
         public static int TabIndex = 2;
 
@@ -24,27 +34,46 @@ namespace ExpressCraft
             return appliedLayout;
         }
 
-        public LayoutControl GetControl(string name)
+        public LayoutControl GetControl(string name, bool allowReadonly = false)
         {
             name = name.ToLower();
-            for(int i = 0; i < ControlEditable.Count; i++)
+           
+            if(allowReadonly)
             {
-                if(ControlEditable[i].LinkFieldName.ToLower() == name)
+                for(int i = 0; i < Controls.Count; i++)
                 {
-                    return ControlEditable[i];
+                    if(Controls[i].LinkFieldName.ToLower() == name)
+                    {
+                        return Controls[i];
+                    }
+                }
+            }else
+            {
+                for(int i = 0; i < ControlEditable.Count; i++)
+                {
+                    if(ControlEditable[i].LinkFieldName.ToLower() == name)
+                    {
+                        return ControlEditable[i];
+                    }
                 }
             }
+
             return null;
         }
 
-        public string GetText(string name)
+        public string GetText(string name, bool allowReadyOnly = false)
         {
-            return GetControl(name)?.Input?.Text;
+            return GetControl(name, allowReadyOnly)?.Input?.Text;
         }
 
-        public void SetText(string name, string value)
+        public object GetEditValue(string name, bool allowReadyOnly = false)
         {
-            var input = GetControl(name)?.Input;
+            return GetControl(name, allowReadyOnly)?.Input?.GetEditValue();
+        }
+
+        public void SetText(string name, string value, bool allowReadyOnly = false)
+        {
+            var input = GetControl(name, allowReadyOnly)?.Input;
             if(input != null)
                 input.Text = value;
         }
@@ -72,6 +101,16 @@ namespace ExpressCraft
         {
             ColumnWidth = columnWidth;
             ControlMargin = controlMargin;
+
+            if(columns != null && columns.Length > 0)
+                Columns.AddRange(columns);
+        }
+
+        public LayoutContainer(int columnWidth = 500, int controlMargin = 6, int buttonWidth = 73, params LayoutColumn[] columns)
+        {
+            ColumnWidth = columnWidth;
+            ControlMargin = controlMargin;
+            ButtinWidth = buttonWidth;
 
             if(columns != null && columns.Length > 0)
                 Columns.AddRange(columns);
@@ -211,7 +250,7 @@ namespace ExpressCraft
                 EditStartX = 15;
             }
 
-            int ButtinWidth = 73;
+            
             int XIncrement = leftMargin + ColumnWidth;
 
             int inputHeight;
@@ -265,6 +304,37 @@ namespace ExpressCraft
 
                     foreach(var row in rows)
                     {
+                        if(row is LayoutRowControl)
+                        {
+                            float height = row.As<LayoutRowControl>().Height;
+
+                            var control = row.As<LayoutRowControl>().Control;
+
+                            if(control != null)
+                            {
+                                control.Height = height;
+                                control.Left = currentLeft + leftLabel;                                
+                                control.Top = y;
+
+                                if(Helper.NotDesktop)
+                                {
+                                    control.Width = "(100% - " + (currentLeft + (leftLabel * 2.0f)) + "px)";                                    
+                                }
+                                else
+                                {
+                                    control.Width = ColumnWidth - currentLeft - (leftLabel);
+                                }
+
+                                docFragment.AppendChild(control);
+
+                                y += ControlMargin;
+                            }
+
+                            y += height;
+                            
+                            continue;
+                        }
+
                         if(!string.IsNullOrWhiteSpace(row.Label))
                         {
                             var label = Control.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, false);
@@ -280,7 +350,7 @@ namespace ExpressCraft
                         {
                             y += row.As<LayoutRowGap>().Height;
                             continue;
-                        }
+                        }                                                
 
                         if(row.Button != null && !Helper.NotDesktop)
                         {
@@ -565,12 +635,25 @@ namespace ExpressCraft
 
     public class LayoutRowGap : LayoutRow
     {
-        public float Height { get; set; }
+        public float Height;
 
         public LayoutRowGap(float height, string label = "")
         {
             Height = height;
             Label = label;
+        }
+    }
+
+    public class LayoutRowControl : LayoutRow
+    {
+        public float Height;
+        public Control Control;
+
+        public LayoutRowControl(float height, Control control)
+        {
+            Height = height;
+            Label = "";
+            Control = control;
         }
     }
 

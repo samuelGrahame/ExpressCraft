@@ -530,16 +530,16 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 return value.As<float>().ToPx();
         }
 
-        public static void SetImage(this Control c, string str, bool useURL = true, bool useResource = true)
+        public static void SetImage(this Control c, string str, bool useURL = true, bool useResource = true, bool center = true)
         {
             if(!str.StartsWith("url("))
             {
                 str = useURL ? Control.GetImageStringURI(str, useResource) : Control.GetImageString(str);
             }
-            SetImage(c.Content, str, useURL);
+            SetImage(c.Content, str, useURL, center);
         }
 
-        public static void SetImage(this HTMLElement c, string str, bool useURL = true)
+        public static void SetImage(this HTMLElement c, string str, bool useURL = true, bool center = true)
         {
             if(string.IsNullOrWhiteSpace(str))
             {
@@ -552,7 +552,10 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 str = useURL ? Control.GetImageStringURI(str) : Control.GetImageString(str);
             }
             c.Style.Background = str;
-            c.Style.BackgroundSize = "100% 100%";
+            if(center)
+            {
+                c.Style.BackgroundSize = "100% 100%";
+            }                
         }
 
         public static void SetSize(this HTMLElement c, Union<string, int, float> width, Union<string, int, float> height)

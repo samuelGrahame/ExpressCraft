@@ -35,13 +35,13 @@ namespace ExpressCraft
 
         public void RefreshImage()
         {
-            if(string.IsNullOrWhiteSpace(_image))
-            {
-                _image = "";
+            if(!string.IsNullOrWhiteSpace(_image))
+            {                
                 _noImageDataText.Content.Style.Visibility = Visibility.Hidden;
             }
             else
             {
+                _image = "";
                 _noImageDataText.Content.Style.Visibility = Visibility.Inherit;
             }
             this.SetImage(_image, _isURL);

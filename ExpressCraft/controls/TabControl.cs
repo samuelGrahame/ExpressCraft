@@ -11,7 +11,7 @@ namespace ExpressCraft
         private Control tabHeaderContainer;
 
         public TabControl() : base("tabcontrol")
-        {
+        {            
             Content.OnContextMenu = (ev) =>
             {
                 ev.StopPropagation();

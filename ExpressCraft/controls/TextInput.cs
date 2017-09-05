@@ -18,6 +18,12 @@ namespace ExpressCraft
 
         public virtual void ValidateData()
         {
+            if(this is TextInputDropDown)
+            {
+                var c = this.As<TextInputDropDown>();
+                if(c.UsedEdit != null && c.OnValidateData != null)
+                    c.OnValidateData(c.UsedEdit);
+            }
             if(OnValidateData != null)
                 OnValidateData(this);
         }
@@ -102,14 +108,28 @@ namespace ExpressCraft
 
         public object GetEditValue()
         {
-            if(Type == InputType.Number)
+            if(this is SearchInput)
             {
-                decimal value = Text.StripNonNumberString();
-                return value;
-            }
-            else
+                var value = ((SearchInput)this).EditValue;
+                if(value == null)
+                    return 0;
+                return value;             
+            }else
             {
-                return Text;
+                if(Type == InputType.Number)
+                {
+                    decimal value = Text.StripNonNumberString();
+                    return value;
+                }
+                else if(Type == InputType.Date)
+                {
+                    DateTime date = GetDateTime();
+                    return date;
+                }
+                else
+                {
+                    return Text;
+                }
             }
         }
 

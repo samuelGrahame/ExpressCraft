@@ -101,8 +101,7 @@ namespace ExpressCraft
         public static bool Mouse_Down = false;
         public static bool MenuOpen = false;
         public static HTMLElement FormOverLay;
-
-        private static HTMLStyleElement WindowCursorManager = null;
+        
         private static bool _hasSetup = false;
 
         public bool HasSetup { get { return _hasSetup; } }
@@ -410,6 +409,8 @@ namespace ExpressCraft
         {
         }
 
+        public Action OnFormClosed = null;
+
         public static FormCollection GetActiveFormCollection()
         {
             for(int i = FormCollections.Count - 1; i >= 0; i--)
@@ -618,9 +619,7 @@ namespace ExpressCraft
                 Parent = Document.Body;
             else
                 Parent = parent;
-
-            WindowCursorManager = new HTMLStyleElement();
-
+            
             WindowHolder = Div("form-container");
 
             FormOverLay = Div("system-form-collection-overlay");
@@ -965,15 +964,12 @@ namespace ExpressCraft
 
             WindowHolder.AppendChild(FormOverLay);
 
-            Parent.AppendChildren(WindowHolder, WindowCursorManager);
+            Parent.AppendChildren(WindowHolder);
         }
 
         public static void SetCursor(Cursor cursor)
         {
-            WindowCursorManager.InnerHTML = string.Format(@"
-				.control{
-					cursor:{0} !important;
-				}", cursor);
+            Document.Body.Style.Cursor = cursor;            
         }
 
         private Union<string, Display> previousDisplay;
@@ -1845,10 +1841,10 @@ namespace ExpressCraft
             }
 
             OnShowed();
-
-            Body.Focus();
-
+            
             ActiveForm = this;
+
+            Body.FocusElement();
         }
 
         public void ShowDialog(params DialogResult[] dialogResults)
@@ -1904,7 +1900,7 @@ namespace ExpressCraft
             if(!HasRendered)
             {
                 base.Render();
-                OnShowing();
+                OnShowing();                
                 Shown();
             }
         }
@@ -1922,7 +1918,7 @@ namespace ExpressCraft
                     Children[i].OnLoaded(Children[i]);
                 }
             }
-            Children.Remove(null);
+            Children.Remove(null);            
         }
 
         protected bool _seperateInstance = false;
@@ -1999,13 +1995,19 @@ namespace ExpressCraft
                             .Css("top", MinZero((int)y));
                     }
                 }
-
-                Body.Focus();
-
-                OnShowed();
+                
+                OnShowed();                
             }
 
             ActiveForm = this;
+            
+            if(Helper.NotDesktop)
+            {
+                Global.SetTimeout(() => {
+                    this.Content.Focus();
+                    this.Content.Click();                    
+                }, 0);               
+            }
         }
 
         public void BringToFront()
@@ -2316,6 +2318,8 @@ namespace ExpressCraft
                 }
             }
 
+            if(OnFormClosed != null)
+                OnFormClosed();
             OnClosed();
 
             if(WindowState == WindowStateType.Minimized)

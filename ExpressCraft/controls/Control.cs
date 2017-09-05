@@ -80,7 +80,7 @@ namespace ExpressCraft
         }
 
         public Action<Control> OnResize = null;
-        public Action<Control> OnLoaded = null;
+        public Action<Control> OnLoaded = null;        
 
         public ContextMenu ContextMenu = null;
 
@@ -299,6 +299,42 @@ namespace ExpressCraft
                 lbl.Style.TextAlign = Alignment;
             }
             SetBT(lbl, IsBold, IsTiny);
+            if(Forecolor != null)
+            {
+                lbl.Style.Color = Forecolor;
+            }
+
+            return lbl;
+        }
+
+        public static HTMLDivElement DivLabel(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
+        {
+            var lbl = new HTMLDivElement();
+            lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
+            lbl.TextContent = Caption;
+            lbl.Style.Left = X.ToPx();
+            lbl.Style.Top = Y.ToPx();
+            lbl.Style.Width = width.ToPx();
+
+            if(Alignment != TextAlign.Left)
+            {
+                if(Alignment == TextAlign.Right)
+                {
+                    lbl.Style.Direction = Direction.Rtl;
+                }
+                else
+                {
+                    lbl.Style.TextAlign = Alignment;
+                }
+            }
+            if(IsBold)
+            {
+                lbl.Style.FontWeight = "bold";
+            }
+            if(IsTiny)
+            {
+                lbl.Style.FontSize = "6.75pt";
+            }
             if(Forecolor != null)
             {
                 lbl.Style.Color = Forecolor;
