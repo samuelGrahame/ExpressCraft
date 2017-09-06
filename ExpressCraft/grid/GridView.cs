@@ -9,6 +9,8 @@ namespace ExpressCraft
 {
     public class GridView : Control
     {
+        public HTMLDivElement GridFindPanel;
+
         public HTMLDivElement GridHeader;
         public HTMLDivElement GridHeaderContainer;
         public HTMLDivElement GridBodyContainer;
@@ -17,6 +19,75 @@ namespace ExpressCraft
         private HTMLDivElement BottonOfTable;
         private HTMLDivElement RightOfTable;
         private HTMLDivElement RightOfTableHeader;
+
+        public TextInput SearchTextInput;
+        public SimpleButton btnFind;
+        public SimpleButton btnClear;
+        public SimpleButton btnClose;
+
+        private ContextItem _showFindPanelContextItem;
+
+        private bool _findPanelVisible;
+
+        public bool FindPanelVisible
+        {
+            get { return _findPanelVisible; }
+            set {
+                if(_findPanelVisible != value)
+                {
+                    if(value)
+                        ShowFindPanel();
+                    else
+                        CloseFindPanel();
+                                        
+                }
+                
+            }
+        }
+
+        private bool _highlighSearchResults = true;
+
+        public bool HighlighSearchResults
+        {
+            get { return _highlighSearchResults; }
+            set {
+                if(_highlighSearchResults != value)
+                {
+                    _highlighSearchResults = value;
+                    RenderGrid();
+                }                    
+            }
+        }
+
+        public void ShowFindPanel()
+        {
+            if(!_findPanelVisible)
+            {
+                _showFindPanelContextItem.Caption = "Close Find Panel";
+                _findPanelVisible = true;
+                GridFindPanel.Style.Visibility = Visibility.Inherit;
+
+                SetDefaultSizes();
+
+                RenderGrid();
+            }
+                
+        }
+
+        public void CloseFindPanel()
+        {
+            if(_findPanelVisible)
+            {
+                _showFindPanelContextItem.Caption = "Show Find Panel";
+                _findPanelVisible = false;
+                GridFindPanel.Style.Visibility = Visibility.Hidden;
+
+                SetDefaultSizes();
+
+                RenderGrid();
+            }            
+        }
+
 
         private DataTable _dataSource = null;
 
@@ -33,24 +104,51 @@ namespace ExpressCraft
 
         public void SetVisibleRowHandles<T>(List<T> Cells, bool asc)
         {
-            if(asc)
+            if(DataSource._searchActive)
             {
-                var sorted = Cells
-                    .Select((x, i) => new KeyValuePair<int, T>(i, x))
-                    .OrderBy(x => x.Value)
-                    .ToList();
+                if(asc)
+                {
+                    var sorted = Cells
+                        .Select((x, i) => new KeyValuePair<int, T>(i, x))
+                        .Where((p) => DataSource._searchResults.Contains(p.Key))
+                        .OrderBy(x => x.Value)
+                        .ToList();
 
-                VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                    VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                }
+                else
+                {
+                    var sorted = Cells
+                        .Select((x, i) => new KeyValuePair<int, T>(i, x))
+                        .Where((p) => DataSource._searchResults.Contains(p.Key))
+                        .OrderByDescending(x => x.Value)
+                        .ToList();
+
+                    VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                }
             }
             else
             {
-                var sorted = Cells
-                    .Select((x, i) => new KeyValuePair<int, T>(i, x))
-                    .OrderByDescending(x => x.Value)
-                    .ToList();
+                if(asc)
+                {
+                    var sorted = Cells
+                        .Select((x, i) => new KeyValuePair<int, T>(i, x))                        
+                        .OrderBy(x => x.Value)
+                        .ToList();
 
-                VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                    VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                }
+                else
+                {
+                    var sorted = Cells
+                        .Select((x, i) => new KeyValuePair<int, T>(i, x))
+                        .OrderByDescending(x => x.Value)
+                        .ToList();
+
+                    VisibleRowHandles = sorted.Select(x => x.Key).ToList();
+                }
             }
+            
         }
 
         public bool _allowRowDrag = false;
@@ -170,17 +268,33 @@ namespace ExpressCraft
         {
             if(_columnHeadersVisible)
             {
-                GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);
-                GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");
                 GridHeader.Style.Visibility = Visibility.Inherit;
                 GridHeaderContainer.Style.Visibility = Visibility.Inherit;
+
+                if(FindPanelVisible)
+                {
+                    GridHeaderContainer.SetBounds(0, 47, "100%", UnitHeight + 1);
+                    GridBodyContainer.SetBounds(0, UnitHeight + 3 + 47, "100%", "(100% - " + (UnitHeight + 3 + 47) + "px)");
+                }
+                else
+                {
+                    GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);
+                    GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");                    
+                }                
             }
             else
             {
                 GridHeader.Style.Visibility = Visibility.Hidden;
                 GridHeaderContainer.Style.Visibility = Visibility.Hidden;
 
-                GridBodyContainer.SetBounds(0, 1, "100%", "(100% - 1px)");
+                if(FindPanelVisible)
+                {
+                    GridBodyContainer.SetBounds(0, 1 + 46, "100%", "(100% - " + (1 + 46)  + "px)");
+                }
+                else
+                {
+                    GridBodyContainer.SetBounds(0, 1, "100%", "(100% - 1px)");
+                }                
             }
         }
 
@@ -682,9 +796,8 @@ namespace ExpressCraft
             int maxLength = 0;
             int maxIndex = -1;
             string maxStr = "";
-
-            int length = RowCount();
-            for(int i = 0; i < length; i++)
+            
+            for(int i = 0; i < RowCount(); i++)
             {
                 string value = column.GetDisplayValueByDataRowHandle(i);
                 if(!string.IsNullOrWhiteSpace(value))
@@ -727,6 +840,15 @@ namespace ExpressCraft
 
         private Dictionary<int, HTMLDivElement> CacheRow = new Dictionary<int, HTMLDivElement>();
         int CountOfDeletion = 0;
+
+        private int _searchTimer = -1;
+        private void _search()
+        {
+            if(this.DataSource == null || !FindPanelVisible)
+                return;
+            this.DataSource.Search(SearchTextInput.Text, this);
+        }
+
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
         {
             if(Helper.NotDesktop)
@@ -744,7 +866,7 @@ namespace ExpressCraft
             }
 
             this.Content.Style.Overflow = Overflow.Hidden;
-
+            // #FIND #RENDER#
             renderGridInternal = () =>
             {
                 if(_disableRender)
@@ -944,7 +1066,7 @@ namespace ExpressCraft
                             int fieldIndex = CacheRow.ElementAt(i).Key;
                             if(fieldIndex < start || fieldIndex >= Length)
                             {
-                                KeysToDelete.Add(CacheRow.ElementAt(i).Key);
+                                KeysToDelete.Add(fieldIndex);
                                 if(KeysToDelete.Count > MaxDelete)
                                 {                                    
                                     break;
@@ -956,24 +1078,24 @@ namespace ExpressCraft
                             CountOfDeletion++;
                         for(int i = 0; i < __length; i++)
                         {
-                            var x = CacheRow[KeysToDelete[i]];
-                            x.OnClick = null;
-                            x.OnDblClick = null;
-                            x.Empty();
-                            x.OnDragStart = null;
-                            x.Delete();
+                            if(CacheRow.ContainsKey(KeysToDelete[i]))
+                            {
+                                var x = CacheRow[KeysToDelete[i]];
+                                x.OnClick = null;
+                                x.OnDblClick = null;
+                                x.Empty();
+                                x.OnDragStart = null;
+                                x.Delete();
 
-                            CacheRow.Remove(KeysToDelete[i]);
+                                CacheRow.Remove(KeysToDelete[i]);
+                            }                            
                         }
                     }
                     
                 }
 
                 int prevRowCache = CacheRow.Count;
-
                 
-
-
                 for(int i = start; i < Length; i++)
                 {
                     if(!CacheRow.ContainsKey(i))
@@ -1001,12 +1123,26 @@ namespace ExpressCraft
                             HTMLElement cell;
                             if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
                             {
-                                cell = Label(col.GetDisplayValueByDataRowHandle(DataRowhandle),
+                                var displayValue = col.GetDisplayValueByDataRowHandle(DataRowhandle, (VisibleRowHandles != null && VisibleRowHandles.Count > 0));
+                                cell = Label(displayValue,
                                 col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
-
-                                dr.AppendChild(useDefault ?
+                                
+                                var newCell = useDefault ?
                                     col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
-                                    cell);
+                                    cell;
+                                
+                                if(_highlighSearchResults && DataSource._searchActive && !useDefault 
+                                    && !string.IsNullOrWhiteSpace(displayValue) 
+                                    && displayValue.ToLower().StartsWith(DataSource.SearchString))
+                                {
+                                    newCell.Empty();
+                                    var markelement = Document.CreateElement("mark");
+                                    int Slength = DataSource.SearchString.Length;
+                                    markelement.TextContent = displayValue.Substring(0, Slength);
+                                    newCell.AppendChildren(markelement, Document.CreateTextNode(displayValue.Substring(Slength)));
+                                }
+
+                                dr.AppendChild(newCell);
                             }
                             else
                             {
@@ -1086,7 +1222,7 @@ namespace ExpressCraft
             GridHeaderContainer = Div("heading-container");
 
             GridHeader = Div();
-            GridHeader.SetBounds("0", "0", "0", "29px");
+            GridHeader.SetBounds(0, 0, 0, "29px");
             GridBodyContainer = Div();
 
             GridBodyContainer.Style.OverflowX = Overflow.Auto;
@@ -1095,10 +1231,56 @@ namespace ExpressCraft
             GridHeaderContainer.Style.Overflow = Overflow.Hidden;
 
             GridBody = Div();
-            GridBody.SetBounds("0", "0", "0", "0");
+            GridBody.SetBounds(0, 0, 0, 0);
 
             GridBodyContainer.AppendChild(GridBody);
             GridHeaderContainer.AppendChild(GridHeader);
+
+            GridFindPanel = Div("heading-container");
+            GridFindPanel.Style.Visibility = Visibility.Hidden;
+            GridFindPanel.SetBounds(0, 0, "100%", 46);
+
+            SearchTextInput = new TextInput() { OnTextChanged = (sender) => {
+                if(_searchTimer > -1)
+                {
+                    Global.ClearTimeout(_searchTimer);
+                }
+                if(string.IsNullOrWhiteSpace(SearchTextInput.Text))
+                    _search();
+                else
+                    _searchTimer = Global.SetTimeout(_search, 500);
+            }, OnKeyDown = (sender, ev) => {
+                if(ev.KeyCode == KeyCodes.Enter)
+                {
+                    btnFind.Content.Click();
+                }
+            } };
+            SearchTextInput.Bounds = new Vector4(30, 13, 350, 22);
+            SearchTextInput.SetAttribute("placeholder", "Enter text to search...");
+
+            btnFind = new SimpleButton() { Text = "Find", ItemClick = (sender) => {
+                if(_searchTimer > -1)
+                {
+                    Global.ClearTimeout(_searchTimer);
+                }
+                _search();
+            }, Bounds = new Vector4(385, 13, 60, 22) };
+            btnClear = new SimpleButton() { Text = "Clear", ItemClick = (sender) => {
+                if(_searchTimer > -1)
+                {
+                    Global.ClearTimeout(_searchTimer);
+                }
+                SearchTextInput.Text = string.Empty;
+            }, Bounds = new Vector4(449, 13, 60, 22) };
+
+            btnClose = new SimpleButton() { Bounds = new Vector4(7, 15, 18, 18), ItemClick = (sender) => {
+                btnClear.Content.Click();
+                CloseFindPanel();
+            } };
+            btnClose.Content.InnerHTML = "&times;";
+
+
+            GridFindPanel.AppendChildren(btnClose, SearchTextInput, btnFind, btnClear);
 
             SetDefaultSizes();
 
@@ -1247,18 +1429,38 @@ namespace ExpressCraft
                 new ContextItem("Clear All Sorting", (cm) => {
                     ClearSortColumn();
                 },  true),
-                new ContextItem("Group By This Column"),
-                new ContextItem("Hide Group By Box", true),
-                new ContextItem("Hide This Column"),
+                //new ContextItem("Group By This Column"),
+                //new ContextItem("Hide Group By Box", true),
+                new ContextItem("Hide This Column", (ci) => {
+                    if(FocusedColumn > -1)
+                    {
+                        Columns[FocusedColumn].Visible = false;
+                        RenderGrid();
+                    }
+                }),
                 new ContextItem("View Columns"),
                 new ContextItem("Save Column Layout"),
-                new ContextItem("Best Fit"),
+                new ContextItem("Best Fit", (ci) => {
+                    if(FocusedColumn > -1)
+                    {
+                        Columns[FocusedColumn].Width = GetBestFitForColumn(Columns[FocusedColumn]);                        
+                    }
+                }) ,
                 new ContextItem("Best Fit (all columns)", (ci) => {
                     BestFitAllColumns();
                 }, true),
-                new ContextItem("Filter Editor..."),
-                new ContextItem("Show Find Panel"),
-                new ContextItem("Show Auto Filter Row"),
+                new ContextItem("Filter Editor...", true),
+                _showFindPanelContextItem = new ContextItem("Show Find Panel") {
+                    OnItemClick = (sender) => {
+                        if(FindPanelVisible)
+                        {                            
+                            FindPanelVisible = false;
+                        }else
+                        {                            
+                            FindPanelVisible = true;
+                        }
+                    }
+                },                
                 new ContextItem("Select All", (cm) => { SelectAllRows(); }),
                 new ContextItem("Unselect All", (cm) => { ClearSelection(); })
             });
@@ -1427,7 +1629,7 @@ namespace ExpressCraft
                 Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
             };
 
-            Content.AppendChildren(GridHeaderContainer, GridBodyContainer);
+            Content.AppendChildren(GridFindPanel, GridHeaderContainer, GridBodyContainer);
 
             FilterRowOnChange = (te) =>
             {

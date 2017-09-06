@@ -9,6 +9,12 @@ namespace ExpressCraft
         public string DisplayMember { get; set; }
         public string ValueMember { get; set; }
 
+        public void SetValues(object editValue, string text)
+        {
+            this.Text = text;
+            EditValue = EditValue;
+        }
+
         public SearchInput() : base(InputType.Text)
         {
             UsedEdit.OnKeyDown = (obj, ev) =>

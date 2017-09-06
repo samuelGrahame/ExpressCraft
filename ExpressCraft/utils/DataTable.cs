@@ -21,6 +21,88 @@ namespace ExpressCraft
     public class DataTable
     {
         public List<DataColumn> Columns = new List<DataColumn>();
+        public List<int> _searchResults = new List<int>();
+
+        public bool _searchActive = false;
+        private string _searchString;
+
+        public string SearchString
+        {
+            get { return _searchString; }            
+        }
+
+        public void Search(string searchData, GridView view)
+        {
+            if(view == null)
+            {
+                _searchString = string.Empty;
+                _searchActive = false;
+                _searchResults = new List<int>();
+                RequireOnDataChangeEvent();
+
+                return;
+            }
+            _searchString = searchData.ToLower();
+            _searchActive = !string.IsNullOrWhiteSpace(_searchString);
+            
+
+            if(_searchActive)
+            {
+                _searchResults = new List<int>();
+                int count = view.ColumnCount();
+                
+                var UseFormat = new List<Tuple<bool, string>>();
+                for(int x = 0; x < count; x++)
+                {
+                    var gridCol = view.GetColumn(x);
+                    if(gridCol.Visible)
+                    {
+                        string FormatString = gridCol.FormatString;
+                        UseFormat.Add(new Tuple<bool, string>(string.IsNullOrWhiteSpace(FormatString), FormatString));
+                    }else
+                    {
+                        UseFormat.Add(new Tuple<bool, string>(false, string.Empty));
+                    }
+                }
+
+                for(int y = 0; y < _RowCount; y++)
+                {                    
+                    for(int x = 0; x < count; x++)
+                    {
+                        var gridCol = view.GetColumn(x);
+                        if(gridCol.Visible)
+                        {
+                            var Column = gridCol.Column;
+                            var helperWhatToDo = UseFormat[x];
+                                                        
+                            string value;
+
+                            if(helperWhatToDo.Item1)
+                            {
+                                value = Column.GetDisplayValue(y);
+                            }
+                            else
+                            {
+                                value = Column.GetDisplayValue(y, helperWhatToDo.Item2);
+                            }
+
+                            if(!string.IsNullOrWhiteSpace(value) && value.ToLower().StartsWith(searchData))
+                            {
+                                _searchResults.Add(y);
+                                break;
+                            }
+                        }
+                    }                    
+                }
+            }
+            else
+            {
+                _searchResults = new List<int>();
+            }
+
+            RequireOnDataChangeEvent();
+        }
+
 
         public event EventHandler OnDataSourceChanged = null;
 
@@ -66,6 +148,10 @@ namespace ExpressCraft
         {
             get
             {
+                if(_searchActive)
+                {
+                    return _searchResults.Count;
+                }
                 return _RowCount;
             }
         }
@@ -431,6 +517,12 @@ namespace ExpressCraft
     {
         public string FieldName;
         public DataType DataType;
+        public dynamic Self;
+
+        public DataColumn()
+        {
+            Self = this;
+        }
 
         //public List<object> Cells = new List<object>();
         public string GetDisplayValue(int rowIndex, string formatString)
@@ -493,7 +585,12 @@ namespace ExpressCraft
         }
 
         public object GetCellValue(int rowIndex)
-        {
+        {            
+            if(Self.Cells.Count <= rowIndex)
+            {
+                return null;
+            }
+
             switch(DataType)
             {
                 default:
@@ -534,6 +631,11 @@ namespace ExpressCraft
 
         public string GetDisplayValue(int rowIndex)
         {
+            if(Self.Cells.Count <= rowIndex)
+            {
+                return null;
+            }
+
             switch(DataType)
             {
                 default:

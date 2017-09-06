@@ -74,8 +74,12 @@
             return -1;
         }
 
-        public string GetDisplayValueByDataRowHandle(int RowHandle)
+        public string GetDisplayValueByDataRowHandle(int RowHandle, bool hasDataRowIndex = false)
         {
+            if(View.DataSource._searchActive && !hasDataRowIndex)
+            {
+                RowHandle = View.DataSource._searchResults[RowHandle];
+            }
             if(string.IsNullOrWhiteSpace(FormatString))
             {
                 return Column.GetDisplayValue(RowHandle);

@@ -590,10 +590,11 @@ namespace ExpressCraft
         }
 
         private static int LoadingCount = 0;
-
+        
         public static void BeginLoading()
         {
-            LoadingCount++;
+            LoadingCount++;            
+            SetCursor(Cursor.Wait);
             WindowLoader.Style.Visibility = Visibility.Visible;
             WindowLoader.Style.Opacity = "0.4";
         }
@@ -602,7 +603,8 @@ namespace ExpressCraft
         {
             LoadingCount--;
             if(LoadingCount == 0)
-            {
+            {                
+                SetCursor(Cursor.Default);
                 WindowLoader.Style.Visibility = Visibility.Hidden;
                 WindowLoader.Style.Opacity = "0";
             }
@@ -969,7 +971,10 @@ namespace ExpressCraft
 
         public static void SetCursor(Cursor cursor)
         {
-            Document.Body.Style.Cursor = cursor;            
+            Document.Body.Style.Cursor = cursor;
+            var x = Document.Body.Style.BackgroundColor;
+            Document.Body.Style.BackgroundColor = "white";
+            Document.Body.Style.BackgroundColor = x;
         }
 
         private Union<string, Display> previousDisplay;
