@@ -256,6 +256,7 @@ namespace ExpressCraft
                 if(value != _focusedDataHandle)
                 {
                     var prev = _focusedDataHandle;
+                    
                     _focusedDataHandle = value;
                     RenderGrid();
                     if(OnFocusedRowChanged != null)
@@ -832,7 +833,7 @@ namespace ExpressCraft
                 }
             }
             _disableRender = false;
-            renderGridInternal();
+            RenderGrid();
         }
 
         private string headingClass;
@@ -847,6 +848,27 @@ namespace ExpressCraft
             if(this.DataSource == null || !FindPanelVisible)
                 return;
             this.DataSource.Search(SearchTextInput.Text, this);
+        }
+
+        public void MakeRowVisible(int rowHandle)
+        {
+            if(rowHandle < 0)
+                return;
+
+            var getTopMostRowIndex = GetRawTopRowIndex();
+
+            if(rowHandle < getTopMostRowIndex)
+            {
+                GridBodyContainer.ScrollTop -= (int)((getTopMostRowIndex - rowHandle) * PixelsPerRow(RowCount()));                
+            }
+            else
+            {
+                getTopMostRowIndex = GetRawVisibleRowCount() + getTopMostRowIndex;
+                if(rowHandle >= getTopMostRowIndex)
+                {
+                    GridBodyContainer.ScrollTop += (int)(((rowHandle - getTopMostRowIndex) + 1) * PixelsPerRow(RowCount()));                    
+                }
+            }
         }
 
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
@@ -1364,8 +1386,25 @@ namespace ExpressCraft
                         RenderGrid();
                         return;
                     }
-                    else if(mev.ShiftKey)
-                    {
+                    else if(mev.ShiftKey && FocusedDataHandle > -1)
+                    {                        
+                        _disableRender = true;
+                        SelectedRows.ClearAll();
+                        if(DataRowHandle < FocusedDataHandle)
+                        {
+                            for(int i = DataRowHandle; i < FocusedDataHandle + 1; i++)
+                            {
+                                SelectedRows.AddOrSet(true, i, true);
+                            }
+                        }else
+                        {
+                            for(int i = FocusedDataHandle; i < DataRowHandle + 1; i++)
+                            {
+                                SelectedRows.AddOrSet(true, i, true);
+                            }
+                        }
+                        _disableRender = false;
+                        RenderGrid();
                         return;
                     }
                 }
@@ -1407,6 +1446,42 @@ namespace ExpressCraft
                 }
                 else
                 {
+                    if(kev.KeyCode == KeyCodes.Up || kev.KeyCode == KeyCodes.Down)
+                    {
+                        _disableRender = true;
+                        var prevFocused = FocusedDataHandle;
+                        if(kev.KeyCode == KeyCodes.Up)
+                        {
+                            if(!(FocusedDataHandle - 1 < 0))
+                                FocusedDataHandle--;
+                        }
+                        else if(kev.KeyCode == KeyCodes.Down)
+                        {
+                            if(!(FocusedDataHandle > RowCount()))
+                                FocusedDataHandle++;
+                        }
+                        if(prevFocused != FocusedDataHandle)
+                        {
+                            if(kev.ShiftKey)
+                            {
+                                SelectedRows.AddOrSet(true, FocusedDataHandle, true);
+                            }
+                            else
+                            {
+                                SelectedRows.ClearAndAddOrSet(true, FocusedDataHandle, true);
+                            }
+                            
+                            MakeRowVisible(FocusedDataHandle);
+
+                            _disableRender = false;
+
+                            RenderGrid();
+                        }else
+                        {
+                            _disableRender = false;
+                        }                        
+                    }
+                                 
                     //Global.Alert("AllowMultiSelection = FALSE");
                 }
             };
@@ -1737,10 +1812,13 @@ namespace ExpressCraft
 
         public void ClearView()
         {
+            _disableRender = true;
             Columns = new List<GridViewColumn>();
             VisibleRowHandles = new List<int>();
             SelectedRows = new HardSoftList<bool>(false);
             _dataSource = null;
+            _disableRender = false;
+            RenderGrid();
         }
 
         public void ClearBody()
@@ -1813,6 +1891,9 @@ namespace ExpressCraft
         private bool _disableRender = false;
         public void RenderGrid(bool clear = true)
         {
+            if(_disableRender)
+                return;
+
             if(clear)
                 CacheRow = new Dictionary<int, HTMLDivElement>();
             
