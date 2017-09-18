@@ -1,4 +1,5 @@
 ﻿using Bridge.Html5;
+using System;
 
 namespace ExpressCraft
 {
@@ -6,7 +7,7 @@ namespace ExpressCraft
     {
         public TextInput Edit;
         public HTMLSpanElement span;
-
+        public Action<CheckEdit> OnCheckChanged;        
         public bool Checked
         {
             get { return Edit.Text.IsTrue() == 1; }
@@ -17,6 +18,10 @@ namespace ExpressCraft
         {
             Edit = new TextInput(InputType.Checkbox);
             Edit.Controller = this;
+            Edit.OnTextChanged = (sender) => {                
+                if(OnCheckChanged != null)
+                    OnCheckChanged(this);
+            };
             span = new HTMLSpanElement();
 
             Text = label;

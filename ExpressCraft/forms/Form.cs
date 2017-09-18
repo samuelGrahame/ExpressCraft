@@ -884,13 +884,47 @@ namespace ExpressCraft
                     }
                     bool changed = false;
                     if(px != x)
-                        MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                    {
+                        if(Settings.AlignFormToGrid && MoveAction == MouseMoveAction.Move && Settings.AlignmentForForm > 1 && x != 0)
+                        {
+                            x = ((int)(x / Settings.AlignmentForForm)) * Settings.AlignmentForForm;
+                            if(px != x)
+                            {
+                                MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                            }
+                        }
+                        else
+                        {
+                            MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                        }                        
+                    }
+                        
                     if(py != y)
-                        MovingForm.Style.Top = Script.Write<string>("y + 'px'");
-                    if(pw != w && (changed = true))
+                    {
+                        if(Settings.AlignFormToGrid && MoveAction == MouseMoveAction.Move && Settings.AlignmentForForm > 1 && y != 0)
+                        {
+                            y = ((int)(y / Settings.AlignmentForForm)) * Settings.AlignmentForForm;
+                            if(py != y)
+                            {
+                                MovingForm.Style.Top = Script.Write<string>("y + 'px'");
+                            }
+                        }else
+                        {
+                            MovingForm.Style.Top = Script.Write<string>("y + 'px'");
+                        }
+                    }
+                        
+                    if(pw != w)
+                    {
+                        changed = true;
                         MovingForm.Style.Width = Script.Write<string>("w + 'px'");
-                    if(ph != h && (changed = true))
+                    }
+                        
+                    if(ph != h)
+                    {
+                        changed = true;
                         MovingForm.Style.Height = Script.Write<string>("h + 'px'");
+                    }
 
                     if(changed)
                         MovingForm.Resizing();

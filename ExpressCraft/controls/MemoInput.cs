@@ -17,6 +17,12 @@ namespace ExpressCraft
             set { Content.As<HTMLTextAreaElement>().Cols = value; }
         }
 
+        public int MaxLength
+        {
+            get { return Content.As<HTMLTextAreaElement>().MaxLength; }
+            set { Content.As<HTMLTextAreaElement>().MaxLength = value; }
+        }
+
         private Vector2 PreSize;
         private Vector2 PrePreSize;
         private string PreZIndex;

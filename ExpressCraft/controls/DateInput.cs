@@ -6,6 +6,11 @@ namespace ExpressCraft
     {
         public DateInput() : base(InputType.Date)
         {
+            UsedEdit.OnKeyDown = (sender, ev) =>
+            {
+                if(ev.KeyCode == KeyCodes.Enter)
+                    UsedEdit.Content.Blur();
+            };
         }
 
         public override void OnDropDownClicked(MouseEvent mouseEvent)

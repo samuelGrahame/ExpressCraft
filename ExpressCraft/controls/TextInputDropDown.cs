@@ -30,7 +30,7 @@ namespace ExpressCraft
         public override HTMLInputElement GetInput()
         {
             return UsedEdit.GetInput();
-        }
+        }        
 
         public TextInputDropDown(InputType inputType = InputType.Text) : base(new HTMLDivElement(), true, false)
         {

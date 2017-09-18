@@ -11,7 +11,7 @@ namespace ExpressCraft
         public static ExternalPlugin ExternalGmail = new ExternalPlugin("https://apis.google.com/js/api.js");
         public static string ClientId;
         public static object GoogleAuth;
-
+        
         private static List<Action> _oneTimeCall = new List<Action>();
 
         public static void Authorize()

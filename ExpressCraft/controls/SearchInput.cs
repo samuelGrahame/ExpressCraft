@@ -12,7 +12,7 @@ namespace ExpressCraft
         public void SetValues(object editValue, string text)
         {
             this.Text = text;
-            EditValue = EditValue;
+            EditValue = editValue;
         }
 
         public SearchInput() : base(InputType.Text)

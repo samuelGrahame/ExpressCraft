@@ -487,6 +487,11 @@ namespace ExpressCraft
             get { return enabled; }
             set
             {
+                if(this is TextInputDropDown)
+                {
+                    var inp = this.As<TextInputDropDown>();
+                    inp.UsedEdit.Enabled = value;
+                }
                 enabled = value;
                 if(enabled)
                 {
@@ -494,7 +499,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    this.Content.SetAttribute("disabled", null);
+                    this.Content.SetAttribute("disabled", "");
                 }
             }
         }

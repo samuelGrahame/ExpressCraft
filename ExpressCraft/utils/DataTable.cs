@@ -443,9 +443,9 @@ namespace ExpressCraft
                         return;
                     }
                     dynamic col = ParentTable.Columns[i];
-                    if(col.Cells.items[RowIndex] != value)
+                    if(col.Cells._items[RowIndex] != value)
                     {
-                        col.Cells.items[RowIndex] = value;
+                        col.Cells._items[RowIndex] = value;
                         ParentTable.RequireOnDataChangeEvent();
                     }
                     return;
@@ -464,7 +464,7 @@ namespace ExpressCraft
                         return batchData[i];
                     }
                     dynamic col = ParentTable.Columns[i];
-                    return col.Cells.items[RowIndex];
+                    return col.Cells._items[RowIndex];
                 }
             }
             return null;
@@ -477,7 +477,7 @@ namespace ExpressCraft
                 return batchData[columnIndex];
             }
             dynamic col = ParentTable.Columns[columnIndex];
-            return col.Cells.items[RowIndex];
+            return col.Cells._items[RowIndex];
         }
 
         public void SetValue(int columnIndex, object value)
@@ -493,9 +493,9 @@ namespace ExpressCraft
                 return;
             }
             dynamic col = ParentTable.Columns[columnIndex];
-            if(col.Cells.items[RowIndex] != value)
+            if(col.Cells._items[RowIndex] != value)
             {
-                col.Cells.items[RowIndex] = value;
+                col.Cells._items[RowIndex] = value;
                 ParentTable.RequireOnDataChangeEvent();
             }
         }

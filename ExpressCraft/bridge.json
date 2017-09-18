@@ -32,6 +32,16 @@
   // Default is false.
   "report": {
     "enabled": true
+  },
+
+  // Rules to manage generated JavaScript syntax.
+  // Default is "Managed"
+  "rules": {
+    "integer": "Managed",
+    "anonymousType": "Plain",
+    "arrayIndex": "Managed",
+    "boxing": "Managed",
+    "lambda": "Plain"
   }
 
   // More config options available at
