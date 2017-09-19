@@ -19,6 +19,8 @@ namespace ExpressCraft
         private static ToolTipControl _activeToolTipControl = null;
         private static int _oepntoolTipTimerHandle = -1;
 
+        public static List<Action<KeyboardEvent>> KeyHooks = new List<Action<KeyboardEvent>>();
+
         public static ToolTip ActiveToolTip
         {
             get { return _activeToolTip; }
@@ -596,7 +598,7 @@ namespace ExpressCraft
             LoadingCount++;            
             SetCursor(Cursor.Wait);
             WindowLoader.Style.Visibility = Visibility.Visible;
-            WindowLoader.Style.Opacity = "0.4";
+            WindowLoader.Style.Opacity = "0.4";                      
         }
 
         public static void EndLoading()
@@ -606,7 +608,7 @@ namespace ExpressCraft
             {                
                 SetCursor(Cursor.Default);
                 WindowLoader.Style.Visibility = Visibility.Hidden;
-                WindowLoader.Style.Opacity = "0";
+                WindowLoader.Style.Opacity = "0";                
             }
         }
 
@@ -673,8 +675,15 @@ namespace ExpressCraft
             };
             FormOverLay.Style.Visibility = Visibility.Visible;
 
-            Window.OnKeyUp = (ev) =>
+            Window.OnKeyDown = (ev) =>
             {
+                int length = KeyHooks.Count;
+                for(int i = 0; i < length; i++)
+                {
+                    if(KeyHooks[i] != null)
+                        KeyHooks[i](ev);
+                }
+
                 if(Settings.OnF2ShowThemeForm && ev.KeyCode == KeyCodes.F2)
                 {
                     ev.PreventDefault();
@@ -1122,7 +1131,8 @@ namespace ExpressCraft
 
         private static void CalculateMinmizedFormsLocation()
         {
-            MinimizedForms.Remove(null);
+            if(MinimizedForms.Count > 0 && MinimizedForms.Contains(null))
+                MinimizedForms.Remove(null);
             var RemoveList = new List<Form>();
             int count = 0;
             float widthTotal = 0;
@@ -2035,7 +2045,9 @@ namespace ExpressCraft
                     }
                 }
                 
-                OnShowed();                
+                OnShowed();
+
+                Resizing();
             }
 
             ActiveForm = this;

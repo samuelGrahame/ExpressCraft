@@ -1,14 +1,40 @@
-﻿using System;
+﻿using Bridge.Html5;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Bridge.Html5.CanvasTypes;
 
 namespace ExpressCraft
 {
     public class CanvasControl : Control
     {
-        public CanvasControl() : base()
+        public CanvasRenderingContext2D Context;
+        public HTMLCanvasElement Canvas;
+
+        public CanvasControl() : base(new HTMLCanvasElement())
+        {
+            Canvas = this.Content.As<HTMLCanvasElement>();
+     
+            Context = Canvas.GetContext(CanvasContext2DType.CanvasRenderingContext2D);
+
+            OnResize = (sender) =>
+            {
+                var bounds = Content.GetBoundingClientRect();
+                Canvas.Width = (int)bounds.Width;
+                Canvas.Height = (int)bounds.Height;
+
+                OnClear();
+            };
+        }
+
+        public virtual void OnClear()
+        {
+            Context.ClearRect(0, 0, Canvas.Width, Canvas.Height);
+        }
+
+        public virtual void OnPaint()
         {
 
         }

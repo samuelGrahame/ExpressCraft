@@ -46,6 +46,7 @@
     <Compile Include="controls\ColorInput.cs" />
     <Compile Include="controls\DateControl.cs" />
     <Compile Include="controls\DateInput.cs" />
+    <Compile Include="controls\DrawingControl.cs" />
     <Compile Include="controls\GridLookupEdit.cs" />
     <Compile Include="controls\GroupPanel.cs" />
     <Compile Include="controls\ImageEdit.cs" />
