@@ -22,7 +22,7 @@ namespace ExpressCraft
             if(Helper.NotDesktop)
             {
                 Content.OnTouchStart = (ev) =>
-                {
+                {                    
                     __mouseDown = true;
                     __currentCursor = new Vector2(ev.LayerX, ev.LayerY);
 

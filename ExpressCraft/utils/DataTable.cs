@@ -539,13 +539,18 @@ namespace ExpressCraft
                     {
                         return string.Empty;
                     }
+                    DateTime d;
                     if(obj is DateTime)
                     {
-                        return string.Format(formatString, (DateTime)obj);
-                    }
-                    DateTime d;
+                        d = (DateTime)obj;
+                        if(d == DateTime.MinValue)
+                            return string.Empty;
+                        return string.Format(formatString, d);
+                    }                    
                     if(DateTime.TryParse(obj, out d))
                     {
+                        if(d == DateTime.MinValue)
+                            return string.Empty;
                         return string.Format(formatString, d);
                     }
                     var str = obj as string;

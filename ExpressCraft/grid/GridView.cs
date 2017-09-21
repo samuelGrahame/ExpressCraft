@@ -45,6 +45,11 @@ namespace ExpressCraft
             }
         }
 
+        public bool ResolveSearchDataIndex()
+        {
+            return (VisibleRowHandles != null && VisibleRowHandles.Count > 0);
+        }
+
         private bool _highlighSearchResults = true;
 
         public bool HighlighSearchResults
@@ -681,9 +686,16 @@ namespace ExpressCraft
         }
 
         public int GetDataSourceRow(int i)
-        {
+        {            
             if(VisibleRowHandles == null || VisibleRowHandles.Count == 0)
+            {
+                if(DataSource._searchActive)
+                {
+                    return  DataSource._searchResults[i];
+                }
                 return i;
+            }
+                
             return VisibleRowHandles[i];
         }
 
@@ -1145,7 +1157,7 @@ namespace ExpressCraft
                             HTMLElement cell;
                             if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
                             {
-                                var displayValue = col.GetDisplayValueByDataRowHandle(DataRowhandle, (VisibleRowHandles != null && VisibleRowHandles.Count > 0));
+                                var displayValue = col.GetDisplayValueByDataRowHandle(DataRowhandle);
                                 cell = Label(displayValue,
                                 col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
                                 
@@ -1831,6 +1843,36 @@ namespace ExpressCraft
         {
             ClearHeader();
             ClearBody();
+        }
+
+        public int[] GetSelectedRowHandles()
+        {
+            List<int> listOfInt = new List<int>();
+            int rowCount = RowCount();        
+            for(int i = 0; i < rowCount; i++)
+            {                
+                int index = GetDataSourceRow(i);
+                if(SelectedRows.GetValue(index, false))
+                {
+                    listOfInt.Add(i);
+                }
+            }
+            return listOfInt.ToArray();
+        }
+
+        public int[] GetSelectedDataRowHandles()
+        {
+            List<int> listOfInt = new List<int>();
+            int rowCount = RowCount();
+            for(int i = 0; i < rowCount; i++)
+            {
+                int index = GetDataSourceRow(i);
+                if(SelectedRows.GetValue(index, false))
+                {
+                    listOfInt.Add(index);
+                }
+            }
+            return listOfInt.ToArray();
         }
 
         private int DragIndex = -1;
