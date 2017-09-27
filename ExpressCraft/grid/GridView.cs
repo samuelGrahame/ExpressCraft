@@ -1069,7 +1069,7 @@ namespace ExpressCraft
                     Length += Settings.GridViewRowScrollPadding;
                 }
 
-                float Y = (start * (ppr)) - RawTopRowScrollPadding;
+                float Y = (start * ppr);// + RawTopRowScrollPadding;
 
                 if(ShowAutoFilterRow)
                 {

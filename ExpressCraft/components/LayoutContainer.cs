@@ -249,7 +249,6 @@ namespace ExpressCraft
             {
                 EditStartX = 15;
             }
-
             
             int XIncrement = leftMargin + ColumnWidth;
 

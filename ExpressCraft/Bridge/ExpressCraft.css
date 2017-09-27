@@ -3,9 +3,12 @@
 /*Default-Form=#0173C7*/
 /*Default-Header-Hover=#2A8AD0*/
 /*Default-Form-Button-Hover=#2A8AD4*/
-/*Default-Form-Button-Active=#015C9F*/
-*{
+/*Default-Form-Button-Active=#015C9F
     font:8.25pt Tahoma;
+
+*/
+*{
+    font:8.25pt "Tahoma";
     color:#404040;
 }
 /**:focus {

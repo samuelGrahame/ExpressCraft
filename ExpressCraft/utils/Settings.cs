@@ -10,7 +10,8 @@ namespace ExpressCraft
         public static string NetworkURL = "Host.ashx";
         public static string ResourceURL = "./images/";
         public static bool AutoRender = true;
-        public const string Font = "8.25pt Tahoma";
+        public const string Font = "8.25pt \"Tahoma\"";
+        //public const string Font = "8.25pt Tahoma";//Consolas
         public static decimal TaxPercent { get; set; } = 0.1m;
         public static bool AlignFormToGrid = false;
         public static int AlignmentForForm = 0;
