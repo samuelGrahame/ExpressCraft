@@ -54,6 +54,7 @@
     <Compile Include="controls\IPages.cs" />
     <Compile Include="controls\MemoInput.cs" />
     <Compile Include="controls\NumberInput.cs" />
+    <Compile Include="controls\PrinterControl.cs" />
     <Compile Include="controls\SearchInput.cs" />
     <Compile Include="controls\SplitHideControlContainer.cs" />
     <Compile Include="controls\TextInputDropDown.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="forms\PdfPreviewForm.cs" />
     <Compile Include="forms\popupforms\SearchLookupForm.cs" />
     <Compile Include="forms\popupforms\TextForm.cs" />
+    <Compile Include="forms\PrintingPreviewForm.cs" />
     <Compile Include="utils\BarcodeQuaggaJS.cs" />
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />
@@ -144,6 +146,7 @@
       <HintPath>..\packages\Bridge.Newtonsoft.Json.1.2.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />
