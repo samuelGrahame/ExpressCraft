@@ -682,13 +682,7 @@ namespace ExpressCraft
                 {
                     if(KeyHooks[i] != null)
                         KeyHooks[i](ev);
-                }
-
-                if(Settings.OnF2ShowThemeForm && ev.KeyCode == KeyCodes.F2)
-                {
-                    ev.PreventDefault();
-                    ThemeForm.ShowThemeForm();
-                }
+                }                
             };
 
             Window.OnResize = (ev) =>

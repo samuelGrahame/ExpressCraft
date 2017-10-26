@@ -79,6 +79,16 @@ namespace ExpressCraft
             }
         }
 
+        public Control SetData(string name, string value)
+        {            
+            return SetAttribute("data-" + name, value);
+        }
+
+        public string GetData(string name)
+        {
+            return GetAttribute("data-" + name);
+        }
+
         public Action<Control> OnResize = null;
         public Action<Control> OnLoaded = null;        
 

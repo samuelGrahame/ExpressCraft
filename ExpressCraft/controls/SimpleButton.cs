@@ -182,12 +182,12 @@ namespace ExpressCraft
 
         public string Text
         {
-            get { return this.Content.As<HTMLButtonElement>().TextContent; }
+            get { return this.Content.As<HTMLButtonElement>().InnerHTML; }
             set
             {
                 if(Text != value)
                 {
-                    this.Content.As<HTMLButtonElement>().TextContent = value;
+                    this.Content.As<HTMLButtonElement>().InnerHTML = value;
 
                     if(_imageElement != null)
                     {

@@ -87,17 +87,7 @@ namespace ExpressCraft
             span.Style.Color = "white";
 
             Slider.Content.AppendChild(span);
-
-            Slider.Content.OnMouseEnter = (ev) =>
-            {
-                Slider.Style.Filter = "brightness(110%)";
-            };
-
-            Slider.Content.OnMouseLeave = (ev) =>
-            {
-                Slider.Style.Filter = "brightness(90%)";
-            };
-
+            
             Slider.Style.Transition = "width 1s, left 1s";
             Body.Style.Transition = "left 1s, width 1s";
             Panel.Style.Transition = "width 1s";

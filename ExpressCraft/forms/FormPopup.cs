@@ -31,6 +31,7 @@ namespace ExpressCraft
             Body.SetLocation(0, 0);
             Body.SetSize("100%", "100%");
             Content.ClassList.Add("inputcontrol");
+            Content.ClassList.Add("popup");
             Content.ClassList.Remove("form-base");
             Content.Style.BoxShadow = "0 0 63px -17px rgba(0,0,0,0.75)";
 
