@@ -146,7 +146,6 @@
       <HintPath>..\packages\Bridge.Newtonsoft.Json.1.2.2\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />

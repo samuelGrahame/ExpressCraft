@@ -58,7 +58,7 @@ namespace ExpressCraft
 
         public PrinterControl() : base("print-body")
         {
-            Style.Overflow = Overflow.Auto;
+            Style.Overflow = Overflow.Auto;       
         }
     }
 

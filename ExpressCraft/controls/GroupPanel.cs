@@ -19,7 +19,7 @@ namespace ExpressCraft
         public GroupPanel() : base(new HTMLFieldSetElement())
         {
             this.Content.AppendChild(legend = new HTMLLegendElement());
-            this.Content.ClassName = "control inputcontrol";
+            this.Content.ClassName = "control inputcontrol popup";
             legend.Style.MarginLeft = "7px";            
         }
     }

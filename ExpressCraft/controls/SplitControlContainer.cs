@@ -78,7 +78,8 @@ namespace ExpressCraft
             Panel1.Style.Overflow = Overflow.Auto;
             Panel2.Style.Overflow = Overflow.Auto;
 
-            Splitter = new Control();
+            Splitter = new Control("primary");
+            Splitter.Style.Cursor = Cursor.Move;
 
             Splitter.Content.OnMouseDown = (ev) =>
             {
@@ -176,7 +177,10 @@ namespace ExpressCraft
 
         private int GetMaxSplitterSize()
         {
-            var maxSize = (int)(Horizontal ? this.Content.GetBoundingClientRect().Height : this.Content.GetBoundingClientRect().Width) - 12;
+            int left = 12;
+            if(FixedSplitterPostion == FixedSplitterPosition.Panel2)
+                left = 0;
+            var maxSize = (int)(Horizontal ? this.Content.GetBoundingClientRect().Height : this.Content.GetBoundingClientRect().Width) - left;
             if(maxSize < 0)
                 maxSize = 0;
             return maxSize;
@@ -244,12 +248,12 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    Splitter.Location = new Vector2("(100% - " + sp + "px)", 0);
+                    Splitter.Location = new Vector2("(100% - " + (sp + 12) + "px)", 0);
 
-                    Panel1.Width = "(100% - " + sp + "px)";
+                    Panel1.Width = "(100% - " + (sp + 12) + "px)";
 
                     Panel2.Width = sp;
-                    Panel2.Location = new Vector2("(100% - " + (sp + 12) + "px)", 0);
+                    Panel2.Location = new Vector2("(100% - " + (sp) + "px)", 0);
                 }
             }
         }
