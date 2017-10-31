@@ -1,5 +1,6 @@
 ﻿using Bridge;
 using Bridge.Html5;
+using System;
 
 namespace ExpressCraft
 {
@@ -46,6 +47,9 @@ namespace ExpressCraft
             _themeType = themeType;
         }
 
+        public Action OnFocus = null;
+        public Action OnBlur = null;
+        
         public override void Render()
         {
             ExternalAceCodeEditor.UsageCheck();
@@ -57,6 +61,18 @@ namespace ExpressCraft
 			this.editor = ace.edit(this.Content);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);
+            this.editor.on("focus", function() {
+                if(this.OnFocus != null)
+                {
+                    this.OnFocus();                    
+                }            
+            });
+            this.editor.on("blur", function() {
+                if(this.OnBlur != null)
+                {
+                    this.OnBlur();                    
+                }            
+            });
 			*/
             this.OnResize = (cont) =>
             {

@@ -91,6 +91,8 @@ namespace ExpressCraft
             page.Content.OnClick = (ev) =>
             {
                 FocusedPage = page;
+                if(page.OnClick != null)
+                    page.OnClick();
             };
 
             return page;  
@@ -165,6 +167,8 @@ namespace ExpressCraft
 
     public class Page : Control
     {
+        public Action OnClick = null;
+
         public Page() : base(Document.CreateElement("page"))
         {
             ClassList.Remove("control");
