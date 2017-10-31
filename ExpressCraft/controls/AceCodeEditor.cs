@@ -5,7 +5,7 @@ namespace ExpressCraft
 {
     public class AceCodeEditor : Control
     {
-        private static ExternalPlugin ExternalAceCodeEditor = new ExternalPlugin("https://ace.c9.io/build/src/ace.js");
+        public static ExternalPlugin ExternalAceCodeEditor = new ExternalPlugin("https://cdnjs.cloudflare.com/ajax/libs/ace/1.0.0/ace.js");
         public object editor = null;
 
         public void ClearSelection()
@@ -40,7 +40,7 @@ namespace ExpressCraft
         private AceModeTypes _modeType;
         private AceThemeTypes _themeType;
 
-        public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.xcode)
+        public AceCodeEditor(AceModeTypes modeType = AceModeTypes.csharp, AceThemeTypes themeType = AceThemeTypes.xcode) : base()
         {
             _modeType = modeType;
             _themeType = themeType;
@@ -50,11 +50,11 @@ namespace ExpressCraft
         {
             ExternalAceCodeEditor.UsageCheck();
 
-            var theme = _modeType.ToString("G");
+            var theme = _themeType.ToString("G");
             var mode = _modeType.ToString("G");
 
             /*@
-			this.editor = ace.edit(this.content);
+			this.editor = ace.edit(this.Content);
 			this.editor.setTheme("ace/theme/" + theme);
 			this.editor.getSession().setMode("ace/mode/" + mode);
 			*/

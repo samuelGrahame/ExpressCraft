@@ -22,9 +22,9 @@ namespace ExpressCraft
             PrintingControl.AddElementFocusedPage(element.Content);
         }
 
-        public Page CreateNewPage(PageSize size = PageSize.A4, Layout layout = Layout.Portrait)
+        public Page CreateNewPage(PageSize size = PageSize.A4)
         {
-            return PrintingControl.CreateNewPage(size, layout);
+            return PrintingControl.CreateNewPage(size);
         }
 
         /// <summary>

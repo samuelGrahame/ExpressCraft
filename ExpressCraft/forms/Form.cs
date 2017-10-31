@@ -19,6 +19,21 @@ namespace ExpressCraft
         private static ToolTipControl _activeToolTipControl = null;
         private static int _oepntoolTipTimerHandle = -1;
 
+        private bool _disableBoxShadow;
+
+        public bool DisableBoxShadow
+        {
+            get { return _disableBoxShadow; }
+            set {
+                _disableBoxShadow = value;
+                if(_disableBoxShadow)
+                    Content.Style.BoxShadow = "none";
+                else
+                    Content.Style.BoxShadow = null;
+            }
+        }
+
+
         public static List<Action<KeyboardEvent>> KeyHooks = new List<Action<KeyboardEvent>>();
 
         public static ToolTip ActiveToolTip
@@ -246,7 +261,7 @@ namespace ExpressCraft
         public static int WindowHolderSelectionBoxXOff;
         public static int WindowHolderSelectionBoxYOff;
 
-        protected HTMLDivElement Heading;
+        public HTMLDivElement Heading;
         protected HTMLDivElement ButtonClose;
         protected HTMLDivElement ButtonExpand;
         protected HTMLDivElement ButtonMinimize;
@@ -720,7 +735,8 @@ namespace ExpressCraft
                     ev.StopImmediatePropagation();
                     ev.StopPropagation();
 
-                    MovingForm.Style.BoxShadow = "none"; // box - shadow: none;
+                    if(!MovingForm.DisableBoxShadow)
+                        MovingForm.Style.BoxShadow = "none"; // box - shadow: none;
 
                     if(MovingForm.BodyOverLay.Style.Visibility.Equals(Visibility.Collapse))
                     {
@@ -939,7 +955,8 @@ namespace ExpressCraft
                 InExternalMouseEvent = false;
                 if(MovingForm != null)
                 {
-                    MovingForm.Style.BoxShadow = null;
+                    if(!MovingForm.DisableBoxShadow)
+                        MovingForm.Style.BoxShadow = null;
                     MovingForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
                 }
 

@@ -10,8 +10,49 @@ namespace ExpressCraft
 {
     public class PrinterControl : Control
     {
-        public List<Page> Pages = new List<Page>();
-        public Page FocusedPage = null;
+        public List<Page> Pages = new List<Page>();        
+        private Page _focusedPage = null;
+        private float _scale = 1;
+        private HTMLDivElement wrapper;
+
+        public Action<Page> OnFocusedPageChanged = null;
+
+        public Layout PageLayout = Layout.Portrait;
+        
+        public float Scale
+        {
+            get { return _scale; }
+            set {
+                if(value < 0.1)
+                    value = 0.1f;
+                if(value > 4)
+                    value = 4;
+                _scale = value;
+
+                wrapper.Style.Transform = "scale(" + _scale + ")";
+            }
+        }
+        
+        public Page FocusedPage
+        {
+            get { return _focusedPage; }
+            set {
+                if(value != _focusedPage)
+                {
+                    if(_focusedPage != null)
+                        _focusedPage.ClassList.Remove("page-focused");
+
+                    _focusedPage = value;
+
+                    if(OnFocusedPageChanged != null)
+                        OnFocusedPageChanged(_focusedPage);
+
+                    if(_focusedPage != null)
+                        _focusedPage.ClassList.Add("page-focused");
+                }                
+            }
+        }
+
 
         /// <summary>
         /// Page is a HTMLElement - AppendChild and Add the page to the list
@@ -34,18 +75,23 @@ namespace ExpressCraft
             FocusedPage.Content.AppendChild(element);
         }
 
-        public Page CreateNewPage(PageSize size = PageSize.A4, Layout layout = Layout.Portrait)
+        public Page CreateNewPage(PageSize size = PageSize.A4)
         {
             var page = new Page()
             {
                 PageSize = size,
-                Layout = layout
+                Layout = PageLayout
             };
 
             Pages.Add(page);
-            Content.AppendChild(page);
-
+            wrapper.AppendChild(page);
+            
             FocusedPage = page;
+
+            page.Content.OnClick = (ev) =>
+            {
+                FocusedPage = page;
+            };
 
             return page;  
         }
@@ -54,11 +100,66 @@ namespace ExpressCraft
         {
             // we need to create an iframe - add css for the printing.
             // also the content
+            var printingFrame = Window.Open("", "");
+            var element =  Document.GetElementById("expresscraft");
+            
+            var headerInfo = "";
+            if(element != null)
+            {
+                string extra;
+
+                if(PageLayout == Layout.Portrait)
+                {
+                    extra = "<style type='text/css' media='print'> @page { size: portait; margin:0; } page { margin:0 !important; box-shadow: none !important; overflow: hidden; } .print-body { margin:0 !important; overflow: visible !important; } page:first-child {  margin-top: 0 !important; } </style>";                    
+                }
+                else
+                {
+                    extra = "<style type='text/css' media='print'> @page { size: landscape; margin:0; } page { margin:0 !important; box-shadow: none !important; overflow: hidden; } .print-body { margin:0 !important; overflow: visible !important; } page:first-child {  margin-top: 0 !important; } </style>";                    
+                }
+
+                headerInfo = "<head>" + element.OuterHTML + "\r\n" + extra + "</head>";
+
+//                <style type="text/css" media="print">
+//  @page { size: landscape; }
+//</style>
+            }
+            if(FocusedPage != null)
+            {
+                FocusedPage.ClassList.Remove("page-focused");
+            }
+            printingFrame.Document.Write("<html><title>Printing...</title>" + headerInfo + "<body>" + Content.OuterHTML + "</body></html>");
+            printingFrame.Document.Close();
+            printingFrame.Focus();
+
+            printingFrame.AddEventListener(EventType.Load, () => {
+                printingFrame.Print();
+                printingFrame.Close();
+            });
+
+
+            //printingFrame.Document.AddEventListener(EventType.Load, () =>
+            //{
+            //    Global.Alert("Hello");
+            //    printingFrame.Focus();
+            //    printingFrame.Print();
+            //});
+            
+            if(FocusedPage != null)
+            {
+                FocusedPage.ClassList.Add("page-focused");
+            }
         }
 
         public PrinterControl() : base("print-body")
         {
-            Style.Overflow = Overflow.Auto;       
+            Style.Overflow = Overflow.Auto;
+
+            wrapper = new HTMLDivElement();
+            wrapper.Style.TransformOrigin = "50% 0 0";
+            wrapper.Style.Position = Position.Relative;
+            //wrapper.Style.Margin = "0 auto";
+
+            Content.AppendChild(wrapper);
         }
     }
 
@@ -68,7 +169,7 @@ namespace ExpressCraft
         {
             ClassList.Remove("control");
 
-            PageSize = PageSize.A4;
+            PageSize = PageSize.A4;            
         }        
 
         public PageSize PageSize
