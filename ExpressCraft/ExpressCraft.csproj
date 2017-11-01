@@ -69,6 +69,7 @@
     <Compile Include="forms\popupforms\SearchLookupForm.cs" />
     <Compile Include="forms\popupforms\TextForm.cs" />
     <Compile Include="forms\PrintingPreviewForm.cs" />
+    <Compile Include="interface\IPrintable.cs" />
     <Compile Include="utils\BarcodeQuaggaJS.cs" />
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />

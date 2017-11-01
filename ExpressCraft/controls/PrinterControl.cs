@@ -19,6 +19,27 @@ namespace ExpressCraft
 
         public Layout PageLayout = Layout.Portrait;
         
+        public void AddPages(List<Page> pages)
+        {
+            foreach(var page in pages)
+            {
+                if(page != null)
+                {
+                    Pages.Add(page);
+                    wrapper.AppendChild(page);
+
+                    FocusedPage = page;
+
+                    page.Content.OnClick = (ev) =>
+                    {
+                        FocusedPage = page;
+                        if(page.OnClick != null)
+                            page.OnClick();
+                    };
+                }
+            }
+        }
+
         public float Scale
         {
             get { return _scale; }

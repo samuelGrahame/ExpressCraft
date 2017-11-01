@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ExpressCraft
 {
-    public class GridView : Control
+    public class GridView : Control, IPrintable
     {
         public HTMLDivElement GridFindPanel;
 
@@ -1948,6 +1948,89 @@ namespace ExpressCraft
             {
                 renderGridInternal();
             }
+        }
+
+        public List<Page> GetPages(Layout pageLayout, PageSize pageSize)
+        {
+            List<Page> Pages = new List<Page>();
+
+            Page activePage = null;
+
+            float yp = 0;
+            float xp = 0;
+
+            float width;
+            float height;
+
+            if(pageSize == PageSize.A4)
+            {
+                if(pageLayout == Layout.Landscape)
+                {
+                    width = 29.7f;
+                    height = 21f; 
+                }
+                else
+                {
+                    height = 29.7f;
+                    width = 21f;
+                }
+            }else
+            {
+                if(pageLayout == Layout.Landscape)
+                {
+                    width = 42f;
+                    height = 29.7f;
+                }
+                else
+                {
+                    height = 42f;
+                    width = 29.7f;
+                }
+            }
+
+            activePage = new Page();
+            Pages.Add(activePage);
+
+            float sep = 0;
+
+            if(ColumnAutoWidth)
+                sep = (width / GetVisibleCount());
+
+            int rowHeight = 28;
+
+            for(int x = 0; x < ColumnCount(); x++)
+            {                
+                if(Columns[x].Visible)
+                {
+                    var colWidth = ColumnAutoWidth ? sep : Columns[x].Width;
+                    yp = 0;
+
+                    var colHeader = new Control();
+                    colHeader.Bounds = new Vector4(xp, yp, colWidth, rowHeight);
+                    colHeader.Content.TextContent = Columns[x].Caption;
+                    colHeader.Style.Border = "1px solid grey";
+                    colHeader.Style.BackgroundColor = "lightgrey";
+                    colHeader.Style.Color = "white";
+
+                    activePage.AppendChild(colHeader);
+
+                    yp += rowHeight;
+
+                    for(int y = 0; y < RowCount(); y++)
+                    {
+                        var rowCell = new Control();
+                        rowCell.Bounds = new Vector4(xp, yp, colWidth, rowHeight);
+                        rowCell.Content.TextContent =  Columns[x].GetDisplayValueByDataRowHandle(GetDataSourceRow(y));
+                        rowCell.Style.Border = "1px solid lightgrey";
+                        activePage.AppendChild(rowCell);
+
+                        yp += rowHeight;
+                    }
+                    xp += colWidth;
+                }
+            }
+
+            return Pages;
         }
     }
 

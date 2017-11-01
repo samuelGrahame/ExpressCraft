@@ -74,6 +74,35 @@ namespace ExpressCraft
 
         public static int FormFadeDuration = 100;
 
+        private static int _dpi;
+        private static bool _dpiSetup = false;
+
+        public static float GetCmToPixel(int pixel)
+        {
+            var ppcm = GetPixelPerCm();            
+            if(pixel == 0 || ppcm == 0)
+                return 0;
+            return pixel / ppcm;
+        }
+
+        public static int GetPixelPerCm()
+        {
+            if(_dpiSetup)
+                return _dpi;
+
+            var div = new Control();
+            div.Top = "-1000cm";
+            div.Left = "-1000cm";
+            div.Height = "1000cm";
+            div.Width = "1000cm";
+
+            Document.Body.AppendChild(div);
+            _dpi = (int)(div.Content.GetBoundingClientRect().Height / 1000.0d);
+            Document.Body.RemoveChild(div);
+            _dpiSetup = true;
+            return _dpi;            
+        }
+        
         /// <summary>
         /// Increase Render Speed
         /// </summary>
