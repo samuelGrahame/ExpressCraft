@@ -1,15 +1,11 @@
-﻿* {
-color:#404040;
-font:8.25pt Tahoma
-}
-
-.control {
+﻿.control {
 -moz-user-select:none;
 -ms-user-select:none;
 -webkit-user-select:none;
 color:#404040;
 position:absolute;
-user-select:none
+user-select:none;
+font:8.25pt Tahoma
 }
 
 .selection {
@@ -874,7 +870,7 @@ page {
 }
 .page-focused
 {
-	box-shadow: 0 0 0.8cm rgba(63,72,204,0.5);
+	box-shadow: 0 0 2cm rgba(63,72,204,0.8);
 }
 page[size="A4"] {  
   width: 21cm;
@@ -900,6 +896,7 @@ page[size="A5"][layout="Landscape"] {
   width: 21cm;
   height: 14.8cm;  
 }
+
 @media print {
   .print-body, page {
     margin: 0;
