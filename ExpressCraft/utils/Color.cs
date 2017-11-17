@@ -1306,7 +1306,7 @@ namespace ExpressCraft
 
         private static long MakeArgb(byte alpha, byte red, byte green, byte blue)
         {
-            return (long)(((ulong)((((red << 0x10) | (green << 8)) | blue) | (alpha << 0x18))) & 0xffffffffL);
+            return (alpha << 24) | (red << 16) | (green << 8) | blue;            
         }
 
         public static Color FromArgb(int argb)

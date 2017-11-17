@@ -1902,7 +1902,9 @@ namespace ExpressCraft
             }
 
             OnShowed();
-            
+
+            Resizing();
+
             ActiveForm = this;
 
             Body.FocusElement();

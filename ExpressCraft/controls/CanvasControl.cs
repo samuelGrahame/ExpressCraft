@@ -25,7 +25,7 @@ namespace ExpressCraft
                 var bounds = Content.GetBoundingClientRect();
                 Canvas.Width = (int)bounds.Width;
                 Canvas.Height = (int)bounds.Height;
-
+                
                 if(ClearOnResize)
                     OnClear();
                 OnPaint();

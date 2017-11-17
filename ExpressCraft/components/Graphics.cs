@@ -33,7 +33,7 @@ namespace ExpressCraft
         {
             if(brush is SolidBrush)
             {
-                _context.FillStyle = brush.As<SolidBrush>().Color.ToString();
+                _context.FillStyle = brush.As<SolidBrush>().Color.ToHex();
             }else if(brush is StyleBrush)
             {
                 _context.FillStyle = brush.As<StyleBrush>().Style;
@@ -44,7 +44,7 @@ namespace ExpressCraft
         {
             if(pen.Brush is SolidBrush)
             {
-                _context.StrokeStyle = pen.Brush.As<SolidBrush>().Color.ToString();
+                _context.StrokeStyle = pen.Brush.As<SolidBrush>().Color.ToHex();
             }
             else if(pen.Brush is StyleBrush)
             {
