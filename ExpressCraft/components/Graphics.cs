@@ -24,7 +24,7 @@ namespace ExpressCraft
             _context.ClearRect(0, 0, _canvas.Width, _canvas.Height);
             if(Color.Transparent != color)
             {
-                _context.FillRect
+                FillRectangle(new SolidBrush(color), 0, 0, _canvas.Width, _canvas.Height);
             }
             
         }
