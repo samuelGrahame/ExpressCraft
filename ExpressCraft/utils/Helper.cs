@@ -440,7 +440,8 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             {
                 for(int i = 0; i < Nodes.Length; i++)
                 {
-                    c.AppendChild(Nodes[i]);
+                    if(Nodes[i] != null)
+                        c.AppendChild(Nodes[i]);
                 }
             }
         }
@@ -451,8 +452,11 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             {
                 for(int i = 0; i < Nodes.Length; i++)
                 {
-                    Nodes[i].Content.TabIndex = i;
-                    c.AppendChild(Nodes[i]);
+                    if(Nodes[i] != null)
+                    {
+                        Nodes[i].Content.TabIndex = i;
+                        c.AppendChild(Nodes[i]);
+                    }
                 }
             }
         }
@@ -481,7 +485,8 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             {
                 for(int i = 0; i < Nodes.Length; i++)
                 {
-                    c.AppendChild(Nodes[i]);
+                    if(Nodes[i] != null)
+                        c.AppendChild(Nodes[i]);
                 }
             }
         }

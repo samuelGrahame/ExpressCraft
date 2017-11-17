@@ -103,7 +103,13 @@ namespace ExpressCraft
             ControlMargin = controlMargin;
 
             if(columns != null && columns.Length > 0)
-                Columns.AddRange(columns);
+            {
+                foreach(var item in columns)
+                {
+                    if(item != null)
+                        Columns.Add(item);
+                }
+            }
         }
 
         public LayoutContainer(int columnWidth = 500, int controlMargin = 6, int buttonWidth = 73, params LayoutColumn[] columns)
@@ -113,7 +119,13 @@ namespace ExpressCraft
             ButtinWidth = buttonWidth;
 
             if(columns != null && columns.Length > 0)
-                Columns.AddRange(columns);
+            {
+                foreach(var item in columns)
+                {
+                    if(item != null)
+                        Columns.Add(item);
+                }
+            }
         }
 
         public LayoutContainer(params LayoutColumn[] columns)
@@ -122,7 +134,13 @@ namespace ExpressCraft
             ControlMargin = 6;
 
             if(columns != null && columns.Length > 0)
-                Columns.AddRange(columns);
+            {
+                foreach(var item in columns)
+                {
+                    if(item != null)
+                        Columns.Add(item);
+                }
+            }                
         }
 
         public string CreateLoadSQL()
@@ -608,7 +626,13 @@ namespace ExpressCraft
         public LayoutColumn(params LayoutGroup[] groups)
         {
             if(groups != null && groups.Length > 0)
-                Groups.AddRange(groups);
+            {
+                foreach(var item in groups)
+                {
+                    if(item != null)
+                        Groups.Add(item);
+                }
+            }
         }
     }
 
@@ -621,14 +645,26 @@ namespace ExpressCraft
         {
             GroupLabel = string.Empty;
             if(rows != null && rows.Length > 0)
-                Rows.AddRange(rows);
+            {
+                foreach(var item in rows)
+                {
+                    if(item != null)
+                        Rows.Add(item);
+                }
+            }
         }
 
         public LayoutGroup(string groupLabel, params LayoutRow[] rows)
         {
             GroupLabel = groupLabel;
             if(rows != null && rows.Length > 0)
-                Rows.AddRange(rows);
+            {
+                foreach(var item in rows)
+                {
+                    if(item != null)
+                        Rows.Add(item);
+                }
+            }
         }
     }
 
@@ -675,7 +711,13 @@ namespace ExpressCraft
         {
             Label = label;
             if(controls != null && controls.Length > 0)
-                Controls.AddRange(controls);
+            {
+                foreach(var item in controls)
+                {
+                    if(item != null)
+                        Controls.Add(item);
+                }
+            }
         }
 
         public LayoutRow(params LayoutControl[] controls) : this("", controls)

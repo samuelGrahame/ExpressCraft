@@ -70,7 +70,16 @@ namespace ExpressCraft
             Caption = _caption;
             Buttons = new List<RibbonButton>();
             if(buttons != null)
-                Buttons.AddRange(buttons);
+            {
+                foreach(var item in buttons)
+                {
+                    if(item != null)
+                    {
+                        Buttons.Add(item);
+                    }                    
+                }                
+            }
+                
         }
 
         private HTMLDivElement CreateVerticalLine(int height)

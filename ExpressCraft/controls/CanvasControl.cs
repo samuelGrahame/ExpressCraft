@@ -12,6 +12,7 @@ namespace ExpressCraft
     {
         public CanvasRenderingContext2D Context;
         public HTMLCanvasElement Canvas;
+        public bool ClearOnResize = true;
 
         public CanvasControl() : base(new HTMLCanvasElement())
         {
@@ -25,8 +26,15 @@ namespace ExpressCraft
                 Canvas.Width = (int)bounds.Width;
                 Canvas.Height = (int)bounds.Height;
 
-                OnClear();
+                if(ClearOnResize)
+                    OnClear();
+                OnPaint();
             };
+        }
+
+        public Graphics CreateGraphics()
+        {
+            return new Graphics(this);
         }
 
         public virtual void OnClear()

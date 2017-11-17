@@ -19,7 +19,13 @@ namespace ExpressCraft
         public void AddRibbonGroups(params RibbonGroup[] pages)
         {
             if(pages != null)
-                RibbonGroups.AddRange(pages);
+            {
+                foreach(var item in pages)
+                {
+                    if(item != null)
+                        RibbonGroups.Add(item);
+                }
+            }                
         }
 
         public override void Render()

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.5.1</version>
+    <version>0.0.6</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -15,12 +15,12 @@ Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-bac
     <copyright>Copyright 2017</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>
-		<dependency id="Bridge" version="[16.2.1]"/>
-		<dependency id="Bridge.Core" version="[16.2.1]"/>
-		<dependency id="Bridge.Html5" version="[16.2.1]"/>
+		<dependency id="Bridge" version="[16.4.1]"/>
+		<dependency id="Bridge.Core" version="[16.4.1]"/>
+		<dependency id="Bridge.Html5" version="[16.4.1]"/>
 		<dependency id="Bridge.jQuery" version="[2.9.4]"/>
-		<dependency id="Bridge.Min" version="[16.2.1]"/>
-		<dependency id="Bridge.Newtonsoft.Json" version="[1.2.0]"/>
+		<dependency id="Bridge.Min" version="[16.4.1]"/>
+		<dependency id="Bridge.Newtonsoft.Json" version="[1.2.2]"/>
 	  </dependencies>
   </metadata>
   <files>

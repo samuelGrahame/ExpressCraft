@@ -34,7 +34,15 @@ namespace ExpressCraft
         public void AddRibbonPages(params RibbonPage[] pages)
         {
             if(pages != null)
-                RibbonPages.AddRange(pages);
+            {
+                foreach(var item in pages)
+                {
+                    if(item != null)
+                    {
+                        RibbonPages.Add(item);
+                    }
+                }
+            }
         }
 
         private int selectedindex = -1;

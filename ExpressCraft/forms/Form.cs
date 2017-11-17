@@ -205,7 +205,8 @@ namespace ExpressCraft
             Children.AddRange(children);
             for(int i = 0; i < children.Length; i++)
             {
-                children[i].LinkedForm = this;
+                if(children[i] != null)
+                    children[i].LinkedForm = this;
             }
         }
 

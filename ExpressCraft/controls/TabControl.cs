@@ -182,8 +182,11 @@ namespace ExpressCraft
                 for(int i = 0; i < TabPages.Count; i++)
                 {
                     var page = TabPages[i];
-
+                    if(page == null || page.Hidden)
+                        continue;
                     page.Render();
+
+                    
 
                     if(page.TabPageHeader == null)
                     {
