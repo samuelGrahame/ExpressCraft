@@ -38,6 +38,10 @@ namespace ExpressCraft
 
                 g.FillEllipse(new SolidBrush(Color.Green), 100, 200, 50, 50);
 
+                var size = g.MeasureString("Hello World", new Font("Arial 11pt"));
+
+                g.DrawString(size.ToString(), new Font("Arial 11pt"), new SolidBrush(Color.Black), 200, 50);
+
                 base.OnPaint();
             }
         }

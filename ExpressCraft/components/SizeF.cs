@@ -10,5 +10,22 @@ namespace ExpressCraft
     {
         public float Width;
         public float Height;
+
+        public SizeF(float width, float height)
+        {
+            Width = width;
+            Height = height;
+        }
+
+        public SizeF(double width, double height)
+        {
+            Width = (float)width;
+            Height = (float)height;
+        }
+
+        public override string ToString()
+        {
+            return $"{Width}, {Height}";
+        }
     }
 }

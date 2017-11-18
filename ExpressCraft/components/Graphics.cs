@@ -208,7 +208,11 @@ namespace ExpressCraft
         
         public void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
         {
-            DrawLine(pen, (float)x1, (float)y1, (float)x2, (float)y2);
+            _context.BeginPath();
+            _context.MoveTo(x1, y1);
+            _context.LineTo(x2, y2);
+            ApplyPen(pen);
+            _context.Stroke();
         }
         
         public void DrawLine(Pen pen, Point pt1, Point pt2)
@@ -301,6 +305,83 @@ namespace ExpressCraft
             }
             _context.ClosePath();
             _context.Stroke();
+        }
+     
+        public SizeF MeasureString(string text, Font font, SizeF layoutArea, StringFormat stringFormat, out int charactersFitted, out int linesFilled)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public SizeF MeasureString(string text, Font font, int width)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public SizeF MeasureString(string text, Font font, int width, StringFormat format)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public SizeF MeasureString(string text, Font font, PointF origin, StringFormat stringFormat)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public SizeF MeasureString(string text, Font font, SizeF layoutArea, StringFormat stringFormat)
+        {
+            throw new NotImplementedException();
+        }
+
+        public float MeasureStringWidth(string text, Font font)
+        {
+            _context.Font = font.FontString;
+            var size = _context.MeasureText(text);
+            var sp = new HTMLSpanElement();
+            sp.Style.Font = font.FontString;
+            return (float)size.Width;
+        }
+
+        public float MeasureStringHeight(string text, Font font)
+        {
+            return internalMeasureHeight(text, font);
+        }
+
+        public SizeF MeasureString(string text, Font font)
+        {
+            _context.Font = font.FontString;
+            var size = _context.MeasureText(text);
+            var sp = new HTMLSpanElement();
+            sp.Style.Font = font.FontString;
+            
+            return new SizeF(size.Width, internalMeasureHeight(text, font));
+        }
+
+        private static Dictionary<string, float> cacheGetHeight = new Dictionary<string, float>();
+        private static float internalMeasureHeight(string text, Font font)
+        {
+            if (cacheGetHeight.ContainsKey(font.FontString))
+            {
+                return cacheGetHeight[font.FontString];
+            }
+            
+            var div = new Control();
+            div.Content.TextContent = text;            
+            div.Left = -100;
+            div.Top = -100;
+            div.Style.Font = font.FontString;
+
+            Document.Body.AppendChild(div);
+
+            var height = (float)div.Content.GetBoundingClientRect().Height;
+
+            Document.Body.RemoveChild(div);
+
+            return cacheGetHeight[font.FontString] = height;
+        }
+        
+        public SizeF MeasureString(string text, Font font, SizeF layoutArea)
+        {
+            throw new NotImplementedException();
         }
     }
 }
