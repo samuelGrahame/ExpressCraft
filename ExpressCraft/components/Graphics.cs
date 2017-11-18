@@ -248,6 +248,59 @@ namespace ExpressCraft
         {
             DrawString(s, font, brush, x, y, null); ;
         }
+        
+        public void DrawBezier(Pen pen, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
+        {
+            _context.BeginPath();
+            ApplyPen(pen);
+            _context.MoveTo(x1, y1);
+            _context.BezierCurveTo(x2, y2, x3, y3, x4, y4);
+            _context.ClosePath();
+            _context.Stroke();
+        }
+        
+        public void DrawBezier(Pen pen, PointF pt1, PointF pt2, PointF pt3, PointF pt4)
+        {
+            DrawBezier(pen, pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
+        }
+        
+        public void DrawBezier(Pen pen, Point pt1, Point pt2, Point pt3, Point pt4)
+        {
+            DrawBezier(pen, pt1.X, pt1.Y, pt2.X, pt2.Y, pt3.X, pt3.Y, pt4.X, pt4.Y);
+        }
+        
+        public void DrawBeziers(Pen pen, PointF[] points)
+        {
+            _context.BeginPath();
+            ApplyPen(pen);
+            var point = points[0];
+            _context.MoveTo(point.X, point.Y);
+            for (int i = 1; i < points.Length; i+=3)
+            {
+                point = points[i];
+                var point2 = points[i + 1];
+                var point3 = points[i + 2];
+                _context.BezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
+            }            
+            _context.ClosePath();
+            _context.Stroke();
+        }
 
+        public void DrawBeziers(Pen pen, Point[] points)
+        {
+            _context.BeginPath();
+            ApplyPen(pen);
+            var point = points[0];
+            _context.MoveTo(point.X, point.Y);
+            for (int i = 1; i < points.Length; i += 3)
+            {
+                point = points[i];
+                var point2 = points[i + 1];
+                var point3 = points[i + 2];
+                _context.BezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
+            }
+            _context.ClosePath();
+            _context.Stroke();
+        }
     }
 }
