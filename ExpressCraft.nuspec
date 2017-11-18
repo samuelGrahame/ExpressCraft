@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.0.6</version>
+    <version>0.1.0</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -11,16 +11,19 @@
     <description>ExpressCraft (For Bridge.Net) - Create a Windows Application using ExpressCraft UI and Bridge for the Browser.
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
-    <releaseNotes>Changed Font Setting on Init for the form</releaseNotes>
+    <releaseNotes>
+	Added Graphics Class
+	Updated to Bridge 16.5
+	</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>
-		<dependency id="Bridge" version="[16.4.1]"/>
-		<dependency id="Bridge.Core" version="[16.4.1]"/>
-		<dependency id="Bridge.Html5" version="[16.4.1]"/>
-		<dependency id="Bridge.jQuery" version="[2.9.4]"/>
-		<dependency id="Bridge.Min" version="[16.4.1]"/>
-		<dependency id="Bridge.Newtonsoft.Json" version="[1.2.2]"/>
+		<dependency id="Bridge" version="[16.5.0]"/>
+		<dependency id="Bridge.Core" version="[16.5.0]"/>
+		<dependency id="Bridge.Html5" version="[16.5.0]"/>
+		<dependency id="Bridge.jQuery" version="[2.10.0]"/>
+		<dependency id="Bridge.Min" version="[16.5.0]"/>
+		<dependency id="Bridge.Newtonsoft.Json" version="[1.3.0]"/>
 	  </dependencies>
   </metadata>
   <files>
