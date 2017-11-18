@@ -25,8 +25,7 @@ namespace ExpressCraft
             if(Color.Transparent != color)
             {
                 FillRectangle(new SolidBrush(color), 0, 0, _canvas.Width, _canvas.Height);
-            }
-            
+            }            
         }
 
         public void ApplyFill(Brush brush)
@@ -99,6 +98,74 @@ namespace ExpressCraft
         {
             FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
         }
+        // Ellcipse
+
+        public void FillEllipse(Brush brush, float x, float y, float width, float height)
+        {
+            var width_over_2 = width / 2;
+            var width_two_thirds = width * 2 / 3;
+            var height_over_2 = height / 2;
+
+            x += width_over_2;
+            y += height_over_2;
+
+            _context.BeginPath();            
+            _context.MoveTo(x, y - height_over_2);
+            _context.BezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
+            _context.BezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
+            _context.ClosePath();
+            ApplyFill(brush);
+            _context.Fill();
+        }
+
+        public void FillEllipse(Brush brush, int x, int y, int width, int height)
+        {
+            FillEllipse(brush, (float)x, (float)y, (float)width, (float)height);
+        }
+
+        public void FillEllipse(Brush brush, Rectangle rect)
+        {
+            FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
+        public void FillEllipse(Brush brush, RectangleF rect)
+        {
+            FillEllipse(brush, rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
+        public void DrawEllipse(Pen pen, float x, float y, float width, float height)
+        {            
+            var width_over_2 = width / 2;
+            var width_two_thirds = width * 2 / 3;
+            var height_over_2 = height / 2;
+
+            x += width_over_2;
+            y += height_over_2;
+
+            _context.BeginPath();
+            ApplyPen(pen);
+            _context.MoveTo(x, y - height_over_2);
+            _context.BezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
+            _context.BezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
+            _context.ClosePath();
+            _context.Stroke();            
+        }
+
+        public void DrawEllipse(Pen pen, int x, int y, int width, int height)
+        {
+            DrawEllipse(pen, (float)x, (float)y, (float)width, (float)height);
+        }
+
+        public void DrawEllipse(Pen pen, Rectangle rect)
+        {
+            DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
+        public void DrawEllipse(Pen pen, RectangleF rect)
+        {
+            DrawEllipse(pen, rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
 
         // Draw rec
 

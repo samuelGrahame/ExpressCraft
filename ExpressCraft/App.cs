@@ -34,6 +34,10 @@ namespace ExpressCraft
                 }
                 g.DrawString("Hello World", new Font("Arial 10pt"), new SolidBrush(Color.Black), 50, 50);
 
+                g.DrawEllipse(new Pen(Color.Red, 2), 100, 100, 50, 50);
+
+                g.FillEllipse(new SolidBrush(Color.Green), 100, 200, 50, 50);
+
                 base.OnPaint();
             }
         }
