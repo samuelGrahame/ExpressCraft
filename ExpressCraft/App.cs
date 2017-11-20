@@ -28,7 +28,7 @@ namespace ExpressCraft
         //    {
         //        var g = CreateGraphics();
         //        var rnd = new Random();
-        //        for (int i = 0; i < 100; i++)
+        //        for(int i = 0; i < 100; i++)
         //        {
         //            g.DrawLine(new Pen(Color.FromArgb(rnd.Next())), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300));
         //        }

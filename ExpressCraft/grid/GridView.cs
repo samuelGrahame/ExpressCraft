@@ -883,6 +883,21 @@ namespace ExpressCraft
             }
         }
 
+        private bool _useDrawNotDom;
+
+        public bool UseDrawNotDom
+        {
+            get { return _useDrawNotDom; }
+            set {
+                if(_useDrawNotDom != value)
+                {
+                    _useDrawNotDom = value;
+                    RenderGrid();
+                }
+            }
+        }
+
+
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
         {
             if(Helper.NotDesktop)
