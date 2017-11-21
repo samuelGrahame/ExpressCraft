@@ -100,8 +100,8 @@ namespace ExpressCraft
         public Action<int> OnRowDoubleClick = null;
         public Action<HTMLElement, int> OnCustomRowStyle = null;
 
-        protected Action<MouseEvent<HTMLDivElement>> OnRowClick;
-        protected Action<MouseEvent<HTMLDivElement>> OnDoubleClick;
+        protected Action<MouseEvent> OnRowClick;
+        protected Action<MouseEvent> OnDoubleClick;
         protected Action<MouseEvent> OnCellRowMouseDown;
 
         public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
@@ -851,7 +851,7 @@ namespace ExpressCraft
         private string headingClass;
         private string cellClass;
 
-        private Dictionary<int, HTMLDivElement> CacheRow = new Dictionary<int, HTMLDivElement>();
+        private Dictionary<int, HTMLElement> CacheRow = new Dictionary<int, HTMLElement>();
         int CountOfDeletion = 0;
 
         private int _searchTimer = -1;
@@ -1102,7 +1102,7 @@ namespace ExpressCraft
                 {                   
                     if(CountOfDeletion > 8)
                     {
-                        CacheRow = new Dictionary<int, HTMLDivElement>();
+                        CacheRow = new Dictionary<int, HTMLElement>();
                         CountOfDeletion = 0;
                     }
                     else
@@ -1150,8 +1150,9 @@ namespace ExpressCraft
                     if(!CacheRow.ContainsKey(i))
                     {
                         var DataRowhandle = GetDataSourceRow(i);
-                        var dr = Div((i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : ""));
-
+                        var dr = Document.CreateElement("row"); // Div();
+                        dr.ClassName = (i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : "");
+                        dr.Style.Position = Position.Absolute;
                         dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
                         dr.SetAttribute("i", Convert.ToString(DataRowhandle));
 
@@ -1160,6 +1161,7 @@ namespace ExpressCraft
                         {
                             dr.OnDblClick = OnDoubleClick;
                         }
+                        var docFrag = Document.CreateDocumentFragment();
 
                         for(int x = RawLeftCellIndex; x < RawLeftCellCount; x++)
                         {
@@ -1169,19 +1171,48 @@ namespace ExpressCraft
 
                             var apparence = col.BodyApparence;
                             bool useDefault = false;
-                            HTMLElement cell;
+                            HTMLElement cell = null;
                             if(col.CellDisplay == null || (useDefault = col.CellDisplay.UseDefaultElement))
                             {
                                 var displayValue = col.GetDisplayValueByDataRowHandle(DataRowhandle);
-                                cell = Label(displayValue,
-                                col.CachedX, 0, _columnAutoWidth ? _columnAutoWidthSingle : col.Width, apparence.IsBold, false, cellClass, apparence.Alignment, apparence.Forecolor);
+
+                                cell = Document.CreateElement("cell");// new HTMLSpanElement();
+                                cell.ClassName = cellClass;// + " control";
+                                cell.Style.Position = Position.Absolute;
+                                cell.Style.Left = col.CachedX + "px";
+                                cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width) + "px";
                                 
+                                if(!string.IsNullOrWhiteSpace(displayValue))
+                                {
+                                    cell.TextContent = displayValue;
+                                    if(apparence.Alignment != TextAlign.Left)
+                                    {
+                                        if(apparence.Alignment == TextAlign.Right)
+                                        {
+                                            cell.Style.Direction = Direction.Rtl;
+                                        }
+                                        else
+                                        {
+                                            cell.Style.TextAlign = apparence.Alignment;
+                                        }
+                                    }
+                                    if(apparence.IsBold)
+                                    {
+                                        cell.Style.FontWeight = "bold";
+                                    }
+
+                                    if(apparence.Forecolor != null)
+                                    {
+                                        cell.Style.Color = apparence.Forecolor;
+                                    }
+                                }
+
                                 var newCell = useDefault ?
                                     col.CellDisplay.OnCreateDefault(cell, this, DataRowhandle, x) :
                                     cell;
-                                
-                                if(_highlighSearchResults && DataSource._searchActive && !useDefault 
-                                    && !string.IsNullOrWhiteSpace(displayValue) 
+
+                                if(_highlighSearchResults && DataSource._searchActive && !useDefault
+                                    && !string.IsNullOrWhiteSpace(displayValue)
                                     && displayValue.ToLower().StartsWith(DataSource.SearchString))
                                 {
                                     newCell.Empty();
@@ -1191,19 +1222,24 @@ namespace ExpressCraft
                                     newCell.AppendChildren(markelement, Document.CreateTextNode(displayValue.Substring(Slength)));
                                 }
 
-                                dr.AppendChild(newCell);
+                                docFrag.AppendChild(newCell);
                             }
                             else
                             {
-                                cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);
-                                cell.SetLocation(col.CachedX, 0);
+                                cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);                                
+                                cell.Style.Left = col.CachedX + "px";
                                 cell.Style.Width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
 
-                                dr.AppendChild(cell);
+                                docFrag.AppendChild(cell);
                             }
-                            cell.SetAttribute("i", x.ToString());
-                            cell.OnMouseDown = OnCellRowMouseDown;
+                            if(cell != null)
+                            {
+
+                            }
+                            
                         }
+
+                        dr.AppendChild(docFrag);
 
                         if(AllowRowDrag)
                         {
@@ -1355,7 +1391,7 @@ namespace ExpressCraft
 
             OnResize = (ev) =>
             {
-                CacheRow = new Dictionary<int, HTMLDivElement>();
+                CacheRow = new Dictionary<int, HTMLElement>();
                 DelayedRenderGrid();
             };
             int prevleft = 0;
@@ -1363,7 +1399,7 @@ namespace ExpressCraft
             {
                 if(prevleft != GridBodyContainer.ScrollLeft)
                 {
-                    CacheRow = new Dictionary<int, HTMLDivElement>();
+                    CacheRow = new Dictionary<int, HTMLElement>();
                     prevleft = GridBodyContainer.ScrollLeft;
                     DelayedRenderGrid();
                 }else
@@ -1402,7 +1438,7 @@ namespace ExpressCraft
                     }
                 }
 
-                var DataRowHandle = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+                var DataRowHandle = Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"));
 
                 var mev = ev.As<MouseEvent>();
                 if(AllowMultiSelection)
@@ -1448,7 +1484,7 @@ namespace ExpressCraft
             Content.TabIndex = 0;
             OnDoubleClick = (ev) =>
             {
-                int drh = Global.ParseInt(ev.CurrentTarget.GetAttribute("i"));
+                int drh = Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"));
                 if(OnRowDoubleClick != null)
                     OnRowDoubleClick(drh);
 
@@ -1574,7 +1610,7 @@ namespace ExpressCraft
                     ev.PreventDefault();
                     ev.StopPropagation();
 
-                    OnDoubleClick(ev.As<MouseEvent<HTMLDivElement>>());
+                    OnDoubleClick(ev.As<MouseEvent<HTMLElement>>());
                 }
                 else
                 {
@@ -1728,7 +1764,7 @@ namespace ExpressCraft
 
             OnRowDragStart = (ev) =>
             {
-                Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.GetAttribute("i"))].GetOfflineDataRow()));
+                Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.Stringify(DataSource[Global.ParseInt(ev.CurrentTarget.As<HTMLElement>().GetAttribute("i"))].GetOfflineDataRow()));
             };
 
             Content.AppendChildren(GridFindPanel, GridHeaderContainer, GridBodyContainer);
@@ -1903,7 +1939,7 @@ namespace ExpressCraft
         private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseMove;
         private Action<MouseEvent<HTMLSpanElement>> OnColumnMouseLeave;
 
-        private Action<Event<HTMLDivElement>> OnRowDragStart;
+        private Action<Event> OnRowDragStart;
 
         private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
         {
@@ -1952,7 +1988,7 @@ namespace ExpressCraft
                 return;
 
             if(clear)
-                CacheRow = new Dictionary<int, HTMLDivElement>();
+                CacheRow = new Dictionary<int, HTMLElement>();
             
             if(RenderTime > -1)
             {

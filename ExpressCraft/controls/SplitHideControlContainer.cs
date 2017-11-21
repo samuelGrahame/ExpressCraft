@@ -49,7 +49,7 @@ namespace ExpressCraft
             set
             {
                 if(_sliderVisible != value)
-                {
+                {                    
                     _sliderVisible = value;
                     RenderControl();
                     ResizeChildren();
@@ -63,6 +63,7 @@ namespace ExpressCraft
         {
             if(this.LinkedForm != null && this.Content != null)
             {
+                
                 if(refreshId != -1)
                 {
                     Global.ClearTimeout(refreshId);
@@ -71,7 +72,7 @@ namespace ExpressCraft
                 {
                     this.LinkedForm.ResizeChildren(this.Content);
                     refreshId = -1;
-                }, 1000);
+                }, 100);
             }
         }
 
@@ -80,6 +81,8 @@ namespace ExpressCraft
             Body = new Control();
             Slider = new Control("primary");
             Panel = new Control();
+            Panel.Style.Overflow = Overflow.Hidden;
+            Body.Style.Overflow = Overflow.Hidden;
             span = Span("form-heading-title");
             span.TextContent = ">";
 
@@ -88,9 +91,9 @@ namespace ExpressCraft
 
             Slider.Content.AppendChild(span);
             
-            Slider.Style.Transition = "width 1s, left 1s";
-            Body.Style.Transition = "left 1s, width 1s";
-            Panel.Style.Transition = "width 1s";
+            Slider.Style.Transition = "width 0.1s, left 0.1s";
+            
+            Panel.Style.Transition = "width 0.1s";
 
             Slider.Style.Filter = "brightness(90%)";
 
@@ -153,6 +156,25 @@ namespace ExpressCraft
             }
             else
             {
+                /// WORKING ON!!!!!!!!!!!!!!!!!
+                if(SliderVisible)
+                {
+                    span.TextContent = ">";
+                    Panel.Width = SlideWidth;
+                    Panel.Location = new Vector2("(100% - " + (SlideWidth) + "px)", 0);
+                    Slider.Left = "(100% - " + (width + SlideWidth) + "px)";                    
+                    Body.Size = new Vector2("(100% - " + (width + SlideWidth) + "px)", "100%");
+                }
+                else
+                {
+                    span.TextContent = "<";
+                    Slider.Left ="(100% - " + (width) + "px)";
+                    Panel.Width = 0;
+                    Body.Size = new Vector2("(100% - " + (width) + "px)", "100%");
+                }
+
+                Body.Location = new Vector2(0, 0);
+                Panel.Height = "100%";
             }
         }
     }
