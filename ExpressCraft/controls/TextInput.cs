@@ -322,7 +322,7 @@ namespace ExpressCraft
 
         public static InputType FixInput(InputType type)
         {
-            if(type == InputType.Date || (Helper.IsFireFox() && type != InputType.Password && type != InputType.Checkbox))
+            if(type == InputType.Date || (Helper.IsFireFox() && type != InputType.Password && type != InputType.Checkbox && type != InputType.Radio))
             {
                 return InputType.Text;
             }
@@ -391,7 +391,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    if(Type == InputType.Checkbox)
+                    if(Type == InputType.Checkbox || Type == InputType.Radio)
                     {
                         return this.Content.As<HTMLInputElement>().Checked.ToString();
                     }
@@ -409,7 +409,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    if(Type == InputType.Checkbox)
+                    if(Type == InputType.Checkbox || Type == InputType.Radio)
                     {
                         value = value.ToLower();
                         this.Content.As<HTMLInputElement>().Checked = value.IsTrue() == 1;
@@ -487,12 +487,22 @@ namespace ExpressCraft
             get { return enabled; }
             set
             {
+                enabled = value;
+
                 if(this is TextInputDropDown)
                 {
                     var inp = this.As<TextInputDropDown>();
                     inp.UsedEdit.Enabled = value;
+                }else if(this is RadioElement)
+                {
+                    var inp = this.As<RadioElement>();
+                    if(inp.labelElement != null)
+                    {
+                        inp.ProcessIsEnabled();
+                    }
                 }
-                enabled = value;
+
+                
                 if(enabled)
                 {
                     this.Content.RemoveAttribute("disabled");

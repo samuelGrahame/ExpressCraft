@@ -9,13 +9,38 @@ namespace ExpressCraft
 {
     public class StackList : Control
     {
-        public List<StackItem> StackItems = new List<StackItem>();
-        public HTMLElement prevFocused;
+        public List<StackItem> StackItems = new List<StackItem>();        
         private TextInput searchInput;
         private bool _showFindScreen;
         private string searchText;
         private bool clearMark = false;
-        private Control contentBody;
+        public Control contentBody;        
+
+
+        private StackItem _focusedStackItem;
+
+        public StackItem FocusedStackItem
+        {
+            get { return _focusedStackItem; }
+            set {
+                if(_focusedStackItem != value)
+                {
+                    if(_focusedStackItem != null)
+                    {
+                        _focusedStackItem.ClassList.Remove("stack-item-active");                        
+                    }
+                    _focusedStackItem = value;
+                    if(_focusedStackItem != null)
+                    {
+                        _focusedStackItem.ClassList.Add("stack-item-active");
+                        if(_focusedStackItem.OnFocused != null)
+                            _focusedStackItem.OnFocused(_focusedStackItem);
+                    }                    
+                }
+                
+            }
+        }
+
 
         public bool ShowFindScreen
         {
@@ -80,24 +105,28 @@ namespace ExpressCraft
                     item.Empty();
 
                     var builder = new StringBuilder();
-                    var builder2 = new StringBuilder();
+                    var builder2 = new StringBuilder();                    
 
                     for(int i = 0; i < x.Length; i++)
                     {
                         builder2.Append(x[i]);
                         builder.Append(x[i]);
-                        if(builder.ToString().ToLower() == (searchText + "").ToLower())
+                        if(builder2.ToString().ToLower() == (searchText + "").ToLower())
                         {
                             var word = builder2.ToString();
                             builder.Length -= searchText.Length;
                             builder.Append("<mark>" + word.HtmlEscape() + "</mark>");
                             builder2 = new StringBuilder();
-                        }else if(builder.ToString().ToLower().EndsWith((searchText + "").ToLower()))
+                        }else if(builder2.ToString().ToLower().EndsWith((searchText + "").ToLower()))
                         {                            
                             var word = builder2.ToString().Substring(builder2.ToString().Length - searchText.Length);
                             builder.Length -= searchText.Length;
                             builder.Append("<mark>" + word.HtmlEscape() + "</mark>");
                             builder2 = new StringBuilder();
+                        }
+                        if(builder2.Length > searchText.Length)
+                        {
+                            builder2 = new StringBuilder(builder2.ToString().Substring(1)); //? ??
                         }
                     }                    
 
@@ -139,15 +168,7 @@ namespace ExpressCraft
                 if(item.Content.OnClick == null)
                 {
                     item.Content.OnClick = (ev) => {
-                        if(prevFocused != item.Content)
-                        {
-                            if(prevFocused != null)
-                            {
-                                prevFocused.ClassList.Remove("stack-item-active");
-                            }
-                            prevFocused = item.Content;
-                            prevFocused.ClassList.Add("stack-item-active");
-                        }
+                        FocusedStackItem = item;                        
                     };
                 }
 
@@ -189,6 +210,25 @@ namespace ExpressCraft
     public class StackItem : Control
     {
         public string UniqueId = "";
+        public Action<StackItem> OnFocused;
+        public Action<StackItem, object> OnStateChanged;
+        public object ReferenceObject;
+
+        private object _state;
+
+        public object State
+        {
+            get { return _state; }
+            set {
+                if(_state != value)
+                {
+                    _state = value;
+                    if(OnStateChanged != null)
+                        OnStateChanged(this, _state);
+                }                
+            }
+        }
+
 
         public StackItem() :  base("stack-item")
         {
