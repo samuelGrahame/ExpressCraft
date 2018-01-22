@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="components\Bitmap.cs" />
     <Compile Include="components\Brush.cs" />
     <Compile Include="components\Font.cs" />
     <Compile Include="components\Graphics.cs" />
@@ -160,6 +161,7 @@
       <HintPath>..\packages\Bridge.Newtonsoft.Json.1.3.0\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="external\" />
