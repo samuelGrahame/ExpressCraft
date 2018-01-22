@@ -12,6 +12,23 @@ namespace ExpressCraft
             return UsedEdit.GetDisplayFormat();
         }
 
+        public bool DisableTextEditor
+        {
+            get { return UsedEdit.Readonly; }
+            set {                
+                UsedEdit.Readonly = value;                
+                if(value)
+                {
+                    UsedEdit.Style.BackgroundColor = Color.White;
+                    UsedEdit.Style.Cursor = Cursor.Pointer;
+                }
+                else
+                {
+                    UsedEdit.Style.BackgroundColor = null;                    
+                }
+            }
+        }
+
         public virtual float GetDropdownWidth()
         {
             return (float)this.Content.GetBoundingClientRect().Width;

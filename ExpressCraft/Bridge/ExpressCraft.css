@@ -853,6 +853,30 @@ background-color:#007acc
 border-bottom:2px #007acc solid
 }
 
+.stack-item
+{
+    background-color:white;
+    border-bottom: 1px #C5C5C5 solid;
+}
+
+.stack-item-active{
+    outline:dotted 1px #000!important;
+    outline-offset:-1px;
+    outline-width:-1px;
+    background-color:rgba(1,115,199,0.3)!important
+}
+
+.stack-item-active:hover{
+filter:brightness(90%);
+}
+
+.stack-item:hover {
+    filter:brightness(90%);
+    cursor:pointer;
+}
+
+/* Printing */
+
 .print-body
 {
     background: rgb(204,204,204);

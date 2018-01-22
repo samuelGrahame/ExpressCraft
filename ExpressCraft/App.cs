@@ -22,28 +22,28 @@ namespace ExpressCraft
             //frm.Show();
         }
 
-        public class Test : CanvasControl
-        {
-            public override void OnPaint()
-            {
-                var g = CreateGraphics();
-                var rnd = new Random();
-                for (int i = 0; i < 100; i++)
-                {
-                    g.DrawLine(new Pen(Color.FromArgb(rnd.Next())), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300));
-                }
-                g.DrawString("Hello World", new Font("Arial 10pt"), new SolidBrush(Color.Black), 50, 50);
+        //public class Test : CanvasControl
+        //{
+        //    public override void OnPaint()
+        //    {
+        //        var g = CreateGraphics();
+        //        var rnd = new Random();
+        //        for(int i = 0; i < 100; i++)
+        //        {
+        //            g.DrawLine(new Pen(Color.FromArgb(rnd.Next())), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300), rnd.Next(10, 300));
+        //        }
+        //        g.DrawString("Hello World", new Font("Arial 10pt"), new SolidBrush(Color.Black), 50, 50);
 
-                g.DrawEllipse(new Pen(Color.Red, 2), 100, 100, 50, 50);
+        //        g.DrawEllipse(new Pen(Color.Red, 2), 100, 100, 50, 50);
 
-                g.FillEllipse(new SolidBrush(Color.Green), 100, 200, 50, 50);
+        //        g.FillEllipse(new SolidBrush(Color.Green), 100, 200, 50, 50);
 
-                var size = g.MeasureString("Hello World", new Font("Arial 11pt"));
+        //        var size = g.MeasureString("Hello World", new Font("Arial 11pt"));
 
-                g.DrawString(size.ToString(), new Font("Arial 11pt"), new SolidBrush(Color.Black), 200, 50);
+        //        g.DrawString(size.ToString(), new Font("Arial 11pt"), new SolidBrush(Color.Black), 200, 50);
 
-                base.OnPaint();
-            }
-        }
+        //        base.OnPaint();
+        //    }
+        //}
     }
 }
