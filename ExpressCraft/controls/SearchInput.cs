@@ -5,9 +5,11 @@ namespace ExpressCraft
 {
     public class SearchInput : TextInputDropDown
     {
-        public object EditValue { get; set; }
-        public string DisplayMember { get; set; }
-        public string ValueMember { get; set; }
+        public object EditValue;
+        public string DisplayMember;
+        public string ValueMember;
+
+        public bool FocusedChangeCloseForm;
 
         public void SetValues(object editValue, string text)
         {

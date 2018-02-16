@@ -186,6 +186,9 @@ namespace ExpressCraft
                     FocusedRow = null;
                 }
                 SearchInput.OnAcceptResult(FocusedRow);
+
+                if(SearchInput.FocusedChangeCloseForm)
+                    this.Close();
             };
 
             View.OnRowDoubleClick = (row) =>
