@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -19,32 +19,32 @@ namespace ExpressCraft
 
         public void InternalLog(string source, ConsoleLogType logType = ConsoleLogType.Log)
         {
-            var para = new HTMLParagraphElement() { ClassName = "console-para" };
+            var para = new HTMLParagraphElement() { className = "console-para" };
             switch(logType)
             {
                 case ConsoleLogType.Debug:
-                    para.Style.Color = Color.ForestGreen;
+                    para.style.color = Color.ForestGreen;
                     break;
 
                 case ConsoleLogType.Error:
-                    para.Style.Color = Color.Red;
+                    para.style.color = Color.Red;
                     break;
             }
 
-            para.InnerHTML = source;
-            logContent.AppendChild(para);
-            if(logContent.Children.Length > 1000)
+            para.innerHTML = source;
+            logContent.appendChild(para);
+            if(logContent.children.length > 1000)
             {
-                logContent.RemoveChild(logContent.Children[0]);
+                logContent.removeChild(logContent.children[0]);
             }
-            para.ScrollIntoView(false);
+            para.scrollIntoView(false);
         }
 
         protected override void OnGotFocus()
         {
             if(Content != null)
             {
-                Style.Opacity = "1";
+                Style.opacity = "1";
             }
             base.OnGotFocus();
         }
@@ -53,7 +53,7 @@ namespace ExpressCraft
         {
             if(Content != null)
             {
-                Style.Opacity = "0.5";
+                Style.opacity = "0.5";
             }
             base.OnLostFocus();
         }
@@ -62,10 +62,10 @@ namespace ExpressCraft
         {
             logContent = Div("console-body");
             this.Body.AppendChild(logContent);
-            this.Body.Style.Background = Color.Black;
-            this.Body.Style.OverflowY = Overflow.Scroll;
+            this.Body.style.background = Color.Black;
+            this.Body.style.overflowY = "scroll";
 
-            this.Text = Document.Title + " - Console";
+            this.Text = document.title + " - Console";
             if(firstLoad)
             {
                 this.StartPosition = FormStartPosition.Center;

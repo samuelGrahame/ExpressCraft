@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,32 +16,37 @@ namespace ExpressCraft
 
         public DrawingControl() : base()
         {
-            ClassList.Add("inputcontrol");
-            Style.BackgroundColor = "white";
+            ClassList.add("inputcontrol");
+            Style.backgroundColor = "white";
             
             if(Helper.NotDesktop)
             {
-                Content.OnTouchStart = (ev) =>
-                {                    
+                Content.ontouchstart = (ev) =>
+                {
+                    dynamic ev2 = ev;
                     __mouseDown = true;
-                    __currentCursor = new Vector2(ev.LayerX, ev.LayerY);
+                    __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
                     OnPaint();
+                    return null;
                 };
-                Content.OnTouchMove = (ev) =>
+                Content.ontouchmove = (ev) =>
                 {
+                    dynamic ev2 = ev;
                     if(__mouseDown)
                     {
-                        var np = new Vector2(ev.LayerX, ev.LayerY);
+                        var np = new Vector2(ev2.layerX, ev2.layerY);
                         Lines.Add(new Vector4(__currentCursor, np));
                         __currentCursor = np;
 
                         OnPaint();
                     }
+                    return null;
                 };
-                Content.OnTouchEnd = (ev) =>
+                Content.ontouchend = (ev) =>
                 {
-                    var np = new Vector2(ev.LayerX, ev.LayerY);
+                    dynamic ev2 = ev;
+                    var np = new Vector2(ev2.layerX, ev2.layerY);
                     if(np.Xi != __currentCursor.Xi || np.Yi != __currentCursor.Yi)
                     {
                         Lines.Add(new Vector4(__currentCursor, np));
@@ -49,31 +54,38 @@ namespace ExpressCraft
                     __mouseDown = false;
 
                     OnPaint();
+                    return null;
                 }; 
             }
             else
             {
-                Content.OnMouseDown = (ev) =>
+                Content.onmousedown = (ev) =>
                 {
+                    dynamic ev2 = ev;
                     __mouseDown = true;
-                    __currentCursor = new Vector2(ev.LayerX, ev.LayerY);
+                    __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
                     OnPaint();
+                    return null;
                 };
-                Content.OnMouseMove = (ev) =>
+                Content.onmousemove = (ev) =>
                 {
                     if(__mouseDown)
                     {
-                        var np = new Vector2(ev.LayerX, ev.LayerY);
+                        dynamic ev2 = ev;
+                        var np = new Vector2(ev2.layerX, ev2.layerY);
                         Lines.Add(new Vector4(__currentCursor, np));
                         __currentCursor = np;
 
                         OnPaint();
                     }
+                    return null;
+
                 };
-                Content.OnMouseUp = (ev) =>
+                Content.onmouseup = (ev) =>
                 {
-                    var np = new Vector2(ev.LayerX, ev.LayerY);
+                    dynamic ev2 = ev;
+                    var np = new Vector2(ev2.layerX, ev2.layerY);
                     if(np.Xi != __currentCursor.Xi || np.Yi != __currentCursor.Yi)
                     {
                         Lines.Add(new Vector4(__currentCursor, np));
@@ -81,6 +93,7 @@ namespace ExpressCraft
                     __mouseDown = false;
 
                     OnPaint();
+                    return null;
                 }; 
             }
 
@@ -99,18 +112,18 @@ namespace ExpressCraft
             int i = __lastDrawn;
             if(i < Lines.Count)
             {
-                Context.BeginPath();
+                Context.beginPath();
 
                 for(; i < Lines.Count; i++)
                 {
 
                     var v1 = Lines[i];
 
-                    Context.MoveTo(v1.Xi, v1.Yi);
-                    Context.LineTo(v1.Zi, v1.Mi);
+                    Context.moveTo(v1.Xi, v1.Yi);
+                    Context.lineTo(v1.Zi, v1.Mi);
                 }
 
-                Context.Stroke();
+                Context.stroke();
                 __lastDrawn = i;
             }            
             

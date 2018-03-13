@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -66,9 +66,9 @@ namespace ExpressCraft
                 
                 if(refreshId != -1)
                 {
-                    Global.ClearTimeout(refreshId);
+                    clearTimeout(refreshId);
                 }
-                refreshId = Global.SetTimeout(() =>
+                refreshId = (int)setTimeout((ab) =>
                 {
                     this.LinkedForm.ResizeChildren(this.Content);
                     refreshId = -1;
@@ -81,38 +81,39 @@ namespace ExpressCraft
             Body = new Control();
             Slider = new Control("primary");
             Panel = new Control();
-            Panel.Style.Overflow = Overflow.Hidden;
-            Body.Style.Overflow = Overflow.Hidden;
+            Panel.Style.overflow = "hidden";
+            Body.Style.overflow = "hidden";
             span = Span("form-heading-title");
-            span.TextContent = ">";
+            span.textContent = ">";
 
-            span.Style.FontWeight = "bold";
-            span.Style.Color = "white";
+            span.style.fontWeight = "bold";
+            span.style.color = "white";
 
             Slider.Content.AppendChild(span);
             
-            Slider.Style.Transition = "width 0.1s, left 0.1s";
+            Slider.Style.transition = "width 0.1s, left 0.1s";
             
-            Panel.Style.Transition = "width 0.1s";
+            Panel.Style.transition = "width 0.1s";
 
-            Slider.Style.Filter = "brightness(90%)";
+            Slider.Style.filter = "brightness(90%)";
 
             if(Helper.NotDesktop)
             {
-                span.Style.FontStyle = "36px";
+                span.style.fontStyle = "36px";
                 Slider.Width = 65;
             }
             else
             {
-                span.Style.FontStyle = "26px";
+                span.style.fontStyle = "26px";
                 Slider.Width = 30;
             }
 
             Slider.Height = "100%";
 
-            Slider.Content.OnClick = (ev) =>
+            Slider.Content.onclick = (ev) =>
             {
                 SliderVisible = !SliderVisible;
+                return null;
             };
             _slideWidth = 250;
             Content.AppendChildren(Panel, Slider, Body);
@@ -136,7 +137,7 @@ namespace ExpressCraft
             {
                 if(SliderVisible)
                 {
-                    span.TextContent = "<";
+                    span.textContent = "<";
                     Panel.Width = SlideWidth;
                     Slider.Left = SlideWidth;
                     Body.Location = new Vector2(width + SlideWidth, 0);
@@ -144,7 +145,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    span.TextContent = ">";
+                    span.textContent = ">";
                     Slider.Left = 0;
                     Panel.Width = 0;
                     Body.Location = new Vector2(width, 0);
@@ -159,7 +160,7 @@ namespace ExpressCraft
                 /// WORKING ON!!!!!!!!!!!!!!!!!
                 if(SliderVisible)
                 {
-                    span.TextContent = ">";
+                    span.textContent = ">";
                     Panel.Width = SlideWidth;
                     Panel.Location = new Vector2("(100% - " + (SlideWidth) + "px)", 0);
                     Slider.Left = "(100% - " + (width + SlideWidth) + "px)";                    
@@ -167,7 +168,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    span.TextContent = "<";
+                    span.textContent = "<";
                     Slider.Left ="(100% - " + (width) + "px)";
                     Panel.Width = 0;
                     Body.Size = new Vector2("(100% - " + (width) + "px)", "100%");

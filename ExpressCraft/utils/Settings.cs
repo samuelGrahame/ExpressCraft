@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 
@@ -98,9 +98,9 @@ namespace ExpressCraft
             div.Height = "1000cm";
             div.Width = "1000cm";
 
-            Document.Body.AppendChild(div);
-            _dpi = (int)(div.Content.GetBoundingClientRect().Height / 1000.0d);
-            Document.Body.RemoveChild(div);
+            document.body.AppendChild(div);
+            _dpi = (int)(div.Content.getBoundingClientRect().height / 1000.0d);
+            document.body.removeChild((Node)div);
             _dpiSetup = true;
             return _dpi;            
         }
@@ -119,21 +119,21 @@ namespace ExpressCraft
         {
             try
             {
-                StyleSheetList sheets = Document.StyleSheets;
-                for(int i = 0; i < sheets.Length; i++)
+                StyleSheetList sheets = document.stylesheets;
+                for(int i = 0; i < sheets.length; i++)
                 {
-                    var ownerNode = sheets[i].OwnerNode as HTMLLinkElement;
+                    var ownerNode = sheets[i].ownerNode as HTMLLinkElement;
                     if(ownerNode == null)
                         continue;
-                    if(ownerNode.Id.ToLower() == "expresscraft")
+                    if(ownerNode.id.ToLower() == "expresscraft")
                     {
                         DefaultStyleSheet = sheets[i];
                     }
-                    if(ownerNode.Id.ToLower() == "expresscraftplugin")
+                    if(ownerNode.id.ToLower() == "expresscraftplugin")
                     {
                         PluginStyleSheet = sheets[i];
                     }
-                    if(ownerNode.Id.ToLower() == "resourcemanager")
+                    if(ownerNode.id.ToLower() == "resourcemanager")
                     {
                         resourceManangerSheets.Add(sheets[i]);
                     }

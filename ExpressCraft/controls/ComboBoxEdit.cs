@@ -1,13 +1,13 @@
-﻿using Bridge.Html5;
-using Bridge.jQuery2;
+﻿using static Retyped.dom;
 using System;
+using static Retyped.jquery;
 
 namespace ExpressCraft
 {
     public class ComboBoxEdit : Control
     {
         public HTMLSelectElement ComboBoxBase;
-        private int previousSelectedIndex = -1;
+        private double previousSelectedIndex = -1;
 
         public Action<ComboBoxEdit> SelectedIndexChanged = null;
 
@@ -15,27 +15,29 @@ namespace ExpressCraft
         {
             ComboBoxBase = this.Content as HTMLSelectElement;
 
-            this.Content.OnContextMenu = (ev) =>
+            this.Content.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
+                ev.stopPropagation();
+                return null;
             };
 
-            ComboBoxBase.OnChange = (ev) =>
+            ComboBoxBase.onchange = (ev) =>
             {
-                if(previousSelectedIndex != ComboBoxBase.SelectedIndex)
+                if(previousSelectedIndex != ComboBoxBase.selectedIndex)
                 {
                     if(SelectedIndexChanged != null)
                         SelectedIndexChanged(this);
 
-                    previousSelectedIndex = ComboBoxBase.SelectedIndex;
+                    previousSelectedIndex = ComboBoxBase.selectedIndex;
                 }
-                ev.StopPropagation();
+                ev.stopPropagation();
+                return null;
             };
         }
 
         public void FillData(params DataItem[] dataitems)
         {
-            jQuery.Select(ComboBoxBase).Empty();
+            jQuery.select(ComboBoxBase).empty();
 
             if(dataitems == null)
             {
@@ -43,8 +45,8 @@ namespace ExpressCraft
                 {
                     ComboBoxBase.AppendChild(new HTMLOptionElement()
                     {
-                        InnerHTML = dataitems[i].Text,
-                        Value = dataitems[i].Value
+                        innerHTML = dataitems[i].Text,
+                        value = dataitems[i].Value
                     });
                 }
             }
@@ -59,18 +61,18 @@ namespace ExpressCraft
         {
             get
             {
-                if(ComboBoxBase.SelectedIndex == -1)
+                if(ComboBoxBase.selectedIndex == -1)
                     return string.Empty;
-                return ComboBoxBase.Options[ComboBoxBase.SelectedIndex].InnerHTML;
+                return ComboBoxBase.options[ComboBoxBase.selectedIndex].innerHTML;
             }
             set
             {
-                for(int i = 0; i < ComboBoxBase.Options.Length; i++)
+                for(int i = 0; i < ComboBoxBase.options.length; i++)
                 {
-                    if(ComboBoxBase.Options[i].InnerHTML == value)
-                        ComboBoxBase.SelectedIndex = i;
+                    if(ComboBoxBase.options[i].innerHTML == value)
+                        ComboBoxBase.selectedIndex = i;
                 }
-                ComboBoxBase.SelectedIndex = -1;
+                ComboBoxBase.selectedIndex = -1;
             }
         }
 
@@ -78,18 +80,18 @@ namespace ExpressCraft
         {
             get
             {
-                if(ComboBoxBase.SelectedIndex == -1)
+                if(ComboBoxBase.selectedIndex == -1)
                     return string.Empty;
-                return ComboBoxBase.Options[ComboBoxBase.SelectedIndex].Value;
+                return ComboBoxBase.options[ComboBoxBase.selectedIndex].value;
             }
             set
             {
-                for(int i = 0; i < ComboBoxBase.Options.Length; i++)
+                for(int i = 0; i < ComboBoxBase.options.length; i++)
                 {
-                    if(ComboBoxBase.Options[i].Value == value)
-                        ComboBoxBase.SelectedIndex = i;
+                    if(ComboBoxBase.options[i].value == value)
+                        ComboBoxBase.selectedIndex = i;
                 }
-                ComboBoxBase.SelectedIndex = -1;
+                ComboBoxBase.selectedIndex = -1;
             }
         }
 
@@ -101,7 +103,7 @@ namespace ExpressCraft
             set
             {
                 enabled = value;
-                this.Content.SetAttribute("disabled", (!enabled).ToString());
+                this.Content.setAttribute("disabled", (!enabled).ToString());
             }
         }
 
@@ -113,7 +115,7 @@ namespace ExpressCraft
             set
             {
                 _readonly = value;
-                this.Content.SetAttribute("readonly", (_readonly).ToString());
+                this.Content.setAttribute("readonly", (_readonly).ToString());
             }
         }
     }

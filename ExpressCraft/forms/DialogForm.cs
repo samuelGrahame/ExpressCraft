@@ -11,7 +11,7 @@ namespace ExpressCraft
         public DialogForm(string text = "") : base()
         {
             this.Text = text;
-            base.Body.Style.BackgroundColor = "white";
+            base.Body.style.backgroundColor = "white";
 
             //           top:calc(100% - 70px);
             //width:100%;

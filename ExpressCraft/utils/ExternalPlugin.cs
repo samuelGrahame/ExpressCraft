@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -24,20 +24,21 @@ namespace ExpressCraft
                 InLoad = true;
                 var script = new HTMLScriptElement()
                 {
-                    OnLoad = (ele) =>
+                    onload = (ele) =>
                     {
                         SetupCompleted = true;
                         InLoad = false;
                         if(OnReady != null)
                             OnReady();
+                        return null;
                     },
-                    Src = SourceUrl
+                    src = SourceUrl
                 };
                 if(async)
-                    script.Async = async;
+                    script.async = async;
                 if(defer)
-                    script.Defer = defer;
-                Document.Head.AppendChild(script);
+                    script.defer = defer;
+                document.head.AppendChild(script);
             }
         }
 

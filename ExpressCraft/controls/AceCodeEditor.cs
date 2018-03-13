@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -81,12 +81,12 @@ namespace ExpressCraft
 				*/
             };
 
-            this.Content.AddEventListener(EventType.MouseDown, (ev) =>
+            this.Content.addEventListener("mouseDown", (ev) =>
             {
                 Form.InExternalMouseEvent = true;
             });
 
-            this.Content.AddEventListener(EventType.MouseUp, (ev) =>
+            this.Content.addEventListener("mouseUp", (ev) =>
             {
                 Form.InExternalMouseEvent = false;
             });

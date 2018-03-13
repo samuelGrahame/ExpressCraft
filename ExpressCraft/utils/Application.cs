@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -20,8 +20,8 @@ namespace ExpressCraft
             {
                 MainForm.Close();
             }
-            Window.Close();
-            Window.Location.Reload();
+            window.close();
+            window.location.reload();
         }
 
         private static ApplicationDefitnion _applicationDefition = ApplicationDefitnion.BridgeConsole;

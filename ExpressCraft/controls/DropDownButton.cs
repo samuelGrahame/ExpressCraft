@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +11,10 @@ namespace ExpressCraft
     {
         public DropDownButton() : base()
         {
-            Content.OnMouseDown = (ev) => {
+            Content.onmousedown = (ev) => {
                 if(Enabled)
                     OnDropDownClicked(ev);
+                return null;
             };
         }
 

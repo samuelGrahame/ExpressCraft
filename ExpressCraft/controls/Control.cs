@@ -1,6 +1,6 @@
 ﻿using Bridge;
-using Bridge.Html5;
 using System;
+using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -17,8 +17,8 @@ namespace ExpressCraft
         public const string ControlClass = "control";
 
         private ToolTip _toolTip = null;
-        private Action<MouseEvent> _OnMouseEnterToolTip = null;
-        private Action<MouseEvent> _OnMouseLeaveToolTip = null;
+        private Action<Event> _OnMouseEnterToolTip = null;
+        private Action<Event> _OnMouseLeaveToolTip = null;
 
         public ToolTip ToolTip
         {
@@ -60,19 +60,19 @@ namespace ExpressCraft
                             }
                         };
 
-                        Content.AddEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
-                        Content.AddEventListener(EventType.MouseLeave, _OnMouseLeaveToolTip);
+                        Content.addEventListener("MoveEnter", _OnMouseEnterToolTip);
+                        Content.addEventListener("MouseLeave", _OnMouseLeaveToolTip);
                         return;
                     }
 
                     if(_OnMouseEnterToolTip != null)
                     {
-                        Content.RemoveEventListener(EventType.MouseEnter, _OnMouseEnterToolTip);
+                        Content.removeEventListener("MouseEnter", _OnMouseEnterToolTip);
                         _OnMouseEnterToolTip = null;
                     }
                     if(_OnMouseLeaveToolTip != null)
                     {
-                        Content.RemoveEventListener(EventType.MouseLeave, _OnMouseLeaveToolTip);
+                        Content.removeEventListener("MouseLeave", _OnMouseLeaveToolTip);
                         _OnMouseLeaveToolTip = null;
                     }
                 }
@@ -94,29 +94,29 @@ namespace ExpressCraft
 
         public ContextMenu ContextMenu = null;
 
-        public CSSStyleDeclaration Style => Content.Style;
-        public DOMTokenList ClassList => Content.ClassList;
+        public CSSStyleDeclaration Style => Content.style;
+        public DOMTokenList ClassList => Content.classList;
 
         public Control SetAttribute(string name, Union<string, int, float> value)
         {
-            this.Content.SetAttribute(name, value.ToStr());
+            this.Content.setAttribute(name, value.ToStr());
 
             return this;
         }
 
         public string GetAttribute(string name)
         {
-            return this.Content.GetAttribute(name);
+            return this.Content.getAttribute(name);
         }
 
         public int GetAttributei(string name)
         {
-            return Global.ParseInt(this.Content.GetAttribute(name));
+            return Script.ParseInt(this.Content.getAttribute(name));
         }
 
         public float GetAttributef(string name)
         {
-            return (float)Global.ParseFloat(this.Content.GetAttribute(name));
+            return (float)Script.ParseFloat(this.Content.getAttribute(name));
         }
 
         public Form LinkedForm = null;
@@ -129,14 +129,14 @@ namespace ExpressCraft
 
         public Union<string, int, float> Width
         {
-            get { return this.Content.Style.Width; }
+            get { return this.Content.style.width; }
             set
             {
                 var x = value.ToHtmlValue();
                 x = Vector2.pf(x);
-                if(this.Content.Style.Width != x)
+                if(this.Content.style.width != x)
                 {
-                    this.Content.Style.Width = x;
+                    this.Content.style.width = x;
                     OnSizeChanged();
                 }
             }
@@ -144,14 +144,14 @@ namespace ExpressCraft
 
         public Union<string, int, float> Height
         {
-            get { return this.Content.Style.Height; }
+            get { return this.Content.style.height; }
             set
             {
                 var x = value.ToHtmlValue();
                 x = Vector2.pf(x);
-                if(x != this.Content.Style.Height)
+                if(x != this.Content.style.height)
                 {
-                    this.Content.Style.Height = x;
+                    this.Content.style.height = x;
                     OnSizeChanged();
                 }
             }
@@ -159,14 +159,14 @@ namespace ExpressCraft
 
         public Union<string, int, float> Left
         {
-            get { return this.Content.Style.Left; }
+            get { return this.Content.style.left; }
             set
             {
                 var x = value.ToHtmlValue();
                 x = Vector2.pf(x);
-                if(x != this.Content.Style.Left)
+                if(x != this.Content.style.left)
                 {
-                    this.Content.Style.Left = x;
+                    this.Content.style.left = x;
                     OnLocationChanged();
                 }
             }
@@ -174,14 +174,14 @@ namespace ExpressCraft
 
         public Union<string, int, float> Top
         {
-            get { return this.Content.Style.Top; }
+            get { return this.Content.style.top; }
             set
             {
                 var x = value.ToHtmlValue();
                 x = Vector2.pf(x);
-                if(this.Content.Style.Top != x)
+                if(this.Content.style.top != x)
                 {
-                    this.Content.Style.Top = x;
+                    this.Content.style.top = x;
                     OnLocationChanged();
                 }
             }
@@ -256,20 +256,15 @@ namespace ExpressCraft
         {
             Content = Div(cn, ac);
         }
-
-        public Control(string cn, ButtonType bt, bool ac = true)
-        {
-            Content = Button(cn, bt, ac);
-        }
-
+        
         public Control(string cn, ComboBoxTypes ct, bool ac = true)
         {
             Content = ComboBox(cn, ct, ac);
         }
 
-        public Control(string cn, InputType it, bool ac = true)
+        public Control(string cn, bool IsInput, string it, bool ac = true)
         {
-            Content = Input(cn, it, ac);
+            Content = (IsInput ? (HTMLElement)Input(cn, it, ac) : (HTMLElement)Button(cn, it, ac));
         }
 
         public virtual void Render()
@@ -279,104 +274,104 @@ namespace ExpressCraft
 
         public static HTMLDivElement Div(bool ac = true)
         {
-            return new HTMLDivElement() { ClassName = BaseClass(false, ac) };
+            return new HTMLDivElement() { className = BaseClass(false, ac) };
         }
 
         public static HTMLSpanElement Span(bool ac = true)
         {
-            return new HTMLSpanElement() { ClassName = BaseClass(false, ac) };
+            return new HTMLSpanElement() { className = BaseClass(false, ac) };
         }
 
         public static HTMLSpanElement Label(string Caption, float X, float Y, bool IsBold = false, bool IsTiny = false, bool ac = true)
         {
-            var lbl = new HTMLSpanElement() { ClassName = BaseClass(false, ac) };
+            var lbl = new HTMLSpanElement() { className = BaseClass(false, ac) };
 
-            lbl.InnerHTML = Caption.HtmlEscape();
+            lbl.innerHTML = Caption.HtmlEscape();
             lbl.SetLocation(X, Y);
             SetBT(lbl, IsBold, IsTiny);
 
             return lbl;
         }
 
-        public static HTMLSpanElement Label(string Caption, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
+        public static HTMLSpanElement Label(string Caption, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", string Alignment = "left", string Forecolor = null, bool ac = true)
         {
-            var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
+            var lbl = new HTMLSpanElement() { className = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
-            lbl.InnerHTML = Caption.HtmlEscape();
+            lbl.innerHTML = Caption.HtmlEscape();
             lbl.SetBounds(X, Y, width, height);
-            if(Alignment != TextAlign.Left)
+            if(Alignment != "left")
             {
-                lbl.Style.TextAlign = Alignment;
+                lbl.style.textAlign = Alignment;
             }
             SetBT(lbl, IsBold, IsTiny);
             if(Forecolor != null)
             {
-                lbl.Style.Color = Forecolor;
+                lbl.style.color = Forecolor;
             }
 
             return lbl;
         }
 
-        public static HTMLDivElement DivLabel(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
+        public static HTMLDivElement DivLabel(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", string Alignment = "left", string Forecolor = null, bool ac = true)
         {
             var lbl = new HTMLDivElement();
-            lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
-            lbl.TextContent = Caption;
-            lbl.Style.Left = X.ToPx();
-            lbl.Style.Top = Y.ToPx();
-            lbl.Style.Width = width.ToPx();
+            lbl.className = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
+            lbl.textContent = Caption;
+            lbl.style.left = X.ToPx();
+            lbl.style.top = Y.ToPx();
+            lbl.style.width = width.ToPx();
 
-            if(Alignment != TextAlign.Left)
+            if(Alignment != "left")
             {
-                if(Alignment == TextAlign.Right)
+                if(Alignment == "right")
                 {
-                    lbl.Style.Direction = Direction.Rtl;
+                    lbl.style.direction = "rtl";
                 }
                 else
                 {
-                    lbl.Style.TextAlign = Alignment;
+                    lbl.style.textAlign = Alignment;
                 }
             }
             if(IsBold)
             {
-                lbl.Style.FontWeight = "bold";
+                lbl.style.fontWeight = "bold";
             }
             if(IsTiny)
             {
-                lbl.Style.FontSize = "6.75pt";
+                lbl.style.fontSize = "6.75pt";
             }
             if(Forecolor != null)
             {
-                lbl.Style.Color = Forecolor;
+                lbl.style.color = Forecolor;
             }
 
             return lbl;
         }
 
-        public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", TextAlign Alignment = TextAlign.Left, string Forecolor = null, bool ac = true)
+        public static HTMLSpanElement Label(string Caption, float X, float Y, float width, bool IsBold = false, bool IsTiny = false, string classr = "", string Alignment = "left", string Forecolor = null, bool ac = true)
         {
             var lbl = new HTMLSpanElement();
-            lbl.ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
-            lbl.TextContent = Caption;
-            lbl.Style.Left = X.ToPx();
-            lbl.Style.Top = Y.ToPx();
-            lbl.Style.Width = width.ToPx();
+            lbl.className = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac);
+            lbl.textContent = Caption;
+            lbl.style.left = X.ToPx();
+            lbl.style.top = Y.ToPx();
+            lbl.style.width = width.ToPx();
 
-            if(Alignment != TextAlign.Left)
+            if(Alignment != "left")
             {
-                if(Alignment == TextAlign.Right)
+                if(Alignment == "right")
                 {
-                    lbl.Style.Direction = Direction.Rtl;
+                    lbl.style.direction = "rtl";
                 }
                 else
                 {
-                    lbl.Style.TextAlign = Alignment;
+                    lbl.style.textAlign = Alignment;
                 }
             }
             SetBT(lbl, IsBold, IsTiny);
             if(Forecolor != null)
             {
-                lbl.Style.Color = Forecolor;
+                lbl.style.color = Forecolor;
             }
 
             return lbl;
@@ -384,29 +379,29 @@ namespace ExpressCraft
 
         public void Focus()
         {
-            Global.SetTimeout(() =>
+            setTimeout(new setTimeoutFn((a) =>
             {
-                this.Content.Focus();
-            }, 0);
+                this.Content.focus();
+            }), 0);
         }
 
         private static void SetBT(HTMLSpanElement lbl, bool IsBold, bool IsTiny)
         {
             if(IsBold)
             {
-                lbl.Style.FontWeight = "bold";
+                lbl.style.fontWeight = "bold";
             }
             if(IsTiny)
             {
-                lbl.Style.FontSize = "6.75pt";
+                lbl.style.fontSize = "6.75pt";
             }
         }
 
         public static HTMLSpanElement Label(string c, float X, float Y, float width, float height, bool IsBold = false, bool IsTiny = false, string classr = "", bool ac = true)
         {
-            var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
+            var lbl = new HTMLSpanElement() { className = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
-            lbl.InnerHTML = c.HtmlEscape();
+            lbl.innerHTML = c.HtmlEscape();
             lbl.SetBounds(X, Y, width, height);
             SetBT(lbl, IsBold, IsTiny);
 
@@ -415,11 +410,11 @@ namespace ExpressCraft
 
         public static HTMLSpanElement Label(string c, int X, int Y, int width, bool IsBold = false, bool IsTiny = false, string classr = "", bool ac = true)
         {
-            var lbl = new HTMLSpanElement() { ClassName = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
+            var lbl = new HTMLSpanElement() { className = classr + BaseClass(!string.IsNullOrWhiteSpace(classr), ac) };
 
-            lbl.InnerHTML = c.HtmlEscape();
+            lbl.innerHTML = c.HtmlEscape();
             lbl.SetLocation(X, Y);
-            lbl.Style.Width = width.ToPx();
+            lbl.style.width = width.ToPx();
             SetBT(lbl, IsBold, IsTiny);
 
             return lbl;
@@ -432,38 +427,38 @@ namespace ExpressCraft
 
         public static HTMLSpanElement Span(string cn, bool ac = true)
         {
-            return new HTMLSpanElement() { ClassName = cn + BaseClass(true, ac) };
+            return new HTMLSpanElement() { className = cn + BaseClass(true, ac) };
         }
 
         public static HTMLSelectElement ComboBox(string cn, ComboBoxTypes ct, bool ac = true)
         {
-            var combo = new HTMLSelectElement() { ClassName = cn + BaseClass(true, ac) };
+            var combo = new HTMLSelectElement() { className = cn + BaseClass(true, ac) };
             if(ct == ComboBoxTypes.Default)
             {
             }
             return combo;
         }
 
-        public static HTMLButtonElement Button(string cn, ButtonType bt, bool ac = true)
+        public static HTMLButtonElement Button(string cn, string bt, bool ac = true)
         {
-            return new HTMLButtonElement() { ClassName = cn + BaseClass(true, ac), Type = bt };
+            return new HTMLButtonElement() { className = cn + BaseClass(true, ac), type = bt };
         }
 
         public static HTMLDivElement Div(string cn, bool ac = true)
         {
-            return new HTMLDivElement() { ClassName = cn + BaseClass(true, ac) };
+            return new HTMLDivElement() { className = cn + BaseClass(true, ac) };
         }
 
-        public static HTMLInputElement Input(string cn, InputType it, bool ac = true)
+        public static HTMLInputElement Input(string cn, string it, bool ac = true)
         {
             var input = new HTMLInputElement();
-            input.ClassName = cn + BaseClass(!string.IsNullOrWhiteSpace(cn), ac);
+            input.className = cn + BaseClass(!string.IsNullOrWhiteSpace(cn), ac);
             dynamic ty = it;
             if(Browser.IsIE && (ty == "text" || ty == "date" || ty == "color" || ty == 19 || ty == 3 || ty == 2))
             {
                 return input;
             }
-            input.Type = it;
+            input.type = it;
 
             return input;
         }
@@ -482,9 +477,9 @@ namespace ExpressCraft
             {
                 f = "8.25pt Tahoma";
             }
-            var c = (cva ?? (cva = new HTMLCanvasElement())).GetContext(CanvasTypes.CanvasContext2DType.CanvasRenderingContext2D).As<CanvasRenderingContext2D>();
-            c.Font = f;
-            return c.MeasureText(t);
+            var c = (cva ?? (cva = new HTMLCanvasElement())).getContext("2D").As<CanvasRenderingContext2D>();
+            c.font = f;
+            return c.measureText(t);
         }
 
         /// <summary>
@@ -495,10 +490,10 @@ namespace ExpressCraft
         /// <returns>double</returns>
 		public static double GetTextWidth(string t, string f)
         {
-            return GetTextMetrics(t, f).Width;
+            return GetTextMetrics(t, f).width;
         }
 
-        public static implicit operator Node(Control control)
+        public static implicit operator Retyped.dom.Node(Control control)
         {
             if(Settings.AutoRender && !control.HasRendered)
                 control.Render();
@@ -509,11 +504,11 @@ namespace ExpressCraft
         {
             if(s)
             {
-                Content.ClassList.Remove(sf);
+                Content.classList.remove(sf);
             }
             else
             {
-                Content.ClassList.Add(sf);
+                Content.classList.add(sf);
             }
         }
     }

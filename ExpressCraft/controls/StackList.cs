@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,12 +27,12 @@ namespace ExpressCraft
                 {
                     if(_focusedStackItem != null)
                     {
-                        _focusedStackItem.ClassList.Remove("stack-item-active");                        
+                        _focusedStackItem.ClassList.remove("stack-item-active");                        
                     }
                     _focusedStackItem = value;
                     if(_focusedStackItem != null)
                     {
-                        _focusedStackItem.ClassList.Add("stack-item-active");
+                        _focusedStackItem.ClassList.add("stack-item-active");
                         if(_focusedStackItem.OnFocused != null)
                             _focusedStackItem.OnFocused(_focusedStackItem);
                     }                    
@@ -62,7 +62,7 @@ namespace ExpressCraft
                             RebuildData();
                         };
 
-                        Content.AppendChild(searchInput);
+                        Content.appendChild((Node)searchInput);
                         
                         contentBody.Top = 50;
                         contentBody.Size = new Vector2("100%", "(100% - 50px)");
@@ -77,7 +77,7 @@ namespace ExpressCraft
                             clearMark = false;
                         }
                         searchText = "";
-                        Content.RemoveChild(searchInput.Content);
+                        Content.removeChild(searchInput.Content);
                         searchInput = null;
 
                         contentBody.Top = 0;
@@ -91,17 +91,17 @@ namespace ExpressCraft
         {                        
             contentBody = new Control();
             contentBody.Size = new Vector2("100%", "100%");
-            contentBody.Style.OverflowY = Overflow.Auto;
-            Content.AppendChild(contentBody);
+            contentBody.Style.overflowY = "auto";
+            Content.appendChild((Node)contentBody);
         }
 
         private void AddMark(HTMLElement item)
         {
-            if(item.ChildElementCount == 0)
+            if(item.childElementCount == 0)
             {
-                if((item.TextContent + "").ToLower().Contains((searchText + "").ToLower()))
+                if((item.textContent + "").ToLower().Contains((searchText + "").ToLower()))
                 {
-                    string x = item.TextContent;
+                    string x = item.textContent;
                     item.Empty();
 
                     var builder = new StringBuilder();
@@ -130,13 +130,14 @@ namespace ExpressCraft
                         }
                     }                    
 
-                    item.InnerHTML = builder.ToString();
+                    item.innerHTML = builder.ToString();
                 }
             }else
             {
-                foreach(var child in item.Children)
+                for(int i = 0; i < item.childElementCount; i++)
                 {
-                    AddMark(child);
+                    var child = item.children[i];
+                    AddMark(child.As<HTMLElement>());
                 }
             }
             
@@ -144,16 +145,17 @@ namespace ExpressCraft
 
         private void RemoveMark(HTMLElement item)
         {
-            if(item.InnerHTML.Contains("<mark>") && item.InnerHTML.Contains("</mark>"))
+            if(item.innerHTML.Contains("<mark>") && item.innerHTML.Contains("</mark>"))
             {
-                item.InnerHTML = item.InnerHTML.Replace("<mark>", "").Replace("</mark>", "");
+                item.innerHTML = item.innerHTML.Replace("<mark>", "").Replace("</mark>", "");
             }
             else
             {
-                foreach(var child in item.Children)
+                for(int i = 0; i < item.childElementCount; i++)
                 {
-                    AddMark(child);
-                }
+                    var child = item.children[i];
+                    AddMark(child.As<HTMLElement>());
+                }                
             }
         }
 
@@ -165,10 +167,11 @@ namespace ExpressCraft
 
             foreach(var item in StackItems)
             {
-                if(item.Content.OnClick == null)
+                if(item.Content.onclick == null)
                 {
-                    item.Content.OnClick = (ev) => {
-                        FocusedStackItem = item;                        
+                    item.Content.onclick = (ev) => {
+                        FocusedStackItem = item;
+                        return null;                 
                     };
                 }
 
@@ -179,17 +182,17 @@ namespace ExpressCraft
 
                 if(!string.IsNullOrWhiteSpace(searchText))
                 {
-                    if((item.Content.TextContent + "").ToLower().Contains((searchText + "").ToLower()) )
+                    if((item.Content.textContent + "").ToLower().Contains((searchText + "").ToLower()) )
                     {
                         AddMark(item.Content);
-                        contentBody.Content.AppendChild(item);
-                        contentBody.Content.AppendChild(new HTMLDivElement());
+                        contentBody.Content.appendChild((Node)item);
+                        contentBody.Content.appendChild(new HTMLDivElement());
                     }                    
                 }
                 else
                 {
-                    contentBody.Content.AppendChild(item);
-                    contentBody.Content.AppendChild(new HTMLDivElement());
+                    contentBody.Content.appendChild((Node)item);
+                    contentBody.Content.appendChild(new HTMLDivElement());
                 }                
             }
             clearMark = false;
@@ -232,9 +235,9 @@ namespace ExpressCraft
 
         public StackItem() :  base("stack-item")
         {
-            ClassList.Remove("control");
-            Style.Width = "100%";
-            Style.Height = "auto";
+            ClassList.remove("control");
+            Style.width = "100%";
+            Style.height = "auto";
             
         }
     }

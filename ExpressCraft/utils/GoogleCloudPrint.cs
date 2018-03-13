@@ -1,5 +1,5 @@
-﻿using Bridge.jQuery2;
-using System;
+﻿using System;
+using static Retyped.jquery;
 
 namespace ExpressCraft
 {
@@ -55,7 +55,7 @@ namespace ExpressCraft
         {
             try
             {
-                jQuery.Select(".__gcp_dialog_container_cls").Parent().Get(0).Delete();
+                jQuery.select(".__gcp_dialog_container_cls").parent().get(0).Delete();
             }
             catch(Exception)
             {

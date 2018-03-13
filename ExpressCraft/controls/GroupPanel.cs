@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +12,15 @@ namespace ExpressCraft
         private HTMLLegendElement legend;
         public string Caption
         {
-            get { return legend.TextContent; }
-            set { legend.TextContent = value; }
+            get { return legend.textContent; }
+            set { legend.textContent = value; }
         }
 
         public GroupPanel() : base(new HTMLFieldSetElement())
         {
             this.Content.AppendChild(legend = new HTMLLegendElement());
-            this.Content.ClassName = "control inputcontrol popup";
-            legend.Style.MarginLeft = "7px";            
+            this.Content.className = "control inputcontrol popup";
+            legend.style.marginLeft = "7px";            
         }
     }
 }

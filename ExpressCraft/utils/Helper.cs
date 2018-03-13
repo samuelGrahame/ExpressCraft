@@ -1,10 +1,10 @@
 ﻿using Bridge;
-using Bridge.Html5;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using static ExpressCraft.Settings;
+using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -109,12 +109,12 @@ namespace ExpressCraft
 
         public static int ToInt(this Union<string, int, float> value)
         {
-            return Global.ParseInt(value.As<string>());
+            return Script.ParseInt(value.As<string>());
         }
 
         public static float ToFloat(this Union<string, int, float> value)
         {
-            return (float)Global.ParseFloat(value.As<string>());
+            return (float)Script.ParseFloat(value.As<string>());
         }
 
         public static string ToStr(this Union<string, int, float> value)
@@ -137,9 +137,9 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 
         public static void FocusElement(this HTMLElement element)
         {
-            Global.SetTimeout(() =>
+            setTimeout((arg) =>
             {
-                element.Focus();
+                element.focus();                
             }, 0);
         }
 
@@ -404,11 +404,11 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
             if(!check)
             {
-                input.RemoveAttribute(GridViewCellDisplayCheckBox.resource_checked);
+                input.removeAttribute(GridViewCellDisplayCheckBox.resource_checked);
             }
             else
             {
-                input.SetAttribute(GridViewCellDisplayCheckBox.resource_checked, null);
+                input.setAttribute(GridViewCellDisplayCheckBox.resource_checked, null);
             }
         }
 
@@ -419,9 +419,21 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
         public static void Delete(this Element c)
         {
             if(c != null &&
-                c.ParentElement != null &&
-                c.ParentElement.Contains(c))
-                c.ParentElement.RemoveChild(c);
+                c.parentElement != null &&
+                c.parentElement.contains(c))
+                c.parentElement.removeChild(c);
+        }
+
+        /// <summary>
+        /// IE does not support .remove on Element use delete
+        /// </summary>
+        /// <param name="c"></param>
+        public static void Delete(this HTMLElement c)
+        {
+            if(c != null &&
+                c.parentElement != null &&
+                c.parentElement.contains(c))
+                c.parentElement.removeChild(c);
         }
 
         public static string ToPx(this object i)
@@ -441,7 +453,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 for(int i = 0; i < Nodes.Length; i++)
                 {
                     if(Nodes[i] != null)
-                        c.AppendChild(Nodes[i]);
+                        c.appendChild(Nodes[i]);
                 }
             }
         }
@@ -454,8 +466,8 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 {
                     if(Nodes[i] != null)
                     {
-                        Nodes[i].Content.TabIndex = i;
-                        c.AppendChild(Nodes[i]);
+                        Nodes[i].Content.tabIndex = i;
+                        c.appendChild((Node)Nodes[i]);
                     }
                 }
             }
@@ -479,6 +491,16 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             return c;
         }
 
+        public static void AppendChild(this HTMLElement c, Control b)
+        {
+            c.appendChild<Node>(b);
+        }
+
+        public static void AppendChild(this HTMLElement c, Node b)
+        {
+            c.appendChild(b);
+        }
+
         public static void AppendChildren(this Node c, params Control[] Nodes)
         {
             if(Nodes != null && Nodes.Length > 0)
@@ -486,7 +508,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 for(int i = 0; i < Nodes.Length; i++)
                 {
                     if(Nodes[i] != null)
-                        c.AppendChild(Nodes[i]);
+                        c.appendChild((Node)Nodes[i]);
                 }
             }
         }
@@ -519,10 +541,10 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 
         public static void SetBounds(this HTMLElement c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
         {
-            c.Style.Left = left.ToHtmlValue();
-            c.Style.Top = top.ToHtmlValue();
-            c.Style.Width = width.ToHtmlValue();
-            c.Style.Height = height.ToHtmlValue();
+            c.style.left = left.ToHtmlValue();
+            c.style.top = top.ToHtmlValue();
+            c.style.width = width.ToHtmlValue();
+            c.style.height = height.ToHtmlValue();
         }
 
         public static string ToHtmlValue(this Union<string, int, float> value)
@@ -548,25 +570,25 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
         {
             if(string.IsNullOrWhiteSpace(str))
             {
-                c.Style.Background = "";
-                c.Style.BackgroundSize = "";
+                c.style.background = "";
+                c.style.backgroundSize = "";
                 return;
             }
             else if(!str.StartsWith("url("))
             {
                 str = useURL ? Control.GetImageStringURI(str) : Control.GetImageString(str);
             }
-            c.Style.Background = str;
+            c.style.background = str;
             if(center)
             {
-                c.Style.BackgroundSize = "100% 100%";
+                c.style.backgroundSize = "100% 100%";
             }                
         }
 
         public static void SetSize(this HTMLElement c, Union<string, int, float> width, Union<string, int, float> height)
         {
-            c.Style.Width = width.ToHtmlValue();
-            c.Style.Height = height.ToHtmlValue();
+            c.style.width = width.ToHtmlValue();
+            c.style.height = height.ToHtmlValue();
         }
 
         public static void SetLocation(this Control c, int left, int top)
@@ -581,8 +603,8 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 
         public static void SetLocation(this HTMLElement c, Union<string, int, float> left, Union<string, int, float> top)
         {
-            c.Style.Left = left.ToHtmlValue();
-            c.Style.Top = top.ToHtmlValue();
+            c.style.left = left.ToHtmlValue();
+            c.style.top = top.ToHtmlValue();
         }
 
         /// <summary>
@@ -656,10 +678,10 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 
         public static void ExchangeClass(this HTMLElement control, string oldClass, string newClass)
         {
-            if(!IsEmpty(oldClass) && control.ClassList.Contains(oldClass))
-                control.ClassList.Remove(oldClass);
-            if(!IsEmpty(newClass) && !control.ClassList.Contains(newClass))
-                control.ClassList.Add(newClass);
+            if(!IsEmpty(oldClass) && control.classList.contains(oldClass))
+                control.classList.remove(oldClass);
+            if(!IsEmpty(newClass) && !control.classList.contains(newClass))
+                control.classList.add(newClass);
         }
 
         public static bool IsEmpty(this string value)

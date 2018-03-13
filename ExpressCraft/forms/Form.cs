@@ -1,9 +1,9 @@
 ﻿using Bridge;
-using Bridge.Html5;
-using Bridge.jQuery2;
-using System;
+using static Retyped.dom;
 using System.Collections.Generic;
 using System.Linq;
+using static Retyped.jquery;
+using System;
 
 namespace ExpressCraft
 {
@@ -15,7 +15,7 @@ namespace ExpressCraft
 
         private static ToolTip _activeToolTip;
         private static int _toolTipTimerHandle = -1;
-        private static Action<MouseEvent> _activeToolTipMouseMove;
+        private static Action<Event> _activeToolTipMouseMove;
         private static ToolTipControl _activeToolTipControl = null;
         private static int _oepntoolTipTimerHandle = -1;
 
@@ -27,9 +27,9 @@ namespace ExpressCraft
             set {
                 _disableBoxShadow = value;
                 if(_disableBoxShadow)
-                    Content.Style.BoxShadow = "none";
+                    Content.style.boxShadow = "none";
                 else
-                    Content.Style.BoxShadow = null;
+                    Content.style.boxShadow = null;
             }
         }
 
@@ -47,7 +47,7 @@ namespace ExpressCraft
                     {
                         if(_activeToolTipMouseMove != null)
                         {
-                            value.AttachedControl.Content.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+                            value.AttachedControl.Content.removeEventListener("mouseMove", _activeToolTipMouseMove);
                             _activeToolTipMouseMove = null;
                         }
                     }
@@ -58,7 +58,7 @@ namespace ExpressCraft
                     }
                     if(_toolTipTimerHandle > -1)
                     {
-                        Global.ClearTimeout(_toolTipTimerHandle);
+                        clearTimeout(_toolTipTimerHandle);
                         _toolTipTimerHandle = -1;
                     }
 
@@ -71,9 +71,9 @@ namespace ExpressCraft
                         {
                             if(_toolTipTimerHandle > -1)
                             {
-                                Global.ClearTimeout(_toolTipTimerHandle);
+                                clearTimeout(_toolTipTimerHandle);
                             }
-                            _toolTipTimerHandle = Global.SetTimeout(() =>
+                            _toolTipTimerHandle = (int)setTimeout((ab) =>
                             {
                                 if(_activeToolTipControl != null)
                                 {
@@ -82,13 +82,13 @@ namespace ExpressCraft
                                 }
                                 if(_oepntoolTipTimerHandle > -1)
                                 {
-                                    Global.ClearTimeout(_oepntoolTipTimerHandle);
+                                    clearTimeout(_oepntoolTipTimerHandle);
                                     _oepntoolTipTimerHandle = -1;
                                 }
                                 _activeToolTipControl = new ToolTipControl(_activeToolTip);
-                                _activeToolTipControl.Show(ev);
+                                _activeToolTipControl.Show(ev.As<MouseEvent>());
 
-                                _oepntoolTipTimerHandle = Global.SetTimeout(() =>
+                                _oepntoolTipTimerHandle = (int)setTimeout((ab2) =>
                                 {
                                     if(_activeToolTipControl != null)
                                     {
@@ -99,12 +99,12 @@ namespace ExpressCraft
 
                                 if(_activeToolTipMouseMove != null)
                                 {
-                                    value.AttachedControl.Content.RemoveEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+                                    value.AttachedControl.Content.removeEventListener("mouseMove", _activeToolTipMouseMove);
                                     _activeToolTipMouseMove = null;
                                 }
                             }, Math.Max(1, Settings.ToolTipPopupDelayMs));
                         };
-                        value.AttachedControl.Content.AddEventListener(EventType.MouseMove, _activeToolTipMouseMove);
+                        value.AttachedControl.Content.addEventListener("mouseMove", _activeToolTipMouseMove);
                     }
                 }
             }
@@ -133,7 +133,7 @@ namespace ExpressCraft
         public bool AllowSizeChange = true;
         public bool AllowMoveChange = true;
 
-        public HTMLCollection Controls => Body.Children;
+        public HTMLCollection Controls => Body.children;
 
         public static bool InExternalMouseEvent = false;
 
@@ -146,7 +146,7 @@ namespace ExpressCraft
             }
         }
 
-        public CSSStyleDeclaration BodyStyle => Body.Style;
+        public CSSStyleDeclaration BodyStyle => Body.style;
 
         public bool ShowClose
         {
@@ -179,7 +179,7 @@ namespace ExpressCraft
 
         protected static bool InErrorDialog = false;
 
-        public jQuery Self;
+        public JQuery Self;
 
         protected bool _IsDialog = false;
 
@@ -212,7 +212,7 @@ namespace ExpressCraft
 
         public Form AppendChild(Control node)
         {
-            this.Body.AppendChild(node);
+            this.Body.appendChild((Node)node);
 
             return this;
         }
@@ -226,7 +226,7 @@ namespace ExpressCraft
 
         public Form AppendChild(HTMLElement node)
         {
-            this.Body.AppendChild(node);
+            this.Body.appendChild(node);
 
             return this;
         }
@@ -290,22 +290,22 @@ namespace ExpressCraft
                 OnResize(this);
             OnResizing();
 
-            for(int x = 0; x < parent.Children.Length; x++)
+            for(int x = 0; x < parent.children.length; x++)
             {
-                if(!parent.Children[x].ClassList.Contains("control"))
+                if(!parent.children[x].classList.contains("control"))
                     continue;
                 for(int i = 0; i < Children.Count; i++)
                 {
                     if(Children[i] != null && Children[i].OnResize != null)
                     {
-                        if(Children[i].Content == parent.Children[x])
+                        if(Children[i].Content == parent.children[x])
                         {
                             Children[i].OnResize(Children[i]);
                             break;
                         }
                     }
                 }
-                ResizeChildren(parent.Children[x]);
+                ResizeChildren(parent.children[x].As<HTMLElement>());
             }
         }
 
@@ -344,7 +344,7 @@ namespace ExpressCraft
 
         public bool IsContentVisible()
         {
-            return Content != null && Content.Style.Visibility.Equals(Visibility.Visible);
+            return Content != null && Content.style.visibility.Equals("visible");
         }
 
         public void ChangeHeadingButton(FormButtonType button, bool visible = true)
@@ -477,13 +477,13 @@ namespace ExpressCraft
         public void ShowBodyOverLayStyle()
         {
             if(BodyOverLay != null &&
-                BodyOverLay.Style.Visibility.Equals(Visibility.Collapse))
+                BodyOverLay.style.visibility.Equals("collapse"))
             {
                 if(InDesign)
                 {
                     return;
                 }
-                BodyOverLay.Style.Visibility = Visibility.Visible;
+                BodyOverLay.style.visibility = "visible";
             }
         }
 
@@ -511,10 +511,10 @@ namespace ExpressCraft
                         {
                             if(_ActiveForm.InDesign)
                             {
-                                _ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+                                _ActiveForm.BodyOverLay.style.visibility = "collapse";
                                 return;
                             }
-                            _ActiveForm.BodyOverLay.Style.Visibility = Visibility.Visible;
+                            _ActiveForm.BodyOverLay.style.visibility = "visible";
                         }
                     }
                     _ActiveForm = value;
@@ -523,7 +523,7 @@ namespace ExpressCraft
                         _ActiveForm.OnGotFocus();
                         if(_ActiveForm.Content != null)
                         {
-                            _ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+                            _ActiveForm.BodyOverLay.style.visibility = "collapse";
                             _ActiveForm.BringToFront();
                         }
                     }
@@ -537,7 +537,7 @@ namespace ExpressCraft
 
         public static void ChangeStateTextSelection(HTMLElement element, bool state)
         {
-            jQuery.Select(element).Css("user-select", state ? "text" : "none");
+            jQuery.select(element).css("user-select", state ? "text" : "none");
         }
 
         public static void PerformFocusShake()
@@ -545,10 +545,10 @@ namespace ExpressCraft
             if(ActiveForm != null)
             {
                 var form = ActiveForm;
-                form.Heading.ClassList.Add("form-heading-flash");
-                Global.SetTimeout(() =>
+                form.Heading.classList.add("form-heading-flash");
+                setTimeout((ab) =>
                 {
-                    form.Heading.ClassList.Remove("form-heading-flash");
+                    form.Heading.classList.remove("form-heading-flash");
                 }, 800);
             }
         }
@@ -557,29 +557,32 @@ namespace ExpressCraft
         {
             if(element is HTMLImageElement)
             {
-                element.As<HTMLImageElement>().OnDragStart = (ev) =>
+                element.As<HTMLImageElement>().ondragstart = (ev) =>
                 {
-                    ev.PreventDefault();
+                    ev.preventDefault();
+                    return null;
                 };
             }
             else
             {
-                jQuery.Select(element).Css("user-drag:", "none");
+                jQuery.select(element).css("user-drag:", "none");
             }
         }
 
         public static void SetupHideElementsOnView()
         {
-            Window.OnBlur = (ev) =>
+            window.onblur = (ev) =>
             {
-                if(Document.Body.ChildNodes.Contains(WindowHolder))
-                    Document.Body.RemoveChild(WindowHolder);
+                if(document.body.contains(WindowHolder))
+                    document.body.removeChild(WindowHolder);
+                return null;
             };
 
-            Window.OnFocus = (ev) =>
+            window.onfocus = (ev) =>
             {
-                if(!Document.Body.ChildNodes.Contains(WindowHolder))
-                    Document.Body.AppendChild(WindowHolder);
+                if(!document.body.contains(WindowHolder))
+                    document.body.appendChild(WindowHolder);
+                return null;
             };
         }
 
@@ -612,9 +615,9 @@ namespace ExpressCraft
         public static void BeginLoading()
         {
             LoadingCount++;            
-            SetCursor(Cursor.Wait);
-            WindowLoader.Style.Visibility = Visibility.Visible;
-            WindowLoader.Style.Opacity = "0.4";                      
+            SetCursor("wait");
+            WindowLoader.style.visibility = "visible";
+            WindowLoader.style.opacity = "0.4";                      
         }
 
         public static void EndLoading()
@@ -622,9 +625,9 @@ namespace ExpressCraft
             LoadingCount--;
             if(LoadingCount == 0)
             {                
-                SetCursor(Cursor.Default);
-                WindowLoader.Style.Visibility = Visibility.Hidden;
-                WindowLoader.Style.Opacity = "0";                
+                SetCursor("default");
+                WindowLoader.style.visibility = "hidden";
+                WindowLoader.style.opacity = "0";                
             }
         }
 
@@ -636,7 +639,7 @@ namespace ExpressCraft
             _hasSetup = true;
 
             if(parent == null)
-                Parent = Document.Body;
+                Parent = document.body;
             else
                 Parent = parent;
             
@@ -645,66 +648,72 @@ namespace ExpressCraft
             FormOverLay = Div("system-form-collection-overlay");
 
             WindowLoader = new HTMLDivElement();
-            WindowLoader.ClassName = "ajax-loading-screen";
-            WindowLoader.Style.Visibility = Visibility.Hidden;
-            WindowLoader.Style.Opacity = "0";
-            WindowLoader.Style.BackgroundColor = "white";
+            WindowLoader.className = "ajax-loading-screen";
+            WindowLoader.style.visibility = "hidden";
+            WindowLoader.style.opacity = "0";
+            WindowLoader.style.backgroundColor = "white";
             WindowLoader.SetBoundsFull();
-            WindowLoader.Style.Position = Position.Fixed;
-            WindowLoader.Style.ZIndex = "100000";
-            WindowLoader.OnContextMenu = (ev) =>
+            WindowLoader.style.position = "fixed";
+            WindowLoader.style.zIndex = "100000";
+            WindowLoader.oncontextmenu = (ev) =>
             {
-                ev.PreventDefault();
+                ev.preventDefault();
+                return null;
             };
-            WindowLoader.OnMouseDown = (ev) =>
+            WindowLoader.onmousedown = (ev) =>
             {
-                ev.PreventDefault();
-                ev.StopPropagation();
+                ev.preventDefault();
+                ev.stopPropagation();
+                return null;
             };
-            WindowLoader.Style.Transition = "opacity 1s ease";
+            WindowLoader.style.transition = "opacity 1s ease";
 
-            Document.Body.AppendChild(WindowLoader);
+            document.body.appendChild(WindowLoader);
 
-            FormOverLay.OnMouseDown = (ev) =>
+            FormOverLay.onmousedown = (ev) =>
             {
                 if(ActiveForm is FormPopup)
                 {
                     CloseFormPopups();
                 }
 
-                if(Document.ActiveElement != null)
+                if(document.activeElement != null)
                 {
                     //FormPopup
-                    Document.ActiveElement.Focus();
-                    ev.PreventDefault();
-                    SetCursor(Cursor.Default);
+                    document.activeElement.As<HTMLElement>().focus();
+                    ev.preventDefault();
+                    SetCursor("default");
                 }
+                return null;
             };
-            FormOverLay.OnClick = (ev) =>
+            FormOverLay.onclick = (ev) =>
             {
                 PerformFocusShake();
+                return null;
             };
-            FormOverLay.OnContextMenu = (ev) =>
+            FormOverLay.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
-                ev.PreventDefault();
+                ev.stopPropagation();
+                ev.preventDefault();
+                return null;
             };
-            FormOverLay.Style.Visibility = Visibility.Visible;
+            FormOverLay.style.visibility = "visible";
 
-            Window.OnKeyDown = (ev) =>
+            window.onkeydown = (ev) =>
             {
                 int length = KeyHooks.Count;
                 for(int i = 0; i < length; i++)
                 {
                     if(KeyHooks[i] != null)
                         KeyHooks[i](ev);
-                }                
+                }
+                return null;     
             };
 
-            Window.OnResize = (ev) =>
+            window.onresize = (ev) =>
             {
                 if(FormCollections == null)
-                    return;
+                    return null;
 
                 for(int i = 0; i < FormCollections.Count; i++)
                 {
@@ -721,36 +730,38 @@ namespace ExpressCraft
                 }
 
                 CalculateMinmizedFormsLocation();
+
+                return null;
             };
 
-            Window.OnMouseMove = (ev) =>
+            window.onmousemove = (ev) =>
             {
                 if(InExternalMouseEvent)
-                    return;
+                    return null;
 
                 var mev = ev.As<MouseEvent>();
 
                 if(MovingForm != null)
                 {
-                    ev.PreventDefault();
-                    ev.StopImmediatePropagation();
-                    ev.StopPropagation();
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    ev.stopPropagation();
 
                     if(!MovingForm.DisableBoxShadow)
-                        MovingForm.Style.BoxShadow = "none"; // box - shadow: none;
+                        MovingForm.Style.boxShadow = "none"; // box - shadow: none;
 
-                    if(MovingForm.BodyOverLay.Style.Visibility.Equals(Visibility.Collapse))
+                    if(MovingForm.BodyOverLay.style.visibility.Equals("collapse"))
                     {
                         if(MovingForm.InDesign)
                         {
-                            _ActiveForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+                            _ActiveForm.BodyOverLay.style.visibility = "collapse";
                         }
                         else
                         {
-                            MovingForm.BodyOverLay.Style.Visibility = Visibility.Visible;
+                            MovingForm.BodyOverLay.style.visibility = "visible";
                         }
 
-                        MovingForm.Heading.Focus();
+                        MovingForm.Heading.focus();
                     }
 
                     var mousePos = Helper.GetClientMouseLocation(ev);
@@ -769,10 +780,10 @@ namespace ExpressCraft
                         MovingForm.prev_px = newX - mousePos.Xf;
                     }
 
-                    float x = (float)Global.ParseFloat(MovingForm.Style.Left);
-                    float y = (float)Global.ParseFloat(MovingForm.Style.Top);
-                    float w = (float)Global.ParseFloat(MovingForm.Style.Width);
-                    float h = (float)Global.ParseFloat(MovingForm.Style.Height);
+                    float x = (float)Script.ParseFloat(MovingForm.Style.left);
+                    float y = (float)Script.ParseFloat(MovingForm.Style.top);
+                    float w = (float)Script.ParseFloat(MovingForm.Style.width);
+                    float h = (float)Script.ParseFloat(MovingForm.Style.height);
 
                     float px = x;
                     float py = y;
@@ -910,12 +921,12 @@ namespace ExpressCraft
                             x = ((int)(x / Settings.AlignmentForForm)) * Settings.AlignmentForForm;
                             if(px != x)
                             {
-                                MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                                MovingForm.Style.left = Script.Write<string>("x + 'px'");
                             }
                         }
                         else
                         {
-                            MovingForm.Style.Left = Script.Write<string>("x + 'px'");
+                            MovingForm.Style.left = Script.Write<string>("x + 'px'");
                         }                        
                     }
                         
@@ -926,59 +937,68 @@ namespace ExpressCraft
                             y = ((int)(y / Settings.AlignmentForForm)) * Settings.AlignmentForForm;
                             if(py != y)
                             {
-                                MovingForm.Style.Top = Script.Write<string>("y + 'px'");
+                                MovingForm.Style.top = Script.Write<string>("y + 'px'");
                             }
                         }else
                         {
-                            MovingForm.Style.Top = Script.Write<string>("y + 'px'");
+                            MovingForm.Style.top = Script.Write<string>("y + 'px'");
                         }
                     }
                         
                     if(pw != w)
                     {
                         changed = true;
-                        MovingForm.Style.Width = Script.Write<string>("w + 'px'");
+                        MovingForm.Style.width = Script.Write<string>("w + 'px'");
                     }
                         
                     if(ph != h)
                     {
                         changed = true;
-                        MovingForm.Style.Height = Script.Write<string>("h + 'px'");
+                        MovingForm.Style.height = Script.Write<string>("h + 'px'");
                     }
 
                     if(changed)
                         MovingForm.Resizing();
                 }
+
+                return null;
             };
 
-            Window.OnMouseUp = (ev) =>
+            window.onmouseup = (ev) =>
             {
                 InExternalMouseEvent = false;
                 if(MovingForm != null)
                 {
                     if(!MovingForm.DisableBoxShadow)
-                        MovingForm.Style.BoxShadow = null;
-                    MovingForm.BodyOverLay.Style.Visibility = Visibility.Collapse;
+                        MovingForm.Style.boxShadow = null;
+                    MovingForm.BodyOverLay.style.visibility = "collapse";
                 }
 
                 MovingForm = null;
                 Mouse_Down = false;
                 MoveAction = MouseMoveAction.Move;
-                SetCursor(Cursor.Default);
+                SetCursor("default");
+                return null;
             };
-            Window.OnBeforeUnload = (ev) =>
+            window.onbeforeunload = (ev) =>
             {
                 if(!Settings.AllowCloseWithoutQuestion)
                 {
                     Script.Write("return 'Would you like to close this application?'");
                 }
+                return null;
             };
-            Window.OnUnload = (ev) =>
+            window.onunload = (ev) =>
             {
                 if(Settings.OnApplicationClose != null)
                     Settings.OnApplicationClose();
+
+                return null;
             };
-            Window.OnError += new ErrorEventHandler((string message, string url, int lineNumber, int columnNumber, object error) =>
+            
+            dynamic window2 = window;
+
+            Func<string, string, int ,int, object, bool> errorFunc = (string message, string url, int lineNumber, int columnNumber, object error) =>
             {
                 if(InErrorDialog)
                 {
@@ -1017,22 +1037,24 @@ namespace ExpressCraft
                 }
 
                 return false;
-            });
+            };
 
-            WindowHolder.AppendChild(FormOverLay);
+            window2.onerror = errorFunc;
+            
+            WindowHolder.appendChild(FormOverLay);
 
             Parent.AppendChildren(WindowHolder);
         }
 
-        public static void SetCursor(Cursor cursor)
+        public static void SetCursor(string cursor)
         {
-            Document.Body.Style.Cursor = cursor;
-            var x = Document.Body.Style.BackgroundColor;
-            Document.Body.Style.BackgroundColor = "white";
-            Document.Body.Style.BackgroundColor = x;
+            document.body.style.cursor = cursor;
+            var x = document.body.style.backgroundColor;
+            document.body.style.backgroundColor = "white";
+            document.body.style.backgroundColor = x;
         }
 
-        private Union<string, Display> previousDisplay;
+        private string previousDisplay;
 
         public void SetWindowState(WindowStateType State)
         {
@@ -1043,24 +1065,24 @@ namespace ExpressCraft
 
             if(_prevwindowState == WindowStateType.Minimized)
             {
-                Body.Style.Opacity = PreviousOpacity;
+                Body.style.opacity = PreviousOpacity;
                 AllowSizeChange = PreviousSizeChange;
                 AllowMoveChange = PreviousMoveChange;
                 ShowMaximize = PreviousShowMax;
                 ShowMinimize = PreviousShowMin;
-                HeadingTitle.Style.Left = "";
-                HeadingTitle.Style.MarginRight = "";
-                HeadingTitle.Style.Transform = "";
+                HeadingTitle.style.left = "";
+                HeadingTitle.style.marginRight = "";
+                HeadingTitle.style.transform = "";
 
                 if(ButtonMinimize != null)
                 {
-                    ButtonMinimize.InnerHTML = "-";
+                    ButtonMinimize.innerHTML = "-";
                 }
-                Heading.ClassList.Remove("form-heading-min");
+                Heading.classList.remove("form-heading-min");
 
                 MinimizedForms.Remove(this);
 
-                Body.Style.Display = previousDisplay;
+                Body.style.display = previousDisplay;
 
                 CalculateMinmizedFormsLocation();
             }
@@ -1072,7 +1094,7 @@ namespace ExpressCraft
             {
                 this.SetBounds(prev_left, prev_top, prev_width, prev_height);
                 Resizing();
-                Style.BorderWidth = "1px";
+                Style.borderWidth = "1px";
             }
             else if(windowState == WindowStateType.Maximized)
             {
@@ -1084,7 +1106,7 @@ namespace ExpressCraft
                     prev_height = Height.ToInt();
                 }
 
-                Style.BorderWidth = "0";
+                Style.borderWidth = "0";
 
                 this.SetBounds(0, 0, "100%", "100%");
             }
@@ -1092,12 +1114,12 @@ namespace ExpressCraft
             {
                 PreviousSizeChange = AllowSizeChange;
                 PreviousMoveChange = AllowMoveChange;
-                PreviousOpacity = Body.Style.Opacity;
+                PreviousOpacity = Body.style.opacity;
                 PreviousShowMax = ShowMaximize;
                 PreviousShowMin = ShowMinimize;
 
                 AllowSizeChange = false;
-                Body.Style.Opacity = "0";
+                Body.style.opacity = "0";
                 ShowMaximize = false;
                 ShowMinimize = false;
                 AllowMoveChange = false;
@@ -1111,27 +1133,27 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    Style.BorderWidth = "1px";
+                    Style.borderWidth = "1px";
                 }
 
-                HeadingTitle.Style.MarginRight = "0";
-                HeadingTitle.Style.Left = "3px";
-                HeadingTitle.Style.Transform = "translate(0, -50%)";
+                HeadingTitle.style.marginRight = "0";
+                HeadingTitle.style.left = "3px";
+                HeadingTitle.style.transform = "translate(0, -50%)";
 
                 var offset = (ShowClose ? 45.5f : 0);
 
                 Width = (float)Math.Max(GetTextWidth(Text, "10pt Tahoma") + 32, 100) + offset;
                 Height = 30;
 
-                Heading.ClassList.Add("form-heading-min");
+                Heading.classList.add("form-heading-min");
 
                 if(ButtonMinimize != null)
                 {
-                    ButtonMinimize.InnerHTML = "+";
+                    ButtonMinimize.innerHTML = "+";
                 }
 
-                previousDisplay = Body.Style.Display;
-                Body.Style.Display = Display.None;
+                previousDisplay = Body.style.display;
+                Body.style.display = "none";
 
                 MinimizedForms.Add(this);
 
@@ -1150,7 +1172,7 @@ namespace ExpressCraft
             float widthTotal = 0;
             int y = 30;
 
-            var viewSize = Parent.GetBoundingClientRect();
+            var viewSize = Parent.getBoundingClientRect();
 
             foreach(var item in MinimizedForms)
             {
@@ -1162,7 +1184,7 @@ namespace ExpressCraft
                 {
                     var ToIncrement = 3 + item.Width.ToFloat();
 
-                    if(widthTotal + ToIncrement > viewSize.Width)
+                    if(widthTotal + ToIncrement > viewSize.width)
                     {
                         widthTotal = 0;
                         count = 0;
@@ -1215,32 +1237,32 @@ namespace ExpressCraft
             {
                 if(Helper.NotDesktop)
                 {
-                    ButtonClose.Style.Left = "calc(100% - " + append + "px)";
+                    ButtonClose.style.left = "calc(100% - " + append + "px)";
                 }
                 RightOffset += append;
-                if(!Heading.Children.Contains(ButtonClose))
+                if(!Heading.contains(ButtonClose))
                     Heading.AppendChild(ButtonClose);
             }
 
             if(ShowMaximize)
             {
                 RightOffset += append;
-                ButtonExpand.Style.Left = "calc(100% - " + RightOffset + "px)";
-                if(!Heading.Children.Contains(ButtonExpand))
+                ButtonExpand.style.left = "calc(100% - " + RightOffset + "px)";
+                if(!Heading.contains(ButtonExpand))
                     Heading.AppendChild(ButtonExpand);
             }
             if(ShowMinimize)
             {
                 RightOffset += append;
-                ButtonMinimize.Style.Left = "calc(100% - " + RightOffset + "px)";
-                if(!Heading.Children.Contains(ButtonMinimize))
+                ButtonMinimize.style.left = "calc(100% - " + RightOffset + "px)";
+                if(!Heading.contains(ButtonMinimize))
                     Heading.AppendChild(ButtonMinimize);
             }
 
             if(ShowMenu)
             {
-                ButtonMenu.Style.Left = "0";
-                if(!Heading.Children.Contains(ButtonMenu))
+                ButtonMenu.style.left = "0";
+                if(!Heading.contains(ButtonMenu))
                     Heading.AppendChild(ButtonMenu);
             }
         }
@@ -1252,77 +1274,84 @@ namespace ExpressCraft
             switch(Type)
             {
                 case FormButtonType.Close:
-                    butt.ClassList.Add("form-heading-button-close");
-                    butt.InnerHTML = "&times;";
+                    butt.classList.add("form-heading-button-close");
+                    butt.innerHTML = "&times;";
 
-                    butt.OnMouseDown = (ev) =>
+                    butt.onmousedown = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return;
+                            return null;
                         Mouse_Down = true;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
                         ActiveForm = this;
+                        return null;
                     };
 
-                    butt.OnMouseUp = (ev) =>
+                    butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //|| WindowHolderSelectionBox != null
-                            return;
+                            return null;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
                         if(InDesign)
-                            return;
+                            return null;
 
                         Close();
+
+                        return null;
                     };
                     break;
 
                 case FormButtonType.Maximize:
-                    butt.InnerHTML = "&#9633;";
+                    butt.innerHTML = "&#9633;";
 
-                    butt.OnMouseUp = (ev) =>
+                    butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return;
+                            return null;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
                         Mouse_Down = false;
 
                         changeWindowState();
+
+                        return null;
                     };
 
                     break;
 
                 case FormButtonType.Minimize:
-                    butt.InnerHTML = "-";
+                    butt.innerHTML = "-";
 
-                    butt.OnMouseUp = (ev) =>
+                    butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) // || WindowHolderSelectionBox != null
-                            return;
+                            return null;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
-                        if(butt.InnerHTML == "-")
+                        if(butt.innerHTML == "-")
                         {
-                            butt.InnerHTML = "+";
+                            butt.innerHTML = "+";
                             WindowState = WindowStateType.Minimized;
                         }
                         else
                         {
                             WindowState = _prevwindowState == WindowStateType.Minimized ? WindowStateType.Normal : _prevwindowState;
-                            butt.InnerHTML = "-";
+                            butt.innerHTML = "-";
                         }
 
                         Mouse_Down = false;
+
+                        return null;
                     };
 
                     break;
@@ -1335,82 +1364,91 @@ namespace ExpressCraft
                     break;
 
                 default:
-                    butt.OnMouseUp = (ev) =>
+                    butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return;
+                            return null;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
                         Mouse_Down = false;
+
+                        return null;
                     };
                     break;
 
                 case FormButtonType.Menu:
-                    butt.InnerHTML = "&#9776;";
+                    butt.innerHTML = "&#9776;";
 
-                    butt.OnMouseUp = (ev) =>
+                    butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return;
+                            return null;
 
-                        ev.StopPropagation();
-                        ev.PreventDefault();
+                        ev.stopPropagation();
+                        ev.preventDefault();
 
                         Mouse_Down = false;
 
                         OnMenuClick();
+
+                        return null;
                     };
 
                     break;
             }
 
-            butt.OnMouseEnter = (ev) =>
+            butt.onmouseenter = (ev) =>
             {
                 if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                    return;
-                SetCursor(Cursor.Default);
+                    return null;
+                SetCursor("default");
+                return null;
             };
 
-            butt.OnDblClick = (ev) =>
+            butt.ondblclick = (ev) =>
             {
-                ev.StopPropagation();
+                ev.stopPropagation();
+                return null;
             };
 
-            butt.OnMouseMove = (ev) =>
+            butt.onmousemove = (ev) =>
             {
                 if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                    return;
+                    return null;
 
-                ev.StopImmediatePropagation();
-                ev.PreventDefault();
+                ev.stopImmediatePropagation();
+                ev.preventDefault();
+                return null;
             };
 
             if(Type != FormButtonType.Close)
             {
-                butt.OnMouseDown = (ev) =>
+                butt.onmousedown = (ev) =>
                 {
                     if(MovingForm != null) // || WindowHolderSelectionBox != null
-                        return;
+                        return null;
 
                     Mouse_Down = true;
 
-                    ev.StopPropagation();
-                    ev.PreventDefault();
+                    ev.stopPropagation();
+                    ev.preventDefault();
 
                     ActiveForm = this;
+
+                    return null;
                 };
             }
 
             if(Helper.NotDesktop)
             {
-                butt.Style.Width = "65px";
-                butt.Style.Height = "49px";
-                butt.Style.FontSize = "16pt";
-                butt.Style.LineHeight = "49px";
+                butt.style.width = "65px";
+                butt.style.height = "49px";
+                butt.style.fontSize = "16pt";
+                butt.style.lineHeight = "49px";
                 butt.ExchangeClass("primary", "primary");
-                butt.Style.Filter = "brightness(110%)";
+                butt.style.filter = "brightness(110%)";
             }
 
             return butt;
@@ -1424,30 +1462,32 @@ namespace ExpressCraft
         {
             Heading = Div("form-heading");
 
-            Heading.OnContextMenu = (ev) =>
+            Heading.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
-                ev.PreventDefault();
+                ev.stopPropagation();
+                ev.preventDefault();
+                return null;
             };
 
             HeadingTitle = Span("form-heading-title");
 
             Body = Div("form-body");
 
-            Body.OnContextMenu = (ev) =>
+            Body.oncontextmenu = (ev) =>
             {
-                if(ev.Target == Body)
+                if(ev.target == Body)
                 {
-                    ev.StopPropagation();
-                    ev.PreventDefault();
+                    ev.stopPropagation();
+                    ev.preventDefault();
                 }
+                return null;
             };
 
             BackColor = "#F0F0F0";
 
             BodyOverLay = Div("form-body-overlay");
 
-            BodyOverLay.Style.Opacity = ShowBodyOverLay ? "0.5" : "0";
+            BodyOverLay.style.opacity = ShowBodyOverLay ? "0.5" : "0";
 
             ChangeHeadingButton(FormButtonType.Close);
             if(!Helper.NotDesktop)
@@ -1458,28 +1498,28 @@ namespace ExpressCraft
 
             if(Helper.NotDesktop)
             {
-                Heading.Style.Height = "50px";
-                HeadingTitle.Style.FontSize = "14px";
+                Heading.style.height = "50px";
+                HeadingTitle.style.fontSize = "14px";
 
-                Body.Style.Top = "50px";
-                Body.Style.Height = "calc(100% - 50px)";
+                Body.style.top = "50px";
+                Body.style.height = "calc(100% - 50px)";
 
-                BodyOverLay.Style.Top = "50px";
-                BodyOverLay.Style.Height = "calc(100% - 50px)";
+                BodyOverLay.style.top = "50px";
+                BodyOverLay.style.height = "calc(100% - 50px)";
             }
 
-            BodyOverLay.Style.Visibility = Visibility.Collapse;
+            BodyOverLay.style.visibility = "collapse";
 
-            Self = jQuery.Select(Content);
+            Self = jQuery.select(Content);
 
-            Content.AddEventListener(EventType.MouseDown, (ev) =>
+            Content.addEventListener("mouseDown", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
                 var mev = ev.As<MouseEvent>();
 
-                mev.StopPropagation();
-                mev.StopImmediatePropagation();
+                mev.stopPropagation();
+                mev.stopImmediatePropagation();
 
                 if(!IsActiveFormCollection())
                     return;
@@ -1491,27 +1531,27 @@ namespace ExpressCraft
 
                 SetBodyOverLay();
 
-                var clientRec = this.Content.GetBoundingClientRect();
+                var clientRec = this.Content.getBoundingClientRect();
 
                 var mousePos = Helper.GetClientMouseLocation(ev);
 
-                prev_px = (float)clientRec.Left - mousePos.Xf;
-                prev_py = (float)clientRec.Top - mousePos.Yf;
+                prev_px = (float)clientRec.left - mousePos.Xf;
+                prev_py = (float)clientRec.top - mousePos.Yf;
 
-                var width = (float)clientRec.Width;
-                var height = (float)clientRec.Height;
+                var width = (float)clientRec.width;
+                var height = (float)clientRec.height;
 
-                float X = mousePos.Xf - (float)clientRec.Left;
-                float Y = mousePos.Yf - (float)clientRec.Top;
+                float X = mousePos.Xf - (float)clientRec.left;
+                float Y = mousePos.Yf - (float)clientRec.top;
 
                 if(windowState == WindowStateType.Maximized)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                     MoveAction = MouseMoveAction.Move;
                 }
                 else if(windowState == WindowStateType.Minimized)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                     MoveAction = MouseMoveAction.None;
                     changeWindowState();
                 }
@@ -1520,9 +1560,9 @@ namespace ExpressCraft
                     if(InDesign)
                         return;
 
-                    if(HeadingTitle != null && ev.Target == HeadingTitle)
+                    if(HeadingTitle != null && ev.target == HeadingTitle)
                     {
-                        SetCursor(Cursor.Default);
+                        SetCursor("default");
                         MoveAction = MouseMoveAction.Move;
                     }
                     else
@@ -1531,47 +1571,47 @@ namespace ExpressCraft
                         {
                             if(X <= ResizeCorners && Y <= ResizeCorners)
                             {
-                                SetCursor(Cursor.NorthWestSouthEastResize);
+                                SetCursor("north-west-south-east-resize");
                                 MoveAction = MouseMoveAction.TopLeftResize;
                             }
                             else if(Y <= ResizeCorners && X >= width - ResizeCorners)
                             {
-                                SetCursor(Cursor.NorthEastSouthWestResize);
+                                SetCursor("north-east-south-west-resize");
                                 MoveAction = MouseMoveAction.TopRightResize;
                             }
                             else if(Y <= ResizeCorners)
                             {
-                                SetCursor(Cursor.NorthResize);
+                                SetCursor("north-resize");
                                 MoveAction = MouseMoveAction.TopResize;
                             }
                             else if(X <= ResizeCorners && Y >= height - ResizeCorners)
                             {
-                                SetCursor(Cursor.NorthEastSouthWestResize);
+                                SetCursor("nNorth-east-south-west-resize");
                                 MoveAction = MouseMoveAction.BottomLeftResize;
                             }
                             else if(Y >= height - ResizeCorners && X >= width - ResizeCorners)
                             {
-                                SetCursor(Cursor.NorthWestSouthEastResize);
+                                SetCursor("north-west-south-east-resize");
                                 MoveAction = MouseMoveAction.BottomRightResize;
                             }
                             else if(Y >= height - ResizeCorners)
                             {
-                                SetCursor(Cursor.SouthResize);
+                                SetCursor("south-resize");
                                 MoveAction = MouseMoveAction.BottomResize;
                             }
                             else if(X <= ResizeCorners)
                             {
-                                SetCursor(Cursor.WestResize);
+                                SetCursor("west-resize");
                                 MoveAction = MouseMoveAction.LeftResize;
                             }
                             else if(X >= width - ResizeCorners)
                             {
-                                SetCursor(Cursor.EastResize);
+                                SetCursor("east-resize");
                                 MoveAction = MouseMoveAction.RightResize;
                             }
                             else
                             {
-                                SetCursor(Cursor.Default);
+                                SetCursor("default");
                                 MoveAction = MouseMoveAction.Move;
                             }
                         }
@@ -1580,57 +1620,57 @@ namespace ExpressCraft
 
                 if(!AllowMoveChange && MoveAction == MouseMoveAction.Move)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                     MoveAction = MouseMoveAction.None;
                 }
             });
 
-            Heading.AddEventListener(EventType.DblClick, (ev) =>
+            Heading.addEventListener("dblClick", (ev) =>
             {
                 if(AllowSizeChange)
                 {
                     changeWindowState();
                 }
 
-                ev.PreventDefault();
-                ev.StopPropagation();
+                ev.preventDefault();
+                ev.stopPropagation();
             });
 
-            Content.AddEventListener(EventType.MouseLeave, (ev) =>
+            Content.addEventListener("mouseLeave", (ev) =>
             {
                 if(MovingForm == null)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                 }
             });
 
-            Body.AddEventListener(EventType.MouseEnter, (ev) =>
+            Body.addEventListener("mouseEnter", (ev) =>
             {
-                SetCursor(Cursor.Default);
+                SetCursor("default");
             });
 
-            Content.AddEventListener(EventType.MouseMove, (ev) =>
+            Content.addEventListener("mouseMove", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
 
-                if(ev.Target == HeadingTitle)
+                if(ev.target == HeadingTitle)
                     return;
                 var mev = ev.As<MouseEvent>();
 
-                var width = Content.ClientWidth;
-                var height = Content.ClientHeight;
-                int X = mev.PageX - Content.OffsetLeft;
-                int Y = mev.PageY - Content.OffsetTop;
+                var width = Content.clientWidth;
+                var height = Content.clientHeight;
+                var X = mev.pageX - Content.offsetLeft;
+                var Y = mev.pageY - Content.offsetTop;
 
                 if(MovingForm != null && MoveAction == MouseMoveAction.Move)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                     return;
                 }
                 else if(windowState == WindowStateType.Maximized)
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                     return;
                 }
                 if(InDesign)
@@ -1640,48 +1680,48 @@ namespace ExpressCraft
                 {
                     if(MoveAction == MouseMoveAction.TopLeftResize || X <= ResizeCorners && Y <= ResizeCorners)
                     {
-                        SetCursor(Cursor.NorthWestSouthEastResize);
+                        SetCursor("north-west-south-east-resize");
                     }
                     else if(MoveAction == MouseMoveAction.TopRightResize || Y <= ResizeCorners && X >= width - ResizeCorners)
                     {
-                        SetCursor(Cursor.NorthEastSouthWestResize);
+                        SetCursor("north-east-south-west-resize");
                     }
                     else if(Y <= ResizeCorners || MoveAction == MouseMoveAction.TopResize)
                     {
-                        SetCursor(Cursor.NorthResize);
+                        SetCursor("north-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomLeftResize || X <= ResizeCorners && Y >= height - ResizeCorners)
                     {
-                        SetCursor(Cursor.NorthEastSouthWestResize);
+                        SetCursor("north-east-south-west-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomRightResize || Y >= height - ResizeCorners && X >= width - ResizeCorners)
                     {
-                        SetCursor(Cursor.NorthWestSouthEastResize);
+                        SetCursor("north-west-south-east-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomResize || Y >= height - ResizeCorners)
                     {
-                        SetCursor(Cursor.SouthResize);
+                        SetCursor("south-resize");
                     }
                     else if(MoveAction == MouseMoveAction.LeftResize || X <= ResizeCorners)
                     {
-                        SetCursor(Cursor.WestResize);
+                        SetCursor("west-resize");
                     }
                     else if(MoveAction == MouseMoveAction.RightResize || X >= width - ResizeCorners)
                     {
-                        SetCursor(Cursor.EastResize);
+                        SetCursor("east-resize");
                     }
                     else
                     {
-                        SetCursor(Cursor.Default);
+                        SetCursor("default");
                     }
                 }
                 else
                 {
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
                 }
             });
 
-            Heading.AddEventListener(EventType.MouseDown, (ev) =>
+            Heading.addEventListener("mouseDown", (ev) =>
             {
                 SetBodyOverLay();
                 if(!IsActiveFormCollection())
@@ -1690,7 +1730,7 @@ namespace ExpressCraft
                 if(windowState == WindowStateType.Maximized)
                 {
                     MovingForm = this;
-                    SetCursor(Cursor.Default);
+                    SetCursor("default");
 
                     MoveAction = MouseMoveAction.Move;
                 }
@@ -1702,7 +1742,7 @@ namespace ExpressCraft
                 ActiveForm = this;
             });
 
-            Body.AddEventListener(EventType.MouseDown, (ev) =>
+            Body.addEventListener("mouseDown", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1711,10 +1751,10 @@ namespace ExpressCraft
 
                 ActiveForm = this;
                 MovingForm = null;
-                ev.StopPropagation();
+                ev.stopPropagation();
             });
 
-            Body.AddEventListener(EventType.MouseMove, (ev) =>
+            Body.addEventListener("mouseMove", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1723,28 +1763,28 @@ namespace ExpressCraft
                 {
                     if(!IsActiveFormCollection())
                         return;
-                    ev.StopPropagation();
+                    ev.stopPropagation();
                 }
             });
 
-            BodyOverLay.AddEventListener(EventType.MouseDown, (ev) =>
+            BodyOverLay.addEventListener("mouseDown", (ev) =>
             {
                 if(InDesign)
                 {
-                    BodyOverLay.Style.Visibility = Visibility.Collapse;
+                    BodyOverLay.style.visibility = "collapse";
                     return;
                 }
                 if(!IsActiveFormCollection())
                     return;
-                BodyOverLay.Style.Visibility = Visibility.Collapse;
+                BodyOverLay.style.visibility = "collapse";
                 ActiveForm = this;
             });
 
-            Body.AddEventListener(EventType.MouseLeave, (ev) =>
+            Body.addEventListener("mouseLeave", (ev) =>
             {
                 if(InDesign)
                 {
-                    BodyOverLay.Style.Visibility = Visibility.Collapse;
+                    BodyOverLay.style.visibility = "collapse";
                     return;
                 }
 
@@ -1754,27 +1794,27 @@ namespace ExpressCraft
                 }
             });
 
-            BodyOverLay.AddEventListener(EventType.MouseEnter, (ev) =>
+            BodyOverLay.addEventListener("mouseEnter", (ev) =>
             {
                 if(InDesign)
                 {
-                    BodyOverLay.Style.Visibility = Visibility.Collapse;
+                    BodyOverLay.style.visibility = "collapse";
                     return;
                 }
                 if(MovingForm == null && IsActiveFormCollection()) // WindowHolderSelectionBox == null &&
                 {
-                    SetCursor(Cursor.Default);
-                    BodyOverLay.Style.Visibility = Visibility.Collapse;
+                    SetCursor("default");
+                    BodyOverLay.style.visibility = "collapse";
                 }
                 else
                 {
-                    BodyOverLay.Style.Visibility = Visibility.Visible;
+                    BodyOverLay.style.visibility = "visible";
                 }
             });
 
-            jQuery.Select(Content)
-                .Css("width", Window_DefaultWidth)
-                .Css("height", Window_DefaultHeight);
+            jQuery.select(Content)
+                .css("width", Window_DefaultWidth)
+                .css("height", Window_DefaultHeight);
 
             Content.AppendChild(Heading);
             Content.AppendChild(Body);
@@ -1796,40 +1836,40 @@ namespace ExpressCraft
 
         public int TitleBarHeight()
         {
-            return Heading.ClientHeight;
+            return (int)Heading.clientHeight;
         }
 
         public int TitleBarWidth()
         {
-            return Heading.ClientWidth;
+            return (int)Heading.clientWidth;
         }
 
         public int ClientX()
         {
-            return Body.ClientLeft;
+            return (int)Body.clientLeft;
         }
 
         public int ClientY()
         {
-            return Body.ClientTop;
+            return (int)Body.clientTop;
         }
 
         public string Text
         {
-            get { return HeadingTitle.InnerHTML; }
-            set { HeadingTitle.InnerHTML = value; }
+            get { return HeadingTitle.innerHTML; }
+            set { HeadingTitle.innerHTML = value; }
         }
 
         public string BackColor
         {
-            get { return Body.Style.BackgroundColor; }
-            set { Body.Style.BackgroundColor = value; }
+            get { return Body.style.backgroundColor; }
+            set { Body.style.backgroundColor = value; }
         }
 
         public string ForeColor
         {
-            get { return Body.Style.Color; }
-            set { Body.Style.Color = value; }
+            get { return Body.style.color; }
+            set { Body.style.color = value; }
         }
 
         public List<DialogResult> DialogResults = new List<DialogResult>();
@@ -1954,8 +1994,8 @@ namespace ExpressCraft
                 return;
 
             Self
-            .Css("left", MinZero((WindowHolder.ClientWidth / 2) - (Global.ParseInt(this.Width.ToHtmlValue()) / 2)))
-            .Css("top", MinZero((WindowHolder.ClientHeight / 2) - (Global.ParseInt(this.Height.ToHtmlValue()) / 2)));
+            .css("left", MinZero((float)(WindowHolder.clientWidth / 2) - (Script.ParseInt(this.Width.ToHtmlValue()) / 2)))
+            .css("top", MinZero((float)(WindowHolder.clientHeight / 2) - (Script.ParseInt(this.Height.ToHtmlValue()) / 2)));
         }
 
         public override void Render()
@@ -2008,7 +2048,7 @@ namespace ExpressCraft
                 visbileForms.Add(this);
                 WindowHolder.AppendChild(this);
 
-                Content.Style.Visibility = Visibility.Visible;
+                Content.style.visibility = "visible";
 
                 CalculateZOrder();
 
@@ -2022,25 +2062,25 @@ namespace ExpressCraft
                     {
                         var obj = visbileForms[visbileForms.Count - 1];
 
-                        object x = Global.ParseInt(obj.Left.ToHtmlValue());
-                        object y = Global.ParseInt(obj.Top.ToHtmlValue());
+                        object x = Script.ParseInt(obj.Left.ToHtmlValue());
+                        object y = Script.ParseInt(obj.Top.ToHtmlValue());
 
-                        if(Global.IsNaN(x))
+                        if(Script.IsNaN(x))
                         {
                             x = 0;
                         }
-                        if(Global.IsNaN(y))
+                        if(Script.IsNaN(y))
                         {
                             y = 0;
                         }
 
-                        var rec = WindowHolder.GetBoundingClientRect();
+                        var rec = WindowHolder.getBoundingClientRect();
 
-                        double pw25 = rec.Width * 0.15;
-                        double ph25 = rec.Height * 0.15;
+                        double pw25 = rec.width * 0.15;
+                        double ph25 = rec.height * 0.15;
 
-                        double pw75 = rec.Width * 0.55;
-                        double ph75 = rec.Height * 0.55;
+                        double pw75 = rec.width * 0.55;
+                        double ph75 = rec.height * 0.55;
 
                         if((int)x < pw25)
                             x = (int)pw25;
@@ -2054,8 +2094,8 @@ namespace ExpressCraft
                         x = (int)x + 10;
                         y = (int)y + 10;
 
-                        Self.Css("left", MinZero((int)x))
-                            .Css("top", MinZero((int)y));
+                        Self.css("left", MinZero((int)x))
+                            .css("top", MinZero((int)y));
                     }
                 }
                 
@@ -2068,9 +2108,9 @@ namespace ExpressCraft
             
             if(Helper.NotDesktop)
             {
-                Global.SetTimeout(() => {
-                    this.Content.Focus();
-                    this.Content.Click();                    
+                setTimeout((a) => {
+                    this.Content.focus();
+                    this.Content.click();                    
                 }, 0);               
             }
         }
@@ -2095,35 +2135,35 @@ namespace ExpressCraft
 
         public void SetZIndex(ref int zIndex)
         {
-            this.Content.Style.ZIndex = (zIndex++).ToString();
+            this.Content.style.zIndex = (zIndex++).ToString();
         }
 
         private static void ClearZIndex()
         {
             var x = GetActiveFormCollection().FormOwner;
-            WindowHolder.Style.ZIndex = "-" + WindowHolder.ChildElementCount;
+            WindowHolder.style.zIndex = "-" + WindowHolder.childElementCount;
             bool Found = false;
 
-            for(int i = 0; i < WindowHolder.ChildElementCount; i++)
+            for(int i = 0; i < WindowHolder.childElementCount; i++)
             {
-                if(Found || x.Content == WindowHolder.Children[i])
+                if(Found || x.Content == WindowHolder.children[i])
                 {
-                    WindowHolder.Children[i].Style.ZIndex = "";
+                    WindowHolder.children[i].As<HTMLElement>().style.zIndex = "";
                     Found = true;
                 }
                 else
                 {
-                    WindowHolder.Children[i].Style.ZIndex = (i - WindowHolder.ChildElementCount - 1).ToString();
+                    WindowHolder.children[i].As<HTMLElement>().style.zIndex = (i - WindowHolder.childElementCount - 1).ToString();
                 }
             }
         }
 
         private static void ApplyZIndex()
         {
-            WindowHolder.Style.ZIndex = "";
-            for(int i = 0; i < WindowHolder.ChildElementCount; i++)
+            WindowHolder.style.zIndex = "";
+            for(int i = 0; i < WindowHolder.childElementCount; i++)
             {
-                WindowHolder.Children[i].Style.ZIndex = i.ToString();
+                WindowHolder.children[i].As<HTMLElement>().style.zIndex = i.ToString();
             }
         }
 
@@ -2160,7 +2200,7 @@ namespace ExpressCraft
                 if(formCollection.FormOwner != null)
                 {
                     formCollection.FormOwner.ManagePlaceHolders();
-                    formCollection.FormOwner.Style.ZIndex = zIndex.ToString();
+                    formCollection.FormOwner.Style.zIndex = zIndex.ToString();
                     zIndex++;
                     //frag.AppendChild(formCollection.FormOwner);
 
@@ -2193,7 +2233,7 @@ namespace ExpressCraft
                         VisibleForms[i].Content != null)
                     {
                         VisibleForms[i].ManagePlaceHolders();
-                        VisibleForms[i].Style.ZIndex = zIndex.ToString();
+                        VisibleForms[i].Style.zIndex = zIndex.ToString();
                         zIndex++;
                         //frag.AppendChild(VisibleForms[i]);
 
@@ -2235,28 +2275,28 @@ namespace ExpressCraft
                     var element = que.Dequeue();
                     if(shouldHidePlaceholders)
                     {
-                        var a = element.GetAttribute("placeholder");
+                        var a = element.getAttribute("placeholder");
                         if(!string.IsNullOrWhiteSpace(a))
                         {
-                            element.RemoveAttribute("placeholder");
-                            element.SetAttribute("data-placeholder", a);
+                            element.removeAttribute("placeholder");
+                            element.setAttribute("data-placeholder", a);
                         }
                     }
                     else
                     {
-                        var a = element.GetAttribute("data-placeholder");
+                        var a = element.getAttribute("data-placeholder");
                         if(!string.IsNullOrWhiteSpace(a))
                         {
-                            element.RemoveAttribute("data-placeholder");
-                            element.SetAttribute("placeholder", a);
+                            element.removeAttribute("data-placeholder");
+                            element.setAttribute("placeholder", a);
                         }
                     }
-                    int length = element.ChildElementCount;
+                    int length = (int)element.childElementCount;
                     if(length > 0)
                     {
                         for(int i = 0; i < length; i++)
                         {
-                            que.Enqueue(element.Children[i]);
+                            que.Enqueue(element.children[i].As<HTMLElement>());
                         }
                     }
                 }
@@ -2275,7 +2315,7 @@ namespace ExpressCraft
 
             //var frag = Document.CreateDocumentFragment();
 
-            FormOverLay.Style.Opacity = count == 0 ? "" : count == 1 ? "0" : "0.4";
+            FormOverLay.style.opacity = count == 0 ? "" : count == 1 ? "0" : "0.4";
 
             for(int x = 0; x < count; x++)
             {
@@ -2293,7 +2333,7 @@ namespace ExpressCraft
                 if(x == count - 1)
                 {
                     //frag.AppendChild(FormOverLay);
-                    FormOverLay.Style.ZIndex = zIndex.ToString();
+                    FormOverLay.style.zIndex = zIndex.ToString();
                     zIndex++;
                 }
                 zIndex = CalculateZOrder(FormCollections[x], zIndex); // frag
@@ -2305,7 +2345,7 @@ namespace ExpressCraft
 
             if(ActiveForm != null)
             {
-                ActiveForm.Body.Focus();
+                ActiveForm.Body.focus();
             }
         }
 
@@ -2354,7 +2394,7 @@ namespace ExpressCraft
                 {
                     if(Settings.FormFadeDuration > 0)
                     {
-                        Self.FadeOut(Settings.FormFadeDuration, closeAction);
+                        Self.fadeOut(Settings.FormFadeDuration, closeAction);
                     }
                     else
                     {
@@ -2363,7 +2403,7 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    Content.Style.Visibility = Visibility.Collapse;
+                    Content.style.visibility = "collapse";
                 }
             }
 

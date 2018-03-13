@@ -1,8 +1,9 @@
-﻿using Bridge.Html5;
-using Bridge.jQuery2;
+﻿using static Retyped.dom;
+using static Retyped.jquery;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -29,7 +30,7 @@ namespace ExpressCraft
                 */
                 _hasRan = false;
                 PushEventsTimeCall();
-                Window.Focus();
+                window.focus();
             }
             catch(Exception)
             {
@@ -222,7 +223,7 @@ namespace ExpressCraft
                         }
                         else
                         {
-                            builder.Append(Global.Btoa(attachment.Data));
+                            builder.Append(btoa(attachment.Data));
                         }
 
                         builder.Append("\r\n\r\n");
@@ -232,28 +233,31 @@ namespace ExpressCraft
                 }
             }
 
-            var settings = new AjaxOptions()
+            var x = new JQueryAjaxSettings.headersConfig();
+            x["Authorization"] = "Bearer " + AccessToken();
+
+            var settings = new JQueryAjaxSettings()
             {
-                Type = "POST",
-                Url = "https://www.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=multipart",
-                ContentType = "message/rfc822",
-                Data = builder.ToString(),
-                Headers = new
+                type = "POST",
+                url = "https://www.googleapis.com/upload/gmail/v1/users/me/messages/send?uploadType=multipart",
+                contentType = "message/rfc822",
+                data = builder.ToString(),
+                headers = x,
+                error = new JQueryAjaxSettings.errorFn((a, b, c) =>
                 {
-                    Authorization = "Bearer " + AccessToken()
-                },
-                Error = (a, b, c) =>
+                    return null;
+                }),
+                complete = new JQueryAjaxSettings.completeFn( (jq, data) =>
                 {
-                },
-                Complete = (jq, data) =>
+                    return null;
+                }),
+                success = new JQueryAjaxSettings.successFn((obj, data, jq) =>
                 {
-                },
-                Success = (obj, data, jq) =>
-                {
-                }
+                    return null;
+                })
             };
 
-            jQuery.Ajax(settings);
+            jQuery.ajax(settings);
         }
 
         public static string IconURL()

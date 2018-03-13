@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Text;
 
@@ -15,6 +15,8 @@ namespace ExpressCraft
         public Action<TextInput> OnGotFocus = null;
         public Action<TextInput> OnLostFocus = null;
         public Action<TextInput> OnValidateData = null;
+
+        public bool DisableFocus;
 
         public virtual void ValidateData()
         {
@@ -57,18 +59,18 @@ namespace ExpressCraft
 
         public Control Controller = null;
 
-        public InputType Type;
+        public string Type;
         public bool DisableFocusPopup;
         private bool IsOverride = false;
 
         public virtual string GetValue()
         {
-            return Content.InnerHTML;
+            return Content.innerHTML;
         }
 
         public virtual void SetValue(string value)
         {
-            Content.InnerHTML = value;
+            Content.innerHTML = value;
         }
 
         public void SetDateTime(DateTime date)
@@ -78,7 +80,7 @@ namespace ExpressCraft
 
         public TextInput(HTMLElement overrideElement, bool addInputControl = true, bool addEventsOnControl = true) : base(overrideElement)
         {
-            overrideElement.ClassName = (addInputControl ? "inputcontrol" : "") + BaseClass(addInputControl);
+            overrideElement.className = (addInputControl ? "inputcontrol" : "") + BaseClass(addInputControl);
             IsOverride = true;
             if(addEventsOnControl)
                 addEvents();
@@ -116,12 +118,12 @@ namespace ExpressCraft
                 return value;             
             }else
             {
-                if(Type == InputType.Number)
+                if(Type == "number")
                 {
                     decimal value = Text.StripNonNumberString();
                     return value;
                 }
-                else if(Type == InputType.Date)
+                else if(Type == "date")
                 {
                     DateTime date = GetDateTime();
                     return date;
@@ -137,7 +139,7 @@ namespace ExpressCraft
         {
             if(parent == null)
                 return;
-            parent.ScrollTop = value;
+            parent.scrollTop = value;
             //Global.SetTimeout(() =>
             //{
             //    if(this.Content.ParentElement == null || this.Content.ParentElement.ParentElement == null)
@@ -154,7 +156,7 @@ namespace ExpressCraft
             }
             else
             {
-                if(Type == InputType.Number)
+                if(Type == "number")
                 {
                     decimal value = Text.StripNonNumberString();
                     if(DisplayFormat.ToLower().StartsWith("c"))
@@ -178,7 +180,7 @@ namespace ExpressCraft
                         return string.Format("{0:" + DisplayFormat + "}", value);
                     }
                 }
-                else if(Type == InputType.Date)
+                else if(Type == "date")
                 {
                     DateTime value = Text.StripNonDateString();
                     if(value == DateTime.MinValue)
@@ -200,11 +202,11 @@ namespace ExpressCraft
         private void formatText()
         {
             var input = GetInput();
-            if(input != null && input != Document.ActiveElement) // Is Active
+            if(input != null && input != document.activeElement) // Is Active
             {
                 if(!string.IsNullOrWhiteSpace(DisplayFormat))
                 {
-                    input.Type = InputType.Text;
+                    input.type = "text";
                     string newText = GetDisplayValue();
 
                     if(newText != Text)
@@ -226,26 +228,33 @@ namespace ExpressCraft
                 {
                     if(!string.IsNullOrWhiteSpace(DisplayFormat))
                     {
-                        if(Type == InputType.Password)
+                        if(Type == "password")
                             return;
-                        input.Type = InputType.Text;
+                        input.type = "text";
                     }
                 }
             }
 
-            this.Content.OnBlur = (ev) =>
+            this.Content.onblur = (ev) =>
             {
-                Content.Style.ZIndex = PreZIndex;
+                Content.style.zIndex = PreZIndex;
 
                 formatText();
 
                 if(OnLostFocus != null)
                     OnLostFocus(this);
+                return null;
             };
-            this.Content.OnFocus = (ev) =>
+            this.Content.onfocus = (ev) =>
             {
-                PreZIndex = Content.Style.ZIndex;
-                Content.Style.ZIndex = "10000";
+                if(DisableFocus)
+                {
+                    Content.blur();
+                    return null;
+                }
+
+                PreZIndex = Content.style.zIndex;
+                Content.style.zIndex = "10000";
 
                 OnFocus();
                 var input = GetInput();
@@ -253,7 +262,7 @@ namespace ExpressCraft
                 {
                     if(!string.IsNullOrWhiteSpace(DisplayFormat))
                     {
-                        if(Type == InputType.Number)
+                        if(Type == "number")
                         {
                             try
                             {
@@ -265,15 +274,17 @@ namespace ExpressCraft
                             }
                         }
 
-                        if(!Helper.IsFireFox() && !Readonly && Type != InputType.Date)
+                        if(!Helper.IsFireFox() && !Readonly && Type != "date")
                         {
-                            input.Type = Type;
+                            input.type = Type;
                         }
                     }
-                    if(Type != InputType.Checkbox &&
+                    if(Type != "checkbox" &&
                     Settings.OnFocusSelectAll && !OnFocusDontSelectAll) // && Helper.IsFireFox() && Browser.IsIE
-                        input.Select();
+                        input.select();
                 }
+
+
 
                 if(OnGotFocus != null)
                     OnGotFocus(this);
@@ -283,48 +294,59 @@ namespace ExpressCraft
                     if(!Settings.DisableTextPopupEditor)
                         new TextForm(this).ShowPopup(new Vector2(0, 0));
                 }
+
+                return null;
             };
-            this.Content.OnChange = (ev) =>
+            this.Content.onchange = (ev) =>
             {
                 CheckTextChanged();
+                return null;
             };
-            this.Content.OnContextMenu = (ev) =>
+            this.Content.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
+                ev.stopPropagation();
+
+                return null;
             };
-            this.Content.OnKeyPress = (ev) =>
+            this.Content.onkeypress = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyPress != null)
                     OnKeyPress(this, ev);
+
+                return null;
             };
-            this.Content.OnKeyDown = (ev) =>
+            this.Content.onkeydown = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyDown != null)
                     OnKeyDown(this, ev);
+
+                return null;
             };
-            this.Content.OnKeyUp = (ev) =>
+            this.Content.onkeyup = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyUp != null)
                     OnKeyUp(this, ev);
+
+                return null;
             };
-            this.Content.AddEventListener(EventType.Paste, () =>
+            this.Content.addEventListener("paste", () =>
             {
                 CheckTextChanged();
             });
-            this.Content.AddEventListener(EventType.Cut, () =>
+            this.Content.addEventListener("cut", () =>
             {
                 CheckTextChanged();
             });
         }
 
-        public static InputType FixInput(InputType type)
+        public static string FixInput(string type)
         {
-            if(type == InputType.Date || (Helper.IsFireFox() && type != InputType.Password && type != InputType.Checkbox && type != InputType.Radio))
+            if(type == "date" || (Helper.IsFireFox() && type != "password" && type != "checkbox" && type != "radio"))
             {
-                return InputType.Text;
+                return "text";
             }
             else
             {
@@ -332,19 +354,19 @@ namespace ExpressCraft
             }
         }
 
-        public TextInput(InputType type = InputType.Text, bool ac = true) : base("inputcontrol", FixInput(type), ac)
+        public TextInput(string type = "text", bool ac = true) : base("inputcontrol", true, FixInput(type), ac)
         {
             Type = type;
 
-            if(Type == InputType.Number)
+            if(Type == "number")
             {
-                Content.Style.TextAlign = TextAlign.Right;
-                Content.Style.TextIndent = "3px";
-                Content.Style.PaddingRight = "3px";
+                Content.style.textAlign = "right";
+                Content.style.textIndent = "3px";
+                Content.style.paddingRight = "3px";
 
                 DisplayFormat = "n2";
             }
-            else if(Type == InputType.Date)
+            else if(Type == "date")
             {
                 var str = new string[3];
                 str[(int)Settings.DayPosition] = "dd";
@@ -391,13 +413,13 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    if(Type == InputType.Checkbox || Type == InputType.Radio)
+                    if(Type == "checkbox" || Type == "radio")
                     {
-                        return this.Content.As<HTMLInputElement>().Checked.ToString();
+                        return this.Content.As<HTMLInputElement>().@checked.ToString();
                     }
                     else
                     {
-                        return this.Content.As<HTMLInputElement>().Value;
+                        return this.Content.As<HTMLInputElement>().value;
                     }
                 }
             }
@@ -409,14 +431,14 @@ namespace ExpressCraft
                 }
                 else
                 {
-                    if(Type == InputType.Checkbox || Type == InputType.Radio)
+                    if(Type == "checkbox" || Type == "radio")
                     {
                         value = value.ToLower();
-                        this.Content.As<HTMLInputElement>().Checked = value.IsTrue() == 1;
+                        this.Content.As<HTMLInputElement>().@checked = value.IsTrue() == 1;
                     }
                     else
                     {
-                        this.Content.As<HTMLInputElement>().Value = value;
+                        this.Content.As<HTMLInputElement>().value = value;
                         formatText();
                     }
                 }
@@ -472,12 +494,12 @@ namespace ExpressCraft
 
         public bool IsNumericType()
         {
-            return Type == InputType.Number;
+            return Type == "number";
         }
 
         public bool IsDateType()
         {
-            return Type == InputType.Date;
+            return Type == "date";
         }
 
         private bool enabled = true;
@@ -505,30 +527,30 @@ namespace ExpressCraft
                 
                 if(enabled)
                 {
-                    this.Content.RemoveAttribute("disabled");
+                    this.Content.removeAttribute("disabled");
                 }
                 else
                 {
-                    this.Content.SetAttribute("disabled", "");
+                    this.Content.setAttribute("disabled", "");
                 }
             }
         }
 
         private bool _readonly = false;
-
+        
         public bool Readonly
         {
             get { return _readonly; }
             set
-            {
+            {        
                 _readonly = value;
                 if(_readonly)
                 {
-                    this.Content.SetAttribute("readonly", (_readonly).ToString());
+                    this.Content.setAttribute("readonly", (_readonly).ToString());
                 }
                 else
                 {
-                    this.Content.RemoveAttribute("readonly");
+                    this.Content.removeAttribute("readonly");
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,12 +26,13 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogCheckbox(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Checkbox);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "checkbox");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "40px");
-            input.OnChange = ev =>
+            input.onchange = ev =>
             {
-                Result = input.Checked;
+                Result = input.@checked;
+                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 40 + 25 + 78);
@@ -61,10 +62,10 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogColour(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Color);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "color");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "40px");
-            input.OnChange = ev => { Result = input.Value; };
+            input.onchange = ev => { Result = input.value; return null; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 40 + 25 + 78);
         }
@@ -93,10 +94,10 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogDate(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Date);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "date");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => { Result = input.Value; };
+            input.onchange = ev => { Result = input.value; return null; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
@@ -126,12 +127,13 @@ namespace ExpressCraft
         public InputDialogDateTimeLocal(string title, string question, int size) : base(title, size, question)
         {
             Result = DateTime.Now;
-            var input = Input("inputcontrol", InputType.DateTimeLocal);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "dateTimeLocal");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev =>
+            input.onchange = ev =>
             {
-                Result = DateTime.ParseExact(input.Value, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+                Result = DateTime.ParseExact(input.value, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -164,14 +166,15 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogEmail(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Email);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "email");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev =>
+            input.onchange = ev =>
             {
                 //todo css for email input not showing up
                 //todo could always validate email here
-                Result = input.Value;
+                Result = input.value;
+                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -204,12 +207,13 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogWeek(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Week);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "week");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev =>
+            input.onchange = ev =>
             {
-                Result = input.Value;
+                Result = input.value;
+                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -242,12 +246,13 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogMonth(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Month);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "month");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev =>
+            input.onchange = ev =>
             {
-                Result = input.Value;
+                Result = input.value;
+                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -280,10 +285,10 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogNumber(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Number);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "number");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => { Result = input.ValueAsNumber; };
+            input.onchange = ev => { Result = input.valueAsNumber; return null; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
@@ -312,10 +317,10 @@ namespace ExpressCraft
         /// <param name="size">The width of this dialog. The default size is 360</param>
         public InputDialogText(string title, string question, int size) : base(title, size, question)
         {
-            var input = Input("inputcontrol", InputType.Text);
-            input.Id = "DialogAnswerBox";
+            var input = Input("inputcontrol", "text");
+            input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.OnChange = ev => { Result = input.Value; };
+            input.onchange = ev => { Result = input.value; return null; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
@@ -337,15 +342,15 @@ namespace ExpressCraft
                 new SimpleDialogButton(this, DialogResultEnum.Cancel) {Text = "Cancel"}
             };
 
-            Wrapper.Style.OverflowY = Overflow.Hidden;
+            Wrapper.style.overflowY = "hidden";
             Wrapper.SetBounds("0px", "0px", "100%", "(100% - 60px)");
-            QuestionDiv.Style.Position = Position.Relative;
-            QuestionDiv.Style.Height = "auto";
-            QuestionDiv.Style.MarginLeft = "10px";
-            QuestionDiv.Style.MarginRight = "10px";
-            QuestionDiv.Style.MarginTop = "10px";
-            AnswerDiv.Style.Position = Position.Relative;
-            AnswerDiv.Style.Height = "auto";
+            QuestionDiv.style.position = "relative";
+            QuestionDiv.style.height = "auto";
+            QuestionDiv.style.marginLeft = "10px";
+            QuestionDiv.style.marginRight = "10px";
+            QuestionDiv.style.marginTop = "10px";
+            AnswerDiv.style.position = "relative";
+            AnswerDiv.style.height = "auto";
             _buttonCollection[0].SetLocation("(100% - 170px)", "(100% - 35px)");
             _buttonCollection[1].SetLocation("(100% - 85px)", "(100% - 35px)");
 
@@ -363,7 +368,7 @@ namespace ExpressCraft
             if(tb.ComputedHeight < Settings.MessageFormTextMinimumHeightInPx)
                 tb.ComputedHeight = Settings.MessageFormTextMinimumHeightInPx;
 
-            QuestionDiv.InnerHTML = question;
+            QuestionDiv.innerHTML = question;
             QuestionSize = Convert.ToInt32(tb.ComputedHeight);
         }
 

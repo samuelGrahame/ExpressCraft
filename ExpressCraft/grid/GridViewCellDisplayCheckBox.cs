@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -11,10 +11,10 @@ namespace ExpressCraft
             var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
 
             var cell = Control.Div("cell");
-            var input = Control.Input("", InputType.Checkbox);
+            var input = Control.Input("", "checkbox");
             input.SetBoundsFull();
             input.SetChecked(value);
-            input.Style.Margin = "0";
+            input.style.margin = "0";
             cell.AppendChild(input);
 
             return cell;

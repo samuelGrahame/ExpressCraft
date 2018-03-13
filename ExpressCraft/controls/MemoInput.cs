@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -7,20 +7,20 @@ namespace ExpressCraft
     {
         public int Rows
         {
-            get { return Content.As<HTMLTextAreaElement>().Rows; }
-            set { Content.As<HTMLTextAreaElement>().Rows = value; }
+            get { return (int)Content.As<HTMLTextAreaElement>().rows; }
+            set { Content.As<HTMLTextAreaElement>().rows = value; }
         }
 
         public int Cols
         {
-            get { return Content.As<HTMLTextAreaElement>().Cols; }
-            set { Content.As<HTMLTextAreaElement>().Cols = value; }
+            get { return (int)Content.As<HTMLTextAreaElement>().cols; }
+            set { Content.As<HTMLTextAreaElement>().cols = value; }
         }
 
         public int MaxLength
         {
-            get { return Content.As<HTMLTextAreaElement>().MaxLength; }
-            set { Content.As<HTMLTextAreaElement>().MaxLength = value; }
+            get { return (int)Content.As<HTMLTextAreaElement>().maxLength; }
+            set { Content.As<HTMLTextAreaElement>().maxLength = value; }
         }
 
         private Vector2 PreSize;
@@ -32,24 +32,24 @@ namespace ExpressCraft
 
         public override string GetValue()
         {
-            return Content.As<HTMLTextAreaElement>().Value;
+            return Content.As<HTMLTextAreaElement>().value;
         }
 
         public override void SetValue(string value)
         {
-            Content.As<HTMLTextAreaElement>().Value = value;
+            Content.As<HTMLTextAreaElement>().value = value;
         }
 
         public MemoInput() : base(new HTMLTextAreaElement())
         {
-            Style.Resize = Resize.None;
+            Style.resize = "none";
 
             OnGotFocus = (memo) =>
             {
                 if(DisableResize)
                     return;
 
-                Style.Resize = Resize.Both;
+                Style.resize = "both";
                 PrePreSize = Size;
 
                 if(_hasGotFocus)
@@ -62,7 +62,7 @@ namespace ExpressCraft
             };
             OnLostFocus = (memo) =>
             {
-                Style.Resize = Resize.None;
+                Style.resize = "none";
                 PreSize = Size;
                 Size = PrePreSize;
             };

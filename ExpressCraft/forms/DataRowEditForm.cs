@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 
@@ -30,12 +30,12 @@ namespace ExpressCraft
             this.Text = "Row Edit Form";
             this.Width = "400px"; // 25px - 25px 350px width;
             this.Height = "600px";
-            this.Body.Style.OverflowY = Bridge.Html5.Overflow.Auto;
+            this.Body.style.overflowY = "auto";
 
             Panel = Div();
-            Panel.Style.OverflowY = Overflow.Auto;
+            Panel.style.overflowY = "auto";
             Panel.SetBounds("0", "0", "100%", "(100% - 60px)");
-            Body.Style.BackgroundColor = "white";
+            Body.style.backgroundColor = "white";
 
             _buttonCollection = new List<SimpleDialogButton>() {
                         new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel", Location = new Vector2("(100% - 85px)", "(100% - 35px)"), ItemClick = (ev) => {
@@ -116,7 +116,7 @@ namespace ExpressCraft
                 {
                     case DataType.DateTime:
                         var lbldate = Label(grCol.Caption, 25 + (col * eachWidth + (col * 3)), height);
-                        var inputDate = new TextInput(Bridge.Html5.InputType.Date);
+                        var inputDate = new TextInput("date");
                         inputDate.SetBounds(25 + (col * eachWidth + (col * 3)), height + 16 + 3, eachWidth, 24);
                         inputDate.SetDate(Convert.ToString(DataRow[dtIndex]));
                         inputDate.Readonly = grCol.ReadOnly;
@@ -147,12 +147,12 @@ namespace ExpressCraft
                         TextInput inputNum;
                         if(grCol.CellDisplay is GridViewCellDisplayCheckBox)
                         {
-                            inputNum = new TextInput(Bridge.Html5.InputType.Checkbox);
+                            inputNum = new TextInput("checkbox");
                             inputNum.SetChecked(DataRow[dtIndex]);
                         }
                         else
                         {
-                            inputNum = new TextInput(InputType.Number);
+                            inputNum = new TextInput("number");
                             inputNum.Text = Convert.ToString(DataRow[dtIndex]);
                         }
 
@@ -164,7 +164,7 @@ namespace ExpressCraft
                         {
                             inputNum.OnTextChanged = (ev) =>
                             {
-                                if(inputNum.Type == InputType.Checkbox)
+                                if(inputNum.Type == "checkbox")
                                 {
                                     DataRow[dtIndex] = inputNum.Text.IsTrue() == 1;
                                 }
@@ -184,7 +184,7 @@ namespace ExpressCraft
                     case DataType.Object:
                     case DataType.String:
                         var lblstr = Label(grCol.Caption, 25 + (col * eachWidth + (col * 3)), height);
-                        var inputstr = new TextInput(Bridge.Html5.InputType.Text);
+                        var inputstr = new TextInput("text");
                         inputstr.SetBounds(25 + (col * eachWidth + (col * 3)), height + 16 + 3, eachWidth, 24);
                         inputstr.Text = Convert.ToString(DataRow[dtIndex]);
                         inputstr.Readonly = grCol.ReadOnly;

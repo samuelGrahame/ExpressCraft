@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -14,9 +14,9 @@ namespace ExpressCraft
             set { Edit.Text = value.ToString(); }
         }
 
-        public CheckEdit(string label = "") : base(new HTMLLabelElement() { ClassName = BaseClass(false, true) })
+        public CheckEdit(string label = "") : base(new HTMLLabelElement() { className = BaseClass(false, true) })
         {
-            Edit = new TextInput(InputType.Checkbox);
+            Edit = new TextInput("checkbox");
             Edit.Controller = this;
             Edit.OnTextChanged = (sender) => {                
                 if(OnCheckChanged != null)
@@ -36,8 +36,8 @@ namespace ExpressCraft
 
         public string Text
         {
-            get { return span.InnerHTML; }
-            set { span.InnerHTML = value; }
+            get { return span.innerHTML; }
+            set { span.innerHTML = value; }
         }
     }
 }

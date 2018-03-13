@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -14,12 +14,12 @@ namespace ExpressCraft
             Source = source;
             PDFSourceType = pdfSourceType;
 
-            PdfViewer = Document.CreateElement(Browser.IsIE ? "iframe" : pdfSourceType == PdfSourceType.Url ? "embed" : "object");
-            PdfViewer.ClassName = "control";
+            PdfViewer = document.createElement(Browser.IsIE ? "iframe" : pdfSourceType == PdfSourceType.Url ? "embed" : "object");
+            PdfViewer.className = "control";
 
             PdfViewer.SetBounds(0, 0, "100%", "100%");
-            PdfViewer.SetAttribute("alt", "pdf");
-            PdfViewer.SetAttribute("type", "application/pdf");
+            PdfViewer.setAttribute("alt", "pdf");
+            PdfViewer.setAttribute("type", "application/pdf");
             //object
 
             this.Body.AppendChild(PdfViewer);
@@ -31,11 +31,11 @@ namespace ExpressCraft
             //data
             if(PDFSourceType == PdfSourceType.Url)
             {
-                PdfViewer.SetAttribute("Src", Source);
+                PdfViewer.setAttribute("Src", Source);
             }
             else
             {
-                PdfViewer.SetAttribute("data", GetPdfString(Source));
+                PdfViewer.setAttribute("data", GetPdfString(Source));
             }
         }
     }

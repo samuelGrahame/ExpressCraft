@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -233,7 +233,7 @@ namespace ExpressCraft
             {
                 if(input is TextInputDropDown)
                 {
-                    input.As<TextInputDropDown>().GetInput().ReadOnly = documentreadonly;
+                    input.As<TextInputDropDown>().GetInput().readOnly = documentreadonly;
                 }
                 input.Readonly = documentreadonly;
             }
@@ -301,7 +301,7 @@ namespace ExpressCraft
                 }
                 autoDiv.Left = AppendX;
 
-                var docFragment = Document.CreateDocumentFragment();
+                var docFragment = document.createDocumentFragment();
 
                 var groups = column.Groups;
 
@@ -312,9 +312,9 @@ namespace ExpressCraft
                         var label = Control.Label(group.GroupLabel, currentLeft, y, true);
                         if(Helper.NotDesktop)
                         {
-                            label.Style.FontSize = "14px";
+                            label.style.fontSize = "14px";
                         }
-                        docFragment.AppendChild(label);
+                        docFragment.appendChild(label);
                         y += GroupLabelIncrement;
                     }
                     var rows = group.Rows;
@@ -342,7 +342,7 @@ namespace ExpressCraft
                                     control.Width = ColumnWidth - currentLeft - (leftLabel);
                                 }
 
-                                docFragment.AppendChild(control);
+                                docFragment.appendChild((Node)control);
 
                                 y += ControlMargin;
                             }
@@ -357,10 +357,10 @@ namespace ExpressCraft
                             var label = Control.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, false);
                             if(Helper.NotDesktop)
                             {
-                                label.Style.FontSize = "12px";
+                                label.style.fontSize = "12px";
                                 y += GroupLabelIncrement - 5;
                             }
-                            docFragment.AppendChild(label);
+                            docFragment.appendChild(label);
                         }
 
                         if(row is LayoutRowGap)
@@ -373,7 +373,7 @@ namespace ExpressCraft
                         {
                             row.Button.Location = new Vector2(ColumnWidth - ButtinWidth + 6, y);
                             row.Button.Width = ButtinWidth;
-                            docFragment.AppendChild(row.Button);
+                            docFragment.appendChild((Node)row.Button);
                         }
 
                         var controls = row.Controls;
@@ -430,49 +430,49 @@ namespace ExpressCraft
                                 {
                                     control.Input.Controller.Width = width;
                                     control.Input.Controller.Location = loc;
-                                    control.Input.Content.TabIndex = TabIndex;
-                                    control.Input.ClassList.Remove("control");
+                                    control.Input.Content.tabIndex = TabIndex;
+                                    control.Input.ClassList.remove("control");
                                     if(control.Input.Controller is CheckEdit)
                                     {
                                         var span = control.Input.Controller.As<CheckEdit>().span;
-                                        span.Style.Top = "0";
-                                        span.Style.Left = (inputHeight - 2).ToPx();
+                                        span.style.top = "0";
+                                        span.style.left = (inputHeight - 2).ToPx();
 
-                                        span.Style.Position = Position.Absolute;
+                                        span.style.position = "absolute";
 
-                                        span.Style.WhiteSpace = WhiteSpace.Pre;
+                                        span.style.whiteSpace = "pre";
                                         //span.Style.Transform = "translate(3px, 50%)";
                                         if(Helper.NotDesktop)
                                         {
-                                            span.Style.FontSize = "14px";
-                                            span.Style.WhiteSpace = WhiteSpace.Normal;
+                                            span.style.fontSize = "14px";
+                                            span.style.whiteSpace = "normal";
                                         }
 
-                                        if(control.Input.Content.As<HTMLInputElement>().Type == InputType.Checkbox)
+                                        if(control.Input.Content.As<HTMLInputElement>().type == "checkbox")
                                         {
                                             control.Input.Width = (inputHeight - 4).ToPx();
                                             control.Input.Height = (inputHeight - 4).ToPx();
                                         }
                                     }
 
-                                    docFragment.AppendChild(control.Input.Controller);
+                                    docFragment.appendChild((Node)control.Input.Controller);
                                 }
                                 else
                                 {
                                     control.Input.Width = width;
                                     control.Input.Location = loc;
-                                    control.Input.GetInput().TabIndex = TabIndex;
+                                    control.Input.GetInput().tabIndex = TabIndex;
 
-                                    docFragment.AppendChild(control.Input);
+                                    docFragment.appendChild((Node)control.Input);
                                 }
                                 if(Helper.NotDesktop)
                                 {
                                     control.Input.Height = inputHeight;
-                                    control.Input.Style.FontSize = "14px";
+                                    control.Input.Style.fontSize = "14px";
 
                                     if(control.Input.GetInput() != null)
                                     {
-                                        control.Input.GetInput().Style.FontSize = "14px";
+                                        control.Input.GetInput().style.fontSize = "14px";
                                     }
                                 }
 
@@ -481,11 +481,11 @@ namespace ExpressCraft
                                 if(!row.NoGap && !row.HideTinyLabel && !string.IsNullOrWhiteSpace(control.TinyLabel))
                                 {
                                     var label = Control.Label(control.TinyLabel, 0, y + (inputHeight + 3), false, true);
-                                    label.Style.Left = "calc(" + o100Percent + " + " + (Add - ButtinWidth).ToPx() + ")";
-                                    docFragment.AppendChild(label);
+                                    label.style.left = "calc(" + o100Percent + " + " + (Add - ButtinWidth).ToPx() + ")";
+                                    docFragment.appendChild(label);
                                     if(Helper.NotDesktop)
                                     {
-                                        label.Style.FontSize = "12px";
+                                        label.style.fontSize = "12px";
                                     }
                                     HasTinyLabel = true;
                                 }
@@ -532,6 +532,7 @@ namespace ExpressCraft
                         }
                     }
                 }
+                
                 autoDiv.Height = y;
                 if(!Helper.NotDesktop)
                 {
@@ -549,11 +550,11 @@ namespace ExpressCraft
             {
                 var FirstControl = Controls.FirstOrDefault();
 
-                Action<KeyboardEvent> PreventDefaultMoveForward = (ev) =>
+                Func<KeyboardEvent, object> PreventDefaultMoveForward = (ev) =>
                 {
-                    if(ev.KeyCode == 9 && !ev.ShiftKey)
+                    if(ev.keyCode == 9 && !ev.shiftKey)
                     {
-                        ev.PreventDefault();
+                        ev.preventDefault();
                         var x = FirstControl.Input.GetInput();
                         if(x != null)
                             x.FocusElement();
@@ -562,13 +563,14 @@ namespace ExpressCraft
                             LastControl.Input.Content.FocusElement();
                         }
                     }
+                    return null;
                 };
 
-                Action<KeyboardEvent> PreventDefaultMoveBack = (ev) =>
+                Func<KeyboardEvent, object> PreventDefaultMoveBack = (ev) =>
                 {
-                    if(ev.KeyCode == 9 && ev.ShiftKey)
+                    if(ev.keyCode == 9 && ev.shiftKey)
                     {
-                        ev.PreventDefault();
+                        ev.preventDefault();
                         var x = LastControl.Input.GetInput();
                         if(x != null)
                             x.FocusElement();
@@ -577,10 +579,11 @@ namespace ExpressCraft
                             LastControl.Input.Content.FocusElement();
                         }
                     }
+                    return null;
                 };
 
-                LastControl.Input.Content.OnKeyDown = PreventDefaultMoveForward;
-                FirstControl.Input.Content.OnKeyDown = PreventDefaultMoveBack;
+                LastControl.Input.Content.onkeydown = new HTMLElement.onkeydownFn(PreventDefaultMoveForward);
+                FirstControl.Input.Content.onkeydown = new HTMLElement.onkeydownFn(PreventDefaultMoveBack);
             }
         }
     }

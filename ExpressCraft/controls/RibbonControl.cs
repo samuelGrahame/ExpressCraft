@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 
@@ -24,10 +24,11 @@ namespace ExpressCraft
         {
             Type = type;
 
-            Content.OnContextMenu = (ev) =>
+            Content.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
-                ev.PreventDefault();
+                ev.stopPropagation();
+                ev.preventDefault();
+                return null;
             };
         }
 
@@ -85,18 +86,18 @@ namespace ExpressCraft
                 {
                     if(RibbonPages[i].RibbonHeader != null)
                     {
-                        RibbonPages[i].RibbonHeader.ClassList.Remove("ribbonpageheader-hidden");
-                        RibbonPages[i].RibbonHeader.ClassList.Remove("ribbonpageheader-active");
+                        RibbonPages[i].RibbonHeader.classList.remove("ribbonpageheader-hidden");
+                        RibbonPages[i].RibbonHeader.classList.remove("ribbonpageheader-active");
 
                         if(i == index)
                         {
-                            RibbonPages[i].RibbonHeader.ClassList.Add("ribbonpageheader-active");
-                            RibbonPages[i].Content.Style.Visibility = Visibility.Inherit;
+                            RibbonPages[i].RibbonHeader.classList.add("ribbonpageheader-active");
+                            RibbonPages[i].Content.style.visibility = "inherit";
                         }
                         else
                         {
-                            RibbonPages[i].RibbonHeader.ClassList.Add("ribbonpageheader-hidden");
-                            RibbonPages[i].Content.Style.Visibility = Visibility.Hidden;
+                            RibbonPages[i].RibbonHeader.classList.add("ribbonpageheader-hidden");
+                            RibbonPages[i].Content.style.visibility = "hidden";
                         }
                     }
                 }
@@ -112,8 +113,8 @@ namespace ExpressCraft
                     ApplicationIcon.Delete();
                 ApplicationIcon = Div("application-icon");
                 var appIconImage = Div("fav-icon");
-                appIconImage.Style.Background = RibbonButton.GetImageStringURI(IconURL);
-                appIconImage.Style.BackgroundSize = "100% 100%";
+                appIconImage.style.background = RibbonButton.GetImageStringURI(IconURL);
+                appIconImage.style.backgroundSize = "100% 100%";
 
                 ApplicationIcon.AppendChild(appIconImage);
 
@@ -125,7 +126,7 @@ namespace ExpressCraft
                 int width = 58;
                 for(int i = 0; i < RibbonPages.Count; i++)
                 {
-                    if(Content.Contains(RibbonPages[i]))
+                    if(Content.contains(RibbonPages[i]))
                     {
                         RibbonPages[i].Content.Delete();
                         RibbonPages[i].RibbonHeader.Delete();
@@ -134,13 +135,13 @@ namespace ExpressCraft
 
                     if(Type == RibbonType.Compact)
                     {
-                        if(!RibbonPages[i].Content.ClassName.Contains("ribbonpage-compact"))
-                            RibbonPages[i].Content.ClassList.Add("ribbonpage-compact");
+                        if(!RibbonPages[i].Content.className.Contains("ribbonpage-compact"))
+                            RibbonPages[i].Content.classList.add("ribbonpage-compact");
                     }
                     else
                     {
-                        if(RibbonPages[i].Content.ClassName.Contains("ribbonpage-compact"))
-                            RibbonPages[i].Content.ClassList.Remove("ribbonpage-compact");
+                        if(RibbonPages[i].Content.className.Contains("ribbonpage-compact"))
+                            RibbonPages[i].Content.classList.remove("ribbonpage-compact");
                     }
 
                     int index = i;
@@ -148,24 +149,26 @@ namespace ExpressCraft
                     if(i == selectedindex)
                     {
                         RibbonPages[i].RibbonHeader = Div("ribbonpageheader ribbonpageheader-active" + (Type == RibbonType.Full ? "" : " ribbonpageheader-compact"));
-                        RibbonPages[i].Content.Style.Visibility = Visibility.Visible;
+                        RibbonPages[i].Content.style.visibility = "visible";
                     }
                     else
                     {
                         RibbonPages[i].RibbonHeader = Div("ribbonpageheader ribbonpageheader-hidden" + (Type == RibbonType.Full ? "" : " ribbonpageheader-compact"));
-                        RibbonPages[i].Content.Style.Visibility = Visibility.Hidden;
+                        RibbonPages[i].Content.style.visibility = "hidden";
                     }
 
-                    RibbonPages[i].RibbonHeader.OnMouseDown = (ev) =>
+                    RibbonPages[i].RibbonHeader.onmousedown = (ev) =>
                     {
                         SelectedIndex = index;
+                        return null;
                     };
-                    RibbonPages[i].RibbonHeader.OnTouchStart = (ev) =>
+                    RibbonPages[i].RibbonHeader.ontouchstart = (ev) =>
                     {
                         SelectedIndex = index;
+                        return null;
                     };
 
-                    RibbonPages[i].RibbonHeader.InnerHTML = RibbonPages[i].Caption;
+                    RibbonPages[i].RibbonHeader.innerHTML = RibbonPages[i].Caption;
 
                     int inwidth = 24;
 
@@ -174,8 +177,8 @@ namespace ExpressCraft
                         inwidth += (int)GetTextWidth(RibbonPages[i].Caption, Settings.DefaultFont);
                     }
 
-                    RibbonPages[i].RibbonHeader.Style.Left = width + "px";
-                    RibbonPages[i].RibbonHeader.Style.Width = inwidth + "px";
+                    RibbonPages[i].RibbonHeader.style.left = width + "px";
+                    RibbonPages[i].RibbonHeader.style.width = inwidth + "px";
 
                     Content.AppendChild(RibbonPages[i].RibbonHeader);
                     Content.AppendChild(RibbonPages[i]);
