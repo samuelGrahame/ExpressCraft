@@ -47,7 +47,7 @@ namespace ExpressCraft
                     {
                         if(_activeToolTipMouseMove != null)
                         {
-                            value.AttachedControl.Content.removeEventListener("mouseMove", _activeToolTipMouseMove);
+                            value.AttachedControl.Content.removeEventListener("mousemove", _activeToolTipMouseMove);
                             _activeToolTipMouseMove = null;
                         }
                     }
@@ -99,12 +99,12 @@ namespace ExpressCraft
 
                                 if(_activeToolTipMouseMove != null)
                                 {
-                                    value.AttachedControl.Content.removeEventListener("mouseMove", _activeToolTipMouseMove);
+                                    value.AttachedControl.Content.removeEventListener("mousemove", _activeToolTipMouseMove);
                                     _activeToolTipMouseMove = null;
                                 }
                             }, Math.Max(1, Settings.ToolTipPopupDelayMs));
                         };
-                        value.AttachedControl.Content.addEventListener("mouseMove", _activeToolTipMouseMove);
+                        value.AttachedControl.Content.addEventListener("mousemove", _activeToolTipMouseMove);
                     }
                 }
             }
@@ -1512,7 +1512,7 @@ namespace ExpressCraft
 
             Self = jQuery.select(Content);
 
-            Content.addEventListener("mouseDown", (ev) =>
+            Content.addEventListener("mousedown", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1571,42 +1571,42 @@ namespace ExpressCraft
                         {
                             if(X <= ResizeCorners && Y <= ResizeCorners)
                             {
-                                SetCursor("north-west-south-east-resize");
+                                SetCursor("nwse-resize");
                                 MoveAction = MouseMoveAction.TopLeftResize;
                             }
                             else if(Y <= ResizeCorners && X >= width - ResizeCorners)
                             {
-                                SetCursor("north-east-south-west-resize");
+                                SetCursor("nesw-resize");
                                 MoveAction = MouseMoveAction.TopRightResize;
                             }
                             else if(Y <= ResizeCorners)
                             {
-                                SetCursor("north-resize");
+                                SetCursor("n-resize");
                                 MoveAction = MouseMoveAction.TopResize;
                             }
                             else if(X <= ResizeCorners && Y >= height - ResizeCorners)
                             {
-                                SetCursor("nNorth-east-south-west-resize");
+                                SetCursor("nesw-resize");
                                 MoveAction = MouseMoveAction.BottomLeftResize;
                             }
                             else if(Y >= height - ResizeCorners && X >= width - ResizeCorners)
                             {
-                                SetCursor("north-west-south-east-resize");
+                                SetCursor("nwse-resize");
                                 MoveAction = MouseMoveAction.BottomRightResize;
                             }
                             else if(Y >= height - ResizeCorners)
                             {
-                                SetCursor("south-resize");
+                                SetCursor("s-resize");
                                 MoveAction = MouseMoveAction.BottomResize;
                             }
                             else if(X <= ResizeCorners)
                             {
-                                SetCursor("west-resize");
+                                SetCursor("w-resize");
                                 MoveAction = MouseMoveAction.LeftResize;
                             }
                             else if(X >= width - ResizeCorners)
                             {
-                                SetCursor("east-resize");
+                                SetCursor("e-resize");
                                 MoveAction = MouseMoveAction.RightResize;
                             }
                             else
@@ -1625,7 +1625,7 @@ namespace ExpressCraft
                 }
             });
 
-            Heading.addEventListener("dblClick", (ev) =>
+            Heading.addEventListener("dblclick", (ev) =>
             {
                 if(AllowSizeChange)
                 {
@@ -1636,7 +1636,7 @@ namespace ExpressCraft
                 ev.stopPropagation();
             });
 
-            Content.addEventListener("mouseLeave", (ev) =>
+            Content.addEventListener("mouseleave", (ev) =>
             {
                 if(MovingForm == null)
                 {
@@ -1644,12 +1644,12 @@ namespace ExpressCraft
                 }
             });
 
-            Body.addEventListener("mouseEnter", (ev) =>
+            Body.addEventListener("mouseenter", (ev) =>
             {
                 SetCursor("default");
             });
 
-            Content.addEventListener("mouseMove", (ev) =>
+            Content.addEventListener("mousemove", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1680,35 +1680,35 @@ namespace ExpressCraft
                 {
                     if(MoveAction == MouseMoveAction.TopLeftResize || X <= ResizeCorners && Y <= ResizeCorners)
                     {
-                        SetCursor("north-west-south-east-resize");
+                        SetCursor("nwse-resize");
                     }
                     else if(MoveAction == MouseMoveAction.TopRightResize || Y <= ResizeCorners && X >= width - ResizeCorners)
                     {
-                        SetCursor("north-east-south-west-resize");
+                        SetCursor("nesw-resize");
                     }
                     else if(Y <= ResizeCorners || MoveAction == MouseMoveAction.TopResize)
                     {
-                        SetCursor("north-resize");
+                        SetCursor("n-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomLeftResize || X <= ResizeCorners && Y >= height - ResizeCorners)
                     {
-                        SetCursor("north-east-south-west-resize");
+                        SetCursor("nesw-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomRightResize || Y >= height - ResizeCorners && X >= width - ResizeCorners)
                     {
-                        SetCursor("north-west-south-east-resize");
+                        SetCursor("nwse-resize");
                     }
                     else if(MoveAction == MouseMoveAction.BottomResize || Y >= height - ResizeCorners)
                     {
-                        SetCursor("south-resize");
+                        SetCursor("s-resize");
                     }
                     else if(MoveAction == MouseMoveAction.LeftResize || X <= ResizeCorners)
                     {
-                        SetCursor("west-resize");
+                        SetCursor("w-resize");
                     }
                     else if(MoveAction == MouseMoveAction.RightResize || X >= width - ResizeCorners)
                     {
-                        SetCursor("east-resize");
+                        SetCursor("e-resize");
                     }
                     else
                     {
@@ -1721,7 +1721,7 @@ namespace ExpressCraft
                 }
             });
 
-            Heading.addEventListener("mouseDown", (ev) =>
+            Heading.addEventListener("mousedown", (ev) =>
             {
                 SetBodyOverLay();
                 if(!IsActiveFormCollection())
@@ -1742,7 +1742,7 @@ namespace ExpressCraft
                 ActiveForm = this;
             });
 
-            Body.addEventListener("mouseDown", (ev) =>
+            Body.addEventListener("mousedown", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1754,7 +1754,7 @@ namespace ExpressCraft
                 ev.stopPropagation();
             });
 
-            Body.addEventListener("mouseMove", (ev) =>
+            Body.addEventListener("mousemove", (ev) =>
             {
                 if(InExternalMouseEvent)
                     return;
@@ -1767,7 +1767,7 @@ namespace ExpressCraft
                 }
             });
 
-            BodyOverLay.addEventListener("mouseDown", (ev) =>
+            BodyOverLay.addEventListener("mousedown", (ev) =>
             {
                 if(InDesign)
                 {
@@ -1780,7 +1780,7 @@ namespace ExpressCraft
                 ActiveForm = this;
             });
 
-            Body.addEventListener("mouseLeave", (ev) =>
+            Body.addEventListener("mouseleave", (ev) =>
             {
                 if(InDesign)
                 {
@@ -1794,7 +1794,7 @@ namespace ExpressCraft
                 }
             });
 
-            BodyOverLay.addEventListener("mouseEnter", (ev) =>
+            BodyOverLay.addEventListener("mouseenter", (ev) =>
             {
                 if(InDesign)
                 {

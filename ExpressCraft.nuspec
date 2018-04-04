@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG - BL - PH</authors>
     <owners>SG - BL - PH</owners>
@@ -12,8 +12,6 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-	Added Graphics Class
-	Updated to Bridge 16.5
 	</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
@@ -27,7 +25,7 @@ Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-bac
 		<dependency id="Retyped.Core" version="[1.4.6556]"/>		
 		<dependency id="Retyped.dom" version="[2.3.6556]"/>
 		<dependency id="Retyped.es5" version="[2.3.6556]"/>
-		<dependency id="Retyped.jquery" version="[2.3.6556]"/>
+		<dependency id="Retyped.jquery" version="[2.0.6556]"/>
 		<dependency id="Retyped.scripthost" version="[2.3.6556]"/>
 	  </dependencies>
   </metadata>

@@ -60,8 +60,8 @@ namespace ExpressCraft
                             }
                         };
 
-                        Content.addEventListener("MoveEnter", _OnMouseEnterToolTip);
-                        Content.addEventListener("MouseLeave", _OnMouseLeaveToolTip);
+                        Content.addEventListener("moveenter", _OnMouseEnterToolTip);
+                        Content.addEventListener("mouseleave", _OnMouseLeaveToolTip);
                         return;
                     }
 
@@ -477,7 +477,7 @@ namespace ExpressCraft
             {
                 f = "8.25pt Tahoma";
             }
-            var c = (cva ?? (cva = new HTMLCanvasElement())).getContext("2D").As<CanvasRenderingContext2D>();
+            var c = (cva ?? (cva = new HTMLCanvasElement())).getContext("2d").As<CanvasRenderingContext2D>();
             c.font = f;
             return c.measureText(t);
         }

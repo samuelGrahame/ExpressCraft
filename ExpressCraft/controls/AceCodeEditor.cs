@@ -81,12 +81,12 @@ namespace ExpressCraft
 				*/
             };
 
-            this.Content.addEventListener("mouseDown", (ev) =>
+            this.Content.addEventListener("mousedown", (ev) =>
             {
                 Form.InExternalMouseEvent = true;
             });
 
-            this.Content.addEventListener("mouseUp", (ev) =>
+            this.Content.addEventListener("mouseup", (ev) =>
             {
                 Form.InExternalMouseEvent = false;
             });

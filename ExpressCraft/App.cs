@@ -10,7 +10,7 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-            //var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
+            var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
 
             //var x = new Test();
             //x.SetBoundsFull();
@@ -19,7 +19,7 @@ namespace ExpressCraft
 
             //frm.LinkchildToForm(x);
 
-            //frm.Show();
+            frm.Show();
         }
 
         //public class Test : CanvasControl
