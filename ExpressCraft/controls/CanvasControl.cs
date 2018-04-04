@@ -24,11 +24,27 @@ namespace ExpressCraft
                 var bounds = Content.getBoundingClientRect();
                 Canvas.width = (int)bounds.width;
                 Canvas.height = (int)bounds.height;
-                
-                if(ClearOnResize)
-                    OnClear();
-                OnPaint();
+
+                Refresh();
             };
+        }
+
+        public override void Render()
+        {
+            base.Render();
+
+            Refresh();
+        }
+
+
+        /// <summary>
+        /// Refresh control..
+        /// </summary>
+        public void Refresh()
+        {
+            if(ClearOnResize)
+                OnClear();
+            OnPaint();
         }
 
         public Graphics CreateGraphics()

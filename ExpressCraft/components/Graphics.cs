@@ -240,9 +240,27 @@ namespace ExpressCraft
         {
             ApplyFill(brush);
             _context.font = font.FontString;
-            _context.fillText(s, (int)x, (int)y);
+            _context.fillText(s, x, y);
         }
-        
+
+        public void DrawString(string s, Font font, Brush brush, double x, double y, double maxWidth, bool alignmentCentre = false, bool baseIsTop = true)
+        {
+            ApplyFill(brush);
+            if(baseIsTop)
+                _context.textBaseline = "top";
+
+            if(alignmentCentre)
+            {
+                _context.textAlign = "center";
+            }else
+            {
+                _context.textAlign = "left";
+            }
+            
+            _context.font = font.FontString;
+            _context.fillText(s, x, y, maxWidth);
+        }
+
         public void DrawString(string s, Font font, Brush brush, PointF point)
         {
             DrawString(s, font, brush, point.X, point.Y);
@@ -250,7 +268,7 @@ namespace ExpressCraft
         
         public void DrawString(string s, Font font, Brush brush, float x, float y)
         {
-            DrawString(s, font, brush, x, y, null); ;
+            DrawString(s, font, brush, x, y, null);
         }
         
         public void DrawBezier(Pen pen, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
