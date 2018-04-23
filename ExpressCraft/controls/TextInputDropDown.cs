@@ -34,8 +34,8 @@ namespace ExpressCraft
 
         public virtual float GetDropdownWidth()
         {
-            return (float)this.Content.getBoundingClientRect().width;
-        }        
+            return (float)((DOMRect)this.Content.getBoundingClientRect()).width;
+        }
 
         public override void SetDisplayFormat(string value)
         {

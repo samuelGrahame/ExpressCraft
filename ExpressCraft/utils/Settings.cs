@@ -74,6 +74,7 @@ namespace ExpressCraft
 
         public static bool ShowExceptionDialog = true;
 
+        [Obsolete("No Longer is in the system! - remove self jquery...")]
         public static int FormFadeDuration = 100;
 
         private static int _dpi;
@@ -99,7 +100,7 @@ namespace ExpressCraft
             div.Width = "1000cm";
 
             document.body.AppendChild(div);
-            _dpi = (int)(div.Content.getBoundingClientRect().height / 1000.0d);
+            _dpi = (int)(((DOMRect)div.Content.getBoundingClientRect()).height / 1000.0d);
             document.body.removeChild((Node)div);
             _dpiSetup = true;
             return _dpi;            
@@ -119,7 +120,7 @@ namespace ExpressCraft
         {
             try
             {
-                StyleSheetList sheets = document.stylesheets;
+                StyleSheetList sheets = document.styleSheets;
                 for(int i = 0; i < sheets.length; i++)
                 {
                     var ownerNode = sheets[i].ownerNode as HTMLLinkElement;

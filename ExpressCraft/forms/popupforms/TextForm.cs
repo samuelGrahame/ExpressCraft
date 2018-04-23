@@ -1,6 +1,8 @@
 ﻿using static Retyped.dom;
 using static Retyped.jquery;
 using System;
+using Retyped;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -80,7 +82,8 @@ namespace ExpressCraft
                             dynamic e = jQuery2.Event("keypress");
                             e.which = 13;
                             e.keyCode = 13;
-                            jQuery.select(ReadInput.Content).trigger((JQueryEventObject)e);
+                            jQuery.select((JQuery.TypeOrArray<Element>)ReadInput.Content).trigger(e);
+                            //jQuery.select(ReadInput.Content).trigger((JQueryEventObject)e);
                         }
                         else if(ReadInput.GoNext)
                         {

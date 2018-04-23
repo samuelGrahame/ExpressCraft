@@ -53,7 +53,7 @@ namespace ExpressCraft
         {
             if(Visible)
                 return;
-            var x = this.Content.getBoundingClientRect();
+            var x = (DOMRect)this.Content.getBoundingClientRect();
             gridView.Location = new Vector2((int)x.left, (int)(x.top + x.height));
 
             ContextMenu.TotalContextHandles++;

@@ -102,7 +102,7 @@ namespace ExpressCraft
                         return;
                     }
                 }
-                var clientRec = this.Content.getBoundingClientRect();
+                var clientRec = (ClientRect)this.Content.getBoundingClientRect();
 
                 if(_prevClientRect == null)
                 {
@@ -185,7 +185,7 @@ namespace ExpressCraft
             int left = 12;
             if(FixedSplitterPostion == FixedSplitterPosition.Panel2)
                 left = 0;
-            var maxSize = (int)(Horizontal ? this.Content.getBoundingClientRect().height : this.Content.getBoundingClientRect().width) - left;
+            var maxSize = (int)(Horizontal ? ((DOMRect)this.Content.getBoundingClientRect()).height : ((DOMRect)this.Content.getBoundingClientRect()).width) - left;
             if(maxSize < 0)
                 maxSize = 0;
             return maxSize;

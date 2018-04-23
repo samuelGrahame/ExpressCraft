@@ -15,12 +15,12 @@ namespace ExpressCraft
 
             if(isControlChild)
             {
-                var rec = control.Content.parentElement.getBoundingClientRect();
+                var rec = (DOMRect)control.Content.parentElement.getBoundingClientRect();
                 return new Vector2((float)rec.left, (float)(rec.top + rec.height));
             }
             else
             {
-                var rec = control.Content.getBoundingClientRect();
+                var rec = (DOMRect)control.Content.getBoundingClientRect();
                 return new Vector2((float)rec.left, (float)(rec.top + rec.height));
             }
         }
@@ -67,7 +67,7 @@ namespace ExpressCraft
             }
             else
             {
-                var rect = Content.getBoundingClientRect();
+                var rect = (DOMRect)Content.getBoundingClientRect();
 
                 try
                 {

@@ -1160,7 +1160,7 @@ namespace ExpressCraft
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
                         {
-                            dr.ondblclick = new HTMLElement.ondblclickFn(OnDoubleClick);
+                            dr.ondblclick = new HTMLElement.onclickFn(OnDoubleClick);
                         }
                         var docFrag = document.createDocumentFragment();
 
@@ -1246,7 +1246,7 @@ namespace ExpressCraft
                         {
                             dr.setAttribute("draggable", "true");
 
-                            dr.ondragstart = new HTMLElement.ondragstartFn(OnRowDragStart);
+                            dr.ondragstart = new HTMLElement.ondragFn(OnRowDragStart);
                         }
 
                         rowFragment.appendChild(dr);
@@ -1964,12 +1964,12 @@ namespace ExpressCraft
             se.setAttribute("i", Convert.ToString(index));
             se.setAttribute("draggable", "true");
             se.onclick = new HTMLElement.onclickFn(OnColumnOnClick);
-            se.ondragstart = new HTMLElement.ondragstartFn(OnColumnDragStart);
-            se.ondragover = new HTMLElement.ondragoverFn(OnColumnDragOver);
-            se.ondrop = new HTMLElement.ondropFn(OnColumnDrop);
-            se.onmousedown = new HTMLElement.onmousedownFn(OnColumnMouseDown);
-            se.onmousemove = new HTMLElement.onmousemoveFn(OnColumnMouseMove);
-            se.onmouseleave = new HTMLElement.onmouseleaveFn(OnColumnMouseLeave);
+            se.ondragstart = new HTMLElement.ondragFn(OnColumnDragStart);
+            se.ondragover = new HTMLElement.ondragFn(OnColumnDragOver);
+            se.ondrop = new HTMLElement.ondragFn(OnColumnDrop);
+            se.onmousedown = new HTMLElement.onclickFn(OnColumnMouseDown);
+            se.onmousemove = new HTMLElement.onclickFn(OnColumnMouseMove);
+            se.onmouseleave = new HTMLElement.onclickFn(OnColumnMouseLeave);
         }
 
         private int lastId = -1;

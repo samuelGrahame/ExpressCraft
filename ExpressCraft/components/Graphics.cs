@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Bridge.Html5.CanvasTypes;
 
 namespace ExpressCraft
 {
@@ -390,7 +389,7 @@ namespace ExpressCraft
 
             document.body.AppendChild(div);
 
-            var height = (float)div.Content.getBoundingClientRect().height;
+            var height = (float)((DOMRect)div.Content.getBoundingClientRect()).height;
 
             document.body.removeChild((Node)div);
 

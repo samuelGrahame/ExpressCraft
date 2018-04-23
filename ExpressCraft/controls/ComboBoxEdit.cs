@@ -37,7 +37,7 @@ namespace ExpressCraft
 
         public void FillData(params DataItem[] dataitems)
         {
-            jQuery.select(ComboBoxBase).empty();
+            jQuery.select((JQuery.TypeOrArray<Element>)ComboBoxBase).empty();
 
             if(dataitems == null)
             {

@@ -179,7 +179,7 @@ namespace ExpressCraft
 
         protected static bool InErrorDialog = false;
 
-        public JQuery Self;
+        //public JQuery<HTMLElement> Self;
 
         protected bool _IsDialog = false;
 
@@ -537,7 +537,7 @@ namespace ExpressCraft
 
         public static void ChangeStateTextSelection(HTMLElement element, bool state)
         {
-            jQuery.select(element).css("user-select", state ? "text" : "none");
+            element.style.userSelect = state ? "text" : "none";            
         }
 
         public static void PerformFocusShake()
@@ -565,7 +565,8 @@ namespace ExpressCraft
             }
             else
             {
-                jQuery.select(element).css("user-drag:", "none");
+                dynamic el = element;
+                el.style.webkitUserDrag = "none";                
             }
         }
 
@@ -1172,7 +1173,7 @@ namespace ExpressCraft
             float widthTotal = 0;
             int y = 30;
 
-            var viewSize = Parent.getBoundingClientRect();
+            var viewSize = (DOMRect)Parent.getBoundingClientRect();
 
             foreach(var item in MinimizedForms)
             {
@@ -1509,9 +1510,7 @@ namespace ExpressCraft
             }
 
             BodyOverLay.style.visibility = "collapse";
-
-            Self = jQuery.select(Content);
-
+            
             Content.addEventListener("mousedown", (ev) =>
             {
                 if(InExternalMouseEvent)
@@ -1531,7 +1530,7 @@ namespace ExpressCraft
 
                 SetBodyOverLay();
 
-                var clientRec = this.Content.getBoundingClientRect();
+                var clientRec = (DOMRect)this.Content.getBoundingClientRect();
 
                 var mousePos = Helper.GetClientMouseLocation(ev);
 
@@ -1812,9 +1811,8 @@ namespace ExpressCraft
                 }
             });
 
-            jQuery.select(Content)
-                .css("width", Window_DefaultWidth)
-                .css("height", Window_DefaultHeight);
+            Content.style.width = Window_DefaultWidth.ToPx();
+            Content.style.height = Window_DefaultHeight.ToPx();            
 
             Content.AppendChild(Heading);
             Content.AppendChild(Body);
@@ -1993,9 +1991,8 @@ namespace ExpressCraft
             if(WindowHolder == null)
                 return;
 
-            Self
-            .css("left", MinZero((float)(WindowHolder.clientWidth / 2) - (Script.ParseInt(this.Width.ToHtmlValue()) / 2)))
-            .css("top", MinZero((float)(WindowHolder.clientHeight / 2) - (Script.ParseInt(this.Height.ToHtmlValue()) / 2)));
+            Content.style.left = MinZero((float)(WindowHolder.clientWidth / 2) - (Script.ParseInt(this.Width.ToHtmlValue()) / 2)).ToPx();
+            Content.style.top = MinZero((float)(WindowHolder.clientHeight / 2) - (Script.ParseInt(this.Height.ToHtmlValue()) / 2)).ToPx();            
         }
 
         public override void Render()
@@ -2074,7 +2071,7 @@ namespace ExpressCraft
                             y = 0;
                         }
 
-                        var rec = WindowHolder.getBoundingClientRect();
+                        var rec = (DOMRect)WindowHolder.getBoundingClientRect();
 
                         double pw25 = rec.width * 0.15;
                         double ph25 = rec.height * 0.15;
@@ -2094,8 +2091,8 @@ namespace ExpressCraft
                         x = (int)x + 10;
                         y = (int)y + 10;
 
-                        Self.css("left", MinZero((int)x))
-                            .css("top", MinZero((int)y));
+                        this.Content.style.left = MinZero((int)x).ToPx();
+                        this.Content.style.top = MinZero((int)x).ToPx();                        
                     }
                 }
                 
@@ -2393,13 +2390,15 @@ namespace ExpressCraft
                 if(!ForReuse)
                 {
                     if(Settings.FormFadeDuration > 0)
-                    {
-                        Self.fadeOut(Settings.FormFadeDuration, closeAction);
+                    {             
+                                   
+                        //Self.fadeOut(Settings.FormFadeDuration, closeAction);
                     }
                     else
                     {
                         closeAction();
                     }
+                    closeAction();
                 }
                 else
                 {

@@ -2,6 +2,7 @@
 using static Retyped.jquery;
 using System;
 using static Retyped.es5;
+using static Retyped.jquery.JQuery;
 
 namespace ExpressCraft
 {
@@ -35,124 +36,43 @@ namespace ExpressCraft
             }
         }
 
+        [Obsolete("No Longer Used!")]
         public static void InvokeMethodUI(string interfaceName, string method, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, params object[] arguments)
         {
-            PostJsonProgressForm(new MethodRequest(interfaceName, method, arguments), Success, Error);
+            
         }
 
+        [Obsolete("No Longer Used!")]
         public static void InvokeMethodUIControl(string interfaceName, string method, ProgressControl progressControl, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, params object[] arguments)
         {
-            PostJsonProgressControl(new MethodRequest(interfaceName, method, arguments), progressControl, Success, Error);
+            
         }
 
+        [Obsolete("No Longer Used!")]
         public static void InvokeMethod(string interfaceName, string method, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, params object[] arguments)
         {
             PostJson(new MethodRequest(interfaceName, method, arguments), Success, Error);
         }
 
+        [Obsolete("No Longer Used!")]
         public static void PostJson(object JsonFile, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, bool Async = true)
         {
-            // lets convert the JsonFileObject to a string;
-            var ajo = GetAjaxOptions(JsonFile, Async);
-            if(Success != null)
-                ajo.success = new JQueryAjaxSettings.successFn((o, s, j) => { Success(o, s, j); return null; });
-            if(Error != null)
-                ajo.error = new JQueryAjaxSettings.errorFn((j, s, s2) => { Error(j, s, s2); return null; });
-
-            jQuery.ajax(ajo);
+            
         }
 
+        [Obsolete("No Longer Used!")]
         public static void PostJsonProgressControl(object JsonFile, ProgressControl progressControl, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, bool Async = true)
         {
-            // lets convert the JsonFileObject to a string;
-            Func<object> inline = () =>
-            {
-                var xmlRequest = new XMLHttpRequest();
-                xmlRequest.addEventListener("progress", (e) =>
-                {
-                    var pe = e as ProgressEvent;
-                    if(progressControl == null)
-                        return;
-                    var pc = progressControl;
-
-                    float Percent = 0;
-
-                    if(pe.loaded != 0 && pe.total != 0)
-                    {
-                        Percent = ((float)pe.loaded / (float)pe.total) * 100.0f;
-                    }
-                    pc.internalProgressControl.style.width = Percent.ToString() + "%";
-                });
-
-                return xmlRequest;
-            };
-
-            var ajo = GetAjaxOptions(JsonFile, Async);
-            ajo.xhr = inline;
-            if(Success != null)
-                ajo.success = new JQueryAjaxSettings.successFn((o, s, j) => { Success(o, s, j); return null; });
-            if(Error != null)
-                ajo.error = new JQueryAjaxSettings.errorFn((j, s, s2) => { Error(j, s, s2); return null; });
-
-            jQuery.ajax(ajo);
+           
         }
 
+        [Obsolete("No Longer Used!")]
         public static void PostJsonProgressForm(object JsonFile, Action<object, string, JQueryXHR> Success = null, Action<JQueryXHR, string, string> Error = null, bool Async = true)
         {
-            // lets convert the JsonFileObject to a string;
-            var npf = new NetworkProgressForm();
-            Func<object> inline = () =>
-            {
-                var xmlRequest = new XMLHttpRequest();
-                xmlRequest.addEventListener("progress", (e) =>
-                {
-                    var pe = e as ProgressEvent;
-                    if(npf == null || npf.progressControl == null)
-                        return;
-                    var pc = npf.progressControl;
-
-                    float Percent = 0;
-
-                    if(pe.loaded != 0 && pe.total != 0)
-                    {
-                        Percent = ((float)pe.loaded / (float)pe.total) * 100.0f;
-                    }
-                    pc.internalProgressControl.style.width = Percent.ToString() + "%";
-                });
-
-                return xmlRequest;
-            };
-
-            var ajo = GetAjaxOptions(JsonFile, Async);
-            ajo.xhr = inline;
-
-            ajo.success = new JQueryAjaxSettings.successFn((o, s, j) => {
-                npf.DialogResult = DialogResultEnum.OK;
-                if(Success != null)
-                    Success(o, s, j);
-                return null;
-            });
-            ajo.error = new JQueryAjaxSettings.errorFn((j, s, s2) => {
-                npf.DialogResult = DialogResultEnum.Cancel;
-                if(Error != null)
-                    Error(j, s, s2);
-                return null;
-            });
-
-            ajo.complete = new JQueryAjaxSettings.completeFn((jq, str) =>
-            {
-                npf.Close();
-                return null;
-            });      
-
-            var ajr = jQuery.ajax(ajo);
-
-            npf.ShowDialog(new DialogResult(DialogResultEnum.Cancel, () =>
-            {
-                ajr.abort();
-            }));
+            
         }
 
+        [Obsolete("No Longer Used!")]
         public class NetworkProgressForm : Form
         {
             public ProgressControl progressControl;
@@ -160,20 +80,7 @@ namespace ExpressCraft
 
             public NetworkProgressForm(string _text = "Loading...")
             {
-                this.Text = _text;
-                this.Width = 400;
-                this.Height = 200;
-
-                progressControl = new ProgressControl();
-                progressControl.SetBounds(50, 50, "(100% - 100px)", "23px");
-
-                buttonCancel = new SimpleDialogButton(this, DialogResultEnum.Cancel) { Text = "Cancel" };
-                buttonCancel.SetLocation("(100% - 78px)", "(100% - 26px)");
-                buttonCancel.Content.tabIndex = 0;
-
-                Body.AppendChildren(buttonCancel, progressControl);
-
-                AllowSizeChange = false;
+                
             }
         }
     }
