@@ -1244,7 +1244,7 @@ namespace ExpressCraft
 
         public static implicit operator string(Color color)  // implicit digit to byte conversion operator
         {
-            return color.ToHex();
+            return color.ToHTMLColor();
         }
 
         public static implicit operator Color(string hexValue)  // implicit digit to byte conversion operator
@@ -1767,13 +1767,13 @@ namespace ExpressCraft
         public static Color ArgbToKnownColor(int targetARGB)
         {
             EnsureColorTable();
-            for(int i = 0; i < colorTable.Length; i++)
+            for (int i = 0; i < colorTable.Length; i++)
             {
                 int num2 = colorTable[i];
-                if(num2 == targetARGB)
+                if (num2 == targetARGB)
                 {
                     Color color = Color.FromKnownColor((KnownColor)i);
-                    if(!color.IsSystemColor)
+                    if (!color.IsSystemColor)
                     {
                         return color;
                     }
@@ -1789,7 +1789,7 @@ namespace ExpressCraft
 
         private static void EnsureColorNameTable()
         {
-            if(colorNameTable == null)
+            if (colorNameTable == null)
             {
                 InitColorNameTable();
             }
@@ -1797,7 +1797,7 @@ namespace ExpressCraft
 
         private static void EnsureColorTable()
         {
-            if(colorTable == null)
+            if (colorTable == null)
             {
                 InitColorTable();
             }
@@ -2139,7 +2139,7 @@ namespace ExpressCraft
         public static int KnownColorToArgb(KnownColor color)
         {
             EnsureColorTable();
-            if(color <= KnownColor.MenuHighlight)
+            if (color <= KnownColor.MenuHighlight)
             {
                 return colorTable[(int)color];
             }
@@ -2149,18 +2149,11 @@ namespace ExpressCraft
         public static string KnownColorToName(KnownColor color)
         {
             EnsureColorNameTable();
-            if(color <= KnownColor.MenuHighlight)
+            if (color <= KnownColor.MenuHighlight)
             {
                 return colorNameTable[(int)color];
             }
             return null;
         }
-
-        private static int SystemColorToArgb(int index)
-        {
-            return FromWin32Value(SafeNativeMethods.GetSysColor(index));
-        }
-    
-
     }
 }
