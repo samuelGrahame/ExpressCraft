@@ -1350,7 +1350,7 @@ namespace ExpressCraft
             return (x.Length == 1 ? "0" : "") + x;
         }
 
-        public string ToHex()
+        public string ToHTMLColor()
         {
             if(A != 255)
             {
@@ -1755,6 +1755,13 @@ namespace ExpressCraft
         private const int Win32GreenShift = 8;
         private const int Win32RedShift = 0;
 
+        public static string GetColorName(int index)
+        {
+            EnsureColorNameTable();
+            return colorNameTable[index];
+        }
+
+
         // Methods
         public static Color ArgbToKnownColor(int targetARGB)
         {
@@ -2147,5 +2154,12 @@ namespace ExpressCraft
             }
             return null;
         }
+
+        private static int SystemColorToArgb(int index)
+        {
+            return FromWin32Value(SafeNativeMethods.GetSysColor(index));
+        }
+    
+
     }
 }
