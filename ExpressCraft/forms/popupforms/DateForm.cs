@@ -11,10 +11,10 @@ namespace ExpressCraft
 
         public DateForm(TextInput inputControl)
         {
-            if(inputControl.Content.ParentElement != null && inputControl.Content.ParentElement.ParentElement != null && inputControl.Content.ParentElement.ParentElement.ParentElement != null)
+            if(inputControl.Content.parentElement != null && inputControl.Content.parentElement.parentElement != null && inputControl.Content.parentElement.parentElement.parentElement != null)
             {
-                PreviousScrollTop = inputControl.Content.ParentElement.ParentElement.ParentElement.ScrollTop;
-                ParentContainer = inputControl.Content.ParentElement.ParentElement.ParentElement;
+                PreviousScrollTop = inputControl.Content.parentElement.parentElement.parentElement.scrollTop;
+                ParentContainer = inputControl.Content.parentElement.parentElement.parentElement;
             }
 
             Size = new Vector2(232, 247);
@@ -40,7 +40,7 @@ namespace ExpressCraft
                 this.Close();
             };
 
-            Content.OnKeyDown = DateControl.BlockTabEvent;
+            Content.onkeydown = DateControl.BlockTabEvent;
 
             AppendChild(DateControl);
         }
@@ -53,7 +53,7 @@ namespace ExpressCraft
                 InputControl.Focus();
             else
             {
-                InputControl.Scroll(PreviousScrollTop, ParentContainer);
+                InputControl.Scroll((int)PreviousScrollTop, ParentContainer);
             }
         }
 

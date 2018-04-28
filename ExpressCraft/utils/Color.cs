@@ -1,6 +1,7 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Text;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -1368,7 +1369,7 @@ namespace ExpressCraft
                 return FromHex(value.Substring(1));
             else
             {
-                return Color.FromArgb(Global.ParseInt(value));
+                return Color.FromArgb(Script.ParseInt(value));
             }
         }
 

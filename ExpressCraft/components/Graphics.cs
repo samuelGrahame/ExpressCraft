@@ -1,10 +1,9 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Bridge.Html5.CanvasTypes;
 
 namespace ExpressCraft
 {
@@ -16,15 +15,15 @@ namespace ExpressCraft
         public Graphics(CanvasControl control)
         {
             _canvas = control.Canvas;
-            _context = _canvas.GetContext(CanvasContext2DType.CanvasRenderingContext2D);
+            _context = _canvas.getContext("2d").As<CanvasRenderingContext2D>();
         }
 
         public void Clear(Color color)
         {
-            _context.ClearRect(0, 0, _canvas.Width, _canvas.Height);
+            _context.clearRect(0, 0, _canvas.width, _canvas.height);
             if(Color.Transparent != color)
             {
-                FillRectangle(new SolidBrush(color), 0, 0, _canvas.Width, _canvas.Height);
+                FillRectangle(new SolidBrush(color), 0, 0, (float)_canvas.width, (float)_canvas.height);
             }            
         }
 
@@ -32,10 +31,10 @@ namespace ExpressCraft
         {
             if(brush is SolidBrush)
             {
-                _context.FillStyle = brush.As<SolidBrush>().Color.ToHex();
+                _context.fillStyle = brush.As<SolidBrush>().Color.ToHex();
             }else if(brush is StyleBrush)
             {
-                _context.FillStyle = brush.As<StyleBrush>().Style;
+                _context.fillStyle = brush.As<StyleBrush>().Style;
             }
         }
 
@@ -43,16 +42,16 @@ namespace ExpressCraft
         {
             if(pen.Brush is SolidBrush)
             {
-                _context.StrokeStyle = pen.Brush.As<SolidBrush>().Color.ToHex();
+                _context.strokeStyle = pen.Brush.As<SolidBrush>().Color.ToHex();
             }
             else if(pen.Brush is StyleBrush)
             {
-                _context.StrokeStyle = pen.Brush.As<StyleBrush>().Style;
+                _context.strokeStyle = pen.Brush.As<StyleBrush>().Style;
             }
             float width = pen.Width;
             if(width < 0)
                 width = 1;            
-            _context.LineWidth = width;
+            _context.lineWidth = width;
 
             // who knows???
             if(pen.DashStyle != DashStyle.Solid)
@@ -60,13 +59,13 @@ namespace ExpressCraft
                 switch(pen.DashStyle)
                 {                    
                     case DashStyle.Dash:
-                        _context.SetLineDash(new int[] { 2, 2 });
+                        _context.setLineDash(new double[] { 2, 2 });
                         break;
                     case DashStyle.Dot:
-                        _context.SetLineDash(new int[] { 1, 1 });
+                        _context.setLineDash(new double[] { 1, 1 });
                         break;
                     case DashStyle.DashDot:
-                        _context.SetLineDash(new int[] { 2, 1, 1, 1 });
+                        _context.setLineDash(new double[] { 2, 1, 1, 1 });
                         break;
                     case DashStyle.DashDotDot:
                         break;
@@ -86,7 +85,7 @@ namespace ExpressCraft
         public void FillRectangle(Brush brush, int x, int y, int width, int height)
         {
             ApplyFill(brush);
-            _context.FillRect(x, y, width, height);
+            _context.fillRect(x, y, width, height);
         }
         
         public void FillRectangle(Brush brush, Rectangle rect)
@@ -109,13 +108,13 @@ namespace ExpressCraft
             x += width_over_2;
             y += height_over_2;
 
-            _context.BeginPath();            
-            _context.MoveTo(x, y - height_over_2);
-            _context.BezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
-            _context.BezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
-            _context.ClosePath();
+            _context.beginPath();            
+            _context.moveTo(x, y - height_over_2);
+            _context.bezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
+            _context.bezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
+            _context.closePath();
             ApplyFill(brush);
-            _context.Fill();
+            _context.fill();
         }
 
         public void FillEllipse(Brush brush, int x, int y, int width, int height)
@@ -142,13 +141,13 @@ namespace ExpressCraft
             x += width_over_2;
             y += height_over_2;
 
-            _context.BeginPath();
+            _context.beginPath();
             ApplyPen(pen);
-            _context.MoveTo(x, y - height_over_2);
-            _context.BezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
-            _context.BezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
-            _context.ClosePath();
-            _context.Stroke();            
+            _context.moveTo(x, y - height_over_2);
+            _context.bezierCurveTo(x + width_two_thirds, y - height_over_2, x + width_two_thirds, y + height_over_2, x, y + height_over_2);
+            _context.bezierCurveTo(x - width_two_thirds, y + height_over_2, x - width_two_thirds, y - height_over_2, x, y - height_over_2);
+            _context.closePath();
+            _context.stroke();            
         }
 
         public void DrawEllipse(Pen pen, int x, int y, int width, int height)
@@ -177,7 +176,7 @@ namespace ExpressCraft
         public void DrawRectangle(Pen pen, int x, int y, int width, int height)
         {
             ApplyPen(pen);
-            _context.StrokeRect(x, y, width, height);            
+            _context.strokeRect(x, y, width, height);            
         }
 
         public void DrawRectangle(Pen pen, Rectangle rect)
@@ -194,11 +193,11 @@ namespace ExpressCraft
 
         public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
         {
-            _context.BeginPath();
-            _context.MoveTo(x1, y1);
-            _context.LineTo(x2, y2);
+            _context.beginPath();
+            _context.moveTo(x1, y1);
+            _context.lineTo(x2, y2);
             ApplyPen(pen);
-            _context.Stroke();
+            _context.stroke();
         }
         
         public void DrawLine(Pen pen, PointF pt1, PointF pt2)
@@ -208,11 +207,11 @@ namespace ExpressCraft
         
         public void DrawLine(Pen pen, int x1, int y1, int x2, int y2)
         {
-            _context.BeginPath();
-            _context.MoveTo(x1, y1);
-            _context.LineTo(x2, y2);
+            _context.beginPath();
+            _context.moveTo(x1, y1);
+            _context.lineTo(x2, y2);
             ApplyPen(pen);
-            _context.Stroke();
+            _context.stroke();
         }
         
         public void DrawLine(Pen pen, Point pt1, Point pt2)
@@ -239,10 +238,28 @@ namespace ExpressCraft
         public void DrawString(string s, Font font, Brush brush, float x, float y, StringFormat format)
         {
             ApplyFill(brush);
-            _context.Font = font.FontString;
-            _context.FillText(s, (int)x, (int)y);
+            _context.font = font.FontString;
+            _context.fillText(s, x, y);
         }
-        
+
+        public void DrawString(string s, Font font, Brush brush, double x, double y, double maxWidth, bool alignmentCentre = false, bool baseIsTop = true)
+        {
+            ApplyFill(brush);
+            if(baseIsTop)
+                _context.textBaseline = "top";
+
+            if(alignmentCentre)
+            {
+                _context.textAlign = "center";
+            }else
+            {
+                _context.textAlign = "left";
+            }
+            
+            _context.font = font.FontString;
+            _context.fillText(s, x, y, maxWidth);
+        }
+
         public void DrawString(string s, Font font, Brush brush, PointF point)
         {
             DrawString(s, font, brush, point.X, point.Y);
@@ -250,17 +267,17 @@ namespace ExpressCraft
         
         public void DrawString(string s, Font font, Brush brush, float x, float y)
         {
-            DrawString(s, font, brush, x, y, null); ;
+            DrawString(s, font, brush, x, y, null);
         }
         
         public void DrawBezier(Pen pen, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
         {
-            _context.BeginPath();
+            _context.beginPath();
             ApplyPen(pen);
-            _context.MoveTo(x1, y1);
-            _context.BezierCurveTo(x2, y2, x3, y3, x4, y4);
-            _context.ClosePath();
-            _context.Stroke();
+            _context.moveTo(x1, y1);
+            _context.bezierCurveTo(x2, y2, x3, y3, x4, y4);
+            _context.closePath();
+            _context.stroke();
         }
         
         public void DrawBezier(Pen pen, PointF pt1, PointF pt2, PointF pt3, PointF pt4)
@@ -275,36 +292,36 @@ namespace ExpressCraft
         
         public void DrawBeziers(Pen pen, PointF[] points)
         {
-            _context.BeginPath();
+            _context.beginPath();
             ApplyPen(pen);
             var point = points[0];
-            _context.MoveTo(point.X, point.Y);
+            _context.moveTo(point.X, point.Y);
             for (int i = 1; i < points.Length; i+=3)
             {
                 point = points[i];
                 var point2 = points[i + 1];
                 var point3 = points[i + 2];
-                _context.BezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
+                _context.bezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
             }            
-            _context.ClosePath();
-            _context.Stroke();
+            _context.closePath();
+            _context.stroke();
         }
 
         public void DrawBeziers(Pen pen, Point[] points)
         {
-            _context.BeginPath();
+            _context.beginPath();
             ApplyPen(pen);
             var point = points[0];
-            _context.MoveTo(point.X, point.Y);
+            _context.moveTo(point.X, point.Y);
             for (int i = 1; i < points.Length; i += 3)
             {
                 point = points[i];
                 var point2 = points[i + 1];
                 var point3 = points[i + 2];
-                _context.BezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
+                _context.bezierCurveTo(point.X, point.Y, point2.X, point2.Y, point3.X, point3.Y);
             }
-            _context.ClosePath();
-            _context.Stroke();
+            _context.closePath();
+            _context.stroke();
         }
      
         public SizeF MeasureString(string text, Font font, SizeF layoutArea, StringFormat stringFormat, out int charactersFitted, out int linesFilled)
@@ -334,11 +351,11 @@ namespace ExpressCraft
 
         public float MeasureStringWidth(string text, Font font)
         {
-            _context.Font = font.FontString;
-            var size = _context.MeasureText(text);
+            _context.font = font.FontString;
+            var size = _context.measureText(text);
             var sp = new HTMLSpanElement();
-            sp.Style.Font = font.FontString;
-            return (float)size.Width;
+            sp.style.font = font.FontString;
+            return (float)size.width;
         }
 
         public float MeasureStringHeight(string text, Font font)
@@ -348,12 +365,12 @@ namespace ExpressCraft
 
         public SizeF MeasureString(string text, Font font)
         {
-            _context.Font = font.FontString;
-            var size = _context.MeasureText(text);
+            _context.font = font.FontString;
+            var size = _context.measureText(text);
             var sp = new HTMLSpanElement();
-            sp.Style.Font = font.FontString;
+            sp.style.font = font.FontString;
             
-            return new SizeF(size.Width, internalMeasureHeight(text, font));
+            return new SizeF(size.width, internalMeasureHeight(text, font));
         }
 
         private static Dictionary<string, float> cacheGetHeight = new Dictionary<string, float>();
@@ -365,16 +382,16 @@ namespace ExpressCraft
             }
             
             var div = new Control();
-            div.Content.TextContent = text;            
+            div.Content.textContent = text;            
             div.Left = -100;
             div.Top = -100;
-            div.Style.Font = font.FontString;
+            div.Style.font = font.FontString;
 
-            Document.Body.AppendChild(div);
+            document.body.AppendChild(div);
 
-            var height = (float)div.Content.GetBoundingClientRect().Height;
+            var height = (float)((DOMRect)div.Content.getBoundingClientRect()).height;
 
-            Document.Body.RemoveChild(div);
+            document.body.removeChild((Node)div);
 
             return cacheGetHeight[font.FontString] = height;
         }

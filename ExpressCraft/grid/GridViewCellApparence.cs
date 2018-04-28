@@ -1,11 +1,11 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
     public class GridViewCellApparence
     {
         public bool IsBold = false;
-        public TextAlign Alignment = TextAlign.Left;
+        public string Alignment = "left";
         public string Forecolor = null;
 
         public GridViewCellApparence()
@@ -17,13 +17,13 @@ namespace ExpressCraft
             IsBold = isBold;
         }
 
-        public GridViewCellApparence(bool isBold, TextAlign alignment)
+        public GridViewCellApparence(bool isBold, string alignment)
         {
             IsBold = isBold;
             Alignment = alignment;
         }
 
-        public GridViewCellApparence(bool isBold, TextAlign alignment, string forecolor)
+        public GridViewCellApparence(bool isBold, string alignment, string forecolor)
         {
             IsBold = isBold;
             Alignment = alignment;

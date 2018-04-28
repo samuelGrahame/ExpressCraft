@@ -1,5 +1,6 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -76,11 +77,11 @@ namespace ExpressCraft
             {
                 if(strs[i].EndsWith("pt"))
                 {
-                    return (float)Global.ParseFloat(strs[i]) * 1.333333F;
+                    return (float)Script.ParseFloat(strs[i]) * 1.333333F;
                 }
                 else if(strs[i].EndsWith("px"))
                 {
-                    return (float)Global.ParseFloat(strs[i]);
+                    return (float)Script.ParseFloat(strs[i]);
                 }
             }
 

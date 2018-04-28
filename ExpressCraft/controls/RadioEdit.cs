@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +77,7 @@ namespace ExpressCraft
         {
             if(element != null && element.Content != null)
             {
-                element.Content.SetAttribute("name", defaultName);
+                element.Content.setAttribute("name", defaultName);
                 this.AppendChild(element);
                 RadioElements.Add(element);
                 element.ProcessRender();
@@ -89,7 +89,7 @@ namespace ExpressCraft
 
                 if(RadioElements.Count == 1)
                 {
-                    element.Style.MarginLeft = "0";
+                    element.Style.marginLeft = "0";
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace ExpressCraft
                 {
                     if(element != null && element.Content != null)
                     {
-                        element.Content.SetAttribute("name", defaultName);
+                        element.Content.setAttribute("name", defaultName);
                         
                         this.AppendChild(element);
                         RadioElements.Add(element);
@@ -110,7 +110,7 @@ namespace ExpressCraft
                         element.ProcessRender();
                         if(RadioElements.Count == 1)
                         {
-                            element.Style.MarginLeft = "0";
+                            element.Style.marginLeft = "0";
                         }                        
                     }
                 }
@@ -130,15 +130,15 @@ namespace ExpressCraft
 
             if(Enabled)
             {
-                labelElement.RemoveAttribute("disabled");
-                labelElement.Style.Color = "";
-                labelElement.Style.Cursor = Cursor.Pointer;
+                labelElement.removeAttribute("disabled");
+                labelElement.style.color = "";
+                labelElement.style.cursor = "pointer";
             }
             else
             {
-                labelElement.SetAttribute("disabled", "");
-                labelElement.Style.Color = "grey";
-                labelElement.Style.Cursor = Cursor.NotAllowed;
+                labelElement.setAttribute("disabled", "");
+                labelElement.style.color = "grey";
+                labelElement.style.cursor = "not-allowed";
             }
         }
 
@@ -157,8 +157,8 @@ namespace ExpressCraft
 
         public bool Checked
         {
-            get { return  Content.As<HTMLInputElement>().Checked; }
-            set { Content.As<HTMLInputElement>().Checked = value; }
+            get { return  Content.As<HTMLInputElement>().@checked; }
+            set { Content.As<HTMLInputElement>().@checked = value; }
         }
 
         public void ProcessRender()
@@ -168,30 +168,30 @@ namespace ExpressCraft
 
             if(labelElement == null)
             {
-                if(this.Content.ParentElement != null)
+                if(this.Content.parentElement != null)
                 {
                     labelElement = new HTMLLabelElement();
-                    labelElement.ClassList.Add("control");
-                    labelElement.Style.MarginLeft = "16px";
-                    labelElement.Style.TextIndent = "0";
-                    labelElement.Style.Left = "3px";
-                    labelElement.HtmlFor = this.Content.Id;
+                    labelElement.classList.add("control");
+                    labelElement.style.marginLeft = "16px";
+                    labelElement.style.textIndent = "0";
+                    labelElement.style.left = "3px";
+                    labelElement.htmlFor = this.Content.id;
 
-                    labelElement.InnerHTML = _caption;
+                    labelElement.innerHTML = _caption;
 
-                    if(this.Content.NextElementSibling == null)
-                        this.Content.ParentElement.AppendChild(new HTMLBRElement());
+                    if(this.Content.nextElementSibling == null)
+                        this.Content.parentElement.appendChild(new HTMLBRElement());
                     else
-                        this.Content.ParentElement.InsertBefore(new HTMLBRElement(), this.Content.NextElementSibling);
+                        this.Content.parentElement.insertBefore(new HTMLBRElement(), this.Content.nextElementSibling);
 
-                    if(this.Content.NextElementSibling == null)
-                        this.Content.ParentElement.AppendChild(labelElement);
+                    if(this.Content.nextElementSibling == null)
+                        this.Content.parentElement.appendChild(labelElement);
                     else
-                        this.Content.ParentElement.InsertBefore(labelElement, this.Content.NextElementSibling);
+                        this.Content.parentElement.insertBefore(labelElement, this.Content.nextElementSibling);
                 }                
             }else
             {
-                labelElement.InnerHTML = _caption;
+                labelElement.innerHTML = _caption;
             }
 
             ProcessIsEnabled();
@@ -207,17 +207,17 @@ namespace ExpressCraft
         private static long RadioId;
         private static Random rng = new Random();
 
-        public RadioElement() : base(Bridge.Html5.InputType.Radio)
+        public RadioElement() : base("radio")
         {
             RadioId++;
             if(RadioId > 20000)
                 RadioId = 0;
             
-            this.Content.Id = "__radio_internal_" + RadioId.ToString() + "_rng_" + rng.Next(1, 1000).ToString();
-            Style.MarginLeft = "3px";
-            Style.TextIndent = "0";
-            ClassList.Remove("Control");
-            ClassList.Remove("inputcontrol");            
+            this.Content.id = "__radio_internal_" + RadioId.ToString() + "_rng_" + rng.Next(1, 1000).ToString();
+            Style.marginLeft = "3px";
+            Style.textIndent = "0";
+            ClassList.remove("Control");
+            ClassList.remove("inputcontrol");            
         }
 
         

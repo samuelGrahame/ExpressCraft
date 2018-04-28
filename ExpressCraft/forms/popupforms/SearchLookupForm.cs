@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -22,17 +22,17 @@ namespace ExpressCraft
             SearchEdit.Focus();
 
             if(SearchInput.SearchOnLoad())
-                btnSearch.Content.Click();
+                btnSearch.Content.click();
         }
 
         public SearchLookupForm(SearchInput searchInput) : base()
         {
-            if(searchInput.Content.ParentElement != null && searchInput.Content.ParentElement.ParentElement != null)
+            if(searchInput.Content.parentElement != null && searchInput.Content.parentElement.parentElement != null)
             {
-                PreviousScrollTop = searchInput.Content.ParentElement.ParentElement.ScrollTop;
-                ParentContainer = searchInput.Content.ParentElement.ParentElement;
+                PreviousScrollTop = searchInput.Content.parentElement.parentElement.scrollTop;
+                ParentContainer = searchInput.Content.parentElement.parentElement;
             }
-            var x = searchInput.Content.GetBoundingClientRect();
+            var x = searchInput.Content.getBoundingClientRect();
 
             MinHeight = 100;
             MinWidth = 150;
@@ -47,7 +47,7 @@ namespace ExpressCraft
 
             SearchInput = searchInput;
 
-            var frag = Document.CreateDocumentFragment();
+            var frag = document.createDocumentFragment();
 
             frag.AppendChildren(
                 SearchEdit = new TextInput()
@@ -119,33 +119,33 @@ namespace ExpressCraft
                     }
                 });
 
-            btnClose.Style.Color = "red";
+            btnClose.Style.color = "red";
 
             if(Helper.NotDesktop)
             {
-                SearchEdit.Style.FontSize = "14px";
+                SearchEdit.Style.fontSize = "14px";
                 SearchEdit.Height = "45px";
 
-                btnSearch.Style.FontSize = "14px";
+                btnSearch.Style.fontSize = "14px";
                 btnSearch.Height = 45;
 
                 View.Top = 55;
                 View.Height = "(100% - 112px)";
 
-                btnClear.Style.FontSize = "14px";
+                btnClear.Style.fontSize = "14px";
                 btnClear.Height = 45;
                 btnClear.Top = "(100% - 51px)";
 
-                btnUse.Style.FontSize = "14px";
+                btnUse.Style.fontSize = "14px";
                 btnUse.Height = 45;
                 btnUse.Top = "(100% - 51px)";
 
-                btnNew.Style.FontSize = "14px";
+                btnNew.Style.fontSize = "14px";
                 btnNew.Height = 45;
                 btnNew.Top = "(100% - 51px)";
 
-                btnClose.Style.FontSize = "26px";
-                btnClose.Style.FontWeight = "bold";
+                btnClose.Style.fontSize = "26px";
+                btnClose.Style.fontWeight = "bold";
                 btnClose.Height = 45;
                 btnClose.Width = 61;
                 btnClose.Top = "(100% - 51px)";
@@ -153,25 +153,25 @@ namespace ExpressCraft
 
             SearchEdit.OnKeyDown = (obj, ev) =>
             {
-                if(ev.KeyCode == 9)
+                if(ev.keyCode == 9)
                 {
                     Close();
-                    ev.PreventDefault();
+                    ev.preventDefault();
                 }
-                else if(ev.KeyCode == 13)
+                else if(ev.keyCode == 13)
                 {
                     SearchInput.OnRequestSearch(SearchEdit.Text, View);
-                    if(ev.CtrlKey)
+                    if(ev.ctrlKey)
                     {
-                        btnUse.Content.Click();
+                        btnUse.Content.click();
                     }
-                    ev.PreventDefault();
+                    ev.preventDefault();
                 }
-                else if(ev.KeyCode == 27)
+                else if(ev.keyCode == 27)
                 {
                     FocusedRow = null;
                     this.Close();
-                    ev.PreventDefault();
+                    ev.preventDefault();
                 }
             };
 
@@ -186,6 +186,9 @@ namespace ExpressCraft
                     FocusedRow = null;
                 }
                 SearchInput.OnAcceptResult(FocusedRow);
+
+                if(SearchInput.FocusedChangeCloseForm)
+                    this.Close();
             };
 
             View.OnRowDoubleClick = (row) =>
@@ -206,7 +209,7 @@ namespace ExpressCraft
 
             SearchEdit.OnGotFocus = (obj) =>
             {
-                SearchEdit.GetInput().SelectionStart = SearchEdit.Text.Length;
+                SearchEdit.GetInput().selectionStart = SearchEdit.Text.Length;
             };
 
             LinkchildToForm(View);
@@ -219,10 +222,10 @@ namespace ExpressCraft
             SearchInput.OnClosed(FocusedRow);
             SearchInput.ValidateData();
             if(!Helper.NotDesktop)
-                SearchInput.GetInput().Focus();
+                SearchInput.GetInput().focus();
             else
             {
-                SearchInput.Scroll(PreviousScrollTop, ParentContainer);
+                SearchInput.Scroll((int)PreviousScrollTop, ParentContainer);
             }
         }
     }

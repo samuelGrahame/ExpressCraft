@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -91,58 +91,59 @@ namespace ExpressCraft
                 _imageElement.SetImage(_image, !_useBase64Image, false);
                 string padding = _buttonImageSize == 0 ? "16px" : _buttonImageSize.ToPx();
 
-                _imageElement.Style.Height = padding;
-                _imageElement.Style.Position = Position.Absolute;
-                _imageElement.Style.Top = "1px";
+                _imageElement.style.height = padding;
+                _imageElement.style.position = "absolute";
+                _imageElement.style.top = "1px";
 
                 if(!_imageRightAlign)
                 {
-                    _imageElement.Style.BackgroundPosition = "left";
-                    _imageElement.Style.PaddingLeft = padding;
-                    _imageElement.Style.PaddingRight = "";
+                    _imageElement.style.backgroundPosition = "left";
+                    _imageElement.style.paddingLeft = padding;
+                    _imageElement.style.paddingRight = "";
 
-                    _imageElement.Style.Left = "1px";
+                    _imageElement.style.left = "1px";
 
-                    if(Content.LastChild == null)
+                    if(Content.lastChild == null)
                     {
-                        Content.AppendChild(_imageElement);
+                        Content.appendChild(_imageElement);
                     }
                     else
                     {
-                        Content.InsertBefore(_imageElement, Content.LastChild);
+                        Content.insertBefore(_imageElement, Content.lastChild);
                     }                    
                 }
                 else
                 {
-                    _imageElement.Style.Right = "1px";
-                    _imageElement.Style.Left = "";
-                    _imageElement.Style.BackgroundPosition = "right";
-                    _imageElement.Style.PaddingRight = padding;
-                    _imageElement.Style.PaddingLeft = "";
+                    _imageElement.style.right = "1px";
+                    _imageElement.style.left = "";
+                    _imageElement.style.backgroundPosition = "right";
+                    _imageElement.style.paddingRight = padding;
+                    _imageElement.style.paddingLeft = "";
 
-                    Content.AppendChild(_imageElement);
+                    Content.appendChild(_imageElement);
                 }                
             }           
         }
 
-        public SimpleButton(ButtonType button = ButtonType.Button, bool ac = true) : base("simplebutton", button, ac)
+        public SimpleButton(string button = "button", bool ac = true) : base("simplebutton", false, button, ac)
         {
-            Content.OnContextMenu = (ev) =>
+            Content.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
-                ev.PreventDefault();
+                ev.stopPropagation();
+                ev.preventDefault();
+                return null;
             };
 
             if(ac)
-                Style.Font = Settings.Font;
+                Style.font = Settings.Font;
 
             this.SetSize("69px", "20px");
 
-            Content.OnClick = (ev) =>
+            Content.onclick = (ev) =>
             {
                 if(enabled)
                 {
-                    this.Content.Blur();
+                    this.Content.blur();
 
                     if(DialogResult != DialogResultEnum.None &&
                         ParentForm != null && ParentForm.IsDialog()) // Just incase we set disabled and is dialog
@@ -160,34 +161,38 @@ namespace ExpressCraft
                     }
                 }
 
-                ev.StopPropagation();
-                ev.StopImmediatePropagation();
+                ev.stopPropagation();
+                ev.stopImmediatePropagation();
+                return null;
             };
-            Content.OnDblClick = (ev) =>
+            Content.ondblclick = (ev) =>
             {
-                ev.StopPropagation();
-                ev.StopImmediatePropagation();
+                ev.stopPropagation();
+                ev.stopImmediatePropagation();
+                return null;
             };
-            Content.OnMouseDown = (ev) =>
+            Content.onmousedown = (ev) =>
             {
-                ev.StopPropagation();
-                ev.StopImmediatePropagation();
+                ev.stopPropagation();
+                ev.stopImmediatePropagation();
+                return null;
             };
-            Content.OnMouseUp = (ev) =>
+            Content.onmouseup = (ev) =>
             {
-                ev.StopPropagation();
-                ev.StopImmediatePropagation();
+                ev.stopPropagation();
+                ev.stopImmediatePropagation();
+                return null;
             };
         }
 
         public string Text
         {
-            get { return this.Content.As<HTMLButtonElement>().InnerHTML; }
+            get { return this.Content.As<HTMLButtonElement>().innerHTML; }
             set
             {
                 if(Text != value)
                 {
-                    this.Content.As<HTMLButtonElement>().InnerHTML = value;
+                    this.Content.As<HTMLButtonElement>().innerHTML = value;
 
                     if(_imageElement != null)
                     {
@@ -209,11 +214,11 @@ namespace ExpressCraft
                 enabled = value;
                 if(enabled)
                 {
-                    this.Content.RemoveAttribute("disabled");
+                    this.Content.removeAttribute("disabled");
                 }
                 else
                 {
-                    this.Content.SetAttribute("disabled", (!enabled).ToString());
+                    this.Content.setAttribute("disabled", (!enabled).ToString());
                 }
             }
         }

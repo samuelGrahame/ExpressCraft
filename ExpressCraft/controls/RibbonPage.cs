@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System.Collections.Generic;
 
 namespace ExpressCraft
@@ -37,8 +37,8 @@ namespace ExpressCraft
             for(int i = 0; i < RibbonGroups.Count; i++)
             {
                 RibbonGroups[i].Render();
-                RibbonGroups[i].Content.Style.Left = width + "px";
-                width += Global.ParseInt(RibbonGroups[i].Content.Style.Width);
+                RibbonGroups[i].Content.style.left = width + "px";
+                width += Script.ParseInt(RibbonGroups[i].Content.style.width);
                 Content.AppendChild(RibbonGroups[i]);
             }
         }

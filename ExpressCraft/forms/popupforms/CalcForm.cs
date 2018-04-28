@@ -9,10 +9,10 @@
 
         public CalcForm(TextInput inputControl)
         {
-            if(inputControl.Content.ParentElement != null && inputControl.Content.ParentElement.ParentElement != null && inputControl.Content.ParentElement.ParentElement.ParentElement != null)
+            if(inputControl.Content.parentElement != null && inputControl.Content.parentElement.parentElement != null && inputControl.Content.parentElement.parentElement.parentElement != null)
             {
-                PreviousScrollTop = inputControl.Content.ParentElement.ParentElement.ParentElement.ScrollTop;
-                ParentContainer = inputControl.Content.ParentElement.ParentElement.ParentElement;
+                PreviousScrollTop = inputControl.Content.parentElement.parentElement.parentElement.scrollTop;
+                ParentContainer = inputControl.Content.parentElement.parentElement.parentElement;
             }
 
             InputControl = inputControl;
@@ -42,7 +42,7 @@
                 InputControl.Focus();
             else
             {
-                InputControl.Scroll(PreviousScrollTop, ParentContainer);
+                InputControl.Scroll((int)PreviousScrollTop, ParentContainer);
             }
         }
 

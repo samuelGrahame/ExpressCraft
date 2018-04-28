@@ -1,13 +1,15 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
 {
     public class SearchInput : TextInputDropDown
     {
-        public object EditValue { get; set; }
-        public string DisplayMember { get; set; }
-        public string ValueMember { get; set; }
+        public object EditValue;
+        public string DisplayMember;
+        public string ValueMember;
+
+        public bool FocusedChangeCloseForm;
 
         public void SetValues(object editValue, string text)
         {
@@ -15,18 +17,19 @@ namespace ExpressCraft
             EditValue = editValue;
         }
 
-        public SearchInput() : base(InputType.Text)
+        public SearchInput() : base("text")
         {
             UsedEdit.OnKeyDown = (obj, ev) =>
             {
-                if(ev.KeyCode == 13 || ev.KeyCode == 40)
+                if(ev.keyCode == 13 || ev.keyCode == 40)
                 {
                     OnDropDownClicked(new MouseEvent("onmousedown"));
                 }
             };
-            UsedEdit.Content.OnMouseDown = (ev) =>
+            UsedEdit.Content.onmousedown = (ev) =>
             {
                 OnDropDownClicked(new MouseEvent("onmousedown"));
+                return null;
             };
         }
         

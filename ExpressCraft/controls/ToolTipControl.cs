@@ -1,6 +1,6 @@
-﻿using Bridge.Html5;
-using Bridge.jQuery2;
+﻿using static Retyped.dom;
 using System.Text;
+using static Retyped.jquery;
 
 namespace ExpressCraft
 {
@@ -25,11 +25,11 @@ namespace ExpressCraft
             {
                 if(!_toolTip.Heading.IsEmpty())
                 {
-                    this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-heading", InnerHTML = _toolTip.Heading.HtmlEscape().Replace("\r\n", "<br>") });
+                    this.Content.AppendChild(new HTMLParagraphElement() { className = "tool-tip-heading", innerHTML = _toolTip.Heading.HtmlEscape().Replace("\r\n", "<br>") });
                 }
                 if(!_toolTip.Description.IsEmpty())
                 {
-                    this.Content.AppendChild(new HTMLParagraphElement() { ClassName = "tool-tip-body", InnerHTML = _toolTip.Description.HtmlEscape().Replace("\r\n", "<br>") });
+                    this.Content.AppendChild(new HTMLParagraphElement() { className = "tool-tip-body", innerHTML = _toolTip.Description.HtmlEscape().Replace("\r\n", "<br>") });
                 }
             }
             var mouse = Helper.GetClientMouseLocation(ev);
@@ -40,8 +40,8 @@ namespace ExpressCraft
             {
                 visible = true;
                 ContextMenu.TotalContextHandles++;
-                Content.Style.ZIndex = (ContextMenu.TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
-                Document.Body.AppendChild(this);
+                Content.style.zIndex = (ContextMenu.TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
+                document.body.AppendChild(this);
             }
         }
 
@@ -51,10 +51,7 @@ namespace ExpressCraft
             {
                 if(this.Content != null)
                 {
-                    jQuery.Select(this.Content).FadeOut(100, () =>
-                    {
-                        this.Content.Delete();
-                    });
+                    this.Content.Delete();
                 }
                 visible = false;
                 ContextMenu.TotalContextHandles--;

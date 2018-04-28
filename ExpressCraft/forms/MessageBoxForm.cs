@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 
@@ -14,8 +14,11 @@ namespace ExpressCraft
             if(!Settings.MessageFormBeep)
                 return;
             if(snd == null)
-                snd = new HTMLAudioElement(ResourceManager.GetResourceString("beepSound"));
-            snd.Play();
+            {
+                snd = new HTMLAudioElement();
+                snd.src = ResourceManager.GetResourceString("beepSound");                
+            }
+            snd.play();
         }
 
         private readonly MessageBoxButtons _buttons;
@@ -65,7 +68,7 @@ namespace ExpressCraft
                     {
                         _buttons = MessageBoxButtons.Ok;
                     }
-                    pic.ClassList.Add("imagewarning");
+                    pic.classList.add("imagewarning");
                     break;
 
                 case MessageBoxLayout.Information:
@@ -73,7 +76,7 @@ namespace ExpressCraft
                     {
                         _buttons = MessageBoxButtons.Ok;
                     }
-                    pic.ClassList.Add("imageinfo");
+                    pic.classList.add("imageinfo");
                     break;
 
                 case MessageBoxLayout.Question:
@@ -81,7 +84,7 @@ namespace ExpressCraft
                     {
                         _buttons = MessageBoxButtons.YesNo;
                     }
-                    pic.ClassList.Add("imageindex");
+                    pic.classList.add("imageindex");
                     break;
 
                 case MessageBoxLayout.Error:
@@ -89,7 +92,7 @@ namespace ExpressCraft
                     {
                         _buttons = MessageBoxButtons.AbortSendCancel;
                     }
-                    pic.ClassList.Add("imageerror");
+                    pic.classList.add("imageerror");
                     break;
 
                 default:
@@ -166,36 +169,36 @@ namespace ExpressCraft
                 {
                     var but = _buttonCollection[i];
                     but.Height = 45;
-                    but.Style.BorderRadius = "4px";
-                    but.Style.FontSize = "14px";
+                    but.Style.borderRadius = "4px";
+                    but.Style.fontSize = "14px";
                     if(but.DialogResult == DialogResultEnum.OK || but.DialogResult == DialogResultEnum.Yes)
                     {
-                        but.ClassList.Add("primary");
-                        but.Style.Color = "white";
-                        but.Style.Border = "0";
+                        but.ClassList.add("primary");
+                        but.Style.color = "white";
+                        but.Style.border = "0";
                     }
                 }
             }
 
-            textContent.InnerHTML = prompt;
+            textContent.innerHTML = prompt;
 
-            section.Style.OverflowY = Overflow.Auto;
-            section.Style.Height = "100%";
-            section.Style.MaxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
-            section.AppendChild(textContent);
-            section.Style.Top = "32px";
-            section.Style.Width = "90%";
+            section.style.overflowY = "auto";
+            section.style.height = "100%";
+            section.style.maxHeight = Settings.MessageFormTextMaximumHeightInPx.ToPx();
+            section.appendChild(textContent);
+            section.style.top = "32px";
+            section.style.width = "90%";
 
             base.Body.AppendChildren(pic, section);
 
             ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
             if(Helper.NotDesktop)
             {
-                section.Style.TextAlign = TextAlign.Center;
-                section.Style.LineHeight = "100%";
+                section.style.textAlign = "center";
+                section.style.lineHeight = "100%";
 
                 WindowState = WindowStateType.Maximized;
-                Heading.Style.Display = Display.None;
+                Heading.style.display = "none";
                 Body.SetLocation(0, 0);
                 Body.SetSize("100%", "100%");
                 StartPosition = FormStartPosition.Manual;
@@ -206,10 +209,10 @@ namespace ExpressCraft
                 ShowMinimize = false;
                 ShowClose = false;
 
-                textContent.Style.Display = Display.InlineBlock;
-                textContent.Style.FontSize = "14px";
-                textContent.Style.VerticalAlign = VerticalAlign.Middle;
-                textContent.Style.LineHeight = "normal";
+                textContent.style.display = "inlineBlock";
+                textContent.style.fontSize = "14px";
+                textContent.style.verticalAlign = "middle";
+                textContent.style.lineHeight = "normal";
             }
             else
             {
@@ -230,7 +233,7 @@ namespace ExpressCraft
             Beep();
 
             base.OnShowed();
-            _buttonCollection[0].Content.Focus();
+            _buttonCollection[0].Content.focus();
         }
     }
 

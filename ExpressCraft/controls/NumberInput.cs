@@ -1,10 +1,10 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
     public class NumberInput : TextInputDropDown
     {
-        public NumberInput() : base(InputType.Number)
+        public NumberInput() : base("number")
         {
             UsedEdit.SetAttribute("step", "any");
         }

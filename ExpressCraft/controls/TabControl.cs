@@ -1,6 +1,7 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -12,10 +13,11 @@ namespace ExpressCraft
 
         public TabControl() : base("tabcontrol")
         {            
-            Content.OnContextMenu = (ev) =>
+            Content.oncontextmenu = (ev) =>
             {
-                ev.StopPropagation();
-                ev.PreventDefault();
+                ev.stopPropagation();
+                ev.preventDefault();
+                return null;
             };
         }
 
@@ -83,10 +85,10 @@ namespace ExpressCraft
             string state = Isselected ? "active" : "hidden";
             if(page.TabPageHeader != null)
             {
-                page.TabPageHeader.ClassList.Remove("tabcontrolpageheader-hidden");
-                page.TabPageHeader.ClassList.Remove("tabcontrolpageheader-active");
+                page.TabPageHeader.classList.remove("tabcontrolpageheader-hidden");
+                page.TabPageHeader.classList.remove("tabcontrolpageheader-active");
 
-                page.TabPageHeader.ClassList.Add("tabcontrolpageheader-" + state);
+                page.TabPageHeader.classList.add("tabcontrolpageheader-" + state);
             }
             else
             {
@@ -96,24 +98,24 @@ namespace ExpressCraft
             {
                 if(Isselected)
                 {
-                    page.TabPageHeader.Style.LineHeight = "44px";
+                    page.TabPageHeader.style.lineHeight = "44px";
                 }
                 else
                 {
-                    page.TabPageHeader.Style.LineHeight = "46px";
+                    page.TabPageHeader.style.lineHeight = "46px";
                 }
-                page.TabPageHeader.Style.Height = "45px";
+                page.TabPageHeader.style.height = "45px";
             }
 
-            page.TabPageHeader.SetAttribute("i", i.ToString());
+            page.TabPageHeader.setAttribute("i", i.ToString());
             if(showClosedButton)
             {
                 if(page.TabPageHeaderClose == null)
                 {
                     page.TabPageHeaderClose = Div("tabcontrolpageheader-closebutton");
-                    page.TabPageHeaderClose.OnClick = (ev) =>
+                    page.TabPageHeaderClose.onclick = (ev) =>
                     {
-                        var index = Global.ParseInt(ev.CurrentTarget.ParentElement.GetAttribute("i"));
+                        var index = Script.ParseInt(ev.currentTarget.As<HTMLElement>().parentElement.getAttribute("i"));
                         var cpage = TabPages[index];
                         if(cpage.Content != null)
                         {
@@ -129,24 +131,26 @@ namespace ExpressCraft
                         if(index > TabPages.Count - 1)
                             index = TabPages.Count - 1;
 
-                        ev.StopPropagation();
+                        ev.stopPropagation();
 
                         SelectedIndex = index;
 
                         ResizeTabHeaders();
+
+                        return null;
                     };
-                    page.TabPageHeader.AppendChild(page.TabPageHeaderClose);
+                    page.TabPageHeader.appendChild(page.TabPageHeaderClose);
                 }
             }
             else
             {
                 if(page.TabPageHeaderClose != null)
                 {
-                    page.TabPageHeader.RemoveChild(page.TabPageHeaderClose);
+                    page.TabPageHeader.removeChild(page.TabPageHeaderClose);
                 }
             }
 
-            page.Content.Style.Visibility = Isselected ? Visibility.Inherit : Visibility.Collapse;
+            page.Content.style.visibility = Isselected ? "inherit" : "collapse";
         }
 
         public void ResizeTabHeaders()
@@ -161,17 +165,17 @@ namespace ExpressCraft
                     tabHeaderContainer.Width = "100%";
                     tabHeaderContainer.Height = 50;
                     tabHeaderContainer.AppendChild(tabHeaders);
-                    tabHeaderContainer.Style.BackgroundColor = "transparent";
-                    tabHeaderContainer.Style.OverflowX = Overflow.Auto;
+                    tabHeaderContainer.Style.backgroundColor = "transparent";
+                    tabHeaderContainer.Style.overflowX = "auto";
 
-                    tabHeaders.Style.MinWidth = "100%";
+                    tabHeaders.Style.minWidth = "100%";
 
-                    Content.AppendChild(tabHeaderContainer);
+                    Content.appendChild((Node)tabHeaderContainer);
                 }
                 else
                 {
                     tabHeaders.Height = 23;
-                    Content.AppendChild(tabHeaders);
+                    Content.appendChild((Node)tabHeaders);
                     tabHeaders.Width = "100%";
                 }
             }
@@ -191,18 +195,20 @@ namespace ExpressCraft
                     if(page.TabPageHeader == null)
                     {
                         TabControlActiveStyleChange(i, ref page);
-                        page.TabPageHeader.OnMouseDown = (ev) =>
+                        page.TabPageHeader.onmousedown = (ev) =>
                         {
-                            SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
+                            SelectedIndex = Script.ParseInt(ev.currentTarget.As<HTMLDivElement>().getAttribute("i"));
+                            return null;
                         };
-                        page.TabPageHeader.OnTouchStart = (ev) =>
+                        page.TabPageHeader.ontouchstart = (ev) =>
                         {
-                            SelectedIndex = Global.ParseInt(ev.CurrentTarget.As<HTMLDivElement>().GetAttribute("i"));
+                            SelectedIndex = Script.ParseInt(ev.currentTarget.As<HTMLDivElement>().getAttribute("i"));
+                            return null;
                         };
-                        tabHeaders.Content.AppendChild(page.TabPageHeader);
-                        Content.AppendChild(page.Content);
+                        tabHeaders.Content.appendChild(page.TabPageHeader);
+                        Content.appendChild(page.Content);
                     }
-                    page.TabPageHeader.SetAttribute("i", i.ToString());
+                    page.TabPageHeader.setAttribute("i", i.ToString());
 
                     int inwidth = 24;
 
@@ -223,27 +229,28 @@ namespace ExpressCraft
                         inwidth += 19;
                     }
                     HTMLSpanElement span = null;
-                    foreach(var item in page.TabPageHeader.Children)
+                    for(int k = 0; k < page.TabPageHeader.children.length; k++)
                     {
+                        var item = page.TabPageHeader.children[k];
                         if(item is HTMLSpanElement)
                         {
-                            (span = item.As<HTMLSpanElement>()).InnerHTML = page.Caption;
+                            (span = item.As<HTMLSpanElement>()).innerHTML = page.Caption;
                             break;
                         }
-                    }
+                    }                    
                     if(span == null)
                     {
-                        span = new HTMLSpanElement() { InnerHTML = page.Caption };
+                        span = new HTMLSpanElement() { innerHTML = page.Caption };
 
                         page.TabPageHeader.AppendChild(span);
                     }
                     if(Helper.NotDesktop)
                     {
-                        span.Style.FontSize = "14px";
+                        span.style.fontSize = "14px";
                     }
 
-                    page.TabPageHeader.Style.Left = width.ToPx();
-                    page.TabPageHeader.Style.Width = inwidth.ToPx();
+                    page.TabPageHeader.style.left = width.ToPx();
+                    page.TabPageHeader.style.width = inwidth.ToPx();
 
                     //                height: calc(100% - 26px);
                     //top: 24px;

@@ -1,15 +1,15 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
     public class DateInput : TextInputDropDown
     {
-        public DateInput() : base(InputType.Date)
+        public DateInput() : base("date")
         {
             UsedEdit.OnKeyDown = (sender, ev) =>
             {
-                if(ev.KeyCode == KeyCodes.Enter)
-                    UsedEdit.Content.Blur();
+                if(ev.keyCode == KeyCodes.Enter)
+                    UsedEdit.Content.blur();
             };
         }
 

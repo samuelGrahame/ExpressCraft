@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -7,19 +7,36 @@ namespace ExpressCraft
     {
         public static void Main()
         {
-            Document.Head.AppendChild(new HTMLLinkElement() { Id = "ExpressCraft", Rel = "Stylesheet", Type = "text/css", Href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
+            document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-            //var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
+            var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
 
-            //var x = new Test();
+            ////var x = new Test();
+            ////x.SetBoundsFull();
+
+            ////frm.AppendChild(x);
+
+            ////frm.LinkchildToForm(x);
+
+            //var x = new Sheet();
             //x.SetBoundsFull();
+            //x.BeginDataUpdate();
+            //for(int x1 = 0; x1 < 26; x1++)
+            //{
+            //    for(int y = 0; y < 1000; y++)
+            //    {
+            //        x[x1, y].Value = $"{x1}:{y}";
+            //    }
+            //}
+            
+            //frm.LinkchildToForm(x);
 
             //frm.AppendChild(x);
 
-            //frm.LinkchildToForm(x);
-
             //frm.Show();
+
+            //x.EndDataUpdate();
         }
 
         //public class Test : CanvasControl

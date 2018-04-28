@@ -1,10 +1,9 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Bridge.Html5.CanvasTypes;
 
 namespace ExpressCraft
 {
@@ -18,18 +17,34 @@ namespace ExpressCraft
         {
             Canvas = this.Content.As<HTMLCanvasElement>();
      
-            Context = Canvas.GetContext(CanvasContext2DType.CanvasRenderingContext2D);
+            Context = Canvas.getContext("2d").As<CanvasRenderingContext2D>();
 
             OnResize = (sender) =>
             {
-                var bounds = Content.GetBoundingClientRect();
-                Canvas.Width = (int)bounds.Width;
-                Canvas.Height = (int)bounds.Height;
-                
-                if(ClearOnResize)
-                    OnClear();
-                OnPaint();
+                var bounds = (DOMRect)Content.getBoundingClientRect();
+                Canvas.width = (int)bounds.width;
+                Canvas.height = (int)bounds.height;
+
+                Refresh();
             };
+        }
+
+        public override void Render()
+        {
+            base.Render();
+
+            Refresh();
+        }
+
+
+        /// <summary>
+        /// Refresh control..
+        /// </summary>
+        public void Refresh()
+        {
+            if(ClearOnResize)
+                OnClear();
+            OnPaint();
         }
 
         public Graphics CreateGraphics()
@@ -39,7 +54,7 @@ namespace ExpressCraft
 
         public virtual void OnClear()
         {
-            Context.ClearRect(0, 0, Canvas.Width, Canvas.Height);
+            Context.clearRect(0, 0, Canvas.width, Canvas.height);
         }
 
         public virtual void OnPaint()

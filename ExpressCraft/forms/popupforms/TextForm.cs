@@ -1,6 +1,8 @@
-﻿using Bridge.Html5;
-using Bridge.jQuery2;
+﻿using static Retyped.dom;
+using static Retyped.jquery;
 using System;
+using Retyped;
+using Bridge;
 
 namespace ExpressCraft
 {
@@ -30,10 +32,10 @@ namespace ExpressCraft
 
         public TextForm(TextInput input) : base()
         {
-            if(input.Content.ParentElement != null && input.Content.ParentElement.ParentElement != null)
+            if(input.Content.parentElement != null && input.Content.parentElement.parentElement != null)
             {
-                PreviousScrollTop = input.Content.ParentElement.ParentElement.ScrollTop;
-                ParentContainer = input.Content.ParentElement.ParentElement;
+                PreviousScrollTop = input.Content.parentElement.parentElement.scrollTop;
+                ParentContainer = input.Content.parentElement.parentElement;
             }
 
             WindowState = WindowStateType.Maximized;
@@ -49,15 +51,15 @@ namespace ExpressCraft
                 EditInput = new TextInput(input.Type) { DisplayFormat = ReadInput.DisplayFormat };
                 EditInput.OnKeyDown = (s, ev) =>
                 {
-                    if(ev.KeyCode == 13)
+                    if(ev.keyCode == 13)
                     {
-                        btnDone.Content.Click();
+                        btnDone.Content.click();
                     }
                 };
             }
 
             EditInput.Text = input.Text;
-            EditInput.Style.FontSize = "14px";
+            EditInput.Style.fontSize = "14px";
 
             EditInput.DisableFocusPopup = true;
             EditInput.Size = new Vector2("(100% - 112px)", "100%");
@@ -76,18 +78,20 @@ namespace ExpressCraft
 
                         if(ReadInput.IsSubmit)
                         {
-                            dynamic e = jQuery.Event("keypress");
+                            dynamic jQuery2 = jQuery;                            
+                            dynamic e = jQuery2.Event("keypress");
                             e.which = 13;
                             e.keyCode = 13;
-                            jQuery.Select(ReadInput.Content).Trigger((jQueryEvent)e);
+                            jQuery.select((JQuery.TypeOrArray<Element>)ReadInput.Content).trigger(e);
+                            //jQuery.select(ReadInput.Content).trigger((JQueryEventObject)e);
                         }
                         else if(ReadInput.GoNext)
                         {
-                            var x = Document.QuerySelectorAll("input, textarea, button");
-                            int tabPlus1 = ReadInput.Content.TabIndex + 1;
-                            for(int i = 0; i < x.Length; i++)
+                            var x = document.querySelectorAll("input, textarea, button");
+                            int tabPlus1 = (int)ReadInput.Content.tabIndex + 1;
+                            for(int i = 0; i < x.length; i++)
                             {
-                                if(x[i].As<HTMLElement>().TabIndex == tabPlus1)
+                                if(x[i].As<HTMLElement>().tabIndex == tabPlus1)
                                 {
                                     x[i].As<HTMLElement>().FocusElement();
                                     break;
@@ -98,28 +102,28 @@ namespace ExpressCraft
                 }
             };
 
-            btnDone.Style.BorderRadius = "4px";
-            btnDone.ClassList.Add("primary");
-            btnDone.Style.BorderWidth = "0";
+            btnDone.Style.borderRadius = "4px";
+            btnDone.ClassList.add("primary");
+            btnDone.Style.borderWidth = "0";
 
             btnDone.Text = "&times;";
-            btnDone.Style.FontSize = "26px";
-            btnDone.Style.Color = "white";
-            btnDone.Style.FontWeight = "bold";
+            btnDone.Style.fontSize = "26px";
+            btnDone.Style.color = "white";
+            btnDone.Style.fontWeight = "bold";
 
             EditInput.OnTextChanged = (sender) =>
             {
                 if(EditInput.GetEditValue() == ReadInput.GetEditValue())
                 {
                     btnDone.Text = "&times;";
-                    btnDone.Style.FontSize = "26px";
-                    btnDone.Style.FontWeight = "bold";
+                    btnDone.Style.fontSize = "26px";
+                    btnDone.Style.fontWeight = "bold";
                 }
                 else
                 {
                     btnDone.Text = ReadInput.IsSubmit ? "Submit" : ReadInput.GoNext ? "Next" : "Done";
-                    btnDone.Style.FontSize = "14px";
-                    btnDone.Style.FontWeight = "";
+                    btnDone.Style.fontSize = "14px";
+                    btnDone.Style.fontWeight = "";
                 }
             };
 
@@ -128,7 +132,7 @@ namespace ExpressCraft
 
         protected override void OnClosed()
         {
-            ReadInput.Scroll(PreviousScrollTop, ParentContainer);
+            ReadInput.Scroll((int)PreviousScrollTop, ParentContainer);
             ReadInput.ValidateData();
             base.OnClosed();
         }

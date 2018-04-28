@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 
 namespace ExpressCraft
@@ -78,22 +78,22 @@ namespace ExpressCraft
             {
                 if(imageDiv != null)
                 {
-                    imageDiv.ClassList.Remove("disabled");
+                    imageDiv.classList.remove("disabled");
                 }
                 if(captionDiv != null)
                 {
-                    captionDiv.ClassList.Remove("disabled");
+                    captionDiv.classList.remove("disabled");
                 }
             }
             else
             {
                 if(imageDiv != null)
                 {
-                    imageDiv.ClassList.Add("disabled");
+                    imageDiv.classList.add("disabled");
                 }
                 if(captionDiv != null)
                 {
-                    captionDiv.ClassList.Add("disabled");
+                    captionDiv.classList.add("disabled");
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace ExpressCraft
         {
             HasRendered = true;
 
-            Content.OnClick = (ev) =>
+            Content.onclick = (ev) =>
             {
                 bool wasEnabled = enabled;
 
@@ -132,7 +132,9 @@ namespace ExpressCraft
                 if(wasEnabled && AfterItemClick != null)
                     AfterItemClick(this);
 
-                ev.StopPropagation();
+                ev.stopPropagation();
+
+                return null;
             };
 
             ProcessCaption();
@@ -145,14 +147,14 @@ namespace ExpressCraft
         {
             if(captionDiv != null)
             {
-                captionDiv.Remove();
+                captionDiv.remove();
                 captionDiv = null;
             }
             if(!string.IsNullOrWhiteSpace(Caption))
             {
                 captionDiv = Div(IsSmallCaption ? "ribbonbuttonsmallcaption" : "ribbonbuttoncaption");
 
-                captionDiv.InnerHTML = Caption;
+                captionDiv.innerHTML = Caption;
 
                 Content.AppendChild(captionDiv);
             }
@@ -165,12 +167,12 @@ namespace ExpressCraft
                 if(!string.IsNullOrWhiteSpace(Icon))
                 {
                     imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
-                    imageDiv.Style.Background = GetImageString(Icon);
+                    imageDiv.style.background = GetImageString(Icon);
                 }
                 else if(!string.IsNullOrWhiteSpace(IconURL))
                 {
                     imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
-                    imageDiv.Style.Background = GetImageStringURI(IconURL);
+                    imageDiv.style.background = GetImageStringURI(IconURL);
                 }
                 if(imageDiv != null)
                 {
@@ -181,25 +183,25 @@ namespace ExpressCraft
             {
                 if(!string.IsNullOrWhiteSpace(Icon))
                 {
-                    imageDiv.Style.Background = GetImageString(Icon);
+                    imageDiv.style.background = GetImageString(Icon);
                 }
                 else if(!string.IsNullOrWhiteSpace(IconURL))
                 {
-                    imageDiv.Style.Background = GetImageStringURI(IconURL);
+                    imageDiv.style.background = GetImageStringURI(IconURL);
                 }
             }
 
             if(imageDiv != null)
             {
-                imageDiv.Style.BackgroundSize = "100% 100%";
+                imageDiv.style.backgroundSize = "100% 100%";
 
                 if(captionDiv != null && IsSmallCaption)
-                    captionDiv.Style.Left = "28px";
+                    captionDiv.style.left = "28px";
             }
             else
             {
                 if(captionDiv != null && IsSmallCaption)
-                    captionDiv.Style.Left = "6px";
+                    captionDiv.style.left = "6px";
             }
         }
     }

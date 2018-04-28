@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -24,9 +24,9 @@ namespace ExpressCraft
         public ImageEdit() : base("inputcontrol")
         {
             _noImageDataText = new Control("form-heading-title");
-            _noImageDataText.Content.InnerHTML = "No image data";
-            _noImageDataText.Content.Style.Color = "black";
-            _noImageDataText.Content.Style.Visibility = Visibility.Inherit;
+            _noImageDataText.Content.innerHTML = "No image data";
+            _noImageDataText.Content.style.color = "black";
+            _noImageDataText.Content.style.visibility = "inherit";
 
             Content.AppendChild(_noImageDataText);
         }
@@ -37,12 +37,12 @@ namespace ExpressCraft
         {
             if(!string.IsNullOrWhiteSpace(_image))
             {                
-                _noImageDataText.Content.Style.Visibility = Visibility.Hidden;
+                _noImageDataText.Content.style.visibility = "hidden";
             }
             else
             {
                 _image = "";
-                _noImageDataText.Content.Style.Visibility = Visibility.Inherit;
+                _noImageDataText.Content.style.visibility = "inherit";
             }
             this.SetImage(_image, _isURL);
         }

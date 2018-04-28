@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,14 +47,14 @@ namespace ExpressCraft
             {
                 if(captionDiv != null)
                 {
-                    captionDiv.ClassList.Remove("disabled");
+                    captionDiv.classList.remove("disabled");
                 }
             }
             else
             {
                 if(captionDiv != null)
                 {
-                    captionDiv.ClassList.Add("disabled");
+                    captionDiv.classList.add("disabled");
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace ExpressCraft
             var htmlDiv = Div("ribbonseperator");
             if(height != 58)
             {
-                htmlDiv.Style.Height = height + "px";
+                htmlDiv.style.height = height + "px";
             }
 
             return htmlDiv;
@@ -175,7 +175,7 @@ namespace ExpressCraft
                 {
                     width += 3;
                     var vlbg = CreateVerticalLine(58);
-                    vlbg.Style.Left = width + "px";
+                    vlbg.style.left = width + "px";
 
                     Content.AppendChild(vlbg);
                 }
@@ -194,10 +194,10 @@ namespace ExpressCraft
 
                             ri.FirstButton.Render();
 
-                            ri.FirstButton.Content.Style.Left = width + "px";
-                            ri.FirstButton.Content.Style.Width = MaxWidth + "px";
+                            ri.FirstButton.Content.style.left = width + "px";
+                            ri.FirstButton.Content.style.width = MaxWidth + "px";
 
-                            ri.FirstButton.Content.Style.Top = "26px";
+                            ri.FirstButton.Content.style.top = "26px";
 
                             Content.AppendChild(ri.FirstButton);
                             // 1
@@ -210,16 +210,16 @@ namespace ExpressCraft
                             ri.FirstButton.Render();
                             ri.SecondButton.Render();
 
-                            ri.FirstButton.Content.Style.Left = width + "px";
-                            ri.SecondButton.Content.Style.Left = width + "px";
+                            ri.FirstButton.Content.style.left = width + "px";
+                            ri.SecondButton.Content.style.left = width + "px";
 
-                            ri.FirstButton.Content.Style.Top = (((100 - 3) / 3) - 11) + "px";
+                            ri.FirstButton.Content.style.top = (((100 - 3) / 3) - 11) + "px";
 
-                            ri.FirstButton.Content.Style.Width = MaxWidth + "px";
-                            ri.SecondButton.Content.Style.Width = MaxWidth + "px";
+                            ri.FirstButton.Content.style.width = MaxWidth + "px";
+                            ri.SecondButton.Content.style.width = MaxWidth + "px";
 
-                            ri.FirstButton.Content.Style.Top = "11px";
-                            ri.SecondButton.Content.Style.Top = "41px";
+                            ri.FirstButton.Content.style.top = "11px";
+                            ri.SecondButton.Content.style.top = "41px";
 
                             Content.AppendChild(ri.FirstButton);
                             Content.AppendChild(ri.SecondButton);
@@ -237,17 +237,17 @@ namespace ExpressCraft
                         ri.SecondButton.Render();
                         ri.ThirdButton.Render();
 
-                        ri.FirstButton.Content.Style.Left = width + "px";
-                        ri.SecondButton.Content.Style.Left = width + "px";
-                        ri.ThirdButton.Content.Style.Left = width + "px";
+                        ri.FirstButton.Content.style.left = width + "px";
+                        ri.SecondButton.Content.style.left = width + "px";
+                        ri.ThirdButton.Content.style.left = width + "px";
 
-                        ri.FirstButton.Content.Style.Width = MaxWidth + "px";
-                        ri.SecondButton.Content.Style.Width = MaxWidth + "px";
-                        ri.ThirdButton.Content.Style.Width = MaxWidth + "px";
+                        ri.FirstButton.Content.style.width = MaxWidth + "px";
+                        ri.SecondButton.Content.style.width = MaxWidth + "px";
+                        ri.ThirdButton.Content.style.width = MaxWidth + "px";
 
-                        ri.FirstButton.Content.Style.Top = "3px";
-                        ri.SecondButton.Content.Style.Top = "26px";
-                        ri.ThirdButton.Content.Style.Top = "49px";
+                        ri.FirstButton.Content.style.top = "3px";
+                        ri.SecondButton.Content.style.top = "26px";
+                        ri.ThirdButton.Content.style.top = "49px";
                         // 3
 
                         Content.AppendChild(ri.FirstButton);
@@ -261,7 +261,7 @@ namespace ExpressCraft
                 {
                     ri.FirstButton.Render();
 
-                    ri.FirstButton.Content.Style.Left = width + "px";
+                    ri.FirstButton.Content.style.left = width + "px";
                     int inwidth = 0;
                     if(ri.FirstButton.Caption.Contains(" "))
                     {
@@ -301,7 +301,7 @@ namespace ExpressCraft
                         inwidth = 44;
                     }
 
-                    ri.FirstButton.Content.Style.Width = inwidth + "px";
+                    ri.FirstButton.Content.style.width = inwidth + "px";
 
                     width += inwidth;
 
@@ -317,17 +317,17 @@ namespace ExpressCraft
             width += 3;
 
             var vl = CreateVerticalLine(80);
-            vl.Style.Left = width - 1 + "px";
+            vl.style.left = width - 1 + "px";
 
             Content.AppendChild(vl);
 
-            Content.Style.Width = width + "px";
+            Content.style.width = width + "px";
 
             if(!string.IsNullOrWhiteSpace(Caption))
             {
                 captionDiv = Div("ribbongroupcaption");
 
-                captionDiv.InnerHTML = Caption;
+                captionDiv.innerHTML = Caption;
                 Content.AppendChild(captionDiv);
             }
 

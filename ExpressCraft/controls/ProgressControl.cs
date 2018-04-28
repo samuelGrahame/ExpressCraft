@@ -1,5 +1,5 @@
 ﻿using Bridge;
-using Bridge.Html5;
+using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -69,11 +69,11 @@ namespace ExpressCraft
             if(DisableUpdate || internalProgressControl == null)
                 return;
             if(maximum == 0 || position == 0)
-                internalProgressControl.Style.Width = "0%";
+                internalProgressControl.style.width = "0%";
             else
             {
                 string source = Script.Write<string>("((this.position / this.maximum) * 100.00) + '%'");
-                internalProgressControl.Style.Width = "calc(" + source + " - 2px)";
+                internalProgressControl.style.width = "calc(" + source + " - 2px)";
             }
         }
     }

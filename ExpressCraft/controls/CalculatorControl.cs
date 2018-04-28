@@ -1,8 +1,8 @@
-﻿using Bridge.Html5;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -355,13 +355,13 @@ namespace ExpressCraft
 
             current_command = Value.ToString();
 
-            var doc = Document.CreateDocumentFragment();
+            var doc = document.createDocumentFragment();
 
             int AddHeight = (Helper.NotDesktop ? 45 : 22);
 
             //27.77778
 
-            doc.AppendChild(
+            doc.appendChild(
                 (DisplayInput = new MemoInput()
                 {
                     Readonly = true,
@@ -371,7 +371,7 @@ namespace ExpressCraft
 
             if(Helper.NotDesktop)
             {
-                DisplayInput.Style.FontSize = "14px";
+                DisplayInput.Style.fontSize = "14px";
                 DisplayInput.Height = 45;
             }
 
@@ -516,8 +516,8 @@ namespace ExpressCraft
             };
             if(Helper.NotDesktop)
             {
-                btnClose.Style.FontSize = "26px";
-                btnClose.Style.FontWeight = "bold";
+                btnClose.Style.fontSize = "26px";
+                btnClose.Style.fontWeight = "bold";
             }
             btnBack = new SimpleButton()
             {
@@ -527,7 +527,7 @@ namespace ExpressCraft
                 ItemClick = Back
             };
             if(Helper.NotDesktop)
-                btnBack.Style.FontSize = "14px";
+                btnBack.Style.fontSize = "14px";
             btnCE = new SimpleButton()
             {
                 Text = "CE",
@@ -540,7 +540,7 @@ namespace ExpressCraft
                 }
             };
             if(Helper.NotDesktop)
-                btnCE.Style.FontSize = "14px";
+                btnCE.Style.fontSize = "14px";
             btnC = new SimpleButton()
             {
                 Text = "C",
@@ -553,7 +553,7 @@ namespace ExpressCraft
                 }
             };
             if(Helper.NotDesktop)
-                btnC.Style.FontSize = "14px";
+                btnC.Style.fontSize = "14px";
 
             doc.AppendChildren(btnClose.Content, btnBack.Content, btnCE.Content, btnC.Content);
 
@@ -564,9 +564,9 @@ namespace ExpressCraft
                 buttons[i].Size = new Vector2("((100% - 28px) * 0.1666666666666667)", "((100% - " + yOffset + "px) * 0.2)");
                 buttons[i].Location = new Vector2("(((100% - 28px) * " + (index * 0.1666666666666667m) + ") + " + ((index * 4) + 4) + "px)", "(((100% - " + yOffset + "px) * " + (y * 0.2m) + ") + " + (((y * 4) + 8) + AddHeight) + "px)");
                 if(Helper.NotDesktop)
-                    buttons[i].Style.FontSize = "14px";
+                    buttons[i].Style.fontSize = "14px";
 
-                doc.AppendChild(buttons[i].Content);
+                doc.appendChild(buttons[i].Content);
                 index++;
                 if(index == 6)
                 {
@@ -575,22 +575,22 @@ namespace ExpressCraft
                 }
             }
 
-            btnDbl.Style.FontSize = "6.5pt";
-            btnTAX.Style.FontSize = "6.5pt";
-            btnPTAX.Style.FontSize = "6.5pt";
-            btnMTAX.Style.FontSize = "6.5pt";
+            btnDbl.Style.fontSize = "6.5pt";
+            btnTAX.Style.fontSize = "6.5pt";
+            btnPTAX.Style.fontSize = "6.5pt";
+            btnMTAX.Style.fontSize = "6.5pt";
 
-            btnClose.Style.Color = "red";
-            btnClose.Style.FontWeight = "bold";
+            btnClose.Style.color = "red";
+            btnClose.Style.fontWeight = "bold";
 
             if(!CloseButtonVisible)
             {
-                btnClose.Style.Visibility = Visibility.Hidden;
+                btnClose.Style.visibility = "hidden";
             }
 
             RefreshValue();
 
-            Content.AppendChild(doc);
+            Content.appendChild(doc);
         }
     }
 }

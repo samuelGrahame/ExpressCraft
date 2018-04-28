@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 using System;
 using System.Collections.Generic;
 
@@ -19,9 +19,10 @@ namespace ExpressCraft
 
         public ContextMenu() : base("contextmenu")
         {
-            this.Content.OnMouseLeave = (ev) =>
+            this.Content.onmouseleave = (ev) =>
             {
                 this.Close();
+                return null;
             };
         }
 
@@ -54,7 +55,7 @@ namespace ExpressCraft
                 int y = contextItem.Caption.Length;
                 var item = Label(contextItem.Caption, 1, top, width - 2, false, false, "contextitem");
 
-                item.OnClick = (ev) =>
+                item.onclick = (ev) =>
                 {
                     if(contextItem.Enabled)
                     {
@@ -64,6 +65,7 @@ namespace ExpressCraft
                         }
                         this.Close();
                     }
+                    return null;
                 };
 
                 Content.AppendChild(item);
@@ -75,8 +77,8 @@ namespace ExpressCraft
                     top += 1;
                     var sep = Div("contextitemseperator");
 
-                    sep.Style.Top = top.ToPx();
-                    sep.Style.Width = calwidth.ToPx();
+                    sep.style.top = top.ToPx();
+                    sep.style.width = calwidth.ToPx();
 
                     Content.AppendChild(sep);
 
@@ -108,8 +110,8 @@ namespace ExpressCraft
                 RenderContextMenu();
 
                 TotalContextHandles++;
-                Content.Style.ZIndex = (TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
-                Document.Body.AppendChild(this);
+                Content.style.zIndex = (TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
+                document.body.AppendChild(this);
                 Visible = true;
             }
         }
@@ -119,7 +121,7 @@ namespace ExpressCraft
             if(Visible)
             {
                 TotalContextHandles--;
-                Document.Body.RemoveChild(this);
+                document.body.removeChild((Node)this);
                 Visible = false;
             }
 

@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -75,21 +75,22 @@ namespace ExpressCraft
         {
             Panel1 = new Control() { Location = new Vector2(0, 0) };
             Panel2 = new Control();
-            Panel1.Style.Overflow = Overflow.Auto;
-            Panel2.Style.Overflow = Overflow.Auto;
+            Panel1.Style.overflow = "auto";
+            Panel2.Style.overflow = "auto";
 
             Splitter = new Control("primary");
-            Splitter.Style.Cursor = Cursor.Move;
+            Splitter.Style.cursor = "move";
 
-            Splitter.Content.OnMouseDown = (ev) =>
+            Splitter.Content.onmousedown = (ev) =>
             {
                 if(!SplitterResizable)
-                    return;
+                    return null;
                 IsMouseDown = true;
                 _mouseDownVector = Helper.GetClientMouseLocation(ev);
                 var maxSize = GetMaxSplitterSize();
                 _startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;
-                ev.StopImmediatePropagation();
+                ev.stopImmediatePropagation();
+                return null;
             };
 
             OnResize = (ev) =>
@@ -101,7 +102,7 @@ namespace ExpressCraft
                         return;
                     }
                 }
-                var clientRec = this.Content.GetBoundingClientRect();
+                var clientRec = (ClientRect)this.Content.getBoundingClientRect();
 
                 if(_prevClientRect == null)
                 {
@@ -116,19 +117,19 @@ namespace ExpressCraft
 
                     if(Horizontal)
                     {
-                        if(clientRec.Height != _prevClientRect.Height)
+                        if(clientRec.height != _prevClientRect.height)
                         {
-                            V1 = clientRec.Height;
-                            V2 = _prevClientRect.Height;
+                            V1 = clientRec.height;
+                            V2 = _prevClientRect.height;
                             dirty = true;
                         }
                     }
                     else
                     {
-                        if(clientRec.Width != _prevClientRect.Width)
+                        if(clientRec.width != _prevClientRect.width)
                         {
-                            V1 = clientRec.Width;
-                            V2 = _prevClientRect.Width;
+                            V1 = clientRec.width;
+                            V2 = _prevClientRect.width;
                             dirty = true;
                         }
                     }
@@ -145,7 +146,7 @@ namespace ExpressCraft
                 ResizeChildren();
             };
 
-            Content.OnMouseMove = (ev) =>
+            Content.onmousemove = (ev) =>
             {
                 if(IsMouseDown)
                 {
@@ -164,12 +165,16 @@ namespace ExpressCraft
 
                     ResizeChildren();
                 }
+
+                return null;
             };
 
-            Content.OnMouseUp = (ev) =>
+            Content.onmouseup = (ev) =>
             {
                 IsMouseDown = false;
                 RenderControls();
+
+                return null;
             };
 
             this.AppendChildren(Panel1, Splitter, Panel2);
@@ -180,7 +185,7 @@ namespace ExpressCraft
             int left = 12;
             if(FixedSplitterPostion == FixedSplitterPosition.Panel2)
                 left = 0;
-            var maxSize = (int)(Horizontal ? this.Content.GetBoundingClientRect().Height : this.Content.GetBoundingClientRect().Width) - left;
+            var maxSize = (int)(Horizontal ? ((DOMRect)this.Content.getBoundingClientRect()).height : ((DOMRect)this.Content.getBoundingClientRect()).width) - left;
             if(maxSize < 0)
                 maxSize = 0;
             return maxSize;

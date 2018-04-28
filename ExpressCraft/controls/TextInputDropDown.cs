@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -11,27 +11,30 @@ namespace ExpressCraft
         {
             return UsedEdit.GetDisplayFormat();
         }
-
+        private bool _disableTextEditor;
         public bool DisableTextEditor
         {
-            get { return UsedEdit.Readonly; }
-            set {                
-                UsedEdit.Readonly = value;                
+            get { return _disableTextEditor; }
+            set {
+                _disableTextEditor = value;
+                UsedEdit.DisableFocus = value;
                 if(value)
                 {
-                    UsedEdit.Style.BackgroundColor = Color.White;
-                    UsedEdit.Style.Cursor = Cursor.Pointer;
+                    UsedEdit.SetAttribute("contenteditable", "false");
+                    UsedEdit.Style.backgroundColor = Color.White;
+                    UsedEdit.Style.cursor = "pointer";
                 }
                 else
                 {
-                    UsedEdit.Style.BackgroundColor = null;                    
+                    UsedEdit.Style.backgroundColor = null;
+                    UsedEdit.Content.removeAttribute("contenteditable");
                 }
             }
-        }
+        }        
 
         public virtual float GetDropdownWidth()
         {
-            return (float)this.Content.GetBoundingClientRect().Width;
+            return (float)((DOMRect)this.Content.getBoundingClientRect()).width;
         }
 
         public override void SetDisplayFormat(string value)
@@ -49,7 +52,7 @@ namespace ExpressCraft
             return UsedEdit.GetInput();
         }        
 
-        public TextInputDropDown(InputType inputType = InputType.Text) : base(new HTMLDivElement(), true, false)
+        public TextInputDropDown(string inputType = "text") : base(new HTMLDivElement(), true, false)
         {
             int dropDownWidth = 17;
 
@@ -70,19 +73,20 @@ namespace ExpressCraft
             _displayFormat = UsedEdit.DisplayFormat;
 
             DropDownButton = new SimpleButton() { Location = new Vector2("(100% - " + dropDownWidth + "px)", 0), Size = new Vector2(dropDownWidth, "100%") };
-            DropDownButton.Content.OnMouseDown = (ev) =>
+            DropDownButton.Content.onmousedown = (ev) =>
             {
                 if(!Readonly && Enabled)
                     OnDropDownClicked(ev);
+                return null;
             };
 
-            Style.Border = "0";
+            Style.border = "0";
 
-            DropDownButton.ClassList.Add("dropdown");
+            DropDownButton.ClassList.add("dropdown");
 
             if(Helper.NotDesktop)
             {
-                DropDownButton.Style.BackgroundPosition = "right 16px center";
+                DropDownButton.Style.backgroundPosition = "right 16px center";
             }
 
             Content.AppendChildren(UsedEdit, DropDownButton);

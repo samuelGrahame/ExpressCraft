@@ -1,4 +1,4 @@
-﻿using Bridge.Html5;
+﻿using static Retyped.dom;
 
 namespace ExpressCraft
 {
@@ -21,8 +21,8 @@ namespace ExpressCraft
                 {
                     this.Content.AppendChild(new HTMLOptionElement()
                     {
-                        InnerHTML = (gridView.GetRowCellValue(rowHandle, DisplayName) as string),
-                        Value = (gridView.GetRowCellValue(rowHandle, FieldName) as string)
+                        innerHTML = (gridView.GetRowCellValue(rowHandle, DisplayName) as string),
+                        value = (gridView.GetRowCellValue(rowHandle, FieldName) as string)
                     });
                 }
                 if(Visible)
@@ -31,18 +31,21 @@ namespace ExpressCraft
                 }
             };
 
-            gridView.Content.OnMouseLeave = (ev) =>
+            gridView.Content.onmouseleave = (ev) =>
             {
                 ClosePopup();
+                return null;
             };
-            this.Content.OnMouseDown = (ev) =>
+            this.Content.onmousedown = (ev) =>
             {
-                ev.PreventDefault();
-                ev.StopImmediatePropagation();
+                ev.preventDefault();
+                ev.stopImmediatePropagation();
                 if(Visible)
                     ClosePopup();
                 else
                     ShowPopup();
+
+                return null;
             };
         }
 
@@ -50,15 +53,15 @@ namespace ExpressCraft
         {
             if(Visible)
                 return;
-            var x = this.Content.GetBoundingClientRect();
-            gridView.Location = new Vector2((int)x.Left, (int)(x.Top + x.Height));
+            var x = (DOMRect)this.Content.getBoundingClientRect();
+            gridView.Location = new Vector2((int)x.left, (int)(x.top + x.height));
 
             ContextMenu.TotalContextHandles++;
-            this.Content.ParentElement.AppendChild(gridView);
+            this.Content.parentElement.AppendChild(gridView);
 
             gridView.RenderGrid();
 
-            gridView.Content.Style.ZIndex = (ContextMenu.TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
+            gridView.Content.style.zIndex = (ContextMenu.TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
             Visible = true;
         }
 
@@ -66,7 +69,7 @@ namespace ExpressCraft
         {
             if(Visible)
             {
-                gridView.Content.ParentElement.RemoveChild(gridView);
+                gridView.Content.parentElement.removeChild((Node)gridView);
                 ContextMenu.TotalContextHandles--;
                 Visible = false;
             }
