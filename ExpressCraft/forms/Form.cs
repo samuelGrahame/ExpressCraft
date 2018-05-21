@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Retyped.jquery;
 using System;
+using Retyped;
 
 namespace ExpressCraft
 {
@@ -2253,6 +2254,12 @@ namespace ExpressCraft
 
             return zIndex;
         }
+
+        protected override HTMLElement GetControlBase()
+        {
+            return this.Body;
+        }
+
 
         protected void ManagePlaceHolders()
         {

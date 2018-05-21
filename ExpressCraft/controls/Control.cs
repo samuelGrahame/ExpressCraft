@@ -1,6 +1,8 @@
 ﻿using Bridge;
 using System;
+using System.Collections.Generic;
 using static Retyped.dom;
+using System.Collections;
 
 namespace ExpressCraft
 {
@@ -9,7 +11,7 @@ namespace ExpressCraft
         Default
     }
 
-    public class Control
+    public class Control : IList<Control>
     {
         public HTMLElement Content;
         public string Name;
@@ -19,6 +21,8 @@ namespace ExpressCraft
         private ToolTip _toolTip = null;
         private Action<Event> _OnMouseEnterToolTip = null;
         private Action<Event> _OnMouseLeaveToolTip = null;
+
+        private List<Control> innerList = new List<Control>();
 
         public ToolTip ToolTip
         {
@@ -224,6 +228,35 @@ namespace ExpressCraft
                 this.Top = value.Y;
                 this.Width = value.Z;
                 this.Height = value.M;
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Control this[int index]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -463,6 +496,11 @@ namespace ExpressCraft
             return input;
         }
 
+        protected virtual HTMLElement GetControlBase()
+        {
+            return Content;
+        }
+
         private static HTMLCanvasElement cva = null;
 
         /// <summary>
@@ -510,6 +548,67 @@ namespace ExpressCraft
             {
                 Content.classList.add(sf);
             }
+        }
+
+        public int IndexOf(Control item)
+        {
+            return innerList.IndexOf(item);
+        }
+
+        public void Insert(int index, Control item)
+        {
+            var content = GetControlBase();
+            innerList.Insert(index, item);
+            content.insertBefore(item.Content, (Node)content.childNodes[index]);
+        }
+
+        public void RemoveAt(int index)
+        {
+            var control = innerList[index];
+            Remove(control);            
+        }
+
+        public void Add(Control item)
+        {
+            innerList.Add(item);
+            var content = GetControlBase();
+            content.appendChild(item.Content);
+        }
+
+        public void CopyTo(Control[] array, int arrayIndex)
+        {
+            innerList.CopyTo(array, arrayIndex);
+        }
+
+        public void Clear()
+        {
+            innerList.Clear();
+            var content = GetControlBase();
+            content.Empty();
+        }
+
+        public bool Contains(Control item)
+        {
+            return innerList.Contains(item);
+        }
+
+        public bool Remove(Control item)
+        {
+            innerList.Remove(item);
+            var content = GetControlBase();
+            content.removeChild(item.Content);
+
+            return true;
+        }
+
+        public IEnumerator<Control> GetEnumerator()
+        {
+            return innerList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return innerList.GetEnumerator();
         }
     }
 }

@@ -89,8 +89,6 @@
     <Compile Include="sheet\SheetCell.cs" />
     <Compile Include="sheet\SheetColumn.cs" />
     <Compile Include="sheet\SheetRow.cs" />
-    <Compile Include="uiBuilder\XMLBuilder.cs" />
-    <Compile Include="uiBuilder\XMLControl.cs" />
     <Compile Include="utils\BarcodeQuaggaJS.cs" />
     <Compile Include="utils\Color.cs" />
     <Compile Include="utils\ExternalPlugin.cs" />
@@ -137,6 +135,7 @@
     <Compile Include="utils\TextBlock.cs" />
     <Compile Include="controls\TextInput.cs" />
     <Compile Include="utils\Vector4.cs" />
+    <Compile Include="xaml\ContentPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bridge\output\ExpressCraftResourceManager.css" />

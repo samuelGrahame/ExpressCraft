@@ -125,6 +125,11 @@ namespace ExpressCraft
             }           
         }
 
+        public SimpleButton() : this("button", true)
+        {
+
+        }
+
         public SimpleButton(string button = "button", bool ac = true) : base("simplebutton", false, button, ac)
         {
             Content.oncontextmenu = (ev) =>

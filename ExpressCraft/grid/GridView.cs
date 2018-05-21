@@ -898,6 +898,10 @@ namespace ExpressCraft
             }
         }
 
+        public GridView() : this(true, false)
+        {
+
+        }
 
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
         {
