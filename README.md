@@ -2,13 +2,6 @@
 
 [![NuGet](https://img.shields.io/nuget/v/expresscraft.svg)](https://www.nuget.org/packages/ExpressCraft) [![Built with Bridge.NET](https://img.shields.io/badge/built%20with-Bridge.NET-blue.svg)](http://bridge.net/)
 
-If you really enjoy this framework feel free to donate Bitcoin:
-
-![download](download.png)
-
-# 1H4CtdqjFL8vikNg99uhuYuJjwkkQLrnqx
-	
-
  Demo Rep:
  
   https://github.com/samuelGrahame/ExpressCraftDemo
