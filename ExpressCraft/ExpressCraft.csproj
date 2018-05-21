@@ -136,6 +136,7 @@
     <Compile Include="controls\TextInput.cs" />
     <Compile Include="utils\Vector4.cs" />
     <Compile Include="xaml\ContentPage.cs" />
+    <Compile Include="xaml\XAMLDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bridge\output\ExpressCraftResourceManager.css" />

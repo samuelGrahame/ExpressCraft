@@ -10,6 +10,7 @@ namespace ExpressCraft
         public DialogResultEnum DialogResult = DialogResultEnum.None;
         private HTMLImageElement _imageElement = null;
         private string _image;
+        public event EventHandler Click;
                 
         public string Image
         {
@@ -158,6 +159,9 @@ namespace ExpressCraft
 
                     if(ItemClick != null)
                         ItemClick(this);
+
+                    if(Click != null)
+                        Click(this, EventArgs.Empty);
 
                     if(DialogResult != DialogResultEnum.None && ParentForm.DialogResult != DialogResultEnum.None &&
                         ParentForm != null && ParentForm.IsDialog()) // Just incase we set disabled and is dialog

@@ -354,6 +354,11 @@ namespace ExpressCraft
             }
         }
 
+        public TextInput() : this("text", true)
+        {
+
+        }
+
         public TextInput(string type = "text", bool ac = true) : base("inputcontrol", true, FixInput(type), ac)
         {
             Type = type;

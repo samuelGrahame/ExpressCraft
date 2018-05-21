@@ -18,9 +18,12 @@ namespace ExpressCraft
         public bool HasRendered = false;
         public const string ControlClass = "control";
 
+
         private ToolTip _toolTip = null;
         private Action<Event> _OnMouseEnterToolTip = null;
         private Action<Event> _OnMouseLeaveToolTip = null;
+
+
 
         private List<Control> innerList = new List<Control>();
 

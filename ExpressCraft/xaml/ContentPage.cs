@@ -1,10 +1,13 @@
-﻿using ExpressCraft;
+﻿using Bridge;
+using ExpressCraft;
+using ExpressCraft.xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Retyped.dom;
 
 namespace Xamarin.Forms
 {
@@ -12,23 +15,13 @@ namespace Xamarin.Forms
     {
         static ContentPage()
         {
-            foreach(var item in Assembly.GetExecutingAssembly().GetManifestResourceNames())
-            {
-                Console.WriteLine(item);
-            } 
-        }
-
-        public ContentPage() : base()
-        {
-            InitializeComponent();
-        }
+           
+        }        
 
         public void InitializeComponent()
-        {            
-            foreach(var item in this.GetType().Assembly.GetManifestResourceNames())
-            {
-                Console.WriteLine(item);
-            }
+        {
+            XAMLDefinitions.Load(this.GetType().Assembly);
+            XAMLDefinitions.BuildUI(this);
         }
     }
 }

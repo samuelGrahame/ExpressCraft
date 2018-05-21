@@ -191,7 +191,13 @@ namespace ExpressCraft
 
             base.Body.AppendChildren(pic, section);
 
-            ButtonSection.AppendChildrenTabIndex(_buttonCollection.ToArray());
+            Control[] array = new Control[_buttonCollection.Count];
+            for(int i = 0; i < array.Length; i++)
+            {
+                array[i] = _buttonCollection[i];
+            }
+
+            ButtonSection.AppendChildrenTabIndex(array);
             if(Helper.NotDesktop)
             {
                 section.style.textAlign = "center";
