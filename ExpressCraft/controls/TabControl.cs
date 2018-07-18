@@ -17,7 +17,6 @@ namespace ExpressCraft
             {
                 ev.stopPropagation();
                 ev.preventDefault();
-                return null;
             };
         }
 
@@ -136,8 +135,6 @@ namespace ExpressCraft
                         SelectedIndex = index;
 
                         ResizeTabHeaders();
-
-                        return null;
                     };
                     page.TabPageHeader.appendChild(page.TabPageHeaderClose);
                 }
@@ -198,12 +195,10 @@ namespace ExpressCraft
                         page.TabPageHeader.onmousedown = (ev) =>
                         {
                             SelectedIndex = Script.ParseInt(ev.currentTarget.As<HTMLDivElement>().getAttribute("i"));
-                            return null;
                         };
                         page.TabPageHeader.ontouchstart = (ev) =>
                         {
                             SelectedIndex = Script.ParseInt(ev.currentTarget.As<HTMLDivElement>().getAttribute("i"));
-                            return null;
                         };
                         tabHeaders.Content.appendChild(page.TabPageHeader);
                         Content.appendChild(page.Content);
@@ -229,7 +224,7 @@ namespace ExpressCraft
                         inwidth += 19;
                     }
                     HTMLSpanElement span = null;
-                    for(int k = 0; k < page.TabPageHeader.children.length; k++)
+                    for(uint k = 0; k < page.TabPageHeader.children.length; k++)
                     {
                         var item = page.TabPageHeader.children[k];
                         if(item is HTMLSpanElement)

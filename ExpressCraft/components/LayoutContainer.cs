@@ -550,7 +550,7 @@ namespace ExpressCraft
             {
                 var FirstControl = Controls.FirstOrDefault();
 
-                Func<KeyboardEvent, object> PreventDefaultMoveForward = (ev) =>
+                Action<KeyboardEvent> PreventDefaultMoveForward = (ev) =>
                 {
                     if(ev.keyCode == 9 && !ev.shiftKey)
                     {
@@ -563,10 +563,9 @@ namespace ExpressCraft
                             LastControl.Input.Content.FocusElement();
                         }
                     }
-                    return null;
                 };
 
-                Func<KeyboardEvent, object> PreventDefaultMoveBack = (ev) =>
+                Action<KeyboardEvent> PreventDefaultMoveBack = (ev) =>
                 {
                     if(ev.keyCode == 9 && ev.shiftKey)
                     {
@@ -579,7 +578,6 @@ namespace ExpressCraft
                             LastControl.Input.Content.FocusElement();
                         }
                     }
-                    return null;
                 };
 
                 LastControl.Input.Content.onkeydown = new HTMLElement.onkeydownFn(PreventDefaultMoveForward);

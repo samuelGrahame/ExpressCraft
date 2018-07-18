@@ -28,7 +28,6 @@ namespace ExpressCraft
                     __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
                     OnPaint();
-                    return null;
                 };
                 Content.ontouchmove = (ev) =>
                 {
@@ -41,7 +40,6 @@ namespace ExpressCraft
 
                         OnPaint();
                     }
-                    return null;
                 };
                 Content.ontouchend = (ev) =>
                 {
@@ -54,7 +52,6 @@ namespace ExpressCraft
                     __mouseDown = false;
 
                     OnPaint();
-                    return null;
                 }; 
             }
             else
@@ -66,7 +63,6 @@ namespace ExpressCraft
                     __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
                     OnPaint();
-                    return null;
                 };
                 Content.onmousemove = (ev) =>
                 {
@@ -79,8 +75,6 @@ namespace ExpressCraft
 
                         OnPaint();
                     }
-                    return null;
-
                 };
                 Content.onmouseup = (ev) =>
                 {
@@ -93,7 +87,6 @@ namespace ExpressCraft
                     __mouseDown = false;
 
                     OnPaint();
-                    return null;
                 }; 
             }
 

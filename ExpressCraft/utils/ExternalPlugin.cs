@@ -30,7 +30,6 @@ namespace ExpressCraft
                         InLoad = false;
                         if(OnReady != null)
                             OnReady();
-                        return null;
                     },
                     src = SourceUrl
                 };

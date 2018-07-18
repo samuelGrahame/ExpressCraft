@@ -291,7 +291,7 @@ namespace ExpressCraft
                 OnResize(this);
             OnResizing();
 
-            for(int x = 0; x < parent.children.length; x++)
+            for(uint x = 0; x < parent.children.length; x++)
             {
                 if(!parent.children[x].classList.contains("control"))
                     continue;
@@ -561,7 +561,6 @@ namespace ExpressCraft
                 element.As<HTMLImageElement>().ondragstart = (ev) =>
                 {
                     ev.preventDefault();
-                    return null;
                 };
             }
             else
@@ -577,14 +576,12 @@ namespace ExpressCraft
             {
                 if(document.body.contains(WindowHolder))
                     document.body.removeChild(WindowHolder);
-                return null;
             };
 
             window.onfocus = (ev) =>
             {
                 if(!document.body.contains(WindowHolder))
                     document.body.appendChild(WindowHolder);
-                return null;
             };
         }
 
@@ -660,13 +657,11 @@ namespace ExpressCraft
             WindowLoader.oncontextmenu = (ev) =>
             {
                 ev.preventDefault();
-                return null;
             };
             WindowLoader.onmousedown = (ev) =>
             {
                 ev.preventDefault();
                 ev.stopPropagation();
-                return null;
             };
             WindowLoader.style.transition = "opacity 1s ease";
 
@@ -686,18 +681,15 @@ namespace ExpressCraft
                     ev.preventDefault();
                     SetCursor("default");
                 }
-                return null;
             };
             FormOverLay.onclick = (ev) =>
             {
                 PerformFocusShake();
-                return null;
             };
             FormOverLay.oncontextmenu = (ev) =>
             {
                 ev.stopPropagation();
                 ev.preventDefault();
-                return null;
             };
             FormOverLay.style.visibility = "visible";
 
@@ -709,13 +701,12 @@ namespace ExpressCraft
                     if(KeyHooks[i] != null)
                         KeyHooks[i](ev);
                 }
-                return null;     
             };
 
             window.onresize = (ev) =>
             {
                 if(FormCollections == null)
-                    return null;
+                    return;
 
                 for(int i = 0; i < FormCollections.Count; i++)
                 {
@@ -732,14 +723,12 @@ namespace ExpressCraft
                 }
 
                 CalculateMinmizedFormsLocation();
-
-                return null;
             };
 
             window.onmousemove = (ev) =>
             {
                 if(InExternalMouseEvent)
-                    return null;
+                    return;
 
                 var mev = ev.As<MouseEvent>();
 
@@ -962,8 +951,6 @@ namespace ExpressCraft
                     if(changed)
                         MovingForm.Resizing();
                 }
-
-                return null;
             };
 
             window.onmouseup = (ev) =>
@@ -980,7 +967,6 @@ namespace ExpressCraft
                 Mouse_Down = false;
                 MoveAction = MouseMoveAction.Move;
                 SetCursor("default");
-                return null;
             };
             window.onbeforeunload = (ev) =>
             {
@@ -988,14 +974,11 @@ namespace ExpressCraft
                 {
                     Script.Write("return 'Would you like to close this application?'");
                 }
-                return null;
             };
             window.onunload = (ev) =>
             {
                 if(Settings.OnApplicationClose != null)
                     Settings.OnApplicationClose();
-
-                return null;
             };
             
             dynamic window2 = window;
@@ -1282,30 +1265,27 @@ namespace ExpressCraft
                     butt.onmousedown = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return null;
+                            return;
                         Mouse_Down = true;
 
                         ev.stopPropagation();
                         ev.preventDefault();
 
                         ActiveForm = this;
-                        return null;
                     };
 
                     butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //|| WindowHolderSelectionBox != null
-                            return null;
+                            return;
 
                         ev.stopPropagation();
                         ev.preventDefault();
 
                         if(InDesign)
-                            return null;
+                            return;
 
                         Close();
-
-                        return null;
                     };
                     break;
 
@@ -1315,7 +1295,7 @@ namespace ExpressCraft
                     butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return null;
+                            return;
 
                         ev.stopPropagation();
                         ev.preventDefault();
@@ -1323,8 +1303,6 @@ namespace ExpressCraft
                         Mouse_Down = false;
 
                         changeWindowState();
-
-                        return null;
                     };
 
                     break;
@@ -1335,7 +1313,7 @@ namespace ExpressCraft
                     butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) // || WindowHolderSelectionBox != null
-                            return null;
+                            return;
 
                         ev.stopPropagation();
                         ev.preventDefault();
@@ -1352,8 +1330,6 @@ namespace ExpressCraft
                         }
 
                         Mouse_Down = false;
-
-                        return null;
                     };
 
                     break;
@@ -1369,14 +1345,12 @@ namespace ExpressCraft
                     butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return null;
+                            return;
 
                         ev.stopPropagation();
                         ev.preventDefault();
 
                         Mouse_Down = false;
-
-                        return null;
                     };
                     break;
 
@@ -1386,7 +1360,7 @@ namespace ExpressCraft
                     butt.onmouseup = (ev) =>
                     {
                         if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                            return null;
+                            return;
 
                         ev.stopPropagation();
                         ev.preventDefault();
@@ -1394,8 +1368,6 @@ namespace ExpressCraft
                         Mouse_Down = false;
 
                         OnMenuClick();
-
-                        return null;
                     };
 
                     break;
@@ -1404,25 +1376,22 @@ namespace ExpressCraft
             butt.onmouseenter = (ev) =>
             {
                 if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                    return null;
+                    return;
                 SetCursor("default");
-                return null;
             };
 
             butt.ondblclick = (ev) =>
             {
                 ev.stopPropagation();
-                return null;
             };
 
             butt.onmousemove = (ev) =>
             {
                 if(MovingForm != null) //  || WindowHolderSelectionBox != null
-                    return null;
+                    return;
 
                 ev.stopImmediatePropagation();
                 ev.preventDefault();
-                return null;
             };
 
             if(Type != FormButtonType.Close)
@@ -1430,7 +1399,7 @@ namespace ExpressCraft
                 butt.onmousedown = (ev) =>
                 {
                     if(MovingForm != null) // || WindowHolderSelectionBox != null
-                        return null;
+                        return;
 
                     Mouse_Down = true;
 
@@ -1438,8 +1407,6 @@ namespace ExpressCraft
                     ev.preventDefault();
 
                     ActiveForm = this;
-
-                    return null;
                 };
             }
 
@@ -1468,7 +1435,6 @@ namespace ExpressCraft
             {
                 ev.stopPropagation();
                 ev.preventDefault();
-                return null;
             };
 
             HeadingTitle = Span("form-heading-title");
@@ -1482,7 +1448,6 @@ namespace ExpressCraft
                     ev.stopPropagation();
                     ev.preventDefault();
                 }
-                return null;
             };
 
             BackColor = "#F0F0F0";
@@ -2142,7 +2107,7 @@ namespace ExpressCraft
             WindowHolder.style.zIndex = "-" + WindowHolder.childElementCount;
             bool Found = false;
 
-            for(int i = 0; i < WindowHolder.childElementCount; i++)
+            for(uint i = 0; i < WindowHolder.childElementCount; i++)
             {
                 if(Found || x.Content == WindowHolder.children[i])
                 {
@@ -2159,7 +2124,7 @@ namespace ExpressCraft
         private static void ApplyZIndex()
         {
             WindowHolder.style.zIndex = "";
-            for(int i = 0; i < WindowHolder.childElementCount; i++)
+            for(uint i = 0; i < WindowHolder.childElementCount; i++)
             {
                 WindowHolder.children[i].As<HTMLElement>().style.zIndex = i.ToString();
             }
@@ -2298,7 +2263,7 @@ namespace ExpressCraft
                     int length = (int)element.childElementCount;
                     if(length > 0)
                     {
-                        for(int i = 0; i < length; i++)
+                        for(uint i = 0; i < length; i++)
                         {
                             que.Enqueue(element.children[i].As<HTMLElement>());
                         }

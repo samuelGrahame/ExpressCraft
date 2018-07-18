@@ -18,7 +18,6 @@ namespace ExpressCraft
             this.Content.oncontextmenu = (ev) =>
             {
                 ev.stopPropagation();
-                return null;
             };
 
             ComboBoxBase.onchange = (ev) =>
@@ -31,7 +30,6 @@ namespace ExpressCraft
                     previousSelectedIndex = ComboBoxBase.selectedIndex;
                 }
                 ev.stopPropagation();
-                return null;
             };
         }
 

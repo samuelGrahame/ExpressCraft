@@ -32,7 +32,6 @@ namespace ExpressCraft
             input.onchange = ev =>
             {
                 Result = input.@checked;
-                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 40 + 25 + 78);
@@ -65,7 +64,7 @@ namespace ExpressCraft
             var input = Input("inputcontrol", "color");
             input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "40px");
-            input.onchange = ev => { Result = input.value; return null; };
+            input.onchange = ev => { Result = input.value; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 40 + 25 + 78);
         }
@@ -97,7 +96,7 @@ namespace ExpressCraft
             var input = Input("inputcontrol", "date");
             input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.onchange = ev => { Result = input.value; return null; };
+            input.onchange = ev => { Result = input.value; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
@@ -133,7 +132,6 @@ namespace ExpressCraft
             input.onchange = ev =>
             {
                 Result = DateTime.ParseExact(input.value, "yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
-                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -174,7 +172,6 @@ namespace ExpressCraft
                 //todo css for email input not showing up
                 //todo could always validate email here
                 Result = input.value;
-                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -213,7 +210,6 @@ namespace ExpressCraft
             input.onchange = ev =>
             {
                 Result = input.value;
-                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -252,7 +248,6 @@ namespace ExpressCraft
             input.onchange = ev =>
             {
                 Result = input.value;
-                return null;
             };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
@@ -288,7 +283,7 @@ namespace ExpressCraft
             var input = Input("inputcontrol", "number");
             input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.onchange = ev => { Result = input.valueAsNumber; return null; };
+            input.onchange = ev => { Result = input.valueAsNumber; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }
@@ -320,7 +315,7 @@ namespace ExpressCraft
             var input = Input("inputcontrol", "text");
             input.id = "DialogAnswerBox";
             input.SetBounds("10px", "0px", "90%", "auto");
-            input.onchange = ev => { Result = input.value; return null; };
+            input.onchange = ev => { Result = input.value; };
             AnswerDiv.AppendChild(input);
             Create(QuestionSize + 25 + 25 + 78);
         }

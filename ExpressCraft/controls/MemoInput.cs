@@ -8,13 +8,13 @@ namespace ExpressCraft
         public int Rows
         {
             get { return (int)Content.As<HTMLTextAreaElement>().rows; }
-            set { Content.As<HTMLTextAreaElement>().rows = value; }
+            set { Content.As<HTMLTextAreaElement>().rows = (uint)value; }
         }
 
         public int Cols
         {
             get { return (int)Content.As<HTMLTextAreaElement>().cols; }
-            set { Content.As<HTMLTextAreaElement>().cols = value; }
+            set { Content.As<HTMLTextAreaElement>().cols = (uint)value; }
         }
 
         public int MaxLength

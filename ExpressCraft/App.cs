@@ -9,6 +9,36 @@ namespace ExpressCraft
         {
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
+           
+            // Test Grid...
+            //var x = new Form();
+
+            //var grid = new GridView();
+
+            //var rs = new DataTable();
+            //rs.AddColumn("A", DataType.Integer);
+            //rs.AddColumn("B", DataType.Integer);
+            //rs.AddColumn("C", DataType.Integer);
+            //rs.AddColumn("D", DataType.Integer);
+            //rs.AddColumn("E", DataType.Integer);
+            //rs.AddColumn("F", DataType.Integer);
+            //rs.AddColumn("G", DataType.Integer);
+
+            //var rnd = new Random();
+
+            //for (int i = 0; i < 10000; i++)
+            //{                
+            //    rs.AddRow(rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next());
+            //}
+
+            //grid.SetBoundsFull();
+            //grid.DataSource = rs;
+
+            //x.LinkchildToForm(grid);
+
+            //x.AppendChild(grid);
+
+            //Application.Run(x);
 
            // //var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
 

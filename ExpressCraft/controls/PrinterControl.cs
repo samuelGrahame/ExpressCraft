@@ -34,8 +34,6 @@ namespace ExpressCraft
                         FocusedPage = page;
                         if(page.OnClick != null)
                             page.OnClick();
-
-                        return null;
                     };
                 }
             }
@@ -115,8 +113,6 @@ namespace ExpressCraft
                 FocusedPage = page;
                 if(page.OnClick != null)
                     page.OnClick();
-
-                return null;
             };
 
             return page;  
@@ -157,7 +153,7 @@ namespace ExpressCraft
             printingFrame.document.close();
             printingFrame.focus();
 
-            printingFrame.addEventListener("load", (a) => {
+            printingFrame.addEventListener("load", (Event a) => {
                 printingFrame.print();
                 printingFrame.close();
             });

@@ -243,14 +243,12 @@ namespace ExpressCraft
 
                 if(OnLostFocus != null)
                     OnLostFocus(this);
-                return null;
             };
             this.Content.onfocus = (ev) =>
             {
                 if(DisableFocus)
                 {
                     Content.blur();
-                    return null;
                 }
 
                 PreZIndex = Content.style.zIndex;
@@ -294,43 +292,32 @@ namespace ExpressCraft
                     if(!Settings.DisableTextPopupEditor)
                         new TextForm(this).ShowPopup(new Vector2(0, 0));
                 }
-
-                return null;
             };
             this.Content.onchange = (ev) =>
             {
                 CheckTextChanged();
-                return null;
             };
             this.Content.oncontextmenu = (ev) =>
             {
                 ev.stopPropagation();
-
-                return null;
             };
             this.Content.onkeypress = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyPress != null)
                     OnKeyPress(this, ev);
-
-                return null;
             };
             this.Content.onkeydown = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyDown != null)
                     OnKeyDown(this, ev);
-
-                return null;
             };
             this.Content.onkeyup = (ev) =>
             {
                 CheckTextChanged();
                 if(OnKeyUp != null)
                     OnKeyUp(this, ev);
-
-                return null;
             };
             this.Content.addEventListener("paste", () =>
             {

@@ -29,7 +29,6 @@ namespace ExpressCraft
             UsedEdit.Content.onmousedown = (ev) =>
             {
                 OnDropDownClicked(new MouseEvent("onmousedown"));
-                return null;
             };
         }
         

@@ -133,8 +133,6 @@ namespace ExpressCraft
                     AfterItemClick(this);
 
                 ev.stopPropagation();
-
-                return null;
             };
 
             ProcessCaption();

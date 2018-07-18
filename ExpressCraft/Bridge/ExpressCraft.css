@@ -430,8 +430,7 @@ line-height:53px
 
 .focusedrow {
 outline:dotted 1px #000!important;
-outline-offset:-2px;
-outline-width:-2px
+outline-offset:-1px;
 }
 
 .heading {
@@ -725,7 +724,7 @@ background-color:#F1707A
 }
 
 .cell {
-border:1px solid #F0F0F0
+
 }
 
 .cellrow {
@@ -741,11 +740,11 @@ background-color:#AEAEAE!important
 }
 
 .even {
-background-color:#FAFAFA!important
+    background-color: rgb(246, 247, 249) !important
 }
 
 .cellrow-selected {
-background-color:rgba(1,115,199,0.3)!important
+background-color:rgba(1,115,199,0.3) !important
 }
 
 .cellrow-selected:hover {

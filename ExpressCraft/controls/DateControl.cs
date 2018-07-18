@@ -189,7 +189,7 @@ namespace ExpressCraft
 
         public Action OnRequestToClose;
 
-        public object BlockTabEvent(KeyboardEvent ev)
+        public void BlockTabEvent(KeyboardEvent ev)
         {
             if(ev.keyCode == 9)
             {
@@ -197,7 +197,6 @@ namespace ExpressCraft
                     OnRequestToClose();
                 ev.preventDefault();
             }
-            return null;
         }
 
         public DateControl(DateTime startDate) : base()

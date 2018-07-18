@@ -84,13 +84,12 @@ namespace ExpressCraft
             Splitter.Content.onmousedown = (ev) =>
             {
                 if(!SplitterResizable)
-                    return null;
+                    return;
                 IsMouseDown = true;
                 _mouseDownVector = Helper.GetClientMouseLocation(ev);
                 var maxSize = GetMaxSplitterSize();
                 _startingSplitterPos = _splitterPosition > maxSize ? maxSize : _splitterPosition;
                 ev.stopImmediatePropagation();
-                return null;
             };
 
             OnResize = (ev) =>
@@ -165,16 +164,12 @@ namespace ExpressCraft
 
                     ResizeChildren();
                 }
-
-                return null;
             };
 
             Content.onmouseup = (ev) =>
             {
                 IsMouseDown = false;
                 RenderControls();
-
-                return null;
             };
 
             this.AppendChildren(Panel1, Splitter, Panel2);

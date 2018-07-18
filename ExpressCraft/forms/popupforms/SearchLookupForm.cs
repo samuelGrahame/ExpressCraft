@@ -209,7 +209,7 @@ namespace ExpressCraft
 
             SearchEdit.OnGotFocus = (obj) =>
             {
-                SearchEdit.GetInput().selectionStart = SearchEdit.Text.Length;
+                SearchEdit.GetInput().selectionStart = (uint?)SearchEdit.Text?.Length;
             };
 
             LinkchildToForm(View);

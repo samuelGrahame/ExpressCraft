@@ -65,7 +65,7 @@ namespace ExpressCraft.xaml
             var events = child.GetType().GetEvents();
             //TODO CACHE MethodInfos.
             // CACHE DomParser.
-            for(int i = 0; i < element.attributes.length; i++)
+            for(uint i = 0; i < element.attributes.length; i++)
             {
                 try
                 {
@@ -130,7 +130,7 @@ namespace ExpressCraft.xaml
 
             if(element.childElementCount > 0)
             {
-                for(int i = 0; i < element.childElementCount; i++)
+                for(uint i = 0; i < element.childElementCount; i++)
                 {
                     ApplyDocument(child, element.children[i], pageMethods, Page, false);
                 }

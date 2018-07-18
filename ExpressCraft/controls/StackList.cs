@@ -134,7 +134,7 @@ namespace ExpressCraft
                 }
             }else
             {
-                for(int i = 0; i < item.childElementCount; i++)
+                for(uint i = 0; i < item.childElementCount; i++)
                 {
                     var child = item.children[i];
                     AddMark(child.As<HTMLElement>());
@@ -151,7 +151,7 @@ namespace ExpressCraft
             }
             else
             {
-                for(int i = 0; i < item.childElementCount; i++)
+                for(uint i = 0; i < item.childElementCount; i++)
                 {
                     var child = item.children[i];
                     AddMark(child.As<HTMLElement>());
@@ -171,7 +171,6 @@ namespace ExpressCraft
                 {
                     item.Content.onclick = (ev) => {
                         FocusedStackItem = item;
-                        return null;                 
                     };
                 }
 

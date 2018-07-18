@@ -113,7 +113,6 @@ namespace ExpressCraft
             Slider.Content.onclick = (ev) =>
             {
                 SliderVisible = !SliderVisible;
-                return null;
             };
             _slideWidth = 250;
             Content.AppendChildren(Panel, Slider, Body);

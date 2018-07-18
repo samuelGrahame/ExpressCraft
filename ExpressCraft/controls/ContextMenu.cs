@@ -22,7 +22,6 @@ namespace ExpressCraft
             this.Content.onmouseleave = (ev) =>
             {
                 this.Close();
-                return null;
             };
         }
 
@@ -65,7 +64,6 @@ namespace ExpressCraft
                         }
                         this.Close();
                     }
-                    return null;
                 };
 
                 Content.AppendChild(item);

@@ -137,7 +137,6 @@ namespace ExpressCraft
             {
                 ev.stopPropagation();
                 ev.preventDefault();
-                return null;
             };
 
             if(ac)
@@ -172,25 +171,21 @@ namespace ExpressCraft
 
                 ev.stopPropagation();
                 ev.stopImmediatePropagation();
-                return null;
             };
             Content.ondblclick = (ev) =>
             {
                 ev.stopPropagation();
                 ev.stopImmediatePropagation();
-                return null;
             };
             Content.onmousedown = (ev) =>
             {
                 ev.stopPropagation();
                 ev.stopImmediatePropagation();
-                return null;
             };
             Content.onmouseup = (ev) =>
             {
                 ev.stopPropagation();
                 ev.stopImmediatePropagation();
-                return null;
             };
         }
 

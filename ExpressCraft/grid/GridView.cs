@@ -101,9 +101,9 @@ namespace ExpressCraft
         public Action<int> OnRowDoubleClick = null;
         public Action<HTMLElement, int> OnCustomRowStyle = null;
 
-        protected Func<MouseEvent, object> OnRowClick;
-        protected Func<MouseEvent, object> OnDoubleClick;
-        protected Func<MouseEvent, object> OnCellRowMouseDown;
+        protected Action<MouseEvent> OnRowClick;
+        protected Action<MouseEvent> OnDoubleClick;
+        protected Action<MouseEvent> OnCellRowMouseDown;
 
         public HardSoftList<bool> SelectedRows = new HardSoftList<bool>(false);
         public List<int> VisibleRowHandles = null;
@@ -281,12 +281,12 @@ namespace ExpressCraft
                 if(FindPanelVisible)
                 {
                     GridHeaderContainer.SetBounds(0, 47, "100%", UnitHeight + 1);
-                    GridBodyContainer.SetBounds(0, UnitHeight + 3 + 47, "100%", "(100% - " + (UnitHeight + 3 + 47) + "px)");
+                    GridBodyContainer.SetBounds(0, UnitHeight + 2 + 47, "100%", "(100% - " + (UnitHeight + 2 + 47) + "px)");
                 }
                 else
                 {
                     GridHeaderContainer.SetBounds(0, 0, "100%", UnitHeight + 1);
-                    GridBodyContainer.SetBounds(0, UnitHeight + 3, "100%", "(100% - " + (UnitHeight + 3) + "px)");                    
+                    GridBodyContainer.SetBounds(0, UnitHeight + 2, "100%", "(100% - " + (UnitHeight + 2) + "px)");                    
                 }                
             }
             else
@@ -1315,8 +1315,8 @@ namespace ExpressCraft
             GridHeader.SetBounds(0, 0, 0, "29px");
             GridBodyContainer = Div();
 
-            GridBodyContainer.style.overflowX = "auto";
-            GridBodyContainer.style.overflowY = "auto";
+            GridBodyContainer.style.overflowX = "auto !important";
+            GridBodyContainer.style.overflowY = "auto !important";
 
             GridHeaderContainer.style.overflow = "hidden";
 
@@ -1377,7 +1377,7 @@ namespace ExpressCraft
             Content.onmouseup = (ev) =>
             {
                 if(ResizeIndex == -1)
-                    return null;
+                    return;
                 int x = Script.Write<int>("ev.pageX");
                 x = Columns[ResizeIndex].Width + (x - ResizePageX);
                 if(x < 24)
@@ -1392,7 +1392,6 @@ namespace ExpressCraft
 
                 ResizeIndex = -1;
                 ResizeSpan = null;
-                return null;
             };
 
             OnResize = (ev) =>
@@ -1400,9 +1399,27 @@ namespace ExpressCraft
                 CacheRow = new Dictionary<int, HTMLElement>();
                 DelayedRenderGrid();
             };
+
             int prevleft = 0;
+            if(Settings.IsChrome)
+            {
+                GridBodyContainer.onmousewheel = (ev) =>
+                {
+                    ev.preventDefault();
+
+                    if (ev.deltaY != 0)
+                    {
+                        GridBodyContainer.scrollTop += (UnitHeight * (ev.deltaY / 100.00d));
+                    }
+                };
+            }
+            
+            bool ignoreScroll = false;
             GridBodyContainer.onscroll = (ev) =>
             {
+                if (ignoreScroll)
+                    return;
+
                 if(prevleft != GridBodyContainer.scrollLeft)
                 {
                     CacheRow = new Dictionary<int, HTMLElement>();
@@ -1410,10 +1427,22 @@ namespace ExpressCraft
                     DelayedRenderGrid();
                 }else
                 {
+                    if(Settings.IsChrome)
+                    {
+                        if (GridBodyContainer.scrollTop != 0)
+                        {
+                            var diff = GridBodyContainer.scrollTop % UnitHeight;
+                            if (diff != 0)
+                            {
+                                ignoreScroll = true;
+                                GridBodyContainer.scrollTop -= diff;
+                                ignoreScroll = false;
+                            }
+                        }
+                    }
+                    
                     DelayedRenderGrid(true);
                 }
-                return null;
-                
             };
             OnLoaded = (ev) =>
             {
@@ -1422,7 +1451,6 @@ namespace ExpressCraft
             OnCellRowMouseDown = (ev) =>
             {
                 FocusedColumn = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
-                return null;
             };
             OnRowClick = (ev) =>
             {
@@ -1454,7 +1482,6 @@ namespace ExpressCraft
                     {
                         SelectedRows.AddOrSet(true, DataRowHandle, true);
                         RenderGrid();
-                        return null;
                     }
                     else if(mev.shiftKey && FocusedDataHandle > -1)
                     {                        
@@ -1475,7 +1502,7 @@ namespace ExpressCraft
                         }
                         _disableRender = false;
                         RenderGrid();
-                        return null;
+                        return;
                     }
                 }
                 SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
@@ -1487,7 +1514,6 @@ namespace ExpressCraft
                 {
                     RenderGrid();
                 }
-                return null;
             };
             Content.tabIndex = 0;
             OnDoubleClick = (ev) =>
@@ -1503,7 +1529,6 @@ namespace ExpressCraft
                     var fdre = new DataRowEditForm(idr, this, true);
                     fdre.ShowDialog();
                 }
-                return null;
             };
 
             Content.onkeydown = (ev) =>
@@ -1556,8 +1581,6 @@ namespace ExpressCraft
                                  
                     //Global.Alert("AllowMultiSelection = FALSE");
                 }
-
-                return null;
             };
 
             ContextMenu = new ContextMenu();
@@ -1632,13 +1655,12 @@ namespace ExpressCraft
                         ev.stopPropagation();
                     }
                 }
-                return null;
             };
 
             OnColumnOnClick = (ev) =>
             {
                 if(ResizeIndex >= 0)
-                    return null;
+                    return;
 
                 var gcol = Columns[Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"))];
 
@@ -1664,44 +1686,41 @@ namespace ExpressCraft
                         SortColumn(gcol, GridViewSortMode.None);
                         break;
                 }
-                return null;
             };
             OnColumnDragStart = (ev) =>
             {
                 Script.Call("ev.dataTransfer.setData", "gridviewColumnDrag", ev.currentTarget.As<HTMLElement>().getAttribute("i"));
-                return null;
             };
             OnColumnDragOver = (ev) =>
             {
                 ev.preventDefault();
-                return null;
             };
             OnColumnDrop = (ev) =>
             {
                 if(ev.target == null || !(ev.target is HTMLSpanElement))
-                    return null;
+                    return;
 
                 var target = ev.target.As<HTMLSpanElement>();
 
                 if(target.parentElement != GridHeader)
-                    return null;
+                    return;
 
                 var HoverIndex = Script.ParseInt(target.getAttribute("i"));
                 var SelectedIndex = Script.Write<int>("parseInt(ev.dataTransfer.getData(\"gridviewColumnDrag\"));");
                 if(SelectedIndex == HoverIndex)
-                    return null;
+                    return;
 
                 if(HoverIndex < 0)
-                    return null;
+                    return;
 
                 int x = Script.Write<int>("ev.layerX");
                 x -= (int)target.clientLeft;
                 int w = (int)target.clientWidth / 2;
 
                 if(HoverIndex == SelectedIndex - 1 && x > w)
-                    return null;
+                    return;
                 if(HoverIndex == SelectedIndex + 1 && x < w)
-                    return null;
+                    return;
 
                 if(x < w)
                 {
@@ -1713,7 +1732,7 @@ namespace ExpressCraft
                 }
 
                 if(DragIndex < 0 || SelectedIndex < 0)
-                    return null;
+                    return;
                 var col = Columns[SelectedIndex];
                 if(DragIndex == Columns.Count)
                 {
@@ -1728,8 +1747,6 @@ namespace ExpressCraft
                 }
 
                 RenderGrid();
-
-                return null;
             };
             OnColumnMouseDown = (ev) =>
             {
@@ -1753,8 +1770,6 @@ namespace ExpressCraft
                     ResizeSpan = null;
                     ResizeIndex = -1;
                 }
-
-                return null;
             };
             OnColumnMouseMove = (ev) =>
             {
@@ -1767,11 +1782,10 @@ namespace ExpressCraft
                     if(x >= target.clientWidth - 2)
                     {
                         Form.SetCursor("east-west-resize");
-                        return null; ;
+                        return;
                     }
                     Form.SetCursor("default");
                 }
-                return null;
             };
 
             OnColumnMouseLeave = (ev) =>
@@ -1780,13 +1794,11 @@ namespace ExpressCraft
                 {
                     Form.SetCursor("default");
                 }
-                return null;
             };
 
             OnRowDragStart = (ev) =>
             {
                 Script.Call("ev.dataTransfer.setData", "gridviewRowDrag", JSON.stringify(DataSource[Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"))].GetOfflineDataRow()));
-                return null;
             };
 
             Content.AppendChildren(GridFindPanel, GridHeaderContainer, GridBodyContainer);
@@ -1953,15 +1965,15 @@ namespace ExpressCraft
         private int ResizePageX = 0;
         private HTMLSpanElement ResizeSpan = null;
 
-        private Func<MouseEvent, object> OnColumnOnClick;
-        private Func<Event, object> OnColumnDragStart;
-        private Func<Event, object> OnColumnDragOver;
-        private Func<Event, object> OnColumnDrop;
-        private Func<MouseEvent, object> OnColumnMouseDown;
-        private Func<MouseEvent, object> OnColumnMouseMove;
-        private Func<MouseEvent, object> OnColumnMouseLeave;
+        private Action<MouseEvent> OnColumnOnClick;
+        private Action<Event> OnColumnDragStart;
+        private Action<Event> OnColumnDragOver;
+        private Action<Event> OnColumnDrop;
+        private Action<MouseEvent> OnColumnMouseDown;
+        private Action<MouseEvent> OnColumnMouseMove;
+        private Action<MouseEvent> OnColumnMouseLeave;
 
-        private Func<Event, object> OnRowDragStart;
+        private Action<Event> OnRowDragStart;
 
         private void SetupColumn(HTMLSpanElement se, int index, GridViewColumn gcol)
         {

@@ -77,7 +77,6 @@ namespace ExpressCraft
             {
                 if(!Readonly && Enabled)
                     OnDropDownClicked(ev);
-                return null;
             };
 
             Style.border = "0";

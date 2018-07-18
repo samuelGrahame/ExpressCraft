@@ -14,7 +14,6 @@ namespace ExpressCraft
             Content.onmousedown = (ev) => {
                 if(Enabled)
                     OnDropDownClicked(ev);
-                return null;
             };
         }
 

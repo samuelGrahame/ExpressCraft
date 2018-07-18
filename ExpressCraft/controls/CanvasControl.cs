@@ -22,8 +22,8 @@ namespace ExpressCraft
             OnResize = (sender) =>
             {
                 var bounds = (DOMRect)Content.getBoundingClientRect();
-                Canvas.width = (int)bounds.width;
-                Canvas.height = (int)bounds.height;
+                Canvas.width = (uint)bounds.width;
+                Canvas.height = (uint)bounds.height;
 
                 Refresh();
             };

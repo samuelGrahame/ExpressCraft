@@ -28,7 +28,6 @@ namespace ExpressCraft
             {
                 ev.stopPropagation();
                 ev.preventDefault();
-                return null;
             };
         }
 
@@ -160,12 +159,10 @@ namespace ExpressCraft
                     RibbonPages[i].RibbonHeader.onmousedown = (ev) =>
                     {
                         SelectedIndex = index;
-                        return null;
                     };
                     RibbonPages[i].RibbonHeader.ontouchstart = (ev) =>
                     {
                         SelectedIndex = index;
-                        return null;
                     };
 
                     RibbonPages[i].RibbonHeader.innerHTML = RibbonPages[i].Caption;

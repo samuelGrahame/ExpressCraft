@@ -173,7 +173,6 @@ namespace ExpressCraft
             div2.Content.onmousedown = (ev) =>
             {
                 ev.stopPropagation();
-                return null;
             };
 
             Content.appendChild((Node)div2);

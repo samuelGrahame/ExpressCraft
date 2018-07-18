@@ -34,7 +34,6 @@ namespace ExpressCraft
             gridView.Content.onmouseleave = (ev) =>
             {
                 ClosePopup();
-                return null;
             };
             this.Content.onmousedown = (ev) =>
             {
@@ -44,8 +43,6 @@ namespace ExpressCraft
                     ClosePopup();
                 else
                     ShowPopup();
-
-                return null;
             };
         }
 
