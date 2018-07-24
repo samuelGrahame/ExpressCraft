@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using static Retyped.es5;
+using System.Text;
 
 namespace ExpressCraft
 {
@@ -903,6 +904,76 @@ namespace ExpressCraft
 
         }
 
+        public void ExportToXLS(string fileName)
+        {
+
+            var builder = new StringBuilder();
+
+            // Grid is empty...
+            if(ColumnCount() == 0 || RowCount() == 0)
+                return;
+            int columnLength = ColumnCount();
+
+            builder.Append("<table><thead><tr>");
+
+            for(int i = 0; i < columnLength; i++)
+            {
+                var col = Columns[i];
+                if(col.Visible)
+                {
+                    builder.Append($"<th>{Columns[i].Caption}</th>");
+                }
+                    
+            }
+
+            builder.Append("</tr></thead>");
+
+            builder.Append("<tbody>");
+
+            int rowLength = RowCount();
+
+            for(int y = 0; y < rowLength; y++)
+            {
+                builder.Append("<tr>");
+                var DataRowhandle = GetDataSourceRow(y);
+                
+
+                for(int x = 0; x < columnLength; x++)
+                {
+                    var col = Columns[x];
+                    if(!col.Visible)
+                        continue;
+
+                    var displayValue = col.GetDisplayValueByDataRowHandle(DataRowhandle);
+
+                    builder.Append($"<td>{displayValue}</td>");
+                }
+
+                builder.Append("</tr>");
+            }
+                        
+
+            builder.Append("</tbody>");
+
+
+            builder.Append("</table>");
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.IndexOf("MSIE ");
+
+            if(msie > 0)      // If Internet Explorer
+            {
+                var iframe = new HTMLIFrameElement();
+                iframe.contentDocument.open("txt/html", "replace");
+                iframe.contentDocument.write(builder.ToString());
+                iframe.contentDocument.close();
+                iframe.focus();
+                iframe.contentDocument.execCommand("SaveAs", true, fileName);
+            }
+            else                 //other browser not tested on IE 11
+                window.open("data:application/vnd.ms-excel," + encodeURIComponent(builder.ToString()));            
+        }
+
         public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
         {
             if(Helper.NotDesktop)
@@ -1610,8 +1681,8 @@ namespace ExpressCraft
                         RenderGrid();
                     }
                 }),
-                new ContextItem("View Columns"),
-                new ContextItem("Save Column Layout"),
+                //new ContextItem("View Columns"),
+                //new ContextItem("Save Column Layout"),
                 new ContextItem("Best Fit", (ci) => {
                     if(FocusedColumn > -1)
                     {
@@ -1621,7 +1692,10 @@ namespace ExpressCraft
                 new ContextItem("Best Fit (all columns)", (ci) => {
                     BestFitAllColumns();
                 }, true),
-                new ContextItem("Filter Editor...", true),
+                new ContextItem("Export to Excel", (ci) => {
+                    this.ExportToXLS("export.xls");
+                }, true),
+                //new ContextItem("Filter Editor...", true),
                 _showFindPanelContextItem = new ContextItem("Show Find Panel") {
                     OnItemClick = (sender) => {
                         if(FindPanelVisible)
