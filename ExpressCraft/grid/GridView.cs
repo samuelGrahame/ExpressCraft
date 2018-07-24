@@ -1499,7 +1499,8 @@ namespace ExpressCraft
                 {
                     if(Settings.IsChrome)
                     {
-                        if (GridBodyContainer.scrollTop != 0)
+                        //(window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2
+                        if(GridBodyContainer.scrollTop != 0 && GridBodyContainer.scrollTop + GridBodyContainer.clientHeight != GridBodyContainer.scrollHeight)
                         {
                             var diff = GridBodyContainer.scrollTop % UnitHeight;
                             if (diff != 0)
@@ -1947,7 +1948,7 @@ namespace ExpressCraft
         {
             var i = RowCount();
             var ppr = PixelsPerRow(i);
-            var height = ppr * (i + 1);
+            var height = ppr * (i);
 
             if(i > Settings.MaximumPixelScrollingRows && GridBodyContainer.clientHeight > 0)
             {
