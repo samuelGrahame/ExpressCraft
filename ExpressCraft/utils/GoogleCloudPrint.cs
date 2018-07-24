@@ -55,7 +55,7 @@ namespace ExpressCraft
         {
             try
             {
-                jQuery.select(".__gcp_dialog_container_cls").parent().Value.get(0).Delete();
+                jQuery.select(".__gcp_dialog_container_cls").parent().get(0).Delete();
             }
             catch(Exception)
             {

@@ -166,22 +166,22 @@
       <HintPath>..\packages\Retyped.dom.2.8.6733\lib\net40\Retyped.dom.dll</HintPath>
     </Reference>
     <Reference Include="Retyped.es2015.core, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Retyped.es2015.core.2.8.6685\lib\net40\Retyped.es2015.core.dll</HintPath>
+      <HintPath>..\packages\Retyped.es2015.core.2.8.6733\lib\net40\Retyped.es2015.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Retyped.es2015.iterable, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Retyped.es2015.iterable.2.8.6685\lib\net40\Retyped.es2015.iterable.dll</HintPath>
+      <HintPath>..\packages\Retyped.es2015.iterable.2.8.6733\lib\net40\Retyped.es2015.iterable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Retyped.es2015.symbol, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Retyped.es2015.symbol.2.8.6685\lib\net40\Retyped.es2015.symbol.dll</HintPath>
+      <HintPath>..\packages\Retyped.es2015.symbol.2.8.6733\lib\net40\Retyped.es2015.symbol.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Retyped.es5, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Retyped.es5.2.8.6733\lib\net40\Retyped.es5.dll</HintPath>
     </Reference>
     <Reference Include="Retyped.jquery, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Retyped.jquery.3.3.6685\lib\net40\Retyped.jquery.dll</HintPath>
+      <HintPath>..\packages\Retyped.jquery.3.3.6733\lib\net40\Retyped.jquery.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Retyped.scripthost, Version=2.8.2.0, Culture=neutral, processorArchitecture=MSIL">

@@ -82,7 +82,8 @@ namespace ExpressCraft
                             dynamic e = jQuery2.Event("keypress");
                             e.which = 13;
                             e.keyCode = 13;
-                            jQuery.select((JQuery.TypeOrArray<Element>)ReadInput.Content).trigger(e);
+                            dynamic obj = jQuery.select((JQuery.TypeOrArray<Element>)ReadInput.Content);
+                            obj.trigger(e);
                             //jQuery.select(ReadInput.Content).trigger((JQueryEventObject)e);
                         }
                         else if(ReadInput.GoNext)
