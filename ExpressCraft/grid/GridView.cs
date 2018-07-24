@@ -922,8 +922,7 @@ namespace ExpressCraft
                 if(col.Visible)
                 {
                     builder.Append($"<th>{Columns[i].Caption}</th>");
-                }
-                    
+                } 
             }
 
             builder.Append("</tr></thead>");
