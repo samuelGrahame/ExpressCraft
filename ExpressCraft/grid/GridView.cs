@@ -1947,13 +1947,13 @@ namespace ExpressCraft
         {
             var i = RowCount();
             var ppr = PixelsPerRow(i);
-            var height = ppr * i;
+            var height = ppr * (i + 1);
 
             if(i > Settings.MaximumPixelScrollingRows && GridBodyContainer.clientHeight > 0)
             {
                 height += (float)((GridBodyContainer.clientHeight / UnitHeight) * ppr);
             }
-
+            
             GridBody.style.height = height.ToPx();
             if(BottonOfTable == null)
             {
