@@ -249,6 +249,7 @@ namespace ExpressCraft
                 if(DisableFocus)
                 {
                     Content.blur();
+                    return;
                 }
 
                 PreZIndex = Content.style.zIndex;
