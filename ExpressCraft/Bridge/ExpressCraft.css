@@ -127,7 +127,6 @@ left:0
 background-color:#F0F0F0;
 cursor:pointer;
 height:68px;
-text-shadow:.2px .2px rgba(0,0,0,0.5);
 top:3px
 }
 
@@ -187,7 +186,6 @@ height:23px;
 line-height:22px;
 text-align:center;
 top:29px;
-text-shadow:.2px .2px rgba(0,0,0,0.5);
 }
 
 .ribbonpageheader-compact {
@@ -218,7 +216,6 @@ height:21px;
 line-height:22px;
 text-align:center;
 top:0;
-text-shadow:.2px .2px rgba(0,0,0,0.5);
 }
 
 .tabcontrolpageheader-hidden {
@@ -265,7 +262,6 @@ padding:0;
 text-indent:3px;
 user-select:text;
 border-radius:2px;
-text-shadow:.2px .2px rgba(0,0,0,0.5);
 }
 
 .dropdown {
@@ -281,7 +277,6 @@ cursor:pointer;
 overflow:hidden;
 padding:0;
 text-overflow:ellipsis;
-text-shadow:.2px .2px rgba(0,0,0,0.5);
 white-space:nowrap
 }
 
