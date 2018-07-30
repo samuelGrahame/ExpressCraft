@@ -354,7 +354,7 @@ namespace ExpressCraft
 
                         if(!string.IsNullOrWhiteSpace(row.Label))
                         {
-                            var label = Control.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, false);
+                            var label = Control.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, row.Bold);
                             if(Helper.NotDesktop)
                             {
                                 label.style.fontSize = "12px";
@@ -707,6 +707,8 @@ namespace ExpressCraft
         public bool UsePlaceholder { get; set; } = false;
         public bool HideTinyLabel { get; set; } = false;
         public decimal Offset { get; set; } = 0;
+
+        public bool Bold { get; set; } = false;
 
         public LayoutRow(string label, params LayoutControl[] controls)
         {
