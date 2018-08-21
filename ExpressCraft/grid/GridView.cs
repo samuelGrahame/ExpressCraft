@@ -254,8 +254,7 @@ namespace ExpressCraft
         }
 
         private int _focusedDataHandle = -1;
-        private bool _inFocusedChanged = false;
-
+        
         public int FocusedDataHandle
         {
             get
@@ -1483,7 +1482,7 @@ namespace ExpressCraft
 
                     if (ev.deltaY != 0)
                     {
-                        GridBodyContainer.scrollTop += (UnitHeight * (ev.deltaY / 100.00d));
+                        GridBodyContainer.scrollTop += (UnitHeight * (ev.deltaY / 100.00d)) * 3;
                     }
                 };
             }
