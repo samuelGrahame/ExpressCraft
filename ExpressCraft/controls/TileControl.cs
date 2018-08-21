@@ -85,75 +85,82 @@ namespace ExpressCraft
 
                 foreach(var group in page.RibbonGroups)
                 {
-                    foreach(var button in group.Buttons)
+                    foreach(var item in group.Items)
                     {
-                        button.ExchangeClass("ribbonbuttonsmall", "ribbonbutton");
-                        button.Style.borderRadius = "4px";
-                        button.AfterItemClick = (ev) =>
+                        if(item is RibbonButton)
                         {
-                            ViewState = TileViewState.Hidden;
-                        };
-                        if(button.Enabled)
-                        {
-                            button.ExchangeClass("primary", "primary");
-                            button.Style.border = "0";
-                            button.Style.filter = "brightness(110%)";
-                        }
-                        else
-                        {
-                            button.ExchangeClass("primary", "");
-                            button.Style.border = "1px";
-                            button.Style.filter = "";
-                        }
-                        button.Style.opacity = "1";
-                        button.Style.boxShadow = "0px 0px 10px -2px rgba(0,0,0,0.25)";
-                        button.IsSmallCaption = false;
-                        button.ProcessCaption();
-                        button.ProcessImage();
-                        button.Size = new Vector2("((100% - 24px) * 0.33)", 100);
-                        button.Location = new Vector2("(((100% - 24px) * (" + (x * 0.33m) + ")) + (" + (6 * (x)) + "px) + 6px)", y);
+                            var button = (RibbonButton)item;
 
-                        if(button.captionDiv != null)
-                        {
-                            if(button.Enabled)
+                            item.ExchangeClass("ribbonbuttonsmall", "ribbonbutton");
+                            item.Style.borderRadius = "4px";
+
+                            button.AfterItemClick = (ev) =>
                             {
-                                button.captionDiv.style.color = "white";
+                                ViewState = TileViewState.Hidden;
+                            };
+                            if(item.Enabled)
+                            {
+                                item.ExchangeClass("primary", "primary");
+                                item.Style.border = "0";
+                                item.Style.filter = "brightness(110%)";
                             }
                             else
                             {
-                                button.captionDiv.style.color = "grey";
+                                item.ExchangeClass("primary", "");
+                                item.Style.border = "1px";
+                                item.Style.filter = "";
+                            }
+                            item.Style.opacity = "1";
+                            item.Style.boxShadow = "0px 0px 10px -2px rgba(0,0,0,0.25)";
+                            button.IsSmallItem = false;
+                            item.ProcessCaption();
+                            button.ProcessImage();
+                            item.Size = new Vector2("((100% - 24px) * 0.33)", 100);
+                            item.Location = new Vector2("(((100% - 24px) * (" + (x * 0.33m) + ")) + (" + (6 * (x)) + "px) + 6px)", y);
+
+                            if(item.captionDiv != null)
+                            {
+                                if(item.Enabled)
+                                {
+                                    item.captionDiv.style.color = "white";
+                                }
+                                else
+                                {
+                                    item.captionDiv.style.color = "grey";
+                                }
+
+                                item.captionDiv.style.fontSize = "14px";
+                                item.captionDiv.style.top = "65px";
                             }
 
-                            button.captionDiv.style.fontSize = "14px";
-                            button.captionDiv.style.top = "65px";
-                        }
-
-                        if(button.imageDiv != null)
-                        {
-                            button.imageDiv.ExchangeClass("ribbonbuttonsmallicon", "ribbonbuttonicon");
-                            button.IconURL = (button.IconURL + "").Replace("x16x16", "x32x32");
-                            button.imageDiv.style.top = "27px";
-                            if(button.Enabled)
+                            if(button.imageDiv != null)
                             {
-                                //  button.imageDiv.Style.filter = "brightness(90%) grayscale(100%) contrast(60%) brightness(180%)";
+                                button.imageDiv.ExchangeClass("ribbonbuttonsmallicon", "ribbonbuttonicon");
+                                button.IconURL = (button.IconURL + "").Replace("x16x16", "x32x32");
+                                button.imageDiv.style.top = "27px";
+                                if(item.Enabled)
+                                {
+                                    //  button.imageDiv.Style.filter = "brightness(90%) grayscale(100%) contrast(60%) brightness(180%)";
+                                }
+                                else
+                                {
+                                    //  button.imageDiv.Style.filter = "";
+                                }
+                            }
+
+                            if(x == 2)
+                            {
+                                x = 0;
+                                y += 106;
                             }
                             else
                             {
-                                //  button.imageDiv.Style.filter = "";
+                                x++;
                             }
+                            item.Style.opacity = "1";
+                            doc.appendChild((Node)item);
                         }
-
-                        if(x == 2)
-                        {
-                            x = 0;
-                            y += 106;
-                        }
-                        else
-                        {
-                            x++;
-                        }
-                        button.Style.opacity = "1";
-                        doc.appendChild((Node)button);
+                        
                     }
                 }
 

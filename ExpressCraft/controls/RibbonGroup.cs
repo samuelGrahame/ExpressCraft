@@ -10,7 +10,7 @@ namespace ExpressCraft
     public class RibbonGroup : Control
     {
         public string Caption { get; set; }
-        public List<RibbonButton> Buttons { get; set; }
+        public List<RibbonItem> Items { get; set; }
         private bool enabled = true;
 
         private HTMLDivElement captionDiv = null;
@@ -28,17 +28,19 @@ namespace ExpressCraft
             }
         }
 
+
+
         public void setEnabled(bool value)
         {
-            if(Buttons.Count > 0)
+            if(Items.Count > 0)
             {
-                for(int i = 0; i < Buttons.Count; i++)
+                for(int i = 0; i < Items.Count; i++)
                 {
                     if(!value)
-                        Buttons[i].setEnabled(value);
+                        Items[i].setEnabled(value);
                     else
                     {
-                        Buttons[i].setEnabled(Buttons[i].Enabled);
+                        Items[i].setEnabled(Items[i].Enabled);
                     }
                 }
             }
@@ -62,20 +64,20 @@ namespace ExpressCraft
         public RibbonGroup(string _caption = "") : base("ribbongroup")
         {
             Caption = _caption;
-            Buttons = new List<RibbonButton>();
+            Items = new List<RibbonItem>();
         }
 
-        public RibbonGroup(string _caption, params RibbonButton[] buttons) : base("ribbongroup")
+        public RibbonGroup(string _caption, params RibbonItem[] buttons) : base("ribbongroup")
         {
             Caption = _caption;
-            Buttons = new List<RibbonButton>();
+            Items = new List<RibbonItem>();
             if(buttons != null)
             {
                 foreach(var item in buttons)
                 {
                     if(item != null)
                     {
-                        Buttons.Add(item);
+                        Items.Add(item);
                     }                    
                 }                
             }
@@ -100,9 +102,9 @@ namespace ExpressCraft
 
             public bool IsSmall = false;
 
-            public RibbonButton FirstButton;
-            public RibbonButton SecondButton;
-            public RibbonButton ThirdButton;
+            public RibbonItem FirstItem;
+            public RibbonItem SecondItem;
+            public RibbonItem ThirdItem;
 
             public bool BeginGroup = false;
         }
@@ -116,34 +118,34 @@ namespace ExpressCraft
             if(riList == null)
             {
                 riList = new List<RenderInfo>();
-                for(int i = 0; i < Buttons.Count; i++)
+                for(int i = 0; i < Items.Count; i++)
                 {
                     if(ri == null)
                     {
                         ri = new RenderInfo();
-                        ri.FirstButton = Buttons[i];
-                        ri.IsSmall = ri.FirstButton.IsSmallCaption;
+                        ri.FirstItem = Items[i];
+                        ri.IsSmall = ri.FirstItem.IsSmallItem;
                     }
                     else
                     {
-                        if(ri.IsSmall != Buttons[i].IsSmallCaption || Buttons[i].BeginGroup || !Buttons[i].IsSmallCaption || (ri.FirstButton != null && ri.SecondButton != null && ri.ThirdButton != null))
+                        if(ri.IsSmall != Items[i].IsSmallItem || Items[i].BeginGroup || !Items[i].IsSmallItem || (ri.FirstItem != null && ri.SecondItem != null && ri.ThirdItem != null))
                         {
                             riList.Add(ri);
 
                             ri = new RenderInfo();
-                            ri.FirstButton = Buttons[i];
-                            ri.IsSmall = Buttons[i].IsSmallCaption;
-                            ri.BeginGroup = Buttons[i].BeginGroup;
+                            ri.FirstItem = Items[i];
+                            ri.IsSmall = Items[i].IsSmallItem;
+                            ri.BeginGroup = Items[i].BeginGroup;
                         }
                         else
                         {
-                            if(ri.SecondButton == null)
+                            if(ri.SecondItem == null)
                             {
-                                ri.SecondButton = Buttons[i];
+                                ri.SecondItem = Items[i];
                             }
                             else
                             {
-                                ri.ThirdButton = Buttons[i];
+                                ri.ThirdItem = Items[i];
                             }
                         }
                     }
@@ -155,6 +157,15 @@ namespace ExpressCraft
                     ri = null;
                 }
             }
+        }
+
+        public int GetExtraWidth(RibbonItem item)
+        {
+            if(item is RibbonEditItem)
+            {
+                return item.As<RibbonEditItem>().EditWidth + 6;
+            }
+            return 0;
         }
 
         public override void Render()
@@ -186,89 +197,91 @@ namespace ExpressCraft
                 {
                     int MaxWidth;
 
-                    if(ri.ThirdButton == null)
+                    if(ri.ThirdItem == null)
                     {
-                        if(ri.SecondButton == null)
+                        if(ri.SecondItem == null)
                         {
-                            MaxWidth = Math.Max((int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont) + 28 + 6, 64);
+                            MaxWidth = Math.Max((int)GetTextWidth(ri.FirstItem.Caption, Settings.DefaultFont) + 28 + 6 + GetExtraWidth(ri.FirstItem), 64);
 
-                            ri.FirstButton.Render();
+                            
 
-                            ri.FirstButton.Content.style.left = width + "px";
-                            ri.FirstButton.Content.style.width = MaxWidth + "px";
+                            ri.FirstItem.Render();
 
-                            ri.FirstButton.Content.style.top = "26px";
+                            ri.FirstItem.Content.style.left = width + "px";
+                            ri.FirstItem.Content.style.width = MaxWidth + "px";
 
-                            Content.AppendChild(ri.FirstButton);
+                            ri.FirstItem.Content.style.top = "26px";
+
+                            Content.AppendChild(ri.FirstItem);
                             // 1
                         }
                         else
                         {
-                            MaxWidth = Math.Max(Math.Max((int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont),
-                                (int)GetTextWidth(ri.SecondButton.Caption, Settings.DefaultFont)) + 28 + 6, 64);
+                            MaxWidth = Math.Max(Math.Max((int)GetTextWidth(ri.FirstItem.Caption, Settings.DefaultFont) + GetExtraWidth(ri.FirstItem),
+                                (int)GetTextWidth(ri.SecondItem.Caption, Settings.DefaultFont) + GetExtraWidth(ri.SecondItem)) + 28 + 6, 64);
 
-                            ri.FirstButton.Render();
-                            ri.SecondButton.Render();
+                            ri.FirstItem.Render();
+                            ri.SecondItem.Render();
 
-                            ri.FirstButton.Content.style.left = width + "px";
-                            ri.SecondButton.Content.style.left = width + "px";
+                            ri.FirstItem.Content.style.left = width + "px";
+                            ri.SecondItem.Content.style.left = width + "px";
 
-                            ri.FirstButton.Content.style.top = (((100 - 3) / 3) - 11) + "px";
+                            ri.FirstItem.Content.style.top = (((100 - 3) / 3) - 11) + "px";
 
-                            ri.FirstButton.Content.style.width = MaxWidth + "px";
-                            ri.SecondButton.Content.style.width = MaxWidth + "px";
+                            ri.FirstItem.Content.style.width = MaxWidth + "px";
+                            ri.SecondItem.Content.style.width = MaxWidth + "px";
 
-                            ri.FirstButton.Content.style.top = "11px";
-                            ri.SecondButton.Content.style.top = "41px";
+                            ri.FirstItem.Content.style.top = "11px";
+                            ri.SecondItem.Content.style.top = "41px";
 
-                            Content.AppendChild(ri.FirstButton);
-                            Content.AppendChild(ri.SecondButton);
+                            Content.AppendChild(ri.FirstItem);
+                            Content.AppendChild(ri.SecondItem);
                             // 2
                         }
                     }
                     else
                     {
                         MaxWidth = Math.Max(
-                            Math.Max(Math.Max((int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont),
-                                (int)GetTextWidth(ri.SecondButton.Caption, Settings.DefaultFont)),
-                                (int)GetTextWidth(ri.ThirdButton.Caption, Settings.DefaultFont)) + 28 + 6, 64);
+                            Math.Max(Math.Max((int)GetTextWidth(ri.FirstItem.Caption, Settings.DefaultFont) + GetExtraWidth(ri.FirstItem),
+                                (int)GetTextWidth(ri.SecondItem.Caption, Settings.DefaultFont) + GetExtraWidth(ri.SecondItem)),
+                                (int)GetTextWidth(ri.ThirdItem.Caption, Settings.DefaultFont) + GetExtraWidth(ri.ThirdItem)) + 28 + 6, 64);
 
-                        ri.FirstButton.Render();
-                        ri.SecondButton.Render();
-                        ri.ThirdButton.Render();
+                        ri.FirstItem.Render();
+                        ri.SecondItem.Render();
+                        ri.ThirdItem.Render();
 
-                        ri.FirstButton.Content.style.left = width + "px";
-                        ri.SecondButton.Content.style.left = width + "px";
-                        ri.ThirdButton.Content.style.left = width + "px";
+                        ri.FirstItem.Content.style.left = width + "px";
+                        ri.SecondItem.Content.style.left = width + "px";
+                        ri.ThirdItem.Content.style.left = width + "px";
 
-                        ri.FirstButton.Content.style.width = MaxWidth + "px";
-                        ri.SecondButton.Content.style.width = MaxWidth + "px";
-                        ri.ThirdButton.Content.style.width = MaxWidth + "px";
+                        ri.FirstItem.Content.style.width = MaxWidth + "px";
+                        ri.SecondItem.Content.style.width = MaxWidth + "px";
+                        ri.ThirdItem.Content.style.width = MaxWidth + "px";
 
-                        ri.FirstButton.Content.style.top = "3px";
-                        ri.SecondButton.Content.style.top = "26px";
-                        ri.ThirdButton.Content.style.top = "49px";
+                        ri.FirstItem.Content.style.top = "3px";
+                        ri.SecondItem.Content.style.top = "26px";
+                        ri.ThirdItem.Content.style.top = "49px";
                         // 3
 
-                        Content.AppendChild(ri.FirstButton);
-                        Content.AppendChild(ri.SecondButton);
-                        Content.AppendChild(ri.ThirdButton);
+                        Content.AppendChild(ri.FirstItem);
+                        Content.AppendChild(ri.SecondItem);
+                        Content.AppendChild(ri.ThirdItem);
                     }
 
                     width += MaxWidth;
                 }
                 else
                 {
-                    ri.FirstButton.Render();
+                    ri.FirstItem.Render();
 
-                    ri.FirstButton.Content.style.left = width + "px";
+                    ri.FirstItem.Content.style.left = width + "px";
                     int inwidth = 0;
-                    if(ri.FirstButton.Caption.Contains(" "))
+                    if(ri.FirstItem.Caption.Contains(" "))
                     {
-                        var strings = ri.FirstButton.Caption.Split(' ');
+                        var strings = ri.FirstItem.Caption.Split(' ');
                         var builder = new StringBuilder();
 
-                        int length = ri.FirstButton.Caption.Length / 2;
+                        int length = ri.FirstItem.Caption.Length / 2;
 
                         for(int j = 0; j < strings.Length; j++)
                         {
@@ -293,7 +306,7 @@ namespace ExpressCraft
                     }
                     else
                     {
-                        inwidth = (int)GetTextWidth(ri.FirstButton.Caption, Settings.DefaultFont) + 20;
+                        inwidth = (int)GetTextWidth(ri.FirstItem.Caption, Settings.DefaultFont) + 20;
                     }
 
                     if(inwidth < 44)
@@ -301,11 +314,13 @@ namespace ExpressCraft
                         inwidth = 44;
                     }
 
-                    ri.FirstButton.Content.style.width = inwidth + "px";
+                    inwidth += GetExtraWidth(ri.FirstItem);
+
+                    ri.FirstItem.Content.style.width = inwidth + "px";
 
                     width += inwidth;
 
-                    Content.AppendChild(ri.FirstButton);
+                    Content.AppendChild(ri.FirstItem);
                 }
             }
 

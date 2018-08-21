@@ -5,7 +5,7 @@ using System;
 namespace ExpressCraft
 {
     [Namespace(true)]
-    public class RibbonButton : Control
+    public class RibbonButton : RibbonItem
     {
         private string _icon = "";
 
@@ -43,78 +43,40 @@ namespace ExpressCraft
             }
         }
 
-        private string _caption = "";
+        
 
-        public string Caption
-        {
-            get
-            {
-                return _caption;
-            }
-            set
-            {
-                if(_caption != value)
-                {
-                    _caption = value;
-                    ProcessCaption();
-                }
-            }
-        }
 
-        public bool BeginGroup = false;
-        public bool IsSmallCaption = false;
 
         public Action<RibbonButton> OnItemClick;
 
-        private bool enabled = true;
+        
 
-        public HTMLDivElement captionDiv = null;
+        
         public HTMLDivElement imageDiv = null;
 
-        public void setEnabled(bool value)
+        protected override void OnSetEnabled(bool value)
         {
-            ChangeState(value);
             if(value)
             {
                 if(imageDiv != null)
                 {
                     imageDiv.classList.remove("disabled");
-                }
-                if(captionDiv != null)
-                {
-                    captionDiv.classList.remove("disabled");
-                }
+                }                
             }
             else
             {
                 if(imageDiv != null)
                 {
                     imageDiv.classList.add("disabled");
-                }
-                if(captionDiv != null)
-                {
-                    captionDiv.classList.add("disabled");
-                }
+                }                
             }
-        }
-
-        public bool Enabled
-        {
-            get
-            {
-                return enabled;
-            }
-            set
-            {
-                enabled = value;
-                setEnabled(value);
-            }
-        }
+            base.OnSetEnabled(value);
+        }        
 
         public RibbonButton(string caption = "", bool _isSmallCaption = false) : base(_isSmallCaption ? "ribbonbuttonsmall" : "ribbonbutton")
         {
             Caption = caption;
-            IsSmallCaption = _isSmallCaption;
+            IsSmallItem = _isSmallCaption;
         }
 
         public Action<RibbonButton> AfterItemClick;
@@ -141,22 +103,7 @@ namespace ExpressCraft
             setEnabled(enabled);
         }
 
-        public void ProcessCaption()
-        {
-            if(captionDiv != null)
-            {
-                captionDiv.remove();
-                captionDiv = null;
-            }
-            if(!string.IsNullOrWhiteSpace(Caption))
-            {
-                captionDiv = Div(IsSmallCaption ? "ribbonbuttonsmallcaption" : "ribbonbuttoncaption");
-
-                captionDiv.innerHTML = Caption;
-
-                Content.AppendChild(captionDiv);
-            }
-        }
+        
 
         public void ProcessImage()
         {
@@ -164,12 +111,12 @@ namespace ExpressCraft
             {
                 if(!string.IsNullOrWhiteSpace(Icon))
                 {
-                    imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
+                    imageDiv = Div(IsSmallItem ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
                     imageDiv.style.background = GetImageString(Icon);
                 }
                 else if(!string.IsNullOrWhiteSpace(IconURL))
                 {
-                    imageDiv = Div(IsSmallCaption ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
+                    imageDiv = Div(IsSmallItem ? "ribbonbuttonsmallicon" : "ribbonbuttonicon");
                     imageDiv.style.background = GetImageStringURI(IconURL);
                 }
                 if(imageDiv != null)
@@ -193,12 +140,12 @@ namespace ExpressCraft
             {
                 imageDiv.style.backgroundSize = "100% 100%";
 
-                if(captionDiv != null && IsSmallCaption)
+                if(captionDiv != null && IsSmallItem)
                     captionDiv.style.left = "28px";
             }
             else
             {
-                if(captionDiv != null && IsSmallCaption)
+                if(captionDiv != null && IsSmallItem)
                     captionDiv.style.left = "6px";
             }
         }

@@ -69,6 +69,8 @@
     <Compile Include="controls\NumberInput.cs" />
     <Compile Include="controls\PrinterControl.cs" />
     <Compile Include="controls\RadioEdit.cs" />
+    <Compile Include="controls\RibbonEditItem.cs" />
+    <Compile Include="controls\RibbonItem.cs" />
     <Compile Include="controls\SearchInput.cs" />
     <Compile Include="controls\SplitHideControlContainer.cs" />
     <Compile Include="controls\StackList.cs" />
