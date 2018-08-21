@@ -99,6 +99,7 @@ namespace ExpressCraft
         private DataTable _dataSource = null;
 
         public Action<int, int> OnFocusedRowChanged = null;
+        public Action<int, int> OnFocusedColumnChanged = null;
         public Action<int> OnRowDoubleClick = null;
         public Action<HTMLElement, int> OnCustomRowStyle = null;
 
@@ -246,11 +247,14 @@ namespace ExpressCraft
                     var prev = _focusedcolumn;
                     _focusedcolumn = value;
                     //RenderGrid();
+                    if(OnFocusedColumnChanged != null)
+                        OnFocusedColumnChanged(_focusedcolumn, prev);
                 }
             }
         }
 
         private int _focusedDataHandle = -1;
+        private bool _inFocusedChanged = false;
 
         public int FocusedDataHandle
         {
@@ -261,13 +265,13 @@ namespace ExpressCraft
             set
             {
                 if(value != _focusedDataHandle)
-                {
+                {                    
                     var prev = _focusedDataHandle;
                     
                     _focusedDataHandle = value;
                     RenderGrid();
                     if(OnFocusedRowChanged != null)
-                        OnFocusedRowChanged(_focusedDataHandle, prev);
+                        OnFocusedRowChanged(_focusedDataHandle, prev);                    
                 }
             }
         }
