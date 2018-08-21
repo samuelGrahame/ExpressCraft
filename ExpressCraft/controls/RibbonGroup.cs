@@ -163,7 +163,7 @@ namespace ExpressCraft
         {
             if(item is RibbonEditItem)
             {
-                return item.As<RibbonEditItem>().EditWidth + 6;
+                return item.As<RibbonEditItem>().EditWidth + 6 - 20;
             }
             return 0;
         }
