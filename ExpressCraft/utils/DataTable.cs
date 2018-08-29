@@ -356,7 +356,7 @@ namespace ExpressCraft
                         DataCells[y] = NewRows[y].batchData[x];
                     }
                 }
-                col.Cells.addRange(DataCells);
+                col.Cells.AddRange(DataCells);
             }
             NewRows.Clear();
 

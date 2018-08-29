@@ -806,14 +806,19 @@ namespace ExpressCraft
             return length1;
         }
 
-        public int GetBestFitForColumn(GridViewColumn column)
+        public int GetBestFitForColumn(GridViewColumn column, bool includeColumnHeader = false)
         {
             if(!column.Visible)
                 return 0;
 
             int maxLength = 0;
-            int maxIndex = -1;
             string maxStr = "";
+
+            if(includeColumnHeader && !string.IsNullOrWhiteSpace(column.Caption))
+            {
+                maxStr = column.Caption;
+                maxLength = column.Caption.Length;
+            }
             
             for(int i = 0; i < RowCount(); i++)
             {
@@ -824,13 +829,12 @@ namespace ExpressCraft
                     if(v > maxLength)
                     {
                         maxLength = v;
-                        maxIndex = i;
                         maxStr = value;
                     }
                 }
             }
 
-            if(maxIndex > -1)
+            if(maxLength > 0)
             {
                 return (int)GetTextWidth(maxStr, Settings.DefaultFont) + 20;
             }else
@@ -839,14 +843,14 @@ namespace ExpressCraft
             }
         }
 
-        public void BestFitAllColumns()
+        public void BestFitAllColumns(bool includeColumnHeader = false)
         {
             _disableRender = true;
             for(int i = 0; i < Columns.Count; i++)
             {
                 if(Columns[i].Visible)
                 {
-                    Columns[i].Width = GetBestFitForColumn(Columns[i]);
+                    Columns[i].Width = GetBestFitForColumn(Columns[i], includeColumnHeader);
                 }
             }
             _disableRender = false;
