@@ -1237,6 +1237,7 @@ namespace ExpressCraft
                         dr.style.position = "absolute";
                         dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
                         dr.setAttribute("i", Convert.ToString(DataRowhandle));
+                        
 
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
@@ -1250,7 +1251,7 @@ namespace ExpressCraft
                             var col = Columns[x];
                             if(!col.Visible)
                                 continue;
-
+                            
                             var apparence = col.BodyApparence;
                             bool useDefault = false;
                             HTMLElement cell = null;
@@ -1263,7 +1264,9 @@ namespace ExpressCraft
                                 cell.style.position = "absolute";
                                 cell.style.left = col.CachedX + "px";
                                 cell.style.width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width) + "px";
-                                
+                                cell.setAttribute("x", Convert.ToString(x));
+                                cell.onclick = new HTMLElement.onclickFn(OnCellRowMouseDown);
+
                                 if(!string.IsNullOrWhiteSpace(displayValue))
                                 {
                                     cell.textContent = displayValue;
@@ -1528,7 +1531,7 @@ namespace ExpressCraft
             };
             OnCellRowMouseDown = (ev) =>
             {
-                FocusedColumn = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
+                FocusedColumn = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("x"));
             };
             OnRowClick = (ev) =>
             {
@@ -1552,7 +1555,7 @@ namespace ExpressCraft
                 }
 
                 var DataRowHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
-
+                
                 var mev = ev.As<MouseEvent>();
                 if(AllowMultiSelection)
                 {

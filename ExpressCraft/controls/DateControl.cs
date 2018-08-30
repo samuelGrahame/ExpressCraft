@@ -128,7 +128,7 @@ namespace ExpressCraft
 
                         if(curDate < startDate || curDate > endDate)
                         {
-                            //btn.Style.color = "rgb(211, 211, 211)";
+                            btn.Style.color = "rgb(211, 211, 211)";
                         }
                         else if(curDate.DayOfWeek == DayOfWeek.Saturday || curDate.DayOfWeek == DayOfWeek.Sunday)
                         {

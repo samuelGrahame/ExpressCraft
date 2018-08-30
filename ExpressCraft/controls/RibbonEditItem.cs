@@ -24,7 +24,7 @@ namespace ExpressCraft
             set {
                 Edit.Width = value;
                 Edit.Top = 0;
-                Edit.Left = "(100% - " + (value - 6) + "px)";
+                Edit.Left = "(100% - " + (value + 10) + "px)";
                 Edit.Height = "100%";
             }
         }
