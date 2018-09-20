@@ -1481,7 +1481,7 @@ namespace ExpressCraft
             };
 
             int prevleft = 0;
-            if(Settings.IsChrome)
+            if(Settings.IsChrome && !Helper.NotDesktop)
             {
                 GridBodyContainer.onmousewheel = (ev) =>
                 {
@@ -1507,7 +1507,7 @@ namespace ExpressCraft
                     DelayedRenderGrid();
                 }else
                 {
-                    if(Settings.IsChrome)
+                    if(Settings.IsChrome && !Helper.NotDesktop)
                     {
                         //(window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2
                         if(GridBodyContainer.scrollTop != 0 && GridBodyContainer.scrollTop + GridBodyContainer.clientHeight != GridBodyContainer.scrollHeight)
