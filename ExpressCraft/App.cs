@@ -1,10 +1,13 @@
 ﻿using static Retyped.dom;
+using Bridge;
 using System;
 
 namespace ExpressCraft
 {
     public class App
     {
+        
+
         public static void Main()
         {
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
