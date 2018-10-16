@@ -42,6 +42,11 @@ namespace ExpressCraft
             AddRibbonPages(pages);
         }
 
+        public int GetAutoHeight()
+        {
+            return Type == RibbonType.Compact ? 128 : 154;
+        }
+
         public void AddRibbonPages(params RibbonPage[] pages)
         {
             if(pages != null)
