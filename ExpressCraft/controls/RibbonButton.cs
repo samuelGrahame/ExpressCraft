@@ -47,7 +47,7 @@ namespace ExpressCraft
 
 
 
-        public Action<RibbonButton> OnItemClick;
+        public Action<RibbonButton> ItemClick;
 
         
 
@@ -89,8 +89,8 @@ namespace ExpressCraft
             {
                 bool wasEnabled = enabled;
 
-                if(enabled && OnItemClick != null)
-                    OnItemClick(this);
+                if(enabled && ItemClick != null)
+                    ItemClick(this);
                 if(wasEnabled && AfterItemClick != null)
                     AfterItemClick(this);
 
