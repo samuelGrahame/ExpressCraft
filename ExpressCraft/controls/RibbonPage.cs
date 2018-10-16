@@ -11,9 +11,10 @@ namespace ExpressCraft
         public List<RibbonGroup> RibbonGroups { get; set; } = new List<RibbonGroup>();
         public HTMLDivElement RibbonHeader = null;
 
-        public RibbonPage(string _caption = "") : base("ribbonpage")
+        public RibbonPage(string _caption = "", params RibbonGroup[] pages) : base("ribbonpage")
         {
             Caption = _caption;
+            AddRibbonGroups(pages);
         }
 
         public void AddRibbonGroups(params RibbonGroup[] pages)

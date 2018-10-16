@@ -127,7 +127,7 @@ namespace ExpressCraft
             _consoleForm.InternalLog(source, logType);
         }
 
-        public static void Clear()
+        public new static void Clear()
         {
             CheckConsoleState();
             _consoleForm.InternalClear();

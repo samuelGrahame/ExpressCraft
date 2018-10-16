@@ -10,7 +10,18 @@ namespace ExpressCraft
     {
         public List<RibbonPage> RibbonPages { get; set; } = new List<RibbonPage>();
         public string IconURL = "fav.ico";
-        public readonly RibbonType Type;
+        public RibbonType Type { get {
+                return Content.classList.contains("ribboncontrol-compact") ? RibbonType.Compact : RibbonType.Full;
+            } set {
+                if(value == RibbonType.Full)
+                {
+                    Content.classList.remove("ribboncontrol-compact");
+                }
+                else if (!Content.classList.contains("ribboncontrol-compact"))
+                {
+                    Content.classList.add("ribboncontrol-compact");
+                }
+            } }
         public HTMLDivElement ApplicationIcon = null;
         public Action<int, RibbonPage> OnSelectedPageChange = null;
 
@@ -20,15 +31,15 @@ namespace ExpressCraft
             Compact
         }
 
-        public RibbonControl(RibbonType type = RibbonType.Full) : base("ribboncontrol" + (type == RibbonType.Full ? "" : " ribboncontrol-compact"))
-        {
-            Type = type;
-
+        public RibbonControl(params RibbonPage[] pages) : base("ribboncontrol ribboncontrol-compact")
+        {            
             Content.oncontextmenu = (ev) =>
             {
                 ev.stopPropagation();
                 ev.preventDefault();
             };
+
+            AddRibbonPages(pages);
         }
 
         public void AddRibbonPages(params RibbonPage[] pages)
