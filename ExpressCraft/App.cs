@@ -13,7 +13,6 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-
             var x = new Form();
 
             var yt = new ComboBoxEdit(
@@ -31,12 +30,22 @@ namespace ExpressCraft
 
             var dt = new DataTable();
 
-            dt.AddColumn("ABC");
-            dt.AddColumn("CBA");
-
-            dt.AddRow("ABC", "DAA");
+            for (int i = 0; i < 100; i++)
+            {
+                dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
+            }
+            dt.BeginDataUpdate();
+            for (int h = 0; h < 100;h++)
+            {
+                var dr = dt.NewRow();
+                for (int i = 0; i < 100; i++)
+                {
+                    dr[i] = DateTime.Now;
+                }
+                dt.AddRow(dr);
+            }
             dt.AcceptNewRows();
-
+            
             gr.DataSource = dt;
 
             x.LinkResize(gr, true);

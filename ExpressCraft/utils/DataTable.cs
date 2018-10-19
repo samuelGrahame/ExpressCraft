@@ -20,6 +20,8 @@ namespace ExpressCraft
 
     public class DataTable
     {
+
+        public static bool DynamicGetValue = false;
         public List<DataColumn> Columns = new List<DataColumn>();
         public List<int> _searchResults = new List<int>();
 
@@ -634,49 +636,56 @@ namespace ExpressCraft
             }
         }
 
+
         public string GetDisplayValue(int rowIndex)
         {
             if(Self.Cells.Count <= rowIndex)
             {
                 return null;
             }
-
-            switch(DataType)
+            if(DataTable.DynamicGetValue)
+                return this.ToDynamic().Cells.getItem(rowIndex);
+            else
             {
-                default:
-                case DataType.Object:
-                    return Convert.ToString(((DataColumnObject)this).Cells[rowIndex]);
+                switch (DataType)
+                {
+                    default:
+                    case DataType.Object:
+                        return Convert.ToString(((DataColumnObject)this).Cells[rowIndex]);
 
-                case DataType.DateTime:
-                    return Convert.ToString(((DataColumnDateTime)this).Cells[rowIndex]);
+                    case DataType.DateTime:
+                        return Convert.ToString(((DataColumnDateTime)this).Cells[rowIndex]);
 
-                case DataType.String:
-                    return ((DataColumnString)this).Cells[rowIndex];
+                    case DataType.String:
+                        return ((DataColumnString)this).Cells[rowIndex];
 
-                case DataType.Integer:
-                    return Convert.ToString(((DataColumnInteger)this).Cells[rowIndex]);
+                    case DataType.Integer:
+                        return Convert.ToString(((DataColumnInteger)this).Cells[rowIndex]);
 
-                case DataType.Long:
-                    return Convert.ToString(((DataColumnLong)this).Cells[rowIndex]);
+                    case DataType.Long:
+                        return Convert.ToString(((DataColumnLong)this).Cells[rowIndex]);
 
-                case DataType.Float:
-                    return Convert.ToString(((DataColumnFloat)this).Cells[rowIndex]);
+                    case DataType.Float:
+                        return Convert.ToString(((DataColumnFloat)this).Cells[rowIndex]);
 
-                case DataType.Double:
-                    return Convert.ToString(((DataColumnDouble)this).Cells[rowIndex]);
+                    case DataType.Double:
+                        return Convert.ToString(((DataColumnDouble)this).Cells[rowIndex]);
 
-                case DataType.Decimal:
-                    return Convert.ToString(((DataColumnDecimal)this).Cells[rowIndex]);
+                    case DataType.Decimal:
+                        return Convert.ToString(((DataColumnDecimal)this).Cells[rowIndex]);
 
-                case DataType.Byte:
-                    return Convert.ToString(((DataColumnByte)this).Cells[rowIndex]);
+                    case DataType.Byte:
+                        return Convert.ToString(((DataColumnByte)this).Cells[rowIndex]);
 
-                case DataType.Bool:
-                    return Convert.ToString(((DataColumnBool)this).Cells[rowIndex]);
+                    case DataType.Bool:
+                        return Convert.ToString(((DataColumnBool)this).Cells[rowIndex]);
 
-                case DataType.Short:
-                    return Convert.ToString(((DataColumnShort)this).Cells[rowIndex]);
+                    case DataType.Short:
+                        return Convert.ToString(((DataColumnShort)this).Cells[rowIndex]);
+                }
             }
+
+
         }
     }
 
