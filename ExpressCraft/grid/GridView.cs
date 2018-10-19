@@ -1221,8 +1221,7 @@ namespace ExpressCraft
                                 CacheRow.Remove(KeysToDelete[i]);
                             }                            
                         }
-                    }
-                    
+                    }                    
                 }
 
                 int prevRowCache = CacheRow.Count;
@@ -1316,11 +1315,6 @@ namespace ExpressCraft
 
                                 docFrag.appendChild(cell);
                             }
-                            if(cell != null)
-                            {
-
-                            }
-                            
                         }
 
                         dr.AppendChild(docFrag);
