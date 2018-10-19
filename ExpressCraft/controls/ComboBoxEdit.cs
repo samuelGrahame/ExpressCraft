@@ -11,7 +11,7 @@ namespace ExpressCraft
 
         public Action<ComboBoxEdit> SelectedIndexChanged = null;
 
-        public ComboBoxEdit() : base("inputcontrol", ComboBoxTypes.Default)
+        public ComboBoxEdit(params DataItem[] dataitems) : base("inputcontrol", ComboBoxTypes.Default)
         {
             ComboBoxBase = this.Content as HTMLSelectElement;
 
@@ -31,6 +31,11 @@ namespace ExpressCraft
                 }
                 ev.stopPropagation();
             };
+
+            if(dataitems != null)
+            {
+                FillData(dataitems);
+            }
         }
 
         public void FillData(params DataItem[] dataitems)
