@@ -1235,10 +1235,9 @@ namespace ExpressCraft
                         var dr = document.createElement("row"); // Div();
                         dr.className = (i % 2 == 0 ? "cellrow even" : "cellrow") + (SelectedRows.GetValue(DataRowhandle, true) ? " cellrow-selected" : "") + (DataRowhandle == FocusedDataHandle ? " focusedrow" : "");
                         dr.style.position = "absolute";
-                        dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth, UnitHeight);
+                        dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth + 1, UnitHeight);
                         dr.setAttribute("i", Convert.ToString(DataRowhandle));
                         
-
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
                         {
@@ -1263,7 +1262,7 @@ namespace ExpressCraft
                                 cell.className = cellClass;// + " control";
                                 cell.style.position = "absolute";
                                 cell.style.left = col.CachedX + "px";
-                                cell.style.width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width) + "px";
+                                cell.style.width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width + (x == Columns.Count - 1 ? 1 : 0)) + "px";
                                 cell.setAttribute("x", Convert.ToString(x));
                                 cell.onclick = new HTMLElement.onclickFn(OnCellRowMouseDown);
 
