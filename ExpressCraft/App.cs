@@ -12,8 +12,22 @@ namespace ExpressCraft
         {
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
-           
-            // Test Grid...
+
+
+            var x = new Form();
+
+            var yt = new ComboBoxEdit(
+                new DataItem("Hello World 1"),
+                new DataItem("Hello World 2"),
+                new DataItem("Hello World 3"));
+
+            yt.Bounds = new Vector4(10, 10, 100, 24);
+
+            x.AppendChild(yt);
+
+            x.Show();
+
+            // Test Grid...1
             //var x = new Form();
 
             //var grid = new GridView();
