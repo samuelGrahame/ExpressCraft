@@ -1092,7 +1092,7 @@ namespace ExpressCraft
                         if(gcol.SortedMode != GridViewSortMode.None)
                         {
                             var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");
-                            sortImage.SetBounds("(100% - 13px)", 11, 9, 5);
+                            sortImage.SetBounds("(100% - 13px)", 7, 9, 5);
                             col.AppendChild(sortImage);
                         }
 

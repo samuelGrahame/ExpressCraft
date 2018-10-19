@@ -215,7 +215,7 @@ namespace ExpressCraft
                 }
             };
 
-            LinkchildToForm(View);
+            LinkResize(View);
         }
 
         protected override void OnClosed()

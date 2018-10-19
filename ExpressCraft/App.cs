@@ -25,6 +25,22 @@ namespace ExpressCraft
 
             x.AppendChild(yt);
 
+            var gr = new GridView();
+
+            gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
+
+            var dt = new DataTable();
+
+            dt.AddColumn("ABC");
+            dt.AddColumn("CBA");
+
+            dt.AddRow("ABC", "DAA");
+            dt.AcceptNewRows();
+
+            gr.DataSource = dt;
+
+            x.LinkResize(gr, true);
+
             x.Show();
 
             // Test Grid...1

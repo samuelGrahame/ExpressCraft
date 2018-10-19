@@ -191,15 +191,17 @@ namespace ExpressCraft
 
         private List<Control> Children = new List<Control>();
 
-        public void LinkchildToForm(Control child)
+        public void LinkResize(Control child, bool appendAlso = false)
         {
             if(child == null)
                 return;
             Children.Add(child);
+            if (appendAlso)
+                Body.AppendChild(child);
             child.LinkedForm = this;
         }
 
-        public void LinkchildrenToForm(params Control[] children)
+        public void LinkResize(params Control[] children)
         {
             if(children == null || children.Length == 0)
                 return;
@@ -207,7 +209,7 @@ namespace ExpressCraft
             for(int i = 0; i < children.Length; i++)
             {
                 if(children[i] != null)
-                    children[i].LinkedForm = this;
+                    children[i].LinkedForm = this;                
             }
         }
 
