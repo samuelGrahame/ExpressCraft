@@ -14,7 +14,9 @@ namespace ExpressCraft
             set { Edit.Text = value.ToString(); }
         }
 
-        public CheckEdit(string label = "") : base(new HTMLLabelElement() { className = BaseClass(false, true) })
+        public static int InputHeight = 20;
+
+        public CheckEdit(string label = "") : base(new HTMLLabelElement() { className = "inputcontrol" + BaseClass(true, true) })
         {
             Edit = new TextInput("checkbox");
             Edit.Controller = this;
@@ -23,6 +25,16 @@ namespace ExpressCraft
                     OnCheckChanged(this);
             };
             span = new HTMLSpanElement();
+
+            span.style.left = (InputHeight - 2).ToPx();
+            span.style.position = "absolute";
+            span.style.whiteSpace = "pre";
+            
+            if (Content.As<HTMLInputElement>().type == "checkbox")
+            {                
+                Edit.Width = (InputHeight - 4).ToPx();
+                Edit.Height = (InputHeight - 4).ToPx();
+            }
 
             Text = label;
 

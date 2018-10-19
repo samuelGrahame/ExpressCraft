@@ -1456,9 +1456,12 @@ namespace ExpressCraft
 
             Content.onmouseup = (ev) =>
             {
-                if(ResizeIndex == -1)
+                if(ResizeIndex < 0 || Bridge.Script.IsNaN(ResizeIndex))
                     return;
-                int x = Script.Write<int>("ev.pageX");
+                
+                
+                int x = (int)ev.pageX;
+                
                 x = Columns[ResizeIndex].Width + (x - ResizePageX);
                 if(x < 24)
                     x = 24;
@@ -1691,6 +1694,40 @@ namespace ExpressCraft
                         RenderGrid();
                     }
                 }),
+                new ContextItem("View Columns", (ci) => {
+                    if(this.ColumnCount() == 0)
+                    {
+                        new MessageBoxForm("This grid control is empty.", MessageBoxLayout.Information).ShowDialog();
+                    }
+                    else
+                    {
+                        var x = new Form();
+                        x.StartPosition = FormStartPosition.Center;
+                        x.Size = new Vector2(200, 400);
+                        x.Text = "View Columns";
+                        x.ShowMaximize = false;
+                        x.ShowMinimize = false;
+                        int index = 10;
+                        foreach (var item in this.Columns)
+                        {
+                            var gridItem = item;
+
+                            var checkEdit = new CheckEdit(gridItem.Caption) { Checked = gridItem.Visible, OnCheckChanged = (chk) => {
+                                    gridItem.Visible = chk.Checked;
+                                    this.RenderGrid();
+                                }, Location = new Vector2(10, index), Width = "(100% - 20px)", Height = 22
+                            };
+
+                            x.AppendChild(checkEdit);
+                            index += 24;
+	                    }
+
+                        x.Body.style.overflow = "auto";
+
+                        x.Show();
+
+                    }
+                }),
                 //new ContextItem("View Columns"),
                 //new ContextItem("Save Column Layout"),
                 new ContextItem("Best Fit", (ci) => {
@@ -1706,7 +1743,7 @@ namespace ExpressCraft
                     this.ExportToXLS("export.xls");
                 }, true),
                 //new ContextItem("Filter Editor...", true),
-                _showFindPanelContextItem = new ContextItem("Show Find Panel") {
+                _showFindPanelContextItem = new ContextItem("Show Find Panel", true) {
                     OnItemClick = (sender) => {
                         if(FindPanelVisible)
                         {                            
