@@ -42,7 +42,7 @@ namespace ExpressCraft
         {
             ComboBoxBase.Empty();            
 
-            if(dataitems == null)
+            if(dataitems != null && dataitems.Length > 0)
             {
                 for(int i = 0; i < dataitems.Length; i++)
                 {
