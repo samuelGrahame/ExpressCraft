@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG</authors>
     <owners>SG</owners>
@@ -12,7 +12,8 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-		Few changes - fixes for ComboBoxEdit, CheckEdit.
+		Added GridView InRowEdit
+		Added ComboBoxEdit base is InputText - ability to add to ribbon control.
 	</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>

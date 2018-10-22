@@ -13,45 +13,45 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-            var x = new Form();
-            x.StartPosition = FormStartPosition.Center;
-            //var yt = new ComboBoxEdit(
-            //    new DataItem("Hello World 1"),
-            //    new DataItem("Hello World 2"),
-            //    new DataItem("Hello World 3"));
+            //var x = new Form();
+            //x.StartPosition = FormStartPosition.Center;
+            ////var yt = new ComboBoxEdit(
+            ////    new DataItem("Hello World 1"),
+            ////    new DataItem("Hello World 2"),
+            ////    new DataItem("Hello World 3"));
 
-            //yt.Bounds = new Vector4(10, 10, 100, 24);
+            ////yt.Bounds = new Vector4(10, 10, 100, 24);
 
-            //x.AppendChild(yt);
+            ////x.AppendChild(yt);
 
-            var gr = new GridView();
-            gr.UseInRowEditor = true;
+            //var gr = new GridView();
+            //gr.UseInRowEditor = true;
 
-            gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
+            //gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
 
-            var dt = new DataTable();
+            //var dt = new DataTable();
 
-            for (int i = 0; i < 100; i++)
-            {
-                dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
-            }
-            dt.BeginDataUpdate();
-            for (int h = 0; h < 100; h++)
-            {
-                var dr = dt.NewRow();
-                for (int i = 0; i < 100; i++)
-                {
-                    dr[i] = DateTime.Now;
-                }
-                dt.AddRow(dr);
-            }
-            dt.AcceptNewRows();
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
+            //}
+            //dt.BeginDataUpdate();
+            //for (int h = 0; h < 100; h++)
+            //{
+            //    var dr = dt.NewRow();
+            //    for (int i = 0; i < 100; i++)
+            //    {
+            //        dr[i] = DateTime.Now;
+            //    }
+            //    dt.AddRow(dr);
+            //}
+            //dt.AcceptNewRows();
 
-            gr.DataSource = dt;
+            //gr.DataSource = dt;
 
-            x.LinkResize(gr, true);
+            //x.LinkResize(gr, true);
 
-            x.Show();
+            //x.Show();
 
             // Test Grid...1
             //var x = new Form();
