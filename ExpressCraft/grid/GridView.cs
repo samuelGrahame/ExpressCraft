@@ -272,6 +272,10 @@ namespace ExpressCraft
                     if (OnFocusedColumnChanged != null)
                         OnFocusedColumnChanged(_focusedcolumnHandle, prev);
                 }
+                else
+                {
+                    setNewCell(value, FocusedDataHandle);
+                }
             }
         }
 
@@ -469,6 +473,22 @@ namespace ExpressCraft
                     cellChangeTimer = -1;
                 }, 25);
             }
+            else
+            {
+                // reason for where there are the same is when you click again on same cell.... after close..
+                if (cellChangeTimer > -1)
+                {
+                    window.clearTimeout(cellChangeTimer);
+                    cellChangeTimer = -1;
+                }
+
+                cellChangeTimer = window.setTimeout((obj) =>
+                {                    
+                    ValidateEditor();
+                    ShowEditor();
+                    cellChangeTimer = -1;
+                }, 25);
+            }
         }
 
         private int _focusedDataHandle = -1;
@@ -489,7 +509,11 @@ namespace ExpressCraft
                     setNewCell(FocusedColumnHandle, value);
                     RenderGrid();
                     if(OnFocusedRowChanged != null)
-                        OnFocusedRowChanged(_focusedDataHandle, prev);                    
+                        OnFocusedRowChanged(_focusedDataHandle, prev);
+                }
+                else
+                {
+                    setNewCell(FocusedColumnHandle, value);
                 }
             }
         }
@@ -1769,6 +1793,7 @@ namespace ExpressCraft
             OnCellRowMouseDown = (ev) =>
             {
                 FocusedColumnHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("x"));
+
             };
             OnRowClick = (ev) =>
             {
