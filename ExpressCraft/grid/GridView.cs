@@ -384,7 +384,7 @@ namespace ExpressCraft
                     return;
                 }
                 
-                dataRowIndex = GetDataSourceRow(FocusedDataHandle);
+                dataRowIndex = FocusedDataHandle;
                 dataRow = DataSource[dataRowIndex];
 
                 dataColIndex = FocusedColumn.GetDataColumnIndex();
@@ -1581,7 +1581,7 @@ namespace ExpressCraft
                                 docFrag.appendChild(cell);
                             }
 
-                            if (isEditorShown && dataRow.RowIndex == DataRowhandle && col.GetDataColumnIndex() == dataColIndex)
+                            if (isEditorShown && dataRowIndex == DataRowhandle && col.GetDataColumnIndex() == dataColIndex)
                             {
                                 activeEditorElement.style.left = cell.style.left;
                                 activeEditorElement.style.width = cell.style.width;
