@@ -78,6 +78,11 @@ namespace ExpressCraft
             SetDate(string.Format("{0:" + GetDisplayFormat() + "}", date));
         }
 
+        public TextInput(string cn, ComboBoxTypes ct, bool ac = true) : base(cn, ct, ac)
+        {
+
+        }
+
         public TextInput(HTMLElement overrideElement, bool addInputControl = true, bool addEventsOnControl = true) : base(overrideElement)
         {
             overrideElement.className = (addInputControl ? "inputcontrol" : "") + BaseClass(addInputControl);
@@ -426,7 +431,7 @@ namespace ExpressCraft
             prevText = Text;
         }
 
-        public string Text
+        public virtual string Text
         {
             get
             {

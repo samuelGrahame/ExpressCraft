@@ -4,7 +4,7 @@ using static Retyped.jquery;
 
 namespace ExpressCraft
 {
-    public class ComboBoxEdit : Control
+    public class ComboBoxEdit : TextInput
     {
         public HTMLSelectElement ComboBoxBase;
         private double previousSelectedIndex = -1;
@@ -60,7 +60,7 @@ namespace ExpressCraft
             base.Render();
         }
 
-        public string Text
+        public override string Text
         {
             get
             {
@@ -95,30 +95,6 @@ namespace ExpressCraft
                         ComboBoxBase.selectedIndex = i;
                 }
                 ComboBoxBase.selectedIndex = -1;
-            }
-        }
-
-        private bool enabled = true;
-
-        public bool Enabled
-        {
-            get { return enabled; }
-            set
-            {
-                enabled = value;
-                this.Content.setAttribute("disabled", (!enabled).ToString());
-            }
-        }
-
-        private bool _readonly = false;
-
-        public bool Readonly
-        {
-            get { return _readonly; }
-            set
-            {
-                _readonly = value;
-                this.Content.setAttribute("readonly", (_readonly).ToString());
             }
         }
     }
