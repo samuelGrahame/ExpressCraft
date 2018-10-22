@@ -413,12 +413,12 @@ namespace ExpressCraft
             return lbl;
         }
 
-        public void Focus()
+        public void Focus(int delay = 0)
         {
             setTimeout(new setTimeoutFn((a) =>
             {
                 this.Content.focus();
-            }), 0);
+            }), delay);
         }
 
         private static void SetBT(HTMLSpanElement lbl, bool IsBold, bool IsTiny)

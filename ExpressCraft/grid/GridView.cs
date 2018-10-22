@@ -382,12 +382,14 @@ namespace ExpressCraft
 
                 _activeEditor = input;
 
-                _activeEditor.OnLostFocus = (txt) =>
+                var inpute = _activeEditor.GetInput();
+
+                inpute.onblur = (ev) =>
                 {
                     ValidateEditor();
                 };
 
-                _activeEditor.OnKeyDown = (txt, ev) => {
+                inpute.onkeydown = (ev) => {
                     if (ev.keyCode == 9)
                     {
                         ev.preventDefault();
@@ -398,7 +400,7 @@ namespace ExpressCraft
                     }
                     else if (ev.keyCode == 13)
                     {
-                        _activeEditor.OnLostFocus = null;
+                        inpute.onblur = null;
                         ValidateEditor();
                     }
                 };
@@ -412,8 +414,9 @@ namespace ExpressCraft
                 isEditorShown = true;
 
                 RenderGrid();
-                _activeEditor.Content.tabIndex = -1;
-                _activeEditor.Focus();                
+
+                inpute.tabIndex = -1;
+                inpute.focus();
             }
         }               
 
