@@ -348,6 +348,11 @@ namespace ExpressCraft
             }            
         }
 
+        public void MoveNextCell()
+        {
+
+        }
+
         public void ShowEditor()
         {
             if(!isEditorShown && UseInRowEditor)
@@ -377,9 +382,25 @@ namespace ExpressCraft
 
                 _activeEditor = input;
 
-                _activeEditor.OnLostFocus = (ev) =>
+                _activeEditor.OnLostFocus = (txt) =>
                 {
                     ValidateEditor();
+                };
+
+                _activeEditor.OnKeyDown = (txt, ev) => {
+                    if (ev.keyCode == 9)
+                    {
+                        ev.preventDefault();
+
+                        ValidateEditor();
+
+                        MoveNextCell();
+                    }
+                    else if (ev.keyCode == 13)
+                    {
+                        _activeEditor.OnLostFocus = null;
+                        ValidateEditor();
+                    }
                 };
 
                 _activeEditor.SetEditValue(dataRow[dataColIndex]);
@@ -391,6 +412,8 @@ namespace ExpressCraft
                 isEditorShown = true;
 
                 RenderGrid();
+
+                _activeEditor.Focus();
             }
         }               
 
