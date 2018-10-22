@@ -321,6 +321,8 @@ namespace ExpressCraft
         {
             if(isEditorShown)
             {
+                dataRow[dataColIndex] = _activeEditor.GetEditValue();
+                
                 //SetRowCellValue(openedEditorRowIndex, openedEditorCol, _activeEditor.GetEditValue());
 
                 CloseEditor();
@@ -394,9 +396,8 @@ namespace ExpressCraft
 
                         MoveNextCell();
                     }
-                    else if (ev.keyCode == 13)
+                    else if (ev.keyCode == 13 || ev.keyCode == 27)
                     {
-                        inpute.onblur = null;
                         ValidateEditor();
                     }
                 };
