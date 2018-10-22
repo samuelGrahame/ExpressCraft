@@ -383,12 +383,7 @@ namespace ExpressCraft
                 _activeEditor = input;
 
                 var inpute = _activeEditor.GetInput();
-
-                inpute.onblur = (ev) =>
-                {
-                    ValidateEditor();
-                };
-
+                
                 inpute.onkeydown = (ev) => {
                     if (ev.keyCode == 9)
                     {
@@ -466,10 +461,7 @@ namespace ExpressCraft
                     {
                         OnFocusedCellChanged(col, row);
                     }
-                    if (isEditorShown)
-                    {
-                        ValidateEditor();
-                    }
+                    ValidateEditor();
                     ShowEditor();
                 }, 25);
             }
@@ -1400,6 +1392,10 @@ namespace ExpressCraft
                     Length -= 1;
                     Y += UnitHeight;
                 }
+
+                this.Content.onblur = (ev) => {
+                    ValidateEditor();
+                };
 
                 // #TODO - CLEAN...
                 if(start < 0)
