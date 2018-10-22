@@ -255,6 +255,8 @@ namespace ExpressCraft
 
         double cellChangeTimer = -1;
 
+        private bool skipSetNewCell = false;
+
         public int FocusedColumnHandle
         {
             get
@@ -449,7 +451,7 @@ namespace ExpressCraft
         
         private void setNewCell(int col, int row)
         {
-            if(col == -1 || row == -1)
+            if(col == -1 || row == -1 || skipSetNewCell)
             {
                 prevCellColIndex = col;
                 prevRowCellIndex = row;
@@ -2141,10 +2143,11 @@ namespace ExpressCraft
                 var target = ev.target.As<HTMLSpanElement>();
                 x -=(int)target.clientLeft;
                 ResizePageX = Script.Write<int>("ev.pageX");
-
+                skipSetNewCell = true;
                 FocusedColumnHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
+                skipSetNewCell = false;
 
-                if(x >= target.clientWidth - 2)
+                if (x >= target.clientWidth - 2)
                 {
                     ResizeIndex = Script.ParseInt(target.getAttribute("i"));
                     ResizeSpan = target;
