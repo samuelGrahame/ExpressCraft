@@ -14,13 +14,13 @@ namespace ExpressCraft.Design
 
         private bool GetBaseType(Type WantType, Type Compare)
         {
-            if(Compare.BaseType == WantType)
-            {
-                return true;
-            }
-            else if(Compare.BaseType == null)
+            if (Compare == null || Compare.BaseType == null) 
             {
                 return false;
+            }
+            else if (Compare.BaseType == WantType)
+            {
+                return true;
             }else
             {
                 return GetBaseType(WantType, Compare.BaseType);
