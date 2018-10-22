@@ -12,6 +12,21 @@ namespace ExpressCraft.Design
         public Form DesigningForm = null;
 
 
+        private bool GetBaseType(Type WantType, Type Compare)
+        {
+            if(Compare.BaseType == WantType)
+            {
+                return true;
+            }
+            else if(Compare.BaseType == null)
+            {
+                return false;
+            }else
+            {
+                return GetBaseType(WantType, Compare.BaseType);
+            }
+        }
+
         public frmDesigner()
         {
             ShowClose = false;
@@ -34,7 +49,7 @@ namespace ExpressCraft.Design
             dt.AddColumn("Name", DataType.String);
             dt.AddColumn("Type", DataType.Object);
 
-            foreach (var item in typeof(Control).Assembly.GetTypes().Where((o) => o.BaseType == typeof(Control) && o != typeof(Form)))
+            foreach (var item in typeof(Control).Assembly.GetTypes().Where((o) => GetBaseType(typeof(Control), o.BaseType) && o != typeof(Form) && o != typeof(Page) && o != typeof(TabControlPage)))
             {
                 var dr = dt.NewRow();
                 var type = item;
