@@ -135,6 +135,36 @@ namespace ExpressCraft
             }
         }
 
+        public void SetEditValue(object value)
+        {
+            if (this is SearchInput)
+            {
+                ((SearchInput)this).EditValue = value;                
+            }
+            else
+            {
+                if (Type == "number")
+                {
+                    this.Text = (value + "").ToString();
+                }
+                else if (Type == "date")
+                {
+                    if(value is DateTime)
+                    {
+                        ((DateInput)this).SetDateTime((DateTime)value);
+                    }
+                    else
+                    {
+                        ((DateInput)this).SetDate((value + "").ToString());
+                    }                    
+                }
+                else
+                {
+                    this.Text = (value + "").ToString();
+                }
+            }
+        }
+
         public void Scroll(int value, HTMLElement parent)
         {
             if(parent == null)

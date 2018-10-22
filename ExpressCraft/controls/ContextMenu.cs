@@ -19,6 +19,9 @@ namespace ExpressCraft
 
         public ContextMenu() : base("contextmenu")
         {
+            this.Content.oncontextmenu = (ev) => {
+                ev.preventDefault();
+            };
             this.Content.onmouseleave = (ev) =>
             {
                 this.Close();

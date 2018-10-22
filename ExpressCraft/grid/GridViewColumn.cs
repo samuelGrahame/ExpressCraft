@@ -31,7 +31,7 @@
                     }
                 }
             }
-        }
+        }        
 
         public bool ValueMatchFilter(int index)
         {
@@ -62,6 +62,43 @@
 
         public bool AllowEdit = true;
         public bool ReadOnly = false;
+
+        public GridViewColumnCustomEditor CustomEditor;
+
+        public TextInput GetNewInput()
+        {
+            TextInput input = null;
+            if(CustomEditor != null)
+            {
+                input = CustomEditor.GetNewEditor();
+            }
+
+            if(input == null)
+            {
+                if (Column.DataType == DataType.Object)
+                    return null;
+
+                switch (Column.DataType)
+                {                    
+                    case DataType.Integer:
+                    case DataType.Long:
+                    case DataType.Float:
+                    case DataType.Double:
+                    case DataType.Decimal:
+                    case DataType.Bool:
+                    case DataType.Byte:
+                    case DataType.Short:
+                        return new NumberInput();
+                    case DataType.DateTime:
+                        return new DateInput();
+                    default:
+                    case DataType.String:
+                        return new TextInput();
+                }
+            }
+
+            return input;
+        }
 
         public int GetDataColumnIndex()
         {

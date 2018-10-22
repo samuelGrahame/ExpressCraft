@@ -353,13 +353,22 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
 
         public static void Empty(this HTMLElement element)
         {
-            /*@
-			var len = element.childNodes.length;
-			while(len--)
-			{
-				element.removeChild(element.lastChild);
-			};
-			*/
+            var len = element.childNodes.length;
+            while (len-- > 0)
+            {
+                element.removeChild(element.childNodes[len]);
+            };
+        }
+
+        public static void Empty(this HTMLElement element, Node exceptNode)
+        {
+            var len = element.childNodes.length;
+            while (len-- > 0)
+            {
+                var t = (Node)element.childNodes[len];
+                if(t != exceptNode)
+                    element.removeChild(element.childNodes[len]);
+            };
         }
 
         public static Vector2 GetClientMouseLocation(object e)

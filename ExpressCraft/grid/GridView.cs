@@ -27,6 +27,25 @@ namespace ExpressCraft
         public SimpleButton btnClear;
         public SimpleButton btnClose;
 
+
+        private bool _useInRowEditor;
+
+        public bool UseInRowEditor
+        {
+            get { return _useInRowEditor; }
+            set {
+                if(_useInRowEditor != value)
+                {
+                    CloseEditor();
+                    _useInRowEditor = value;
+                    if(_useInRowEditor)
+                    {
+                        UseEditForm = false;
+                    }
+                }                
+            }
+        }
+
         private ContextItem _showFindPanelContextItem;
 
         private bool _findPanelVisible;
@@ -231,25 +250,202 @@ namespace ExpressCraft
 
         public float UnitHeight = 28.0f;
         private bool _columnAutoWidth = false;
+        
+        private int _focusedcolumnHandle = -1;
 
-        private int _focusedcolumn = -1;
+        double cellChangeTimer = -1;
 
-        public int FocusedColumn
+        public int FocusedColumnHandle
         {
             get
             {
-                return _focusedcolumn;
+                return _focusedcolumnHandle;
             }
             set
             {
-                if(value != FocusedColumn)
+                if(value != FocusedColumnHandle)
                 {
-                    var prev = _focusedcolumn;
-                    _focusedcolumn = value;
-                    //RenderGrid();
-                    if(OnFocusedColumnChanged != null)
-                        OnFocusedColumnChanged(_focusedcolumn, prev);
+                    var prev = _focusedcolumnHandle;
+                    _focusedcolumnHandle = value;
+                    setNewCell(value, FocusedDataHandle);
+                    RenderGrid();
+                    if (OnFocusedColumnChanged != null)
+                        OnFocusedColumnChanged(_focusedcolumnHandle, prev);
                 }
+            }
+        }
+
+        int prevCellColIndex = -1;
+        int prevRowCellIndex = -1;
+
+        private DataRow dataRow = null;
+        private int dataRowIndex = -1;
+        private int dataColIndex = -1;
+        private TextInput _activeEditor = null;
+        private HTMLElement activeEditorElement = null;
+        public TextInput ActiveEditor { get; }
+
+        private bool isEditorShown = false;
+
+        public class ValidateInput
+        {
+            public bool IsValid = true;
+            public string ErrorDescription;
+        }
+
+        public class ShowingEditor
+        {
+            public bool Cancel;
+        }
+        
+        public Action<TextInput, ValidateInput> OnValidateInput = null;
+
+        public void SetFocusedRowCellValue(int columnHandle, object value)
+        {
+            SetRowCellValue(FocusedDataHandle, columnHandle, value);
+        }
+
+        public void SetRowCellValue(int rowHandle, int columnHandle, object value)
+        {
+
+        }
+
+        public void SetRowCellValue(int rowHandle, GridViewColumn column, object value)
+        {
+
+        }
+
+
+        public void PostEditor()
+        {
+            if(isEditorShown)
+            {
+                //SetRowCellValue(openedEditorRowIndex, openedEditorCol, _activeEditor.GetEditValue());
+
+                CloseEditor();
+            }
+        }
+
+        public void ValidateEditor()
+        {
+             if(isEditorShown)
+            {
+                var vi = new ValidateInput();
+                // what we need to do is validate editor
+                if (OnValidateInput != null)
+                {
+                    OnValidateInput(_activeEditor, vi);
+                }
+                if (!vi.IsValid)
+                {
+                    CloseEditor();
+                    new MessageBoxForm(vi.ErrorDescription, MessageBoxLayout.Exclamation).ShowDialog();
+                }
+                else
+                {
+                    PostEditor();
+                }
+            }            
+        }
+
+        public void ShowEditor()
+        {
+            if(!isEditorShown && UseInRowEditor)
+            {
+                if (!FocusedColumn.AllowEdit)
+                    return;
+
+                var cancelEven = new ShowingEditor();
+                if (OnShowingEditor != null)
+                {
+                    OnShowingEditor(cancelEven);
+                }
+                if (cancelEven.Cancel)
+                    return;
+
+                var input = FocusedColumn.GetNewInput();
+
+                if(input == null)
+                {
+                    return;
+                }
+                
+                dataRowIndex = GetDataSourceRow(FocusedDataHandle);
+                dataRow = DataSource[dataRowIndex];
+
+                dataColIndex = FocusedColumn.GetDataColumnIndex();
+
+                _activeEditor = input;
+
+                _activeEditor.OnLostFocus = (ev) =>
+                {
+                    ValidateEditor();
+                };
+
+                _activeEditor.SetEditValue(dataRow[dataColIndex]);
+
+                activeEditorElement = (input.Controller != null ? input.Controller : input).Content;
+                activeEditorElement.style.zIndex = "100";
+                GridBody.appendChild(activeEditorElement);
+
+                isEditorShown = true;
+
+                RenderGrid();
+            }
+        }               
+
+        public GridViewColumn FocusedColumn => FocusedColumnHandle < 0 ? null : Columns[FocusedColumnHandle];
+
+        public Action<ShowingEditor> OnShowingEditor = null;
+
+        public void CloseEditor()
+        {
+            if(isEditorShown)
+            {                
+                _activeEditor = null;
+                dataColIndex = -1;
+                dataRow = null;
+                dataRowIndex = -1;
+                isEditorShown = false;
+
+                GridBody.removeChild(activeEditorElement);
+                activeEditorElement = null;
+
+                RenderGrid();
+            }
+        }
+
+        /// <summary>
+        /// int Col, int Row
+        /// </summary>
+        public Action<int, int> OnFocusedCellChanged;
+
+        private void setNewCell(int col, int row)
+        {
+            if(col != prevCellColIndex || prevRowCellIndex != row)
+            {
+                // changed..
+                if(cellChangeTimer > -1)
+                {
+                    window.clearTimeout(cellChangeTimer);                    
+                }
+
+                cellChangeTimer = window.setTimeout((obj) =>
+                {
+                    // what we need to do is set new index.
+                    prevCellColIndex = col;
+                    prevRowCellIndex = row;
+
+                    if (OnFocusedCellChanged != null)
+                    {
+                        OnFocusedCellChanged(col, row);
+                    }
+                    if (isEditorShown)
+                    {
+                        ValidateEditor();
+                    }
+                    ShowEditor();
+                }, 25);
             }
         }
 
@@ -268,6 +464,7 @@ namespace ExpressCraft
                     var prev = _focusedDataHandle;
                     
                     _focusedDataHandle = value;
+                    setNewCell(FocusedColumnHandle, value);
                     RenderGrid();
                     if(OnFocusedRowChanged != null)
                         OnFocusedRowChanged(_focusedDataHandle, prev);                    
@@ -364,6 +561,10 @@ namespace ExpressCraft
                 if(value != _useEditForm)
                 {
                     _useEditForm = value;
+                    if(_useEditForm)
+                    {
+                        UseInRowEditor = false;
+                    }
                     RenderGrid();
                 }
             }
@@ -1236,7 +1437,9 @@ namespace ExpressCraft
                         dr.style.position = "absolute";
                         dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth + 1, UnitHeight);
                         dr.setAttribute("i", Convert.ToString(DataRowhandle));
+
                         
+
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
                         {
@@ -1249,7 +1452,9 @@ namespace ExpressCraft
                             var col = Columns[x];
                             if(!col.Visible)
                                 continue;
+
                             
+
                             var apparence = col.BodyApparence;
                             bool useDefault = false;
                             HTMLElement cell = null;
@@ -1315,6 +1520,14 @@ namespace ExpressCraft
 
                                 docFrag.appendChild(cell);
                             }
+
+                            if (isEditorShown && DataRowhandle == dataRowIndex && col.GetDataColumnIndex() == dataColIndex)
+                            {
+                                activeEditorElement.style.left = cell.style.left;
+                                activeEditorElement.style.width = cell.style.width;
+                                activeEditorElement.style.top = dr.style.top;
+                                activeEditorElement.style.height = UnitHeight.ToPx();
+                            }
                         }
 
                         dr.AppendChild(docFrag);
@@ -1330,8 +1543,8 @@ namespace ExpressCraft
 
                         CacheRow[i] = dr;   
                     }
-
-                    if(StartedWith != RenderTime)
+                    
+                    if (StartedWith != RenderTime)
                     {
                         if(prevRowCache == 0)
                             ClearGrid();
@@ -1527,7 +1740,7 @@ namespace ExpressCraft
             };
             OnCellRowMouseDown = (ev) =>
             {
-                FocusedColumn = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("x"));
+                FocusedColumnHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("x"));
             };
             OnRowClick = (ev) =>
             {
@@ -1664,15 +1877,15 @@ namespace ExpressCraft
 
             ContextMenu.ContextItems.AddRange(new ContextItem[] {
                 new ContextItem("Sort Ascending", (cm) => {
-                    if(FocusedColumn > -1)
+                    if(FocusedColumnHandle > -1)
                     {
-                        SortColumn(Columns[FocusedColumn], GridViewSortMode.Asc);
+                        SortColumn(Columns[FocusedColumnHandle], GridViewSortMode.Asc);
                     }
                 }),
                 new ContextItem("Sort Descending", (cm) => {
-                    if(FocusedColumn > -1)
+                    if(FocusedColumnHandle > -1)
                     {
-                        SortColumn(Columns[FocusedColumn], GridViewSortMode.Desc);
+                        SortColumn(Columns[FocusedColumnHandle], GridViewSortMode.Desc);
                     }
                 }),
                 new ContextItem("Clear All Sorting", (cm) => {
@@ -1681,9 +1894,9 @@ namespace ExpressCraft
                 //new ContextItem("Group By This Column"),
                 //new ContextItem("Hide Group By Box", true),
                 new ContextItem("Hide This Column", (ci) => {
-                    if(FocusedColumn > -1)
+                    if(FocusedColumnHandle > -1)
                     {
-                        Columns[FocusedColumn].Visible = false;
+                        Columns[FocusedColumnHandle].Visible = false;
                         RenderGrid();
                     }
                 }),
@@ -1724,9 +1937,9 @@ namespace ExpressCraft
                 //new ContextItem("View Columns"),
                 //new ContextItem("Save Column Layout"),
                 new ContextItem("Best Fit", (ci) => {
-                    if(FocusedColumn > -1)
+                    if(FocusedColumnHandle > -1)
                     {
-                        Columns[FocusedColumn].Width = GetBestFitForColumn(Columns[FocusedColumn]);                        
+                        Columns[FocusedColumnHandle].Width = GetBestFitForColumn(Columns[FocusedColumnHandle]);                        
                     }
                 }) ,
                 new ContextItem("Best Fit (all columns)", (ci) => {
@@ -1869,7 +2082,7 @@ namespace ExpressCraft
                 x -=(int)target.clientLeft;
                 ResizePageX = Script.Write<int>("ev.pageX");
 
-                FocusedColumn = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
+                FocusedColumnHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
 
                 if(x >= target.clientWidth - 2)
                 {
@@ -2034,7 +2247,15 @@ namespace ExpressCraft
 
         public void ClearBody()
         {
-            GridBody.Empty();
+            if(isEditorShown)
+            {
+                GridBody.Empty(activeEditorElement);
+            }
+            else
+            {
+                GridBody.Empty();
+            }
+            
             GridBody.AppendChildren(RightOfTable, BottonOfTable);
         }
 

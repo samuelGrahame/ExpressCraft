@@ -13,7 +13,7 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-            //var x = new Form();
+            var x = new Form();
 
             //var yt = new ComboBoxEdit(
             //    new DataItem("Hello World 1"),
@@ -24,33 +24,34 @@ namespace ExpressCraft
 
             //x.AppendChild(yt);
 
-            //var gr = new GridView();
+            var gr = new GridView();
+            gr.UseInRowEditor = true;
 
-            //gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
+            gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
 
-            //var dt = new DataTable();
+            var dt = new DataTable();
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
-            //}
-            //dt.BeginDataUpdate();
-            //for (int h = 0; h < 100;h++)
-            //{
-            //    var dr = dt.NewRow();
-            //    for (int i = 0; i < 100; i++)
-            //    {
-            //        dr[i] = DateTime.Now;
-            //    }
-            //    dt.AddRow(dr);
-            //}
-            //dt.AcceptNewRows();
-            
-            //gr.DataSource = dt;
+            for (int i = 0; i < 100; i++)
+            {
+                dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
+            }
+            dt.BeginDataUpdate();
+            for (int h = 0; h < 100; h++)
+            {
+                var dr = dt.NewRow();
+                for (int i = 0; i < 100; i++)
+                {
+                    dr[i] = DateTime.Now;
+                }
+                dt.AddRow(dr);
+            }
+            dt.AcceptNewRows();
 
-            //x.LinkResize(gr, true);
+            gr.DataSource = dt;
 
-            //x.Show();
+            x.LinkResize(gr, true);
+
+            x.Show();
 
             // Test Grid...1
             //var x = new Form();
@@ -82,32 +83,32 @@ namespace ExpressCraft
 
             //Application.Run(x);
 
-           // //var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
+            // //var frm = new Form() { Size = new Vector2(500, 500), StartPosition = FormStartPosition.Center };
 
-           //// var x = new Test();
-           //// x.SetBoundsFull();
-            
-           //// frm.AppendChild(x);
+            //// var x = new Test();
+            //// x.SetBoundsFull();
 
-           //// frm.LinkchildToForm(x);
-           //             var x = new Sheet();
-           // x.SetBoundsFull();
-           // x.BeginDataUpdate();
-           // for(int x1 = 0; x1 < 26; x1++)
-           // {
-           //     for(int y = 0; y < 1000; y++)
-           //     {
-           //         x[x1, y].Value = $"{x1}:{y}";
-           //     }
-           // }
+            //// frm.AppendChild(x);
 
-           // frm.LinkchildToForm(x);
+            //// frm.LinkchildToForm(x);
+            //             var x = new Sheet();
+            // x.SetBoundsFull();
+            // x.BeginDataUpdate();
+            // for(int x1 = 0; x1 < 26; x1++)
+            // {
+            //     for(int y = 0; y < 1000; y++)
+            //     {
+            //         x[x1, y].Value = $"{x1}:{y}";
+            //     }
+            // }
 
-           // frm.AppendChild(x);
+            // frm.LinkchildToForm(x);
 
-           // frm.Show();
+            // frm.AppendChild(x);
 
-           // x.EndDataUpdate();
+            // frm.Show();
+
+            // x.EndDataUpdate();
         }
 
         //public class Test : CanvasControl
