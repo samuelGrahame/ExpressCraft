@@ -14,7 +14,7 @@ namespace ExpressCraft
             Settings.Setup();
 
             var x = new Form();
-
+            x.StartPosition = FormStartPosition.Center;
             //var yt = new ComboBoxEdit(
             //    new DataItem("Hello World 1"),
             //    new DataItem("Hello World 2"),

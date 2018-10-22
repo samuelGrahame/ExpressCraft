@@ -412,8 +412,8 @@ namespace ExpressCraft
                 isEditorShown = true;
 
                 RenderGrid();
-
-                _activeEditor.Focus();
+                _activeEditor.Content.tabIndex = -1;
+                _activeEditor.Focus();                
             }
         }               
 
