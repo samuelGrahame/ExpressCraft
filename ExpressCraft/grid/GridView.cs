@@ -1581,7 +1581,7 @@ namespace ExpressCraft
                                 docFrag.appendChild(cell);
                             }
 
-                            if (isEditorShown && DataRowhandle == dataRowIndex && col.GetDataColumnIndex() == dataColIndex)
+                            if (isEditorShown && i == dataRowIndex && col.GetDataColumnIndex() == dataColIndex)
                             {
                                 activeEditorElement.style.left = cell.style.left;
                                 activeEditorElement.style.width = cell.style.width;
