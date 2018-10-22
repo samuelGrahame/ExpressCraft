@@ -431,8 +431,8 @@ namespace ExpressCraft
 
                 GridBody.removeChild(activeEditorElement);
                 activeEditorElement = null;
-
-                RenderGrid();
+                if(cellChangeTimer == -1)
+                    RenderGrid();
             }
         }
 
@@ -440,7 +440,7 @@ namespace ExpressCraft
         /// int Col, int Row
         /// </summary>
         public Action<int, int> OnFocusedCellChanged;
-
+        
         private void setNewCell(int col, int row)
         {
             if(col != prevCellColIndex || prevRowCellIndex != row)
@@ -448,7 +448,8 @@ namespace ExpressCraft
                 // changed..
                 if(cellChangeTimer > -1)
                 {
-                    window.clearTimeout(cellChangeTimer);                    
+                    window.clearTimeout(cellChangeTimer);
+                    cellChangeTimer = -1;
                 }
 
                 cellChangeTimer = window.setTimeout((obj) =>
@@ -463,6 +464,7 @@ namespace ExpressCraft
                     }
                     ValidateEditor();
                     ShowEditor();
+                    cellChangeTimer = -1;
                 }, 25);
             }
         }
