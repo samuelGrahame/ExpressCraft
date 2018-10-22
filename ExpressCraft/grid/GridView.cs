@@ -388,7 +388,7 @@ namespace ExpressCraft
                 inpute.onblur = (ev) =>
                 {
                     ValidateEditor();
-                }
+                };
 
                 inpute.onkeydown = (ev) => {
                     if (ev.keyCode == 9)
