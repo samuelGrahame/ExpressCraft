@@ -286,6 +286,7 @@ namespace ExpressCraft
         public TextInput ActiveEditor { get; }
 
         private bool isEditorShown = false;
+        private bool isShowingEditor = false;
 
         public class ValidateInput
         {
@@ -407,11 +408,12 @@ namespace ExpressCraft
                 GridBody.appendChild(activeEditorElement);
 
                 isEditorShown = true;
-
+                isShowingEditor = true;
                 RenderGrid();
 
                 inpute.tabIndex = -1;
                 inpute.focus();
+                isShowingEditor = false;
             }
         }               
 
@@ -431,8 +433,7 @@ namespace ExpressCraft
 
                 GridBody.removeChild(activeEditorElement);
                 activeEditorElement = null;
-                if(cellChangeTimer == -1)
-                    RenderGrid();
+                RenderGrid();
             }
         }
 
@@ -1396,7 +1397,8 @@ namespace ExpressCraft
                 }
 
                 this.Content.onblur = (ev) => {
-                    ValidateEditor();
+                    if(isEditorShown && !isShowingEditor)
+                        ValidateEditor();
                 };
 
                 // #TODO - CLEAN...
