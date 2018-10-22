@@ -1855,6 +1855,7 @@ namespace ExpressCraft
                 }
                 else
                 {
+                    FocusedDataHandle = DataRowHandle;
                     RenderGrid();
                 }
             };
