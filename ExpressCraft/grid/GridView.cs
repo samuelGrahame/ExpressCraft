@@ -384,12 +384,7 @@ namespace ExpressCraft
                 _activeEditor = input;
 
                 var inpute = _activeEditor.GetInput();
-
-                inpute.onblur = (ev) =>
-                {
-                    ValidateEditor();
-                };
-
+                
                 inpute.onkeydown = (ev) => {
                     if (ev.keyCode == 9)
                     {
@@ -1406,7 +1401,7 @@ namespace ExpressCraft
                         ValidateEditor();
                     isShowingEditor = false;
                 };
-
+                
                 // #TODO - CLEAN...
                 if(start < 0)
                     start = 0;
