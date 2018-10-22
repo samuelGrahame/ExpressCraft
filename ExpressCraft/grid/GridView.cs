@@ -384,7 +384,12 @@ namespace ExpressCraft
                 _activeEditor = input;
 
                 var inpute = _activeEditor.GetInput();
-                
+
+                inpute.onblur = (ev) =>
+                {
+                    ValidateEditor();
+                }
+
                 inpute.onkeydown = (ev) => {
                     if (ev.keyCode == 9)
                     {
@@ -408,12 +413,12 @@ namespace ExpressCraft
                 GridBody.appendChild(activeEditorElement);
 
                 isEditorShown = true;
-                isShowingEditor = true;
+                
                 RenderGrid();
 
                 inpute.tabIndex = -1;
+                isShowingEditor = true;
                 inpute.focus();
-                isShowingEditor = false;
             }
         }               
 
@@ -445,9 +450,9 @@ namespace ExpressCraft
         private void setNewCell(int col, int row)
         {
             if(col != prevCellColIndex || prevRowCellIndex != row)
-            {
+            {                
                 // changed..
-                if(cellChangeTimer > -1)
+                if (cellChangeTimer > -1)
                 {
                     window.clearTimeout(cellChangeTimer);
                     cellChangeTimer = -1;
@@ -1399,6 +1404,7 @@ namespace ExpressCraft
                 this.Content.onblur = (ev) => {
                     if(isEditorShown && !isShowingEditor)
                         ValidateEditor();
+                    isShowingEditor = false;
                 };
 
                 // #TODO - CLEAN...
