@@ -364,7 +364,7 @@ namespace ExpressCraft
         {
             if(!isEditorShown && UseInRowEditor)
             {
-                if (!FocusedColumn.AllowEdit)
+                if (FocusedColumn == null || !FocusedColumn.AllowEdit)
                     return;
 
                 var cancelEven = new ShowingEditor();
@@ -449,6 +449,12 @@ namespace ExpressCraft
         
         private void setNewCell(int col, int row)
         {
+            if(col == -1 || row == -1)
+            {
+                prevCellColIndex = col;
+                prevRowCellIndex = row;
+                return;
+            }
             if(col != prevCellColIndex || prevRowCellIndex != row)
             {                
                 // changed..
