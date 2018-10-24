@@ -1827,12 +1827,14 @@ namespace ExpressCraft
                 var DataRowHandle = Script.ParseInt(ev.currentTarget.As<HTMLElement>().getAttribute("i"));
                 
                 var mev = ev.As<MouseEvent>();
+                var ignoreClear = false;
                 if(AllowMultiSelection)
                 {
                     if(mev.ctrlKey)
                     {
                         SelectedRows.AddOrSet(true, DataRowHandle, true);
                         RenderGrid();
+                        ignoreClear = true;
                     }
                     else if(mev.shiftKey && FocusedDataHandle > -1)
                     {                        
@@ -1856,7 +1858,10 @@ namespace ExpressCraft
                         return;
                     }
                 }
-                SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
+
+                if(!ignoreClear)
+                    SelectedRows.ClearAndAddOrSet(true, DataRowHandle, true);
+
                 if(DataRowHandle != _focusedDataHandle)
                 {
                     FocusedDataHandle = DataRowHandle;
