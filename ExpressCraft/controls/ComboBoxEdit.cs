@@ -72,8 +72,11 @@ namespace ExpressCraft
             {
                 for(int i = 0; i < ComboBoxBase.options.length; i++)
                 {
-                    if(ComboBoxBase.options[i].innerHTML == value)
+                    if (ComboBoxBase.options[i].innerHTML == value)
+                    {
                         ComboBoxBase.selectedIndex = i;
+                        return;
+                    }
                 }
                 ComboBoxBase.selectedIndex = -1;
             }
@@ -91,8 +94,11 @@ namespace ExpressCraft
             {
                 for(int i = 0; i < ComboBoxBase.options.length; i++)
                 {
-                    if(ComboBoxBase.options[i].value == value)
+                    if (ComboBoxBase.options[i].value == value)
+                    {
                         ComboBoxBase.selectedIndex = i;
+                        return;
+                    }
                 }
                 ComboBoxBase.selectedIndex = -1;
             }
