@@ -5,7 +5,7 @@ using System;
 namespace ExpressCraft
 {
     [Namespace(true)]
-    public class RibbonButton : RibbonItem
+    public class RibbonButton : RibbonItem<RibbonButton>
     {
         private string _icon = "";
 
@@ -42,16 +42,8 @@ namespace ExpressCraft
                 }
             }
         }
-
         
 
-
-
-        public Action<RibbonButton> ItemClick;
-
-        
-
-        
         public HTMLDivElement imageDiv = null;
 
         protected override void OnSetEnabled(bool value)
@@ -79,7 +71,7 @@ namespace ExpressCraft
             IsSmallItem = _isSmallCaption;
         }
 
-        public Action<RibbonButton> AfterItemClick;
+        
 
         public override void Render()
         {
@@ -87,20 +79,15 @@ namespace ExpressCraft
 
             Content.onclick = (ev) =>
             {
-                bool wasEnabled = enabled;
-
-                if(enabled && ItemClick != null)
-                    ItemClick(this);
-                if(wasEnabled && AfterItemClick != null)
-                    AfterItemClick(this);
-
-                ev.stopPropagation();
+                performClick(this, ev);
             };
 
             ProcessCaption();
             ProcessImage();
 
             setEnabled(enabled);
+
+            base.Render();
         }
 
         

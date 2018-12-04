@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class RibbonEditItem : RibbonItem
+    public class RibbonEditItem : RibbonItem<RibbonEditItem>
     {
         public TextInput Edit;
         public RibbonEditItem(TextInput edit, int editWidth = 100) : base("ribbonbuttonsmall")
@@ -17,7 +17,19 @@ namespace ExpressCraft
 
             IsSmallItem = true;
         }
-        
+
+        public override void Render()
+        {
+            HasRendered = true;
+
+            Content.onclick = (ev) =>
+            {
+                performClick(this, ev);
+            };
+
+            base.Render();
+        }
+
         public int EditWidth
         {
             get { return Edit.Width.ToInt(); }

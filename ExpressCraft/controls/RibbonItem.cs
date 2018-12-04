@@ -7,11 +7,27 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class RibbonItem : Control
+    public class RibbonItem<T> : Control         
     {
         public bool BeginGroup = false;
         public bool IsSmallItem = false;
         public HTMLDivElement captionDiv = null;
+
+        protected void performClick(T caller, MouseEvent ev)
+        {
+            bool wasEnabled = enabled;
+
+            if (enabled && ItemClick != null)
+                ItemClick(caller);
+            if (wasEnabled && AfterItemClick != null)
+                AfterItemClick(caller);
+
+            ev.stopPropagation();
+        }
+
+        public Action<T> ItemClick;
+        public Action<T> AfterItemClick;
+
         public void ProcessCaption()
         {
             if(captionDiv != null)
@@ -27,6 +43,13 @@ namespace ExpressCraft
 
                 Content.AppendChild(captionDiv);
             }
+        }
+
+        public override void Render()
+        {
+            
+
+            base.Render();
         }
 
         private string _caption = "";
