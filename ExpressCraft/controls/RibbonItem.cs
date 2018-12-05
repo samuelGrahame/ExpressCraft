@@ -7,35 +7,20 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class RibbonItem<T> : Control         
+    public class RibbonItem : Control
     {
         public bool BeginGroup = false;
         public bool IsSmallItem = false;
         public HTMLDivElement captionDiv = null;
 
-        protected void performClick(T caller, MouseEvent ev)
-        {
-            bool wasEnabled = enabled;
-
-            if (enabled && ItemClick != null)
-                ItemClick(caller);
-            if (wasEnabled && AfterItemClick != null)
-                AfterItemClick(caller);
-
-            ev.stopPropagation();
-        }
-
-        public Action<T> ItemClick;
-        public Action<T> AfterItemClick;
-
         public void ProcessCaption()
         {
-            if(captionDiv != null)
+            if (captionDiv != null)
             {
                 captionDiv.remove();
                 captionDiv = null;
             }
-            if(!string.IsNullOrWhiteSpace(Caption))
+            if (!string.IsNullOrWhiteSpace(Caption))
             {
                 captionDiv = Div(IsSmallItem ? "ribbonbuttonsmallcaption" : "ribbonbuttoncaption");
 
@@ -47,7 +32,7 @@ namespace ExpressCraft
 
         public override void Render()
         {
-            
+
 
             base.Render();
         }
@@ -62,7 +47,7 @@ namespace ExpressCraft
             }
             set
             {
-                if(_caption != value)
+                if (_caption != value)
                 {
                     _caption = value;
                     ProcessCaption();
@@ -77,21 +62,21 @@ namespace ExpressCraft
 
         protected virtual void OnSetEnabled(bool value)
         {
-            if(value)
+            if (value)
             {
-                if(captionDiv != null)
+                if (captionDiv != null)
                 {
                     captionDiv.classList.remove("disabled");
                 }
             }
             else
-            {             
-                if(captionDiv != null)
+            {
+                if (captionDiv != null)
                 {
                     captionDiv.classList.add("disabled");
                 }
             }
-        }        
+        }
 
         protected bool enabled = true;
         public void setEnabled(bool value)
@@ -112,5 +97,30 @@ namespace ExpressCraft
                 setEnabled(value);
             }
         }
+    }
+
+    public class RibbonItem<T> : RibbonItem
+    {
+        public RibbonItem(string className) : base(className)
+        {
+
+        }
+
+        protected void performClick(T caller, MouseEvent ev)
+        {
+            bool wasEnabled = enabled;
+
+            if (enabled && ItemClick != null)
+                ItemClick(caller);
+            if (wasEnabled && AfterItemClick != null)
+                AfterItemClick(caller);
+
+            ev.stopPropagation();
+        }
+
+        public Action<T> ItemClick;
+        public Action<T> AfterItemClick;
+
+        
     }
 }
