@@ -1828,8 +1828,12 @@ namespace ExpressCraft
 
         public string BackColor
         {
-            get { return Body.style.backgroundColor; }
-            set { Body.style.backgroundColor = value; }
+            get {                
+                return Body.style.backgroundColor;
+            }
+            set {
+                Body.style.backgroundColor = value;
+            }
         }
 
         public string ForeColor
