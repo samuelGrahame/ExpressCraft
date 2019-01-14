@@ -906,7 +906,7 @@ namespace ExpressCraft
             return null;
         }
 
-        public void AddColumn(string caption, string fieldname, int width = 100, string formatstring = "", string alignment = "left", string forecolor = null, bool isBold = false)
+        public void AddColumn(string caption, string fieldname, int width = 100, string formatstring = "", string alignment = "left", string forecolor = null, bool isBold = false, string backcolor = null)
         {
             var col = GetColumnByFieldName(fieldname);
             if(col == null)
@@ -914,9 +914,9 @@ namespace ExpressCraft
             AddColumn(caption, col, width, formatstring, alignment, forecolor, isBold);
         }
 
-        public void AddColumn(string caption, DataColumn column, int width = 100, string formatstring = "", string alignment = "left", string forecolor = null, bool isBold = false)
+        public void AddColumn(string caption, DataColumn column, int width = 100, string formatstring = "", string alignment = "left", string forecolor = null, bool isBold = false, string backcolor = null)
         {
-            AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new GridViewCellApparence(isBold, alignment, forecolor), FormatString = formatstring, Column = column });
+            AddColumn(new GridViewColumn(this, width) { Caption = caption, BodyApparence = new GridViewCellApparence(isBold, alignment, forecolor) { Backcolor = backcolor }, FormatString = formatstring, Column = column });
         }
 
         public void AddColumn(GridViewColumn column)
@@ -1345,6 +1345,10 @@ namespace ExpressCraft
                         var col = Label(gcol.Caption,
                             (_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
                             apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
+                        if(!string.IsNullOrWhiteSpace(apparence.Backcolor))
+                        {
+                            col.style.backgroundColor = apparence.Backcolor;
+                        }
                         if(gcol.SortedMode != GridViewSortMode.None)
                         {
                             var sortImage = Div(gcol.SortedMode == GridViewSortMode.Asc ? "grid-sort-up" : "grid-sort-down");
@@ -1553,7 +1557,11 @@ namespace ExpressCraft
                                     if(apparence.Forecolor != null)
                                     {
                                         cell.style.color = apparence.Forecolor;
-                                    }
+                                    }                                    
+                                }
+                                if(!string.IsNullOrWhiteSpace(apparence.Backcolor))
+                                {
+                                    cell.style.backgroundColor = apparence.Backcolor;
                                 }
 
                                 var newCell = useDefault ?

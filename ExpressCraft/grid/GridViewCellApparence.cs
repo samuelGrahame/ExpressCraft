@@ -7,6 +7,8 @@ namespace ExpressCraft
         public bool IsBold = false;
         public string Alignment = "left";
         public string Forecolor = null;
+        public string Backcolor = null;
+
 
         public GridViewCellApparence()
         {
