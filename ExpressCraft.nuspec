@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.5.5</version>
+    <version>0.5.8</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG</authors>
     <owners>SG</owners>
@@ -12,7 +12,7 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-		Allow Click Event in RibbonEditItem - so you can create click actions for things like check edit.
+		Added Backcolor for Cells and Columns in the gridview
 	</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
