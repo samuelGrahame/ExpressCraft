@@ -27,6 +27,10 @@ namespace ExpressCraft
         public SimpleButton btnClear;
         public SimpleButton btnClose;
 
+        /// <summary>
+        /// Data Row Html Element - Row handle
+        /// </summary>
+        public Action<GridViewRowCellArguments> OnCustomRowCellStyle;
 
         private bool _useInRowEditor;
 
@@ -1562,6 +1566,14 @@ namespace ExpressCraft
                                 if(!string.IsNullOrWhiteSpace(apparence.Backcolor))
                                 {
                                     cell.style.backgroundColor = apparence.Backcolor;
+                                }
+
+                                if(OnCustomRowCellStyle != null)
+                                {
+                                    OnCustomRowCellStyle(
+                                        new GridViewRowCellArguments() {
+                                            Element = cell, DataRowHandle = DataRowhandle, DisplayValue = displayValue, ViewColumn = col
+                                        });
                                 }
 
                                 var newCell = useDefault ?

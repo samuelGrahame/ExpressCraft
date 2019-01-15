@@ -121,6 +121,21 @@
             {
                 return Column.GetDisplayValue(RowHandle, FormatString);
             }
+        }        
+
+        public object GetCellValueByDataRowHandle(int RowHandle)
+        {
+            return Column.GetCellValue(RowHandle);
+        }
+
+        public object GetCellValue(int RowHandle)
+        {
+            if (View.VisibleRowHandles != null)
+            {
+                RowHandle = View.VisibleRowHandles[RowHandle];
+            }
+
+            return Column.GetCellValue(RowHandle);
         }
 
         public string GetDisplayValue(int RowHandle)
