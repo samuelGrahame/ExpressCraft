@@ -13,6 +13,20 @@
         public GridViewCellDisplay CellDisplay = null;
         public GridViewSortMode SortedMode = GridViewSortMode.None;
 
+        private string cfieldName;
+
+        public string FieldName { get {
+                if (Column == null)
+                    return cfieldName;
+                return Column.FieldName;
+            } set {
+                if(Column == null)
+                {
+                    cfieldName = Column.FieldName;
+                }
+            }
+        }
+
         public TextInput FilterEdit = null;
 
         private object filterValue;
@@ -112,7 +126,10 @@
         }        
 
         public string GetDisplayValueByDataRowHandle(int RowHandle)
-        {            
+        {
+            if (Column == null)
+                return string.Empty;
+
             if(string.IsNullOrWhiteSpace(FormatString))
             {
                 return Column.GetDisplayValue(RowHandle);
@@ -125,11 +142,16 @@
 
         public object GetCellValueByDataRowHandle(int RowHandle)
         {
+            if (Column == null)
+                return null;
             return Column.GetCellValue(RowHandle);
         }
 
         public object GetCellValue(int RowHandle)
         {
+            if (Column == null)
+                return null;
+
             if (View.VisibleRowHandles != null)
             {
                 RowHandle = View.VisibleRowHandles[RowHandle];
@@ -140,6 +162,9 @@
 
         public string GetDisplayValue(int RowHandle)
         {
+            if (Column == null)
+                return null;
+
             if(View.VisibleRowHandles != null)
             {
                 RowHandle = View.VisibleRowHandles[RowHandle];

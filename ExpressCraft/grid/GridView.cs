@@ -768,13 +768,9 @@ namespace ExpressCraft
                     _dataSource.OnDataSourceChanged += DataSource_OnDataSourceChanged;
 
                     if(Columns.Count == 0 && AutoGenerateColumnsFromSource)
-                    {
-                        var sw = Stopwatch.StartNew();
-
+                    {                        
                         for(int i = 0; i < _dataSource.ColumnCount; i++)
                         {
-                            var sw1 = Stopwatch.StartNew();
-
                             var gvc = new GridViewColumn(this);
                             gvc.Caption = _dataSource.Columns[i].FieldName;
                             gvc.Column = _dataSource.Columns[i];
@@ -809,14 +805,30 @@ namespace ExpressCraft
                             }
 
                             Columns.Add(gvc);
-
-                            sw.Stop();
-                            System.Console.WriteLine("DataSource AddColumn Auto: " + sw1.ElapsedMilliseconds);
                         }
+                    }else if(Columns.Count > 0)
+                    {
+                        for (int i = 0; i < Columns.Count; i++)
+                        {
+                            Columns[i].Column = null;
+                            string field = Columns[i].FieldName;
 
-                        sw.Stop();
-                        System.Console.WriteLine("DataSource AutoColumns: " + sw.ElapsedMilliseconds);
+                            if (!string.IsNullOrWhiteSpace(field))
+                            {                                
+                                for (int d = 0; d < _dataSource.ColumnCount; d++)
+                                {
+                                    var col = _dataSource.Columns[i];
+
+                                    if(col.FieldName == field)
+                                    {
+                                        Columns[i].Column = col;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
+
                     RenderGrid();
                 }
             }
@@ -838,7 +850,7 @@ namespace ExpressCraft
         {
             for(int i = 0; i < ColumnCount(); i++)
             {
-                if(Columns[i].Column.FieldName == FieldName)
+                if(Columns[i].Column != null && Columns[i].Column.FieldName == FieldName)
                 {
                     return Columns[i];
                 }
@@ -868,7 +880,7 @@ namespace ExpressCraft
 
         public object GetRowCellValue(int Datahandle, DataColumn column)
         {
-            if(Datahandle == -1)
+            if(Datahandle == -1 || column == null)
                 return null;
             return column.GetCellValue(Datahandle);
         }
@@ -1522,7 +1534,6 @@ namespace ExpressCraft
                             if(!col.Visible)
                                 continue;
 
-                            
 
                             var apparence = col.BodyApparence;
                             bool useDefault = false;
