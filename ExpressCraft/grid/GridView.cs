@@ -752,6 +752,9 @@ namespace ExpressCraft
             }
             set
             {
+                if (_dataSource == value)
+                    return;
+
                 FocusedDataHandle = -1;
                 SelectedRows = new HardSoftList<bool>(false);
                 VisibleRowHandles = new List<int>();
