@@ -18,11 +18,16 @@
         public string FieldName { get {
                 if (Column == null)
                     return cfieldName;
+                cfieldName = Column.FieldName;
                 return Column.FieldName;
             } set {
-                if(Column == null)
+                if(Column != null)
                 {
                     cfieldName = Column.FieldName;
+                }
+                else
+                {
+                    cfieldName = value;
                 }
             }
         }
