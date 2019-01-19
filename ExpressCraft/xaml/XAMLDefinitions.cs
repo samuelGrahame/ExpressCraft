@@ -40,9 +40,9 @@ namespace ExpressCraft.xaml
             return namespaceURI.Replace("clr-namespace:", "").Split(';').FirstOrDefault();            
         }
 
-        private static void ApplyDocument(Control control, Element element, MethodInfo[] pageMethods, ContentPage Page, bool parent = false)
+        private static void ApplyDocument(ExControl control, Element element, MethodInfo[] pageMethods, ContentPage Page, bool parent = false)
         {
-            Control child = null;
+            ExControl child = null;
             if(!parent)
             {
                 string x = GetNamespace(element.namespaceURI);
@@ -54,7 +54,7 @@ namespace ExpressCraft.xaml
                 {
                     x = x + "." + element.tagName;
                 }
-                child = Activator.CreateInstance(Type.GetType(x)).As<Control>();
+                child = Activator.CreateInstance(Type.GetType(x)).As<ExControl>();
             }else
             {
                 child = control;

@@ -3,7 +3,7 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class PDFPreviewForm : Form
+    public class PDFPreviewForm : ExForm
     {
         public string Source;
         public PdfSourceType PDFSourceType;

@@ -7,7 +7,7 @@ using System.Text;
 namespace ExpressCraft
 {
     [Namespace(true)]
-    public class RibbonGroup : Control
+    public class RibbonGroup : ExControl
     {
         public string Caption { get; set; }
         public List<RibbonItem> Items { get; set; }

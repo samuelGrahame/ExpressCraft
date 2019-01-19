@@ -26,7 +26,7 @@ namespace ExpressCraft
             ElelemtsOverMax = false;
             string[] Lines = OriginalSource.Split(new char[] { '\r', '\n' });
 
-            double sizePerChar = Control.GetTextWidth("M", Settings.DefaultFont);
+            double sizePerChar = ExControl.GetTextWidth("M", Settings.DefaultFont);
 
             LinesComputed = 0;
 
@@ -34,7 +34,7 @@ namespace ExpressCraft
             {
                 string line = Lines[i];
 
-                double lineWidth = Control.GetTextWidth(OriginalSource, Settings.DefaultFont);
+                double lineWidth = ExControl.GetTextWidth(OriginalSource, Settings.DefaultFont);
 
                 if(lineWidth > MaxWidth)
                 {

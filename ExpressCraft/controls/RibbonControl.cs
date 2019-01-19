@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace ExpressCraft
 {
     [Namespace(true)]
-    public class RibbonControl : Control, IPages
+    public class RibbonControl : ExControl, IPages
     {
         public List<RibbonPage> RibbonPages { get; set; } = new List<RibbonPage>();
         public string IconURL = "fav.ico";

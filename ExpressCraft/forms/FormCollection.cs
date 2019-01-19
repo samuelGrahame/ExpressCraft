@@ -4,10 +4,10 @@ namespace ExpressCraft
 {
     public class FormCollection
     {
-        public Form FormOwner;
-        public List<Form> VisibleForms = new List<Form>();
+        public ExForm FormOwner;
+        public List<ExForm> VisibleForms = new List<ExForm>();
 
-        public FormCollection(Form formOwner)
+        public FormCollection(ExForm formOwner)
         {
             FormOwner = formOwner;
         }

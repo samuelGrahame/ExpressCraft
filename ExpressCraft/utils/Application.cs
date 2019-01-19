@@ -12,7 +12,7 @@ namespace ExpressCraft
 
     public static class Application
     {
-        public static Form MainForm = null;
+        public static ExForm MainForm = null;
 
         public static void Close()
         {
@@ -27,7 +27,7 @@ namespace ExpressCraft
         private static ApplicationDefitnion _applicationDefition = ApplicationDefitnion.BridgeConsole;
         public static ApplicationDefitnion AplicationDefition { get { return _applicationDefition; } }
 
-        public static void Run(Form _Mainform)
+        public static void Run(ExForm _Mainform)
         {
             MainForm = _Mainform;
             MainForm.ShowStartNewLevel();

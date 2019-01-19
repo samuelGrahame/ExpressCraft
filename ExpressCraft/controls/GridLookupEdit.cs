@@ -2,7 +2,7 @@
 
 namespace ExpressCraft
 {
-    public class GridLookupEdit : Control
+    public class GridLookupEdit : ExControl
     {
         public GridView gridView;
         public string FieldName;

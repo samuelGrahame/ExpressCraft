@@ -243,7 +243,7 @@ namespace ExpressCraft
         {
         }
 
-        public void Apply(Control parent, bool documentreadonly = false)
+        public void Apply(ExControl parent, bool documentreadonly = false)
         {
             if(parent == null)
                 throw new ArgumentNullException();
@@ -287,7 +287,7 @@ namespace ExpressCraft
 
             foreach(var column in Columns)
             {
-                var autoDiv = new Control();
+                var autoDiv = new ExControl();
                 float y = topMargin;
                 if(Helper.NotDesktop)
                 {
@@ -309,7 +309,7 @@ namespace ExpressCraft
                 {
                     if(!string.IsNullOrWhiteSpace(group.GroupLabel))
                     {
-                        var label = Control.Label(group.GroupLabel, currentLeft, y, true);
+                        var label = ExControl.Label(group.GroupLabel, currentLeft, y, true);
                         if(Helper.NotDesktop)
                         {
                             label.style.fontSize = "14px";
@@ -354,7 +354,7 @@ namespace ExpressCraft
 
                         if(!string.IsNullOrWhiteSpace(row.Label))
                         {
-                            var label = Control.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, row.Bold);
+                            var label = ExControl.Label(row.Label, currentLeft + leftLabel + (float)row.Offset, y, row.Bold);
                             if(Helper.NotDesktop)
                             {
                                 label.style.fontSize = "12px";
@@ -480,7 +480,7 @@ namespace ExpressCraft
 
                                 if(!row.NoGap && !row.HideTinyLabel && !string.IsNullOrWhiteSpace(control.TinyLabel))
                                 {
-                                    var label = Control.Label(control.TinyLabel, 0, y + (inputHeight + 3), false, true);
+                                    var label = ExControl.Label(control.TinyLabel, 0, y + (inputHeight + 3), false, true);
                                     label.style.left = "calc(" + o100Percent + " + " + (Add - ButtinWidth).ToPx() + ")";
                                     docFragment.appendChild(label);
                                     if(Helper.NotDesktop)
@@ -683,9 +683,9 @@ namespace ExpressCraft
     public class LayoutRowControl : LayoutRow
     {
         public float Height;
-        public Control Control;
+        public ExControl Control;
 
-        public LayoutRowControl(float height, Control control)
+        public LayoutRowControl(float height, ExControl control)
         {
             Height = height;
             Label = "";

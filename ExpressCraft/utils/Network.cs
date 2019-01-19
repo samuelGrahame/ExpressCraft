@@ -73,7 +73,7 @@ namespace ExpressCraft
         }
 
         [Obsolete("No Longer Used!")]
-        public class NetworkProgressForm : Form
+        public class NetworkProgressForm : ExForm
         {
             public ProgressControl progressControl;
             public SimpleDialogButton buttonCancel;

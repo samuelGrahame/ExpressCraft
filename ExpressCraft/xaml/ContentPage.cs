@@ -11,7 +11,7 @@ using static Retyped.dom;
 
 namespace Xamarin.Forms
 {
-    public class ContentPage : Form
+    public class ContentPage : ExForm
     {
         static ContentPage()
         {

@@ -2,9 +2,9 @@
 
 namespace ExpressCraft
 {
-    public class ImageEdit : Control
+    public class ImageEdit : ExControl
     {
-        private Control _noImageDataText;
+        private ExControl _noImageDataText;
 
         private bool _isURL;
 
@@ -23,7 +23,7 @@ namespace ExpressCraft
 
         public ImageEdit() : base("inputcontrol")
         {
-            _noImageDataText = new Control("form-heading-title");
+            _noImageDataText = new ExControl("form-heading-title");
             _noImageDataText.Content.innerHTML = "No image data";
             _noImageDataText.Content.style.color = "black";
             _noImageDataText.Content.style.visibility = "inherit";

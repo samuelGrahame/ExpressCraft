@@ -191,7 +191,7 @@ namespace ExpressCraft
 
             base.Body.AppendChildren(pic, section);
 
-            Control[] array = new Control[_buttonCollection.Count];
+            ExControl[] array = new ExControl[_buttonCollection.Count];
             for(int i = 0; i < array.Length; i++)
             {
                 array[i] = _buttonCollection[i];

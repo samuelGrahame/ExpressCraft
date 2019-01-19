@@ -5,11 +5,11 @@ using Bridge;
 
 namespace ExpressCraft
 {
-    public class TabControl : Control
+    public class TabControl : ExControl
     {
         public List<TabControlPage> TabPages { get; set; } = new List<TabControlPage>();
-        private Control tabHeaders;
-        private Control tabHeaderContainer;
+        private ExControl tabHeaders;
+        private ExControl tabHeaderContainer;
 
         public TabControl() : base("tabcontrol")
         {            
@@ -154,11 +154,11 @@ namespace ExpressCraft
         {
             if(tabHeaders == null)
             {
-                tabHeaders = new Control("tabheader-container") { Location = new Vector2(0, 0) };
+                tabHeaders = new ExControl("tabheader-container") { Location = new Vector2(0, 0) };
                 if(Helper.NotDesktop)
                 {
                     tabHeaders.Height = 47;
-                    tabHeaderContainer = new Control() { Location = new Vector2(0, 0) };
+                    tabHeaderContainer = new ExControl() { Location = new Vector2(0, 0) };
                     tabHeaderContainer.Width = "100%";
                     tabHeaderContainer.Height = 50;
                     tabHeaderContainer.AppendChild(tabHeaders);

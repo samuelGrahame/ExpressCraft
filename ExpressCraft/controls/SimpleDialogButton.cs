@@ -2,7 +2,7 @@
 {
     public class SimpleDialogButton : SimpleButton
     {
-        public SimpleDialogButton(Form parentForm, DialogResultEnum dialogResult = DialogResultEnum.None) : base()
+        public SimpleDialogButton(ExForm parentForm, DialogResultEnum dialogResult = DialogResultEnum.None) : base()
         {
             this.ParentForm = parentForm;
             this.DialogResult = dialogResult;

@@ -4,7 +4,7 @@ using System;
 
 namespace ExpressCraft
 {
-    public class AceCodeEditor : Control
+    public class AceCodeEditor : ExControl
     {
         public static ExternalPlugin ExternalAceCodeEditor = new ExternalPlugin("https://cdnjs.cloudflare.com/ajax/libs/ace/1.0.0/ace.js");
         public object editor = null;
@@ -83,12 +83,12 @@ namespace ExpressCraft
 
             this.Content.addEventListener("mousedown", (ev) =>
             {
-                Form.InExternalMouseEvent = true;
+                ExForm.InExternalMouseEvent = true;
             });
 
             this.Content.addEventListener("mouseup", (ev) =>
             {
-                Form.InExternalMouseEvent = false;
+                ExForm.InExternalMouseEvent = false;
             });
 
             base.Render();

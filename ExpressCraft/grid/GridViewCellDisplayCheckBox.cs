@@ -10,8 +10,8 @@ namespace ExpressCraft
         {
             var value = gridView.GetRowCellValue(dataRowIndex, columnIndex);
 
-            var cell = Control.Div("cell");
-            var input = Control.Input("", "checkbox");
+            var cell = ExControl.Div("cell");
+            var input = ExControl.Input("", "checkbox");
             input.SetBoundsFull();
             input.SetChecked(value);
             input.style.margin = "0";

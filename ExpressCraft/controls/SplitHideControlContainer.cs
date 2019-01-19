@@ -2,11 +2,11 @@
 
 namespace ExpressCraft
 {
-    public class SplitHideControlContainer : Control
+    public class SplitHideControlContainer : ExControl
     {
-        public Control Body;
-        public Control Slider;
-        public Control Panel;
+        public ExControl Body;
+        public ExControl Slider;
+        public ExControl Panel;
         private HTMLSpanElement span;
 
         private int _slideWidth;
@@ -78,9 +78,9 @@ namespace ExpressCraft
 
         public SplitHideControlContainer() : base()
         {
-            Body = new Control();
-            Slider = new Control("primary");
-            Panel = new Control();
+            Body = new ExControl();
+            Slider = new ExControl("primary");
+            Panel = new ExControl();
             Panel.Style.overflow = "hidden";
             Body.Style.overflow = "hidden";
             span = Span("form-heading-title");

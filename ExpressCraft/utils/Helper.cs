@@ -391,7 +391,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             return new Vector2(x, y);
         }
 
-        public static void SetChecked(this Control input, object value)
+        public static void SetChecked(this ExControl input, object value)
         {
             input.Content.SetChecked(value);
         }
@@ -467,7 +467,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
         }
 
-        public static void AppendChildrenTabIndex(this Node c, params Control[] Nodes)
+        public static void AppendChildrenTabIndex(this Node c, params ExControl[] Nodes)
         {
             if(Nodes != null && Nodes.Length > 0)
             {
@@ -482,25 +482,25 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
         }
 
-        public static void AppendChildrenTabIndex(this Control c, params Control[] Nodes)
+        public static void AppendChildrenTabIndex(this ExControl c, params ExControl[] Nodes)
         {
             c.Content.AppendChildrenTabIndex(Nodes);
         }
 
-        public static Control AppendChild(this Control c, Control Node)
+        public static ExControl AppendChild(this ExControl c, ExControl Node)
         {
             c.Content.AppendChild(Node);
             return c;
         }
 
-        public static Control AppendChildren(this Control c, params Control[] Nodes)
+        public static ExControl AppendChildren(this ExControl c, params ExControl[] Nodes)
         {
             c.Content.AppendChildren(Nodes);
 
             return c;
         }
 
-        public static void AppendChild(this HTMLElement c, Control b)
+        public static void AppendChild(this HTMLElement c, ExControl b)
         {
             c.appendChild<Node>(b);
         }
@@ -510,7 +510,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             c.appendChild(b);
         }
 
-        public static void AppendChildren(this Node c, params Control[] Nodes)
+        public static void AppendChildren(this Node c, params ExControl[] Nodes)
         {
             if(Nodes != null && Nodes.Length > 0)
             {
@@ -522,14 +522,14 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
         }
 
-        public static Control SetBounds(this Control c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
+        public static ExControl SetBounds(this ExControl c, Union<string, int, float> left, Union<string, int, float> top, Union<string, int, float> width, Union<string, int, float> height)
         {
             c.Content.SetBounds(left, top, width, height);
 
             return c;
         }
 
-        public static Control SetBoundsFull(this Control c)
+        public static ExControl SetBoundsFull(this ExControl c)
         {
             c.Content.SetBoundsFull();
 
@@ -541,7 +541,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             c.SetBounds(0, 0, "100%", "100%");
         }
 
-        public static Control SetSize(this Control c, Union<string, int, float> width, Union<string, int, float> height)
+        public static ExControl SetSize(this ExControl c, Union<string, int, float> width, Union<string, int, float> height)
         {
             c.Content.SetSize(width, height);
 
@@ -566,11 +566,11 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 return value.As<float>().ToPx();
         }
 
-        public static void SetImage(this Control c, string str, bool useURL = true, bool useResource = true, bool center = true)
+        public static void SetImage(this ExControl c, string str, bool useURL = true, bool useResource = true, bool center = true)
         {
             if(!str.StartsWith("url("))
             {
-                str = useURL ? Control.GetImageStringURI(str, useResource) : Control.GetImageString(str);
+                str = useURL ? ExControl.GetImageStringURI(str, useResource) : ExControl.GetImageString(str);
             }
             SetImage(c.Content, str, useURL, center);
         }
@@ -585,7 +585,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             }
             else if(!str.StartsWith("url("))
             {
-                str = useURL ? Control.GetImageStringURI(str) : Control.GetImageString(str);
+                str = useURL ? ExControl.GetImageStringURI(str) : ExControl.GetImageString(str);
             }
             c.style.background = str;
             if(center)
@@ -600,12 +600,12 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
             c.style.height = height.ToHtmlValue();
         }
 
-        public static void SetLocation(this Control c, int left, int top)
+        public static void SetLocation(this ExControl c, int left, int top)
         {
             c.Content.SetLocation(left.ToPx(), top.ToPx());
         }
 
-        public static void SetLocation(this Control c, Union<string, int, float> left, Union<string, int, float> top)
+        public static void SetLocation(this ExControl c, Union<string, int, float> left, Union<string, int, float> top)
         {
             c.Content.SetLocation(left, top);
         }
@@ -680,7 +680,7 @@ if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
                 string.Empty;
         }
 
-        public static void ExchangeClass(this Control control, string oldClass, string newClass)
+        public static void ExchangeClass(this ExControl control, string oldClass, string newClass)
         {
             ExchangeClass(control.Content, oldClass, newClass);
         }

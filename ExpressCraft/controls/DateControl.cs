@@ -3,7 +3,7 @@ using System;
 
 namespace ExpressCraft
 {
-    public class DateControl : Control
+    public class DateControl : ExControl
     {
         public SimpleButton btnTop;
         public SimpleButton btnSelectedRange;
@@ -12,7 +12,7 @@ namespace ExpressCraft
         public SimpleButton btnLeft;
         public SimpleButton btnRight;
 
-        public Control ContentRange;
+        public ExControl ContentRange;
 
         private int SelectedYear;
         private int SelectedMonth;
@@ -263,11 +263,11 @@ namespace ExpressCraft
                 btnRight.Top = 20;
                 btnRight.Left = "(100% - 50px)";
 
-                ContentRange = new Control() { Size = new Vector2("(100% - 20px)", "(100% - 147px)"), Location = new Vector2(11, 90) };
+                ContentRange = new ExControl() { Size = new Vector2("(100% - 20px)", "(100% - 147px)"), Location = new Vector2(11, 90) };
             }
             else
             {
-                ContentRange = new Control() { Size = new Vector2("(100% - 20px)", "(100% - 92px)"), Location = new Vector2(11, 60) };
+                ContentRange = new ExControl() { Size = new Vector2("(100% - 20px)", "(100% - 92px)"), Location = new Vector2(11, 60) };
             }
 
             ContentRange.Content.onkeydown = BlockTabEvent;

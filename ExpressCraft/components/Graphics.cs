@@ -381,7 +381,7 @@ namespace ExpressCraft
                 return cacheGetHeight[font.FontString];
             }
             
-            var div = new Control();
+            var div = new ExControl();
             div.Content.textContent = text;            
             div.Left = -100;
             div.Top = -100;
