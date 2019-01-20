@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ExpressCraft
 {
-    public class GridView : ExControl, IPrintable
+    public class GridView : Control, IPrintable
     {
         public HTMLDivElement GridFindPanel;
 
@@ -1768,7 +1768,7 @@ namespace ExpressCraft
                     x = 24;
                 Columns[ResizeIndex].Width = x;
 
-                ExForm.SetCursor("default");
+                Form.SetCursor("default");
 
                 ev.preventDefault();
                 ev.stopImmediatePropagation();
@@ -2009,7 +2009,7 @@ namespace ExpressCraft
                     }
                     else
                     {
-                        var x = new ExForm();
+                        var x = new Form();
                         x.StartPosition = FormStartPosition.Center;
                         x.Size = new Vector2(200, 400);
                         x.Text = "View Columns";
@@ -2191,7 +2191,7 @@ namespace ExpressCraft
                 {
                     ResizeIndex = Script.ParseInt(target.getAttribute("i"));
                     ResizeSpan = target;
-                    ExForm.SetCursor("east-west-resize");
+                    Form.SetCursor("east-west-resize");
 
                     ev.preventDefault();
                 }
@@ -2211,10 +2211,10 @@ namespace ExpressCraft
 
                     if(x >= target.clientWidth - 2)
                     {
-                        ExForm.SetCursor("east-west-resize");
+                        Form.SetCursor("east-west-resize");
                         return;
                     }
-                    ExForm.SetCursor("default");
+                    Form.SetCursor("default");
                 }
             };
 
@@ -2222,7 +2222,7 @@ namespace ExpressCraft
             {
                 if(ResizeIndex == -1)
                 {
-                    ExForm.SetCursor("default");
+                    Form.SetCursor("default");
                 }
             };
 
@@ -2528,7 +2528,7 @@ namespace ExpressCraft
                     var colWidth = ColumnAutoWidth ? sep : Columns[x].Width;
                     yp = 0;
 
-                    var colHeader = new ExControl();
+                    var colHeader = new Control();
                     colHeader.Bounds = new Vector4(xp, yp, colWidth, rowHeight);
                     colHeader.Content.textContent = Columns[x].Caption;
                     colHeader.Style.border = "1px solid grey";
@@ -2541,7 +2541,7 @@ namespace ExpressCraft
 
                     for(int y = 0; y < RowCount(); y++)
                     {
-                        var rowCell = new ExControl();
+                        var rowCell = new Control();
                         rowCell.Bounds = new Vector4(xp, yp, colWidth, rowHeight);
                         rowCell.Content.textContent =  Columns[x].GetDisplayValueByDataRowHandle(GetDataSourceRow(y));
                         rowCell.Style.border = "1px solid lightgrey";

@@ -2,7 +2,7 @@
 
 namespace ExpressCraft
 {
-    public class TabControlPage : ExControl
+    public class TabControlPage : Control
     {
         public int index;
 

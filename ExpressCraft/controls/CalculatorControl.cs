@@ -6,7 +6,7 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class CalculatorControl : ExControl
+    public class CalculatorControl : Control
     {
         public MemoInput DisplayInput;
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ExpressCraft
 {
-    public class ContextMenu : ExControl
+    public class ContextMenu : Control
     {
         /// <summary>
         /// For internal use only - so if we click on document - we can close all context menus ---

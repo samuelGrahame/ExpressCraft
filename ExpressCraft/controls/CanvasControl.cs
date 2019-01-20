@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class CanvasControl : ExControl
+    public class CanvasControl : Control
     {
         public CanvasRenderingContext2D Context;
         public HTMLCanvasElement Canvas;

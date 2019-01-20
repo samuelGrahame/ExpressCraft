@@ -9,7 +9,7 @@ namespace ExpressCraft
         public override HTMLElement OnCreate(GridView gridView, int dataRowIndex, int columnIndex)
         {
             var src = (gridView.GetRowCellValue(dataRowIndex, columnIndex) + "").HtmlUrlEscape();
-            var imgDiv = ExControl.Div("cell");
+            var imgDiv = Control.Div("cell");
 
             imgDiv.SetImage(src, !UseBase64Resource);
 

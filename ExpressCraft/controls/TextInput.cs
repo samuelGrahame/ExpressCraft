@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ExpressCraft
 {
-    public class TextInput : ExControl
+    public class TextInput : Control
     {
         private string prevText = "";
 
@@ -57,7 +57,7 @@ namespace ExpressCraft
             }
         }
 
-        public ExControl Controller = null;
+        public Control Controller = null;
 
         public string Type;
         public bool DisableFocusPopup;

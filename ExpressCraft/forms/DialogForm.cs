@@ -2,11 +2,11 @@
 
 namespace ExpressCraft
 {
-    public class DialogForm : ExForm
+    public class DialogForm : Form
     {
         protected List<SimpleDialogButton> _buttonCollection;
 
-        public ExControl ButtonSection;
+        public Control ButtonSection;
 
         public DialogForm(string text = "") : base()
         {
@@ -17,7 +17,7 @@ namespace ExpressCraft
             //width:100%;
             //height:70px;
 
-            ButtonSection = new ExControl("dialogbuttonsection");
+            ButtonSection = new Control("dialogbuttonsection");
 
             if(Helper.NotDesktop)
             {

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class StackList : ExControl
+    public class StackList : Control
     {
         public List<StackItem> StackItems = new List<StackItem>();        
         private TextInput searchInput;
         private bool _showFindScreen;
         private string searchText;
         private bool clearMark = false;
-        public ExControl contentBody;        
+        public Control contentBody;        
 
 
         private StackItem _focusedStackItem;
@@ -89,7 +89,7 @@ namespace ExpressCraft
 
         public StackList() : base()
         {                        
-            contentBody = new ExControl();
+            contentBody = new Control();
             contentBody.Size = new Vector2("100%", "100%");
             contentBody.Style.overflowY = "auto";
             Content.appendChild((Node)contentBody);
@@ -209,7 +209,7 @@ namespace ExpressCraft
         }
     }
 
-    public class StackItem : ExControl
+    public class StackItem : Control
     {
         public string UniqueId = "";
         public Action<StackItem> OnFocused;

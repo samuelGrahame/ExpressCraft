@@ -8,10 +8,10 @@ using Retyped;
 
 namespace ExpressCraft
 {
-    public class ExForm : ExControl
+    public class Form : Control
     {
         public static HTMLDivElement WindowHolder;
-        public static List<ExForm> MinimizedForms = new List<ExForm>();
+        public static List<Form> MinimizedForms = new List<Form>();
         public static HTMLDivElement WindowLoader;
 
         private static ToolTip _activeToolTip;
@@ -114,7 +114,7 @@ namespace ExpressCraft
         public bool InDesign = false;
 
         public static int ResizeCorners = 2;
-        public static ExForm MovingForm = null;
+        public static Form MovingForm = null;
         public static HTMLElement Parent = null;
         public static bool Mouse_Down = false;
         public static bool MenuOpen = false;
@@ -189,9 +189,9 @@ namespace ExpressCraft
             return _IsDialog;
         }
 
-        private List<ExControl> Children = new List<ExControl>();
+        private List<Control> Children = new List<Control>();
 
-        public void LinkResize(ExControl child, bool appendAlso = false)
+        public void LinkResize(Control child, bool appendAlso = false)
         {
             if(child == null)
                 return;
@@ -201,7 +201,7 @@ namespace ExpressCraft
             child.LinkedForm = this;
         }
 
-        public void LinkResize(params ExControl[] children)
+        public void LinkResize(params Control[] children)
         {
             if(children == null || children.Length == 0)
                 return;
@@ -213,28 +213,28 @@ namespace ExpressCraft
             }
         }
 
-        public ExForm AppendChild(ExControl node)
+        public Form AppendChild(Control node)
         {
             this.Body.appendChild((Node)node);
 
             return this;
         }
 
-        public ExForm AppendChildren(params ExControl[] node)
+        public Form AppendChildren(params Control[] node)
         {
             this.Body.AppendChildren(node);
 
             return this;
         }
 
-        public ExForm AppendChild(HTMLElement node)
+        public Form AppendChild(HTMLElement node)
         {
             this.Body.appendChild(node);
 
             return this;
         }
 
-        public ExForm AppendChildren(params HTMLElement[] node)
+        public Form AppendChildren(params HTMLElement[] node)
         {
             this.Body.AppendChildren(node);
 
@@ -251,8 +251,8 @@ namespace ExpressCraft
         public static int Window_DefaultHeight = 480;
         public static int Window_DefaultWidth = 640;
 
-        private static ExForm _ActiveForm;
-        private static ExForm _PrevActiveForm;
+        private static Form _ActiveForm;
+        private static Form _PrevActiveForm;
         private static MouseMoveAction MoveAction = MouseMoveAction.Move;
 
         public bool TopMost = false;
@@ -498,7 +498,7 @@ namespace ExpressCraft
         {
         }
 
-        public static ExForm ActiveForm
+        public static Form ActiveForm
         {
             get { return _ActiveForm; }
             set
@@ -1154,7 +1154,7 @@ namespace ExpressCraft
         {
             if(MinimizedForms.Count > 0 && MinimizedForms.Contains(null))
                 MinimizedForms.Remove(null);
-            var RemoveList = new List<ExForm>();
+            var RemoveList = new List<Form>();
             int count = 0;
             float widthTotal = 0;
             int y = 30;
@@ -1429,7 +1429,7 @@ namespace ExpressCraft
         {
         }
 
-        public ExForm() : base("form-base")
+        public Form() : base("form-base")
         {
             Heading = Div("form-heading");
 
@@ -1844,7 +1844,7 @@ namespace ExpressCraft
 
         public List<DialogResult> DialogResults = new List<DialogResult>();
 
-        public FormCollection GetFormCollectionFromForm(ExForm form)
+        public FormCollection GetFormCollectionFromForm(Form form)
         {
             if(form._seperateInstance)
             {
@@ -2138,7 +2138,7 @@ namespace ExpressCraft
 
         private static int CalculateZOrder(FormCollection formCollection, int zIndex) // , DocumentFragment frag
         {
-            List<ExForm> TopMostForms = new List<ExForm>();
+            List<Form> TopMostForms = new List<Form>();
 
             var VisibleForms = formCollection.VisibleForms;
             if(VisibleForms != null)
@@ -2324,7 +2324,7 @@ namespace ExpressCraft
             }
         }
 
-        public static List<ExForm> ToClean = new List<ExForm>();
+        public static List<Form> ToClean = new List<Form>();
         private Action closeAction;
         protected bool InClose = false;
 

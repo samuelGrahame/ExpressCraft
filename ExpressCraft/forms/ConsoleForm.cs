@@ -2,7 +2,7 @@
 
 namespace ExpressCraft
 {
-    public class ConsoleForm : ExForm
+    public class ConsoleForm : Form
     {
         public static bool ConsoleVisible = false;
         private static ConsoleForm _consoleForm = null;

@@ -7,7 +7,7 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class RibbonItem : ExControl
+    public class RibbonItem : Control
     {
         public bool BeginGroup = false;
         public bool IsSmallItem = false;

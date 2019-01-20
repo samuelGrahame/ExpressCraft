@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressCraft", "ExpressCraf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressCraft.Design", "ExpressCraft.Design\ExpressCraft.Design.csproj", "{4340DDD9-E154-47D5-A783-A120EC7124E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressCraft.Forms", "ExpressCraft.Forms\ExpressCraft.Forms.csproj", "{8357D49D-173F-45AC-AD49-192750FEDF57}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{4340DDD9-E154-47D5-A783-A120EC7124E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4340DDD9-E154-47D5-A783-A120EC7124E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4340DDD9-E154-47D5-A783-A120EC7124E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8357D49D-173F-45AC-AD49-192750FEDF57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8357D49D-173F-45AC-AD49-192750FEDF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8357D49D-173F-45AC-AD49-192750FEDF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8357D49D-173F-45AC-AD49-192750FEDF57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

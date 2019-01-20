@@ -3,10 +3,10 @@ using System;
 
 namespace ExpressCraft
 {
-    public class SimpleButton : ExControl
+    public class SimpleButton : Control
     {
         public Action<SimpleButton> ItemClick;
-        public ExForm ParentForm = null;
+        public Form ParentForm = null;
         public DialogResultEnum DialogResult = DialogResultEnum.None;
         private HTMLImageElement _imageElement = null;
         private string _image;

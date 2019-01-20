@@ -2,11 +2,11 @@
 
 namespace ExpressCraft
 {
-    public class SplitControlContainer : ExControl
+    public class SplitControlContainer : Control
     {
-        public ExControl Panel1;
-        public ExControl Panel2;
-        public ExControl Splitter;
+        public Control Panel1;
+        public Control Panel2;
+        public Control Splitter;
 
         private ClientRect _prevClientRect = null;
         private bool IsMouseDown = false;
@@ -73,12 +73,12 @@ namespace ExpressCraft
 
         public SplitControlContainer() : base("splitcontrol")
         {
-            Panel1 = new ExControl() { Location = new Vector2(0, 0) };
-            Panel2 = new ExControl();
+            Panel1 = new Control() { Location = new Vector2(0, 0) };
+            Panel2 = new Control();
             Panel1.Style.overflow = "auto";
             Panel2.Style.overflow = "auto";
 
-            Splitter = new ExControl("primary");
+            Splitter = new Control("primary");
             Splitter.Style.cursor = "move";
 
             Splitter.Content.onmousedown = (ev) =>

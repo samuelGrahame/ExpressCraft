@@ -77,7 +77,7 @@
     <Compile Include="controls\TextInputDropDown.cs" />
     <Compile Include="controls\TileControl.cs" />
     <Compile Include="controls\ToolTipControl.cs" />
-    <Compile Include="forms\ExForm.cs" />
+    <Compile Include="forms\Form.cs" />
     <Compile Include="forms\popupforms\DateForm.cs" />
     <Compile Include="forms\popupforms\CalcForm.cs" />
     <Compile Include="forms\ConsoleForm.cs" />

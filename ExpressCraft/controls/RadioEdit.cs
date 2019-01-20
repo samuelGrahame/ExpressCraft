@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class RadioEdit : ExControl
+    public class RadioEdit : Control
     {
         public List<RadioElement> RadioElements = new List<RadioElement>();
         private static long RadioId;

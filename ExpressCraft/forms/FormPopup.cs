@@ -3,12 +3,12 @@ using System;
 
 namespace ExpressCraft
 {
-    public class FormPopup : ExForm
+    public class FormPopup : Form
     {
         public double PreviousScrollTop;
         public HTMLElement ParentContainer;
 
-        public static Vector2 GetPopupDefaultLocation(ExControl control, bool isControlChild = false)
+        public static Vector2 GetPopupDefaultLocation(Control control, bool isControlChild = false)
         {
             if(Helper.NotDesktop)
                 return new Vector2(0, 0);

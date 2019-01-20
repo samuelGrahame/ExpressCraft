@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ExpressCraft
 {
-    public class TileControl : ExControl, IPages
+    public class TileControl : Control, IPages
     {
         public List<RibbonPage> RibbonPages { get; set; } = new List<RibbonPage>();
         private TileViewState _viewState = TileViewState.Hidden;
@@ -58,12 +58,12 @@ namespace ExpressCraft
             int y = 6;
 
             var doc = document.createDocumentFragment();
-            var div = new ExControl();
+            var div = new Control();
             div.Width = "100%";
             div.SetLocation(0, 0);
             div.Style.zIndex = "10";
 
-            var div2 = new ExControl("primary");
+            var div2 = new Control("primary");
             div2.Width = "100%";
             div2.Style.minHeight = "100%";
             div2.SetLocation(0, 0);
@@ -76,7 +76,7 @@ namespace ExpressCraft
             {
                 if(!string.IsNullOrWhiteSpace(page.Caption))
                 {
-                    var llb = ExControl.Label(page.Caption, 6, y);
+                    var llb = Control.Label(page.Caption, 6, y);
                     llb.style.fontSize = "14px";
                     llb.style.color = "white";
                     doc.appendChild(llb);

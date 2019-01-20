@@ -93,7 +93,7 @@ namespace ExpressCraft
             if(_dpiSetup)
                 return _dpi;
 
-            var div = new ExControl();
+            var div = new Control();
             div.Top = "-1000cm";
             div.Left = "-1000cm";
             div.Height = "1000cm";

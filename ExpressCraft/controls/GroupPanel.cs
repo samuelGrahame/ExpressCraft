@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class GroupPanel : ExControl
+    public class GroupPanel : Control
     {
         private HTMLLegendElement legend;
         public string Caption

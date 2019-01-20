@@ -3,7 +3,7 @@ using static Retyped.dom;
 
 namespace ExpressCraft
 {
-    public class ProgressControl : ExControl
+    public class ProgressControl : Control
     {
         private int position;
 

@@ -3,7 +3,7 @@ using System;
 
 namespace ExpressCraft
 {
-    public class CheckEdit : ExControl
+    public class CheckEdit : Control
     {
         public TextInput Edit;
         public HTMLSpanElement span;

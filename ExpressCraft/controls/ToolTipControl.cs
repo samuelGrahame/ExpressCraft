@@ -4,7 +4,7 @@ using static Retyped.jquery;
 
 namespace ExpressCraft
 {
-    internal class ToolTipControl : ExControl
+    internal class ToolTipControl : Control
     {
         private bool visible = false;
         private ToolTip _toolTip;
@@ -64,7 +64,7 @@ namespace ExpressCraft
         public string Description;
         public string Heading;
 
-        public ExControl AttachedControl;
+        public Control AttachedControl;
 
         public ToolTip(string content)
         {

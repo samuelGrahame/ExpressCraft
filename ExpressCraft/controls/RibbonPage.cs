@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace ExpressCraft
 {
     [Namespace(true)]
-    public class RibbonPage : ExControl
+    public class RibbonPage : Control
     {
         public string Caption { get; set; }
         public List<RibbonGroup> RibbonGroups { get; set; } = new List<RibbonGroup>();

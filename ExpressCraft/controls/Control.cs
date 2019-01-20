@@ -11,7 +11,7 @@ namespace ExpressCraft
         Default
     }
 
-    public class ExControl : IList<ExControl>
+    public class Control : IList<Control>
     {
         public HTMLElement Content;
         public string Name;
@@ -25,7 +25,7 @@ namespace ExpressCraft
 
 
 
-        private List<ExControl> innerList = new List<ExControl>();
+        private List<Control> innerList = new List<Control>();
 
         public ToolTip ToolTip
         {
@@ -56,14 +56,14 @@ namespace ExpressCraft
                         {
                             if(!(this is ToolTipControl))
                             {
-                                ExForm.ActiveToolTip = _toolTip;
+                                Form.ActiveToolTip = _toolTip;
                             }
                         };
                         _OnMouseLeaveToolTip = (ev) =>
                         {
                             if(!(this is ToolTipControl))
                             {
-                                ExForm.ActiveToolTip = null;
+                                Form.ActiveToolTip = null;
                             }
                         };
 
@@ -86,7 +86,7 @@ namespace ExpressCraft
             }
         }
 
-        public ExControl SetData(string name, string value)
+        public Control SetData(string name, string value)
         {            
             return SetAttribute("data-" + name, value);
         }
@@ -96,15 +96,15 @@ namespace ExpressCraft
             return GetAttribute("data-" + name);
         }
 
-        public Action<ExControl> OnResize = null;
-        public Action<ExControl> OnLoaded = null;        
+        public Action<Control> OnResize = null;
+        public Action<Control> OnLoaded = null;        
 
         public ContextMenu ContextMenu = null;
 
         public CSSStyleDeclaration Style => Content.style;
         public DOMTokenList ClassList => Content.classList;
 
-        public ExControl SetAttribute(string name, Union<string, int, float> value)
+        public Control SetAttribute(string name, Union<string, int, float> value)
         {
             this.Content.setAttribute(name, value.ToStr());
 
@@ -126,7 +126,7 @@ namespace ExpressCraft
             return (float)Script.ParseFloat(this.Content.getAttribute(name));
         }
 
-        public ExForm LinkedForm = null;
+        public Form LinkedForm = null;
 
         public static string BaseClass(bool add = true, bool ac = true)
         {
@@ -250,7 +250,7 @@ namespace ExpressCraft
             }
         }
 
-        public ExControl this[int index]
+        public Control this[int index]
         {
             get
             {
@@ -278,27 +278,27 @@ namespace ExpressCraft
             return string.Format("url('{0}{1}') no-repeat", useResourceURL ? Settings.ResourceURL : "", s);
         }
 
-        public ExControl(bool ac = true)
+        public Control(bool ac = true)
         {
             Content = Div(ac);
         }
 
-        public ExControl(HTMLElement element)
+        public Control(HTMLElement element)
         {
             Content = element;
         }
 
-        public ExControl(string cn, bool ac = true)
+        public Control(string cn, bool ac = true)
         {
             Content = Div(cn, ac);
         }
         
-        public ExControl(string cn, ComboBoxTypes ct, bool ac = true)
+        public Control(string cn, ComboBoxTypes ct, bool ac = true)
         {
             Content = ComboBox(cn, ct, ac);
         }
 
-        public ExControl(string cn, bool IsInput, string it, bool ac = true)
+        public Control(string cn, bool IsInput, string it, bool ac = true)
         {
             Content = (IsInput ? (HTMLElement)Input(cn, it, ac) : (HTMLElement)Button(cn, it, ac));
         }
@@ -534,7 +534,7 @@ namespace ExpressCraft
             return GetTextMetrics(t, f).width;
         }
 
-        public static implicit operator Retyped.dom.Node(ExControl control)
+        public static implicit operator Retyped.dom.Node(Control control)
         {
             if(Settings.AutoRender && !control.HasRendered)
                 control.Render();
@@ -553,12 +553,12 @@ namespace ExpressCraft
             }
         }
 
-        public int IndexOf(ExControl item)
+        public int IndexOf(Control item)
         {
             return innerList.IndexOf(item);
         }
 
-        public void Insert(int index, ExControl item)
+        public void Insert(int index, Control item)
         {
             var content = GetControlBase();
             innerList.Insert(index, item);
@@ -571,14 +571,14 @@ namespace ExpressCraft
             Remove(control);            
         }
 
-        public void Add(ExControl item)
+        public void Add(Control item)
         {
             innerList.Add(item);
             var content = GetControlBase();
             content.appendChild(item.Content);
         }
 
-        public void CopyTo(ExControl[] array, int arrayIndex)
+        public void CopyTo(Control[] array, int arrayIndex)
         {
             innerList.CopyTo(array, arrayIndex);
         }
@@ -590,12 +590,12 @@ namespace ExpressCraft
             content.Empty();
         }
 
-        public bool Contains(ExControl item)
+        public bool Contains(Control item)
         {
             return innerList.Contains(item);
         }
 
-        public bool Remove(ExControl item)
+        public bool Remove(Control item)
         {
             innerList.Remove(item);
             var content = GetControlBase();
@@ -604,7 +604,7 @@ namespace ExpressCraft
             return true;
         }
 
-        public IEnumerator<ExControl> GetEnumerator()
+        public IEnumerator<Control> GetEnumerator()
         {
             return innerList.GetEnumerator();
         }

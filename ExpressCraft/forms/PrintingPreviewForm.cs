@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExpressCraft
 {
-    public class PrintingPreviewForm : ExForm
+    public class PrintingPreviewForm : Form
     {
         public PrinterControl PrintingControl;
         public Page FocusedPage => PrintingControl.FocusedPage;
@@ -17,7 +17,7 @@ namespace ExpressCraft
         /// Page is a HTMLElement - AppendChild and Add the page to the list
         /// </summary>
         /// <param name="element"></param>
-        public void AddElementFocusedPage(ExControl element)
+        public void AddElementFocusedPage(Control element)
         {
             PrintingControl.AddElementFocusedPage(element.Content);
         }
