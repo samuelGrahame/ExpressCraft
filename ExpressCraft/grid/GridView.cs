@@ -1785,18 +1785,18 @@ namespace ExpressCraft
             };
 
             int prevleft = 0;
-            if(Settings.IsChrome && !Helper.NotDesktop)
-            {
-                GridBodyContainer.onmousewheel = (ev) =>
-                {
-                    ev.preventDefault();
+            //if(Settings.IsChrome && !Helper.NotDesktop)
+            //{
+            //    GridBodyContainer.onmousewheel = (ev) =>
+            //    {
+            //        ev.preventDefault();
 
-                    if (ev.deltaY != 0)
-                    {
-                        GridBodyContainer.scrollTop += (UnitHeight * (ev.deltaY / 100.00d)) * 3;
-                    }
-                };
-            }
+            //        if (ev.deltaY != 0)
+            //        {
+            //            GridBodyContainer.scrollTop += (UnitHeight * (ev.deltaY / 100.00d)) * 3;
+            //        }
+            //    };
+            //}
             
             bool ignoreScroll = false;
             GridBodyContainer.onscroll = (ev) =>
@@ -1811,20 +1811,20 @@ namespace ExpressCraft
                     DelayedRenderGrid();
                 }else
                 {
-                    if(Settings.IsChrome && !Helper.NotDesktop)
-                    {
-                        //(window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2
-                        if(GridBodyContainer.scrollTop != 0 && GridBodyContainer.scrollTop + GridBodyContainer.clientHeight != GridBodyContainer.scrollHeight)
-                        {
-                            var diff = GridBodyContainer.scrollTop % UnitHeight;
-                            if (diff != 0)
-                            {
-                                ignoreScroll = true;
-                                GridBodyContainer.scrollTop -= diff;
-                                ignoreScroll = false;
-                            }
-                        }
-                    }
+                    //if(Settings.IsChrome && !Helper.NotDesktop)
+                    //{
+                    //    //(window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 2
+                    //    if(GridBodyContainer.scrollTop != 0 && GridBodyContainer.scrollTop + GridBodyContainer.clientHeight != GridBodyContainer.scrollHeight)
+                    //    {
+                    //        var diff = GridBodyContainer.scrollTop % UnitHeight;
+                    //        if (diff != 0)
+                    //        {
+                    //            ignoreScroll = true;
+                    //            GridBodyContainer.scrollTop -= diff;
+                    //            ignoreScroll = false;
+                    //        }
+                    //    }
+                    //}
                     
                     DelayedRenderGrid(true);
                 }
