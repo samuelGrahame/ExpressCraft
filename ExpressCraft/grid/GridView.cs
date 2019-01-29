@@ -1255,21 +1255,32 @@ namespace ExpressCraft
                 window.open("data:application/vnd.ms-excel," + encodeURIComponent(builder.ToString()));            
         }
 
-        public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false) : base("grid")
-        {
-            if(Helper.NotDesktop)
-            {
-                UnitHeight = 53;
-                headingClass = "heading heading-responsive";
+        private bool CustomUnitHeight = false;
 
-                cellClass = "cell cell-responsive";
+        public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false, int overrideUnitHeight = -1) : base("grid")
+        {
+            if(overrideUnitHeight == -1)
+            {
+                if (Helper.NotDesktop)
+                {
+                    UnitHeight = 53;
+                    headingClass = "heading heading-responsive";
+
+                    cellClass = "cell cell-responsive";
+                }
+                else
+                {
+                    UnitHeight = 20;
+                    headingClass = "heading";
+                    cellClass = "cell";
+                }
             }
             else
             {
-                UnitHeight = 20;
-                headingClass = "heading";
-                cellClass = "cell";
+                CustomUnitHeight = true;
+                UnitHeight = overrideUnitHeight;
             }
+            
 
             this.Content.style.overflow = "hidden";
             // #FIND #RENDER#
@@ -1364,7 +1375,14 @@ namespace ExpressCraft
                         var col = Label(gcol.Caption,
                             (_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
                             apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
-                        if(!string.IsNullOrWhiteSpace(apparence.Backcolor))
+
+                        if(CustomUnitHeight)
+                        {
+                            col.style.height = overrideUnitHeight.ToPx();
+                            col.style.lineHeight = col.style.height;
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(apparence.Backcolor))
                         {
                             col.style.backgroundColor = apparence.Backcolor;
                         }
@@ -1522,8 +1540,6 @@ namespace ExpressCraft
                         dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth + 1, UnitHeight);
                         dr.setAttribute("i", Convert.ToString(DataRowhandle));
 
-                        
-
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
                         {
@@ -1553,7 +1569,13 @@ namespace ExpressCraft
                                 cell.setAttribute("x", Convert.ToString(x));
                                 cell.onclick = new HTMLElement.onclickFn(OnCellRowMouseDown);
 
-                                if(!string.IsNullOrWhiteSpace(displayValue))
+                                if (CustomUnitHeight)
+                                {
+                                    cell.style.height = overrideUnitHeight.ToPx();
+                                    cell.style.lineHeight = cell.style.height;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(displayValue))
                                 {
                                     cell.textContent = displayValue;
                                     if(apparence.Alignment != "left")
@@ -1612,6 +1634,12 @@ namespace ExpressCraft
                                 cell = col.CellDisplay.OnCreate(this, DataRowhandle, x);                                
                                 cell.style.left = col.CachedX + "px";
                                 cell.style.width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
+
+                                if (CustomUnitHeight)
+                                {
+                                    cell.style.height = overrideUnitHeight.ToPx();
+                                    cell.style.lineHeight = cell.style.height;
+                                }
 
                                 docFrag.appendChild(cell);
                             }
