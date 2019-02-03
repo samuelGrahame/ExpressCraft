@@ -540,8 +540,8 @@ namespace ExpressCraft
 
                 if(FindPanelVisible)
                 {
-                    GridHeaderContainer.SetBounds(0, 47, "100%", UnitHeight + 1);
-                    GridBodyContainer.SetBounds(0, UnitHeight + 2 + 47, "100%", "(100% - " + (UnitHeight + 2 + 47) + "px)");
+                    GridHeaderContainer.SetBounds(0, OverrideFindHeight, "100%", UnitHeight + 1);
+                    GridBodyContainer.SetBounds(0, UnitHeight + 2 + OverrideFindHeight, "100%", "(100% - " + (UnitHeight + 2 + OverrideFindHeight) + "px)");
                 }
                 else
                 {
@@ -556,7 +556,7 @@ namespace ExpressCraft
 
                 if(FindPanelVisible)
                 {
-                    GridBodyContainer.SetBounds(0, 1 + 46, "100%", "(100% - " + (1 + 46)  + "px)");
+                    GridBodyContainer.SetBounds(0, OverrideFindHeight, "100%", "(100% - " + (OverrideFindHeight)  + "px)");
                 }
                 else
                 {
@@ -1256,8 +1256,9 @@ namespace ExpressCraft
         }
 
         private bool CustomUnitHeight = false;
+        private int OverrideFindHeight = -1;
 
-        public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false, int overrideUnitHeight = -1) : base("grid")
+        public GridView(bool autoGenerateColumns = true, bool columnAutoWidth = false, int overrideUnitHeight = -1, int overrideFindHeight = -1, string ocellClass = "", string oheadingClass = "" ) : base("grid")
         {
             if(overrideUnitHeight == -1)
             {
@@ -1279,8 +1280,25 @@ namespace ExpressCraft
             {
                 CustomUnitHeight = true;
                 UnitHeight = overrideUnitHeight;
+
+                if(string.IsNullOrWhiteSpace(ocellClass))
+                {
+                    ocellClass = "cell";
+                }
+                if (string.IsNullOrWhiteSpace(oheadingClass))
+                {
+                    oheadingClass = "heading";
+                }
+                cellClass = ocellClass;
+                headingClass = oheadingClass;
             }
-            
+
+            OverrideFindHeight = overrideFindHeight;
+
+            if(OverrideFindHeight == -1)
+            {
+                OverrideFindHeight = 47;
+            }
 
             this.Content.style.overflow = "hidden";
             // #FIND #RENDER#
@@ -1327,10 +1345,20 @@ namespace ExpressCraft
                 float MaxWidth;
                 float LastWidth;
 
+                GridViewColumn FirstColumn = null;
+                GridViewColumn LastColumn = null;
+
                 for(int x = 0; x < Columns.Count; x++)
                 {
                     if(!Columns[x].Visible)
                         continue;
+
+                    LastColumn = Columns[x];
+
+                    if(FirstColumn == null)
+                    {
+                        FirstColumn = LastColumn;
+                    }
 
                     Columns[x].CachedX = LeftLocation;
                     LastWidth = _columnAutoWidth ? _columnAutoWidthSingle : Columns[x].Width;
@@ -1376,9 +1404,22 @@ namespace ExpressCraft
                             (_columnAutoWidth ? gcol.CachedX : gcol.CachedX), 0, (_columnAutoWidth ? _columnAutoWidthSingle : gcol.Width) - (x == uboundRowCount ? 0 : 1),
                             apparence.IsBold, false, headingClass, apparence.Alignment, apparence.Forecolor);
 
-                        if(CustomUnitHeight)
+                        if(Columns[x] == FirstColumn)
                         {
-                            col.style.height = overrideUnitHeight.ToPx();
+                            col.classList.add("first-col");
+                        }
+                        if (Columns[x] == LastColumn)
+                        {
+                            col.classList.add("last-col");
+                        }
+                        if(!string.IsNullOrWhiteSpace(Columns[x].CustomColuimnClass))
+                        {
+                            col.classList.add(Columns[x].CustomColuimnClass);
+                        }
+
+                        if (CustomUnitHeight)
+                        {
+                            col.style.height = UnitHeight.ToPx();
                             col.style.lineHeight = col.style.height;
                         }
 
@@ -1540,6 +1581,7 @@ namespace ExpressCraft
                         dr.SetBounds(0, Y, _columnAutoWidth ? ClientWidth : MaxWidth + 1, UnitHeight);
                         dr.setAttribute("i", Convert.ToString(DataRowhandle));
 
+                       
                         dr.onclick = new HTMLElement.onclickFn(OnRowClick);
                         if(Settings.IsChrome)
                         {
@@ -1627,6 +1669,11 @@ namespace ExpressCraft
                                     newCell.AppendChildren(markelement, document.createTextNode(displayValue.Substring(Slength)));
                                 }
 
+                                if (!string.IsNullOrWhiteSpace(Columns[x].CustomCellClass))
+                                {
+                                    newCell.classList.add(Columns[x].CustomCellClass);
+                                }
+
                                 docFrag.appendChild(newCell);
                             }
                             else
@@ -1635,10 +1682,18 @@ namespace ExpressCraft
                                 cell.style.left = col.CachedX + "px";
                                 cell.style.width = (_columnAutoWidth ? _columnAutoWidthSingle : col.Width).ToPx();
 
+                                cell.className = cellClass;// + " control";
+                                cell.style.position = "absolute";
+
                                 if (CustomUnitHeight)
                                 {
                                     cell.style.height = overrideUnitHeight.ToPx();
                                     cell.style.lineHeight = cell.style.height;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(Columns[x].CustomCellClass))
+                                {
+                                    cell.classList.add(Columns[x].CustomCellClass);
                                 }
 
                                 docFrag.appendChild(cell);
@@ -1721,7 +1776,7 @@ namespace ExpressCraft
             GridHeaderContainer = Div("heading-container");
 
             GridHeader = Div();
-            GridHeader.SetBounds(0, 0, 0, "29px");
+            GridHeader.SetBounds(0, 0, 0, UnitHeight);
             GridBodyContainer = Div();
 
             GridBodyContainer.style.overflowX = "auto !important";
@@ -1737,7 +1792,7 @@ namespace ExpressCraft
 
             GridFindPanel = Div("heading-container");
             GridFindPanel.style.visibility = "hidden";
-            GridFindPanel.SetBounds(0, 0, "100%", 46);
+            GridFindPanel.SetBounds(0, 0, "100%", OverrideFindHeight);
 
             SearchTextInput = new TextInput() { OnTextChanged = (sender) => {
                 if(_searchTimer > -1)

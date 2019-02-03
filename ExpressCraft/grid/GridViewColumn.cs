@@ -13,6 +13,9 @@
         public GridViewCellDisplay CellDisplay = null;
         public GridViewSortMode SortedMode = GridViewSortMode.None;
 
+        public string CustomCellClass;
+        public string CustomColuimnClass;
+
         private string cfieldName;
 
         public string FieldName { get {
