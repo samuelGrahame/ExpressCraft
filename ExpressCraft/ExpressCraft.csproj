@@ -87,6 +87,7 @@
     <Compile Include="forms\popupforms\SearchLookupForm.cs" />
     <Compile Include="forms\popupforms\TextForm.cs" />
     <Compile Include="forms\PrintingPreviewForm.cs" />
+    <Compile Include="forms\Timer.cs" />
     <Compile Include="grid\GridViewColumnCustomEditor.cs" />
     <Compile Include="grid\GridViewRowCellArguments.cs" />
     <Compile Include="interface\IPrintable.cs" />
