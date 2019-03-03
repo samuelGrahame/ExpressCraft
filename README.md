@@ -6,6 +6,17 @@
  
   https://github.com/samuelGrahame/ExpressCraftDemo
   
+  
+# How Resize works
+
+```
+// Instead of trying to resize all conponents - if the control uses "(100% - 10px)" - it will scale with the screen.
+//but if you would like things where when you resize the form or container it will resize and handle the resize redraw event you can attach the control using this function:
+
+// inside the form:
+
+this.LinkResize(control); // things like GridView and SplitContainer require this when adding controls
+```
 
 # How to create a Form
 
@@ -84,7 +95,7 @@ var gridView = new GridView(true, true);
 gridView.SetBoundsFull(); // Dock the gridView Full
 gridView.DataSource = dataTable;
 
-this.LinkchildToForm(gridView); // required to manage resize events.
+this.LinkResize(gridView); // required to manage resize events.
 this.Body.AppendChild(gridView); // add the control to the working form
 ```
 
