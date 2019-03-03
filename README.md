@@ -145,22 +145,6 @@ public static DataTable GetTestData()
 
 ```
 
-# How to choose your Console
-
-```csharp
-public enum ApplicationDefitnion
-{
-	BrowserConsole,
-	BridgeConsole,
-	ExpressCraftConsole
-}  
-Application.SetApplicationDefinition(ApplicationDefitnion.BrowserConsole);
-Application.SetApplicationDefinition(ApplicationDefitnion.BridgeConsole);
-Application.SetApplicationDefinition(ApplicationDefitnion.ExpressCraftConsole);
-if(Application.AplicationDefition == ApplicationDefitnion.ExpressCraftConsole)
-	// Do Something
-```
-
 # Application Settings
 
 ```csharp
@@ -206,33 +190,6 @@ new Form().Show(null, true);
 // in a seperate List<Form>
 ```
 
-# Added Custom Themes
-
-```csharp
-var Theme Theme2 = new Theme(
-"#0173C7", "#C5C5C5", "#CCCCCC",
-"#F0F0F0", "#C3C3C3", "#ADADAD",
-"#2A8AD0", "#D3D3D3", "#2A8AD4",
-"#015C9F", "#E81123", "#F1707A",
-"#AEAEAE", "#FAFAFA", "white",
-"#CFCFCF", "#B9B9B9", "rgba(1, 115, 199, 0.3)",
-"rgba(1, 115, 199, 0.5)", "#A6A6A6",
-"#777777", "#80868A", "#404040",
-"white", "black");
-
-// Example of how to create a theme.
-// How to set the theme in the project
-
-Settings.ActiveTheme = Theme2;
-
-// Will  Add Notes later for what the colors are used for each variable
-
-```
-# Open the Theme Form || Press F2 when (Settings.OnF2ShowThemeForm == true)
-```csharp
-ThemeForm.ShowThemeForm();
-```
-
 # Added Support for Tooltips
 
 ```csharp
@@ -241,4 +198,32 @@ control.ToolTip = new ToolTip("This is a heading test.", "This is a description 
 
 Settings.ToolTipPopupDelayMs = 1000;
 Settings.ToolTipPopupStayOpenDelayPerWordMs = 250;
+```
+
+# How to create the mainscreen maximised always.
+
+```csharp
+public class frmMain : Form
+    {
+        public static void Main()
+        {
+            new frmMain().Show();
+        }
+        public frmMain()
+        {
+            this.Body.SetBoundsFull();
+            this.Heading.style.visibility = "hidden";
+
+            ShowClose = false;
+            ShowMinimize = false;
+            ShowMaximize = false;
+
+            this.WindowState = WindowStateType.Maximized;
+
+            this.AllowMoveChange = false;
+            this.AllowSizeChange = false;
+
+            this.BackColor = "red";
+        }
+    }
 ```
