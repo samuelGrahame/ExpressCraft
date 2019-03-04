@@ -238,3 +238,32 @@ public class frmMain : Form
         }
     }
 ```
+
+# How to create menu
+
+```csharp
+var x = new Form();
+x.StartPosition = FormStartPosition.Center;
+
+var menu = new MenuBar(new MenuItem("Menu",
+    new MenuItem("Button 1", true),
+    new MenuItem("Button 2", true),
+    new MenuItem("Menu 1",
+        new MenuItem("Button 3", true),
+        new MenuItem("Button 4")
+    )
+),
+new MenuItem("Menu 3",
+    new MenuItem("Button 1", true),
+        new MenuItem("Button 2", true),
+        new MenuItem("Menu 1",
+            new MenuItem("Button 3", true),
+            new MenuItem("Button 4")
+        ))
+);
+
+x.Body.AppendChild(menu);
+
+x.Show();
+
+```
