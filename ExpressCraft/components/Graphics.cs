@@ -117,6 +117,26 @@ namespace ExpressCraft
             _context.fill();
         }
 
+        public void ResetTransform()
+        {
+            _context.As<dynamic>().resetTransform();            
+        }
+
+        public void RotateTransform(float angle)
+        {
+            _context.rotate(angle);
+        }
+
+        public void TranslateTransform(float dx, float dy)
+        {
+            _context.translate(dx, dy);
+        }
+
+        public void ScaleTransform(float sx, float sy)
+        {
+            _context.scale(sx, sy);
+        }
+
         public void FillEllipse(Brush brush, int x, int y, int width, int height)
         {
             FillEllipse(brush, (float)x, (float)y, (float)width, (float)height);
