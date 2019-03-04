@@ -12,7 +12,8 @@ namespace ExpressCraft
         {
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
-           
+
+
             
             //x.StartPosition = FormStartPosition.Center;
             ////var yt = new ComboBoxEdit(

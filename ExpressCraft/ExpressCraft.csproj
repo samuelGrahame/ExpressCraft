@@ -66,6 +66,7 @@
     <Compile Include="controls\ImageEdit.cs" />
     <Compile Include="controls\IPages.cs" />
     <Compile Include="controls\MemoInput.cs" />
+    <Compile Include="controls\MenuBar.cs" />
     <Compile Include="controls\NumberInput.cs" />
     <Compile Include="controls\PrinterControl.cs" />
     <Compile Include="controls\RadioEdit.cs" />

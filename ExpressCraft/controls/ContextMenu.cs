@@ -17,15 +17,34 @@ namespace ExpressCraft
 
         public static ContextMenu MainContextMenu = null;
 
+        public Action OnClose = null;
+        
         public ContextMenu() : base("contextmenu")
         {
             this.Content.oncontextmenu = (ev) => {
                 ev.preventDefault();
-            };
+            };            
             this.Content.onmouseleave = (ev) =>
             {
+                if(SubContextOpened != null)
+                {
+                    var toel = ev.relatedTarget;
+
+                    if(toel != null)
+                    {
+                        foreach (var item in SubContextOpened.ContextItems)
+                        {
+                            if(item.Span == toel)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
+
+                }
                 this.Close();
-            };
+            };            
         }
 
         protected void RenderContextMenu()
@@ -56,6 +75,30 @@ namespace ExpressCraft
                 var contextItem = ContextItems[i];
                 int y = contextItem.Caption.Length;
                 var item = Label(contextItem.Caption, 1, top, width - 2, false, false, "contextitem");
+                contextItem.Span = item;
+
+                if (contextItem.Dropdown)
+                {
+                    var div = new HTMLDivElement();
+
+                    div.className = "control";                    
+                    div.SetLocation("(100% - 20px)", 2);
+                    div.SetSize(20, 20);
+                    div.innerHTML = "&gt;";
+                    div.style.textShadow = "rgba(64, 64, 64, 0.25) 0 1px 1px";
+                    //text-shadow:#000 0 1px 1px,#000 0 -1px 1px
+                    div.style.fontWeight = "bold";
+                    div.style.textIndent = "0";
+                    //                    font-weight: bold;
+                    //text-indent: 0;
+
+                    item.appendChild(div);
+
+  //                       border: solid black;
+  //border-width: 0 3px 3px 0;
+  //display: inline-block;
+  //padding: 3px;
+                }
 
                 item.onclick = (ev) =>
                 {
@@ -65,7 +108,10 @@ namespace ExpressCraft
                         {
                             contextItem.OnItemClick(contextItem);
                         }
-                        this.Close();
+                        if(!contextItem.CloseHandled)
+                        {
+                            this.Close();
+                        }                        
                     }
                 };
 
@@ -117,6 +163,30 @@ namespace ExpressCraft
             }
         }
 
+        public void ShowSub(Vector2 Location, ContextMenu parent)
+        {
+            if (Visible)
+            {
+                this.Close();
+            }
+            if (!Visible)
+            {
+                if(parent.SubContextOpened != null)
+                {
+                    parent.SubContextOpened.Close();
+                }
+
+                parent.SubContextOpened = this;
+                Content.SetLocation(Location.Xi - 1, Location.Yi);
+                RenderContextMenu();
+
+                TotalContextHandles++;
+                Content.style.zIndex = (TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
+                document.body.AppendChild(this);
+                Visible = true;
+            }
+        }
+
         public void Close()
         {
             if(Visible)
@@ -124,6 +194,8 @@ namespace ExpressCraft
                 TotalContextHandles--;
                 document.body.removeChild((Node)this);
                 Visible = false;
+                if (OnClose != null)
+                    OnClose();
             }
 
             if(SubContextOpened != null)
@@ -136,10 +208,13 @@ namespace ExpressCraft
 
     public class ContextItem
     {
+        public bool CloseHandled = false;
         public string Caption = "";
         public Action<ContextItem> OnItemClick = null;
         public bool BeginGroup = false;
         public bool Enabled = true;
+        public HTMLSpanElement Span;
+        public bool Dropdown = false;
 
         public ContextItem()
         {

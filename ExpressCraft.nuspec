@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.6.3</version>
+    <version>0.6.4</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG</authors>
     <owners>SG</owners>
@@ -12,9 +12,9 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-		Bug Fix - Column Visible
+		Added Timer Class
 	</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <copyright>Copyright 2019</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
 	<dependencies>
 		<dependency id="Bridge" version="[17.6.0]"/>
