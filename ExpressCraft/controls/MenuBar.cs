@@ -113,7 +113,7 @@ namespace ExpressCraft
 
                         if (psn.Items.Count == 0)
                         {
-                            ctx.Close();
+                            ContextMenu.MainContextMenu.Close();                                
                         }
                         else
                         {

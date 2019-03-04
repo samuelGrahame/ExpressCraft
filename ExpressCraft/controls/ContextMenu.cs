@@ -23,28 +23,47 @@ namespace ExpressCraft
         {
             this.Content.oncontextmenu = (ev) => {
                 ev.preventDefault();
-            };            
-            this.Content.onmouseleave = (ev) =>
+            };
+            this.Content.tabIndex = -1;
+            this.Content.onblur = (ev) =>
             {
-                if(SubContextOpened != null)
+                if (!SpanExist(ev.relatedTarget.As<HTMLElement>()))
+                    MainContextMenu.Close();
+            };
+
+        }
+
+        private bool SpanExist(HTMLElement element)
+        {            
+            if (element == null)
+                return false;
+
+            if (element == this.Content)
+                return true;
+            
+            if (SubContextOpened != null)
+            {
+                if (element == SubContextOpened.Content)
+                    return true;
+
+                foreach (var item in SubContextOpened.ContextItems)
                 {
-                    var toel = ev.relatedTarget;
-
-                    if(toel != null)
+                    if (item.Span == element)
                     {
-                        foreach (var item in SubContextOpened.ContextItems)
-                        {
-                            if(item.Span == toel)
-                            {
-                                return;
-                            }
-                        }
+                        return true;
                     }
+                }            
+            }
 
-
+            foreach (var item in ContextItems)
+            {
+                if (item.Span == element)
+                {
+                    return true;
                 }
-                this.Close();
-            };            
+            }
+
+            return false;
         }
 
         protected void RenderContextMenu()
@@ -75,7 +94,13 @@ namespace ExpressCraft
                 var contextItem = ContextItems[i];
                 int y = contextItem.Caption.Length;
                 var item = Label(contextItem.Caption, 1, top, width - 2, false, false, "contextitem");
+                item.tabIndex = -1;
                 contextItem.Span = item;
+                item.onblur = (ev) =>
+                {
+                    if (!SpanExist(ev.relatedTarget.As<HTMLElement>()))
+                        MainContextMenu.Close();
+                };
 
                 if (contextItem.Dropdown)
                 {
@@ -160,6 +185,8 @@ namespace ExpressCraft
                 Content.style.zIndex = (TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
                 document.body.AppendChild(this);
                 Visible = true;
+
+                this.Focus();
             }
         }
 
@@ -184,6 +211,7 @@ namespace ExpressCraft
                 Content.style.zIndex = (TotalContextHandles + Settings.ContextMenuStartingZIndex).ToString();
                 document.body.AppendChild(this);
                 Visible = true;
+                this.Focus();
             }
         }
 
@@ -191,9 +219,9 @@ namespace ExpressCraft
         {
             if(Visible)
             {
-                TotalContextHandles--;
-                document.body.removeChild((Node)this);
                 Visible = false;
+                TotalContextHandles--;
+                document.body.removeChild((Node)this);                
                 if (OnClose != null)
                     OnClose();
             }
