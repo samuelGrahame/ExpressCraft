@@ -27,6 +27,11 @@ namespace ExpressCraft
             }            
         }
 
+        public void Clear()
+        {
+            _context.clearRect(0, 0, _canvas.width, _canvas.height);
+        }
+
         public void ApplyFill(Brush brush)
         {
             if(brush is SolidBrush)
