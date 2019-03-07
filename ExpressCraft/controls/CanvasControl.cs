@@ -22,6 +22,14 @@ namespace ExpressCraft
         public event EventHandler<MouseEvent> MouseUp = null;
         public event EventHandler<MouseEvent> MouseMove = null;
 
+        public event EventHandler<MouseEvent> MouseWheel = null;
+
+        public virtual void OnMouseWheel(CanvasControl canvasControl, MouseEvent mouseEvent)
+        {
+            if (MouseWheel != null)
+                MouseWheel(canvasControl, mouseEvent);
+        }
+
         public virtual void OnMouseDown(CanvasControl canvasControl, MouseEvent mouseEvent)
         {
             if (MouseDown != null)
@@ -92,6 +100,11 @@ namespace ExpressCraft
             onmouseup = (ev) =>
             {
                 OnMouseUp(this, ev);
+            };
+
+            onmousewheel = (ev) =>
+            {
+                OnMouseWheel(this, ev);
             };
 
             ontouchstart = (ev) =>
