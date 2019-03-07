@@ -17,7 +17,51 @@ namespace ExpressCraft
         private int _height = -1;
 
         private Graphics _graphics = null;
-        
+
+        public event EventHandler<MouseEvent> MouseDown = null;
+        public event EventHandler<MouseEvent> MouseUp = null;
+        public event EventHandler<MouseEvent> MouseMove = null;
+
+        public virtual void OnMouseDown(CanvasControl canvasControl, MouseEvent mouseEvent)
+        {
+            if (MouseDown != null)
+                MouseDown(canvasControl, mouseEvent);
+        }
+
+        public virtual void OnMouseUp(CanvasControl canvasControl, MouseEvent mouseEvent)
+        {
+            if (MouseUp != null)
+                MouseUp(canvasControl, mouseEvent);
+        }
+
+        public virtual void OnMouseMove(CanvasControl canvasControl, MouseEvent mouseEvent)
+        {
+            if (MouseMove != null)
+                MouseMove(canvasControl, mouseEvent);
+        }
+
+        public event EventHandler<TouchEvent> TouchStart = null;
+        public event EventHandler<TouchEvent> TouchEnd = null;
+        public event EventHandler<TouchEvent> TouchMove = null;
+
+        public virtual void OnTouchStart(CanvasControl canvasControl, TouchEvent touchEvent)
+        {
+            if (TouchStart != null)
+                TouchStart(canvasControl, touchEvent);
+        }
+
+        public virtual void OnTouchEnd(CanvasControl canvasControl, TouchEvent touchEvent)
+        {
+            if (TouchEnd != null)
+                TouchEnd(canvasControl, touchEvent);
+        }
+
+        public virtual void OnTouchMove(CanvasControl canvasControl, TouchEvent touchEvent)
+        {
+            if (TouchMove != null)
+                TouchMove(canvasControl, touchEvent);
+        }
+
         public CanvasControl() : base(new HTMLCanvasElement())
         {
             Canvas = this.Content.As<HTMLCanvasElement>();
@@ -33,6 +77,36 @@ namespace ExpressCraft
                     Canvas.height = (uint)bounds.height;
 
                 Refresh();
+            };
+
+            onmousedown = (ev) =>
+            {
+                OnMouseDown(this, ev);
+            };
+
+            onmousemove = (ev) =>
+            {
+                OnMouseMove(this, ev);
+            };
+
+            onmouseup = (ev) =>
+            {
+                OnMouseUp(this, ev);
+            };
+
+            ontouchstart = (ev) =>
+            {                
+                OnTouchStart(this, ev);
+            };
+
+            ontouchmove = (ev) =>
+            {
+                OnTouchMove(this, ev);
+            };
+
+            ontouchend = (ev) =>
+            {
+                OnTouchMove(this, ev);
             };
         }
 
