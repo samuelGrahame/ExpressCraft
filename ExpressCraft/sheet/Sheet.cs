@@ -152,10 +152,10 @@ namespace ExpressCraft
             return new string(columnChars.ToArray());
         }
 
-        public override void OnPaint()
+        public override void OnPaint(Graphics graphics)
         {
-            base.OnPaint();
-            var g = CreateGraphics();
+            base.OnPaint(graphics);
+            var g = graphics;
 
             // what we need to do is draw from x to x + (total next columns until larger then width)
             

@@ -5,17 +5,15 @@ using System.Collections.Generic;
 namespace ExpressCraft
 {
     public class ContextMenu : Control
-    {
-        /// <summary>
-        /// For internal use only - so if we click on document - we can close all context menus ---
-        /// </summary>
-        protected ContextMenu SubContextOpened = null;
+    {        
+        public ContextMenu SubContextOpened = null;
 
         public List<ContextItem> ContextItems = new List<ContextItem>();
         protected bool Visible = false;
         public static int TotalContextHandles = 0;
 
         public static ContextMenu MainContextMenu = null;
+        internal static bool IgnoreBlur = false;
 
         public Action OnClose = null;
         
@@ -27,6 +25,13 @@ namespace ExpressCraft
             this.Content.tabIndex = -1;
             this.Content.onblur = (ev) =>
             {
+                if (IgnoreBlur)
+                {
+                    this.Close();
+                    return;
+                }
+                    
+
                 if (!SpanExist(ev.relatedTarget.As<HTMLElement>()))
                     MainContextMenu.Close();
             };
@@ -97,7 +102,7 @@ namespace ExpressCraft
                 item.tabIndex = -1;
                 contextItem.Span = item;
                 item.onblur = (ev) =>
-                {
+                {                    
                     if (!SpanExist(ev.relatedTarget.As<HTMLElement>()))
                         MainContextMenu.Close();
                 };
@@ -127,7 +132,9 @@ namespace ExpressCraft
 
                 item.onclick = (ev) =>
                 {
-                    if(contextItem.Enabled)
+                    
+
+                    if (contextItem.Enabled)
                     {
                         if(contextItem.OnItemClick != null)
                         {
@@ -138,6 +145,14 @@ namespace ExpressCraft
                             this.Close();
                         }                        
                     }
+                };
+
+                item.onmouseenter = (ev) =>
+                {                    
+                    if (contextItem.OnMouseEnter != null)
+                    {
+                        contextItem.OnMouseEnter(contextItem);
+                    }                    
                 };
 
                 Content.AppendChild(item);
@@ -190,7 +205,7 @@ namespace ExpressCraft
             }
         }
 
-        public void ShowSub(Vector2 Location, ContextMenu parent)
+        public void ShowSub(Vector2 Location, ContextMenu parent, bool dontcloseSub = false)
         {
             if (Visible)
             {
@@ -198,7 +213,7 @@ namespace ExpressCraft
             }
             if (!Visible)
             {
-                if(parent.SubContextOpened != null)
+                if(parent.SubContextOpened != null && !dontcloseSub)
                 {
                     parent.SubContextOpened.Close();
                 }
@@ -239,6 +254,7 @@ namespace ExpressCraft
         public bool CloseHandled = false;
         public string Caption = "";
         public Action<ContextItem> OnItemClick = null;
+        public Action<ContextItem> OnMouseEnter = null;
         public bool BeginGroup = false;
         public bool Enabled = true;
         public HTMLSpanElement Span;

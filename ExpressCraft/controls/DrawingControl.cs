@@ -27,7 +27,7 @@ namespace ExpressCraft
                     __mouseDown = true;
                     __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
-                    OnPaint();
+                    OnPaint(this.CreateGraphics());
                 };
                 Content.ontouchmove = (ev) =>
                 {
@@ -38,7 +38,7 @@ namespace ExpressCraft
                         Lines.Add(new Vector4(__currentCursor, np));
                         __currentCursor = np;
 
-                        OnPaint();
+                        OnPaint(this.CreateGraphics());
                     }
                 };
                 Content.ontouchend = (ev) =>
@@ -51,7 +51,7 @@ namespace ExpressCraft
                     }
                     __mouseDown = false;
 
-                    OnPaint();
+                    OnPaint(this.CreateGraphics());
                 }; 
             }
             else
@@ -62,7 +62,7 @@ namespace ExpressCraft
                     __mouseDown = true;
                     __currentCursor = new Vector2(ev2.layerX, ev2.layerY);
 
-                    OnPaint();
+                    OnPaint(this.CreateGraphics());
                 };
                 Content.onmousemove = (ev) =>
                 {
@@ -73,7 +73,7 @@ namespace ExpressCraft
                         Lines.Add(new Vector4(__currentCursor, np));
                         __currentCursor = np;
 
-                        OnPaint();
+                        OnPaint(this.CreateGraphics());
                     }
                 };
                 Content.onmouseup = (ev) =>
@@ -86,7 +86,7 @@ namespace ExpressCraft
                     }
                     __mouseDown = false;
 
-                    OnPaint();
+                    OnPaint(this.CreateGraphics());
                 }; 
             }
 
@@ -97,10 +97,10 @@ namespace ExpressCraft
         {
             base.OnClear();
             __lastDrawn = 0;
-            OnPaint();
+            OnPaint(this.CreateGraphics());
         }
 
-        public override void OnPaint()
+        public override void OnPaint(Graphics graphics)
         {
             int i = __lastDrawn;
             if(i < Lines.Count)

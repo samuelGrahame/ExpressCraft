@@ -46,6 +46,27 @@ namespace ExpressCraft
                         else
                             spanItme.ShowMenu();
                     };
+                    span.onmouseenter = (ev) =>
+                    {
+                        if(Items != null)
+                        {
+                            bool open = false;
+                            for (int i = 0; i < Items.Count; i++)
+                            {
+                                if (Items[i].Visible)
+                                {
+                                    open = true;
+                                    Items[i].CloseMenu();
+                                    break;
+                                }
+                                    
+                            }
+                            if(open)
+                            {
+                                spanItme.ShowMenu();
+                            }
+                        }
+                    };
                     span.SetBounds(currentX, 0, width, 24);
                     spanItme.Span = span;
                     this.Content.appendChild(span);
@@ -107,13 +128,24 @@ namespace ExpressCraft
                     Dropdown = psn.Items.Count > 0,
                     OnItemClick = (ev) =>
                     {
-
-                        if (psn.OnItemClick != null)
-                            psn.OnItemClick(psn);
+                        if(!ContextMenu.IgnoreBlur)
+                        {
+                            if (psn.OnItemClick != null)
+                                psn.OnItemClick(psn);
+                        }
+                        
 
                         if (psn.Items.Count == 0)
                         {
-                            ContextMenu.MainContextMenu.Close();                                
+                            if(ContextMenu.IgnoreBlur)
+                            {
+
+                            }
+                            else
+                            {
+                                ContextMenu.MainContextMenu.Close();
+                            }
+                            
                         }
                         else
                         {
@@ -122,6 +154,12 @@ namespace ExpressCraft
 
                             psn.contextMenu.ShowSub(new Vector2((int)rec2.left + (int)rec2.width, (int)(rec2.top)), ctx);
                         }
+                    },
+                    OnMouseEnter = (ev) => {                        
+                        ContextMenu.IgnoreBlur = true;
+
+                        ev.Span.click();
+                        ContextMenu.IgnoreBlur = false;
                     }
                 });
             }
