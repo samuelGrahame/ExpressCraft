@@ -34,6 +34,24 @@ namespace ExpressCraft
             }
         }
 
+        /// <summary>
+        /// Will remove header and make body 100% of the form, will also maxamize the screen making take 100% of the page.
+        /// </summary>
+        public void MakeMainPage()
+        {
+            this.Body.SetBoundsFull();
+            this.Heading.style.visibility = "hidden";
+
+            ShowClose = false;
+            ShowMinimize = false;
+            ShowMaximize = false;
+
+            this.WindowState = WindowStateType.Maximized;
+
+            this.AllowMoveChange = false;
+            this.AllowSizeChange = false;
+        }
+
 
         public static List<Action<KeyboardEvent>> KeyHooks = new List<Action<KeyboardEvent>>();
 

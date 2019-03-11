@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.6.7</version>
+    <version>0.6.8</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG</authors>
     <owners>SG</owners>
@@ -12,10 +12,7 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-		Added ResetTransform
-		Added RotateTransform
-		Added TranslateTransform
-		Added ScaleTransform
+		Hover over Menu to open menu
 	</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>

@@ -15,6 +15,7 @@ namespace ExpressCraft
         {
             this.SetBounds(0, 0, "100%", 24);
             this.Content.style.backgroundColor = "white";
+            this.Content.classList.add("menu-bar");
 
             Items = new List<MenuItem>();
             if(items != null && items.Length > 0)
@@ -170,8 +171,7 @@ namespace ExpressCraft
         {
             if (Visible)
                 return;
-
-
+            
             contextMenu = GetContextMenu();
            
             var x = (DOMRect)Span.getBoundingClientRect();

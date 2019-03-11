@@ -13,6 +13,35 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
+
+            var x = new Form();
+            x.StartPosition = FormStartPosition.Center;
+
+            var menu = new MenuBar(new MenuItem("Menu",
+                new MenuItem("Button 1", true),
+                new MenuItem("Button 2", true),
+                new MenuItem("Menu 1",
+                    new MenuItem("Button 3", true),
+                    new MenuItem("Button 4")
+                ),
+                new MenuItem("Menu 2",
+                    new MenuItem("Button 3", true),
+                    new MenuItem("Button 4")
+                )
+            ),
+            new MenuItem("Menu 3",
+                new MenuItem("Button 1", true),
+                    new MenuItem("Button 2", true),
+                    new MenuItem("Menu 1",
+                        new MenuItem("Button 3", true),
+                        new MenuItem("Button 4")
+                    ))
+            );
+
+            x.Body.AppendChild(menu);
+
+            x.Show();
+
             //x.StartPosition = FormStartPosition.Center;
             ////var yt = new ComboBoxEdit(
             ////    new DataItem("Hello World 1"),
