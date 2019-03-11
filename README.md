@@ -235,6 +235,11 @@ public class frmMain : Form
             this.AllowSizeChange = false;
 
             this.BackColor = "red";
+            
+            
+            // or use 
+            
+            this.MakeMainPage(); // when using version >= 0.6.9 
         }
     }
 ```
