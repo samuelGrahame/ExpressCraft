@@ -35,6 +35,7 @@ namespace ExpressCraft
                         if(_formIcon != null)
                         {
                             _formIcon.Delete();
+                            _formIcon = null;
                         }
                     }
                     else
