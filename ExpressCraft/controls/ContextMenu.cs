@@ -193,6 +193,8 @@ namespace ExpressCraft
             }
             if(!Visible)
             {
+                if (ContextItems.Count == 0)
+                    return;
                 Content.SetLocation(Location.Xi - 5, Location.Yi - 5);
                 RenderContextMenu();
 
@@ -217,6 +219,9 @@ namespace ExpressCraft
                 {
                     parent.SubContextOpened.Close();
                 }
+
+                if (ContextItems.Count == 0)
+                    return;
 
                 parent.SubContextOpened = this;
                 Content.SetLocation(Location.Xi - 1, Location.Yi);

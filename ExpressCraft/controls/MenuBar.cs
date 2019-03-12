@@ -34,7 +34,7 @@ namespace ExpressCraft
                     spanItme.Menu = this;
                     spanItme.MainItem = true;
 
-                    var width = Math.Max((int)GetTextWidth(item.Caption, Settings.DefaultFont), 50);
+                    var width = Math.Max((int)GetTextWidth(item.Caption, Settings.DefaultFont) + 16, 50);
 
                     var span = new HTMLSpanElement() { className = "control menu-item", innerText = item.Caption };
                     span.onclick = (ev) =>
@@ -92,10 +92,17 @@ namespace ExpressCraft
         public HTMLSpanElement Span;
         private ContextMenu contextMenu;
 
+        public MenuItem(string caption, Action<MenuItem> onItemClick, params MenuItem[] items) : this(items)
+        {
+            Caption = caption;
+            OnItemClick = onItemClick;
+        }
+
         public MenuItem(string caption, params MenuItem[] items) : this(items)
         {
             Caption = caption;
         }
+
 
         public MenuItem(string caption, bool beginGroup, params MenuItem[] items) : this(caption, items)
         {
