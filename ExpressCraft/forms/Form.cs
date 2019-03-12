@@ -20,6 +20,38 @@ namespace ExpressCraft
         private static ToolTipControl _activeToolTipControl = null;
         private static int _oepntoolTipTimerHandle = -1;
 
+        private HTMLImageElement _formIcon = null;
+
+        private string _icon;
+
+        public string Icon
+        {
+            get { return _icon; }
+            set {
+                if(_icon != value)
+                {
+                    if(string.IsNullOrWhiteSpace(value))
+                    {
+                        if(_formIcon != null)
+                        {
+                            _formIcon.Delete();
+                        }
+                    }
+                    else
+                    {
+                        if(_formIcon == null)
+                        {
+                            _formIcon = new HTMLImageElement() { className = "control" };
+                            _formIcon.SetBounds(6, 6, 16, 16);
+                            this.Heading.appendChild(_formIcon);
+                        }
+                        _formIcon.src = value;
+                    }
+                    _icon = value;
+                }
+            }
+        }
+        
         private bool _disableBoxShadow;
 
         public bool DisableBoxShadow

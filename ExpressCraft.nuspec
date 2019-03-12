@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>ExpressCraft</id>
-    <version>0.6.8</version>
+    <version>0.7.0</version>
     <title>ExpressCraft (For Bridge.Net)</title>
     <authors>SG</authors>
     <owners>SG</owners>
@@ -12,7 +12,8 @@
 Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-backs based on the Dialogue Result.
 </description>
     <releaseNotes>
-		Hover over Menu to open menu
+		Added Function Make Main Page for form.
+		Added Form Icon to form
 	</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags>Bridge Bridge.net Javascript Forms ExpressCraft C# UI jQuery HTML</tags>
@@ -34,7 +35,7 @@ Handles Modal and Non-Modal Forms - When using Dialogues you can assign call-bac
 	  </dependencies>
   </metadata>
   <files>
-	<file src="ExpressCraft\bin\Release\ExpressCraft.dll" target="lib\ExpressCraft.dll" />
+	<file src="ExpressCraft\bin\Release\ExpressCraft.dll" target="lib\net452\ExpressCraft.dll" />
 	<file src="ExpressCraft\Bridge\ExpressCraft.css" target="content\Bridge" />	
   </files>
  
