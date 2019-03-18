@@ -70,7 +70,9 @@ namespace ExpressCraft
                 TouchMove(canvasControl, touchEvent);
         }
 
-        public CanvasControl() : base(new HTMLCanvasElement())
+        private ImageData ImageData;
+
+        public CanvasControl() : base(new HTMLCanvasElement() { className = "control" })
         {
             Canvas = this.Content.As<HTMLCanvasElement>();
      
@@ -78,6 +80,16 @@ namespace ExpressCraft
 
             OnResize = (sender) =>
             {
+                ImageData = null;
+
+                if (!ClearOnResize)
+                {
+                    if (Canvas.width > 0 && Canvas.height > 0)
+                    {
+                        ImageData = Context.getImageData(0, 0, Canvas.width, Canvas.height);
+                    }                    
+                }
+
                 var bounds = (DOMRect)Content.getBoundingClientRect();
                 if(_width == -1)
                     Canvas.width = (uint)bounds.width;
@@ -85,39 +97,44 @@ namespace ExpressCraft
                     Canvas.height = (uint)bounds.height;
 
                 Refresh();
+
+                if(ImageData != null && !ClearOnResize)
+                {
+                    Context.putImageData(ImageData, 0, 0);
+                }
             };
 
-            onmousedown = (ev) =>
+            Canvas.onmousedown = (ev) =>
             {
                 OnMouseDown(this, ev);
             };
 
-            onmousemove = (ev) =>
+            Canvas.onmousemove = (ev) =>
             {
                 OnMouseMove(this, ev);
             };
 
-            onmouseup = (ev) =>
+            Canvas.onmouseup = (ev) =>
             {
                 OnMouseUp(this, ev);
             };
 
-            onmousewheel = (ev) =>
+            Canvas.onmousewheel = (ev) =>
             {
                 OnMouseWheel(this, ev);
             };
 
-            ontouchstart = (ev) =>
-            {                
+            Canvas.ontouchstart = (ev) =>
+            {
                 OnTouchStart(this, ev);
             };
 
-            ontouchmove = (ev) =>
+            Canvas.ontouchmove = (ev) =>
             {
                 OnTouchMove(this, ev);
             };
 
-            ontouchend = (ev) =>
+            Canvas.ontouchend = (ev) =>
             {
                 OnTouchMove(this, ev);
             };
