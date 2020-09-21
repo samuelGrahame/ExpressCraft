@@ -17,6 +17,106 @@ namespace ExpressCraft
         public static int AlignmentForForm = 0;
         public static string DefaultFont = Font;
 
+        private static HTMLStyleElement darkStyle = null;
+
+        private static bool _darkStyleEnabled;
+
+        public static bool DarkStyleEnabled
+        {
+            get { return _darkStyleEnabled; }
+            set { 
+                if(value != _darkStyleEnabled)
+                {
+                    _darkStyleEnabled = value;
+                    if(_darkStyleEnabled)
+                    {
+                        darkStyle = new HTMLStyleElement();
+                        darkStyle.innerHTML = @"
+.heading {
+    background-color: rgb(178, 178, 178);
+    border-right: 1px solid rgb(68, 68, 68) !important;
+}
+
+.control {
+    color: rgb(64, 64, 64);    
+    scrollbar-color: dark !important;
+}
+
+.form-heading, .ribbonbutton, .ribboncontrol, .ribbongroup, .ribbonpage {
+    background-color: rgb(68, 68, 68);
+}
+
+.form-heading-title {
+    color: rgb(254, 254, 254);
+}
+
+.form-heading-button {
+    color: rgb(254, 254, 254);
+}
+
+.form-heading-button:hover {
+    background-color: rgb(55, 55, 55) !important;
+    color: white !important;
+}
+
+.form-heading-button:active:hover {
+    background-color: rgb(35, 35, 35) !important;
+    color: white !important;
+}
+
+:root {
+  --primary: rgb(68, 68, 68);
+}
+
+@keyframes ColorFlash {
+	from {
+		color: rgb(254, 254, 254) !important;
+        background-color: rgb(68, 68, 68) !important;
+	}
+	to {
+		color: rgb(159, 159, 159) !important;
+        background-color: rgb(68, 68, 68) !important; 
+	}
+}
+
+.grid {
+    border: unset !important;
+}
+
+.cellrow {
+    background-color: rgb(211, 211, 211) !important; 
+}
+
+.even {
+    background-color: rgb(200, 200, 200) !important; 
+}
+
+.cellrow-selected, .focusedrow:hover {
+    outline: rgb(125, 125, 125) solid 1px!important;
+    background-color: rgb(186, 186, 186) !important; 
+}
+
+.cellrow:hover {    
+    background-color: rgb(180, 180, 180) !important; 
+}
+
+";
+
+                        document.body.appendChild(darkStyle);
+                    }
+                    else
+                    {
+                        if(darkStyle != null)
+                        {
+                            document.body.removeChild(darkStyle);
+                            darkStyle = null;
+                        }
+                    }
+                }                
+            }
+        }
+
+
         /// <summary>
         /// Only for firefox - as no error with number input
         /// </summary>

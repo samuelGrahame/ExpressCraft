@@ -13,44 +13,54 @@ namespace ExpressCraft
             document.head.AppendChild(new HTMLLinkElement() { id = "ExpressCraft", rel = "Stylesheet", type = "text/css", href = "data:text/css;base64," + Settings.ExpressCraftCssBase64 });
             Settings.Setup();
 
-            //x.StartPosition = FormStartPosition.Center;
-            ////var yt = new ComboBoxEdit(
-            ////    new DataItem("Hello World 1"),
-            ////    new DataItem("Hello World 2"),
-            ////    new DataItem("Hello World 3"));
+            try
+            {
+                var match = "(prefers-color-scheme: dark)";
+                if (window.matchMedia(match).matches)
+                {
+                    Settings.DarkStyleEnabled = true;
+                }
+                window.matchMedia(match).addListener(new MediaQueryListListener(e => {
+                    Settings.DarkStyleEnabled = e.matches;
+                }));
+            }
+            catch (Exception)
+            {
 
-            ////yt.Bounds = new Vector4(10, 10, 100, 24);
+            }
 
-            ////x.AppendChild(yt);
+            ////var x = new Form();
+            ////x.Text = "This is a test form";
+            ////x.StartPosition = FormStartPosition.Center;
+            
+            ////var gr = new GridView();
+            ////gr.UseInRowEditor = true;
 
-            //var gr = new GridView();
-            //gr.UseInRowEditor = true;
+            ////gr.SetBoundsFull();
 
-            //gr.Bounds = new Vector4(10, 50, "(100% - 20px)", "(100% - 60px)");
+            ////var dt = new DataTable();
 
-            //var dt = new DataTable();
+            ////for (int i = 0; i < 100; i++)
+            ////{
+            ////    dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
+            ////}
+            ////dt.BeginDataUpdate();
+            ////for (int h = 0; h < 100; h++)
+            ////{
+            ////    var dr = dt.NewRow();
+            ////    for (int i = 0; i < 100; i++)
+            ////    {
+            ////        dr[i] = DateTime.Now;
+            ////    }
+            ////    dt.AddRow(dr);
+            ////}
+            ////dt.AcceptNewRows();
 
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    dt.AddColumn("Date " + (i + 1).ToString(), DataType.DateTime);
-            //}
-            //dt.BeginDataUpdate();
-            //for (int h = 0; h < 100; h++)
-            //{
-            //    var dr = dt.NewRow();
-            //    for (int i = 0; i < 100; i++)
-            //    {
-            //        dr[i] = DateTime.Now;
-            //    }
-            //    dt.AddRow(dr);
-            //}
-            //dt.AcceptNewRows();
+            ////gr.DataSource = dt;
 
-            //gr.DataSource = dt;
+            ////x.LinkResize(gr, true);
 
-            //x.LinkResize(gr, true);
-
-            //x.Show();
+            ////x.Show();
 
             // Test Grid...1
             //var x = new Form();
