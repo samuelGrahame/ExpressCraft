@@ -527,6 +527,9 @@ namespace ExpressCraft
         }
 
         //public List<object> Cells = new List<object>();
+
+       // private Dictionary<dynamic, string> _privateDateFormatStringCache = new Dictionary<dynamic, string>();
+
         public string GetDisplayValue(int rowIndex, string formatString)
         {
             switch(DataType)
@@ -535,33 +538,38 @@ namespace ExpressCraft
                 case DataType.Object:
                     return string.Format(formatString, (((DataColumnObject)this).Cells[rowIndex]));
 
-                case DataType.DateTime:
-                    dynamic obj = ((DataColumnDateTime)this).Cells[rowIndex];
-                    if(obj == null)
-                    {
-                        return string.Empty;
-                    }
-                    DateTime d;
-                    if(obj is DateTime)
-                    {
-                        d = (DateTime)obj;
-                        if(d == DateTime.MinValue)
-                            return string.Empty;
-                        return string.Format(formatString, d);
-                    }                    
-                    if(DateTime.TryParse(obj, out d))
-                    {
-                        if(d == DateTime.MinValue)
-                            return string.Empty;
-                        return string.Format(formatString, d);
-                    }
-                    var str = obj as string;
-                    if(string.IsNullOrWhiteSpace(str))
-                    {
-                        return string.Empty;
-                    }
-                    return string.Format(formatString, str);
+                case DataType.DateTime:                    
+                    var obj = (((DataColumnDateTime)this).Cells[rowIndex]);
+                    if(obj.HasValue)
+                        return string.Format(formatString, obj.Value);
+                    return null;
 
+                    //if(_privateDateFormatStringCache.ContainsKey(obj))
+                    //{
+                    //    return _privateDateFormatStringCache[obj];
+                    //}
+
+                    //DateTime d;
+
+                    //if(obj is DateTime)
+                    //{
+                    //    d = (DateTime)obj;
+                    //    if(d == DateTime.MinValue)
+                    //        return string.Empty;
+                    //    return _privateDateFormatStringCache[obj] = string.Format(formatString, d);
+                    //}                    
+                    //if(DateTime.TryParse(obj, out d))
+                    //{
+                    //    if(d == DateTime.MinValue)
+                    //        return string.Empty;
+                    //    return _privateDateFormatStringCache[obj] = string.Format(formatString, d);
+                    //}
+                    //var str = obj as string;
+                    //if(string.IsNullOrWhiteSpace(str))
+                    //{
+                    //    return string.Empty;
+                    //}
+                    //return _privateDateFormatStringCache[obj] = string.Format(formatString, str);
                 case DataType.String:
                     return string.Format(formatString, ((DataColumnString)this).Cells[rowIndex]);
 
